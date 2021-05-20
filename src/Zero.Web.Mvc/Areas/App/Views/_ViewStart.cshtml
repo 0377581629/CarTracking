@@ -1,0 +1,6 @@
+﻿@inherits Zero.Web.Views.ZeroRazorPage<TModel>
+@using Zero.UiCustomization.Dto
+@{
+    var theme = await GetTheme();
+    Layout = "~/Areas/App/Views/Layout/" + theme.BaseSettings.Theme + "/_Layout.cshtml";
+}

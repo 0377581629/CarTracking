@@ -1,0 +1,142 @@
+﻿@using System.Threading.Tasks
+@using Abp.AspNetZeroCore.Timing
+@using Abp.Configuration.Startup
+@using Abp.Timing
+@using Abp.Web.Security.AntiForgery
+@using Zero
+@using Zero.Timing
+@using Zero.UiCustomization.Dto
+@using Zero.Url
+@using Zero.Web.Resources
+@using Zero.Web.Session
+@using CultureHelper = Zero.Localization.CultureHelper
+@inject ScriptPaths ScriptPaths
+@inject AppTimes AppTimes
+@inject IAbpAntiForgeryManager AbpAntiForgeryManager
+@inject IMultiTenancyConfig MultiTenancyConfig
+@inject IWebResourceManager WebResourceManager
+@inject IWebUrlService WebUrlService
+@inject IPerRequestSessionCache SessionCache
+@{
+    Layout = null;
+    AbpAntiForgeryManager.SetCookie(Context);
+    var loginInfo = await SessionCache.GetCurrentLoginInformationsAsync();
+    var loginBgImg = "";
+    if (loginInfo?.Tenant?.LoginBackgroundId == null)
+    {
+        if (!string.IsNullOrEmpty(GlobalConfig.AppDefaultBackgroundLogin))
+        {
+            loginBgImg = GlobalConfig.AppDefaultBackgroundLogin;
+        }
+        else
+        {
+            loginBgImg = ApplicationPath + "metronic/common/images/bg/bg-3.jpg";
+        }
+    }
+    else
+    {
+        loginBgImg = ApplicationPath + "TenantCustomization/GetLoginBackground?tenantId=" + loginInfo?.Tenant?.Id;
+    }
+}
+<!DOCTYPE html>
+<html lang="en" dir=@(CultureHelper.IsRtl ? "rtl" : "")>
+<head>
+    <meta charset="utf-8"/>
+    <title>@(string.IsNullOrEmpty(loginInfo?.Tenant?.WebTitle) ? GlobalConfig.AppName : loginInfo?.Tenant?.WebTitle)</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+
+    @* Fill these meta tags upon your project specification *@
+    <meta property="og:description" content="@(string.IsNullOrEmpty(loginInfo?.Tenant?.WebDescription) ? GlobalConfig.AppName : loginInfo?.Tenant?.WebDescription)"/>
+    <meta content="@(string.IsNullOrEmpty(loginInfo?.Tenant?.WebAuthor) ? GlobalConfig.AppName : loginInfo?.Tenant?.WebAuthor)" name="author"/>
+    <meta content="@(string.IsNullOrEmpty(loginInfo?.Tenant?.WebKeyword) ? GlobalConfig.AppName : loginInfo?.Tenant?.WebKeyword)" name="keywords">
+    
+    <link rel="shortcut icon" href="~/@(string.IsNullOrEmpty(loginInfo?.Tenant?.WebFavicon) ? GlobalConfig.AppFaviconName : loginInfo?.Tenant?.WebFavicon)"/>
+
+    <link rel="stylesheet" abp-href="/view-resources/Areas/App/Views/_Bundles/vendors.bundle.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="/metronic/themes/default/css/style.bundle@(CultureHelper.IsRtl ? ".rtl" : "").css" asp-append-version="true"/>
+    <link rel="stylesheet" abp-href="/view-resources/Areas/App/Views/_Bundles/account-layout-libs.css" asp-append-version="true"/>
+
+    <link rel="stylesheet" abp-href="/view-resources/Areas/App/Views/_Bundles/common-styles.css" asp-append-version="true"/>
+
+    @if (CultureHelper.IsRtl)
+    {
+        <link rel="stylesheet" href="/Common/Styles/abp-zero-template-rtl.css" asp-append-version="true"/>
+    }
+
+    <link rel="stylesheet" abp-href="/view-resources/Views/Account/_Layout@(CultureHelper.IsRtl ? "-rtl" : "").css" asp-append-version="true"/>
+    <link rel="stylesheet" abp-href="/view-resources/Views/TenantRegistration/_Layout.css" asp-append-version="true"/>
+    
+    @await RenderSectionAsync("Styles", false)
+
+    <link href="/css/bootstrap.extend.css" rel="stylesheet"/>
+    
+    <script type="text/javascript">
+        @* This is used to get the application's root path from javascript.
+        It's useful if you're running application in a virtual directory under IIS. *@
+        var abp = abp || {}; abp.appPath = '@ApplicationPath';
+    </script>
+
+</head>
+<body class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable">
+<!-- begin:: Page -->
+<div class="d-flex flex-column flex-root">
+    <div class="login login-4 login-signin-on d-flex flex-row-fluid" id="kt_login">
+        <!--begin::Content-->
+       <div class="d-flex flex-center flex-row-fluid bgi-size-cover bgi-position-top bgi-no-repeat" style="background-image: url(@loginBgImg);">
+            <!--begin::Signin-->
+            <div class="login-form text-center p-7 position-relative overflow-hidden">
+                <div class="login-signin">
+                    <div class="container-fluid">
+                        <div class="card card-custom gutter-b shadow-lg">
+                            <div class="card-body">
+                                <div class="row justify-content-center my-0">
+                                    @if (!(ViewBag.DisableTenantChange ?? false) && MultiTenancyConfig.IsEnabled && !WebUrlService.SupportsTenancyNameInUrl)
+                                    {
+                                        <div class="col-12 pb-10">
+                                            <div class="login__signup-label tenant-change-box">
+                                                <vc:tenant-change></vc:tenant-change>
+                                            </div>
+                                        </div>
+                                    }
+                                    <div class="col-12 min-w-300px">
+                                        <!--begin::Form-->
+                                        @RenderBody()
+                                        <!--end::Form-->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <vc:account-languages></vc:account-languages>
+            </div>
+        </div>
+        <!--end::Content-->
+    </div>
+</div>
+<!--begin::Base Scripts -->
+<script abp-src="/view-resources/Areas/App/Views/_Bundles/account-layout-libs.js" asp-append-version="true"></script>
+
+<!-- Dynamic scripts of ABP system (They are created on runtime and can not be bundled) -->
+<script src="~/AbpServiceProxies/GetAll?v=@(AppTimes.StartupTime.Ticks)" type="text/javascript"></script>
+<script src="~/AbpScripts/GetScripts?v=@(AppTimes.StartupTime.Ticks)" type="text/javascript"></script>
+
+<script abp-src="/view-resources/Areas/App/Views/_Bundles/common-scripts.js" asp-append-version="true"></script>
+<script src="~@ScriptPaths.JQuery_Validation_Localization" asp-append-version="true"></script>
+
+@WebResourceManager.RenderScripts()
+
+@await RenderSectionAsync("Scripts", false)
+<script>
+        app.supportsTenancyNameInUrl = @(WebUrlService.SupportsTenancyNameInUrl.ToString().ToLower());
+
+        jQuery(document).ready(function () {
+            if (window.CurrentPage) {
+                CurrentPage.init();
+            }
+        });
+    </script>
+</body>
+</html>

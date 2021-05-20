@@ -1,0 +1,510 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <Import Project="..\..\common.props"></Import>
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
+    <PreserveCompilationContext>true</PreserveCompilationContext>
+    <AssemblyName>Zero.Web.Mvc</AssemblyName>
+    <OutputType>Exe</OutputType>
+    <PackageId>Zero.Web.Mvc</PackageId>
+    <UserSecretsId>MyCompanyName-Zero-894FDFC1-6482-4A56-926A-3C46C9FE0329</UserSecretsId>
+    <RootNamespace>Zero.Web</RootNamespace>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+    <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
+    <TypeScriptToolsVersion>3.3</TypeScriptToolsVersion>
+    <PreserveCompilationReferences>true</PreserveCompilationReferences>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="App_Data\**" />
+    <Content Remove="App_Data\**" />
+    <EmbeddedResource Remove="App_Data\**" />
+    <None Remove="App_Data\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\swagger\ui\index.html" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="wwwroot\swagger\ui\index.html" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="wwwroot\Plugins\.gitkeep" />
+    <None Update="Dockerfile">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="log4net.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
+    <None Update="wwwroot\**\*;Areas\**\*;Views\**\*">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Zero.Web.Core\Zero.Web.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Abp.Castle.Log4Net" Version="6.3.0" />
+    <PackageReference Include="AspNetCore.HealthChecks.UI" Version="5.0.1" />
+    <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="5.0.1" />
+    <PackageReference Include="AspNetCore.HealthChecks.UI.InMemory.Storage" Version="5.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Twitter" Version="5.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.3" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\css\pages\wizard\wizard-1.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\css\pages\wizard\wizard-1.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\css\pages\wizard\wizard-1.rtl.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\css\pages\wizard\wizard-1.rtl.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\css\pages\wizard\wizard-2.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\css\pages\wizard\wizard-2.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\css\pages\wizard\wizard-2.rtl.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\css\pages\wizard\wizard-2.rtl.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\css\pages\wizard\wizard-3.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\css\pages\wizard\wizard-3.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\css\pages\wizard\wizard-3.rtl.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\css\pages\wizard\wizard-3.rtl.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\css\pages\wizard\wizard-4.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\css\pages\wizard\wizard-4.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\css\pages\wizard\wizard-4.rtl.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\css\pages\wizard\wizard-4.rtl.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\css\pages\wizard\wizard-5.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\css\pages\wizard\wizard-5.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\css\pages\wizard\wizard-5.rtl.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\css\pages\wizard\wizard-5.rtl.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\css\pages\wizard\wizard-6.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\css\pages\wizard\wizard-6.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\css\pages\wizard\wizard-6.rtl.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\css\pages\wizard\wizard-6.rtl.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\css\style.bundle.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\css\style.bundle.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\css\style.bundle.rtl.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\css\style.bundle.rtl.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\images\bg\bg-1.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\images\bg\bg-10.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\components\app.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\components\app.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\components\card.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\components\card.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\components\cookie.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\components\cookie.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\components\datatable\core.datatable.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\components\datatable\core.datatable.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\components\datatable\datatable.checkbox.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\components\datatable\datatable.checkbox.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\components\datatable\datatable.rtl.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\components\datatable\datatable.rtl.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\components\dialog.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\components\dialog.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\components\header.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\components\header.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\components\image-input.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\components\image-input.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\components\menu.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\components\menu.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\components\offcanvas.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\components\offcanvas.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\components\scrolltop.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\components\scrolltop.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\components\toggle.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\components\toggle.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\components\util.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\components\util.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\components\wizard.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\components\wizard.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\layout\base\aside-menu.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\layout\base\aside-menu.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\layout\base\aside.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\layout\base\aside.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\layout\base\content.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\layout\base\content.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\layout\base\footer.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\layout\base\footer.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\layout\base\header-menu.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\layout\base\header-menu.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\layout\base\header-topbar.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\layout\base\header-topbar.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\layout\base\header.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\layout\base\header.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\layout\base\sticky-card.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\layout\base\sticky-card.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\layout\base\stretched-card.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\layout\base\stretched-card.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\layout\base\subheader.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\layout\base\subheader.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\layout\extended\chat.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\layout\extended\chat.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\layout\extended\demo-panel.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\layout\extended\demo-panel.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\layout\extended\examples.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\layout\extended\examples.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\layout\extended\quick-actions.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\layout\extended\quick-actions.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\layout\extended\quick-cart.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\layout\extended\quick-cart.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\layout\extended\quick-notifications.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\layout\extended\quick-notifications.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\layout\extended\quick-panel.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\layout\extended\quick-panel.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\layout\extended\quick-search.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\layout\extended\quick-search.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\layout\extended\quick-user.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\layout\extended\quick-user.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\layout\extended\scrolltop.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\layout\extended\scrolltop.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\layout\extended\search.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\layout\extended\search.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\layout\initialize.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\layout\initialize.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\settings.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme2\js\settings.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\css\pages\wizard\wizard-1.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\css\pages\wizard\wizard-1.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\css\pages\wizard\wizard-1.rtl.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\css\pages\wizard\wizard-1.rtl.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\css\pages\wizard\wizard-2.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\css\pages\wizard\wizard-2.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\css\pages\wizard\wizard-2.rtl.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\css\pages\wizard\wizard-2.rtl.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\css\pages\wizard\wizard-3.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\css\pages\wizard\wizard-3.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\css\pages\wizard\wizard-3.rtl.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\css\pages\wizard\wizard-3.rtl.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\css\pages\wizard\wizard-4.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\css\pages\wizard\wizard-4.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\css\pages\wizard\wizard-4.rtl.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\css\pages\wizard\wizard-4.rtl.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\css\pages\wizard\wizard-5.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\css\pages\wizard\wizard-5.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\css\pages\wizard\wizard-5.rtl.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\css\pages\wizard\wizard-5.rtl.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\css\pages\wizard\wizard-6.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\css\pages\wizard\wizard-6.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\css\pages\wizard\wizard-6.rtl.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\css\pages\wizard\wizard-6.rtl.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\css\style.bundle.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\css\style.bundle.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\css\style.bundle.rtl.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\css\style.bundle.rtl.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\images\bg\bg-1.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\images\bg\footer.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\images\bg\header.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\images\bg\taieri.svg" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\components\app.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\components\app.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\components\card.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\components\card.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\components\cookie.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\components\cookie.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\components\datatable\core.datatable.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\components\datatable\core.datatable.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\components\datatable\datatable.checkbox.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\components\datatable\datatable.checkbox.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\components\datatable\datatable.rtl.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\components\datatable\datatable.rtl.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\components\dialog.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\components\dialog.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\components\header.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\components\header.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\components\image-input.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\components\image-input.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\components\menu.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\components\menu.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\components\offcanvas.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\components\offcanvas.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\components\scrolltop.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\components\scrolltop.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\components\toggle.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\components\toggle.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\components\util.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\components\util.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\components\wizard.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\components\wizard.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\layout\base\aside.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\layout\base\aside.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\layout\base\content.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\layout\base\content.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\layout\base\footer.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\layout\base\footer.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\layout\base\header-menu.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\layout\base\header-menu.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\layout\base\header-topbar.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\layout\base\header-topbar.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\layout\base\header.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\layout\base\header.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\layout\base\sticky-card.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\layout\base\sticky-card.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\layout\base\stretched-card.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\layout\base\stretched-card.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\layout\base\subheader.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\layout\base\subheader.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\layout\extended\advance-search.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\layout\extended\advance-search.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\layout\extended\chat.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\layout\extended\chat.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\layout\extended\demo-panel.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\layout\extended\demo-panel.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\layout\extended\examples.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\layout\extended\examples.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\layout\extended\quick-actions.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\layout\extended\quick-actions.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\layout\extended\quick-cart.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\layout\extended\quick-cart.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\layout\extended\quick-notifications.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\layout\extended\quick-notifications.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\layout\extended\quick-panel.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\layout\extended\quick-panel.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\layout\extended\quick-search.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\layout\extended\quick-search.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\layout\extended\quick-user.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\layout\extended\quick-user.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\layout\extended\scrolltop.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\layout\extended\scrolltop.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\layout\extended\search.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\layout\extended\search.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\layout\initialize.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\layout\initialize.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\settings.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme4\js\settings.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\css\pages\wizard\wizard-1.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\css\pages\wizard\wizard-1.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\css\pages\wizard\wizard-1.rtl.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\css\pages\wizard\wizard-1.rtl.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\css\pages\wizard\wizard-2.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\css\pages\wizard\wizard-2.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\css\pages\wizard\wizard-2.rtl.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\css\pages\wizard\wizard-2.rtl.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\css\pages\wizard\wizard-3.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\css\pages\wizard\wizard-3.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\css\pages\wizard\wizard-3.rtl.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\css\pages\wizard\wizard-3.rtl.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\css\pages\wizard\wizard-4.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\css\pages\wizard\wizard-4.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\css\pages\wizard\wizard-4.rtl.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\css\pages\wizard\wizard-4.rtl.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\css\pages\wizard\wizard-5.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\css\pages\wizard\wizard-5.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\css\pages\wizard\wizard-5.rtl.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\css\pages\wizard\wizard-5.rtl.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\css\pages\wizard\wizard-6.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\css\pages\wizard\wizard-6.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\css\pages\wizard\wizard-6.rtl.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\css\pages\wizard\wizard-6.rtl.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\css\style.bundle.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\css\style.bundle.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\css\style.bundle.rtl.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\css\style.bundle.rtl.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\images\bg\bg-1.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\components\app.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\components\app.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\components\card.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\components\card.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\components\cookie.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\components\cookie.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\components\datatable\core.datatable.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\components\datatable\core.datatable.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\components\datatable\datatable.checkbox.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\components\datatable\datatable.checkbox.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\components\datatable\datatable.rtl.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\components\datatable\datatable.rtl.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\components\dialog.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\components\dialog.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\components\header.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\components\header.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\components\image-input.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\components\image-input.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\components\menu.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\components\menu.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\components\offcanvas.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\components\offcanvas.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\components\scrolltop.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\components\scrolltop.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\components\subheader.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\components\subheader.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\components\toggle.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\components\toggle.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\components\util.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\components\util.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\components\wizard.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\components\wizard.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\layout\base\aside.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\layout\base\aside.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\layout\base\content.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\layout\base\content.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\layout\base\footer.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\layout\base\footer.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\layout\base\header-menu.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\layout\base\header-menu.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\layout\base\header-topbar.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\layout\base\header-topbar.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\layout\base\header.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\layout\base\header.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\layout\base\sidebar.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\layout\base\sidebar.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\layout\base\sticky-card.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\layout\base\sticky-card.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\layout\base\stretched-card.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\layout\base\stretched-card.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\layout\base\subheader.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\layout\base\subheader.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\layout\extended\chat.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\layout\extended\chat.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\layout\extended\demo-panel.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\layout\extended\demo-panel.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\layout\extended\examples.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\layout\extended\examples.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\layout\extended\quick-actions.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\layout\extended\quick-actions.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\layout\extended\quick-cart.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\layout\extended\quick-cart.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\layout\extended\quick-notifications.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\layout\extended\quick-notifications.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\layout\extended\quick-panel.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\layout\extended\quick-panel.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\layout\extended\quick-search.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\layout\extended\quick-search.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\layout\extended\quick-user.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\layout\extended\quick-user.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\layout\extended\scrolltop.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\layout\extended\scrolltop.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\layout\extended\search.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\layout\extended\search.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\layout\initialize.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\layout\initialize.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\settings.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme6\js\settings.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\css\pages\wizard\wizard-1.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\css\pages\wizard\wizard-1.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\css\pages\wizard\wizard-1.rtl.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\css\pages\wizard\wizard-1.rtl.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\css\pages\wizard\wizard-2.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\css\pages\wizard\wizard-2.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\css\pages\wizard\wizard-2.rtl.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\css\pages\wizard\wizard-2.rtl.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\css\pages\wizard\wizard-3.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\css\pages\wizard\wizard-3.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\css\pages\wizard\wizard-3.rtl.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\css\pages\wizard\wizard-3.rtl.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\css\pages\wizard\wizard-4.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\css\pages\wizard\wizard-4.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\css\pages\wizard\wizard-4.rtl.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\css\pages\wizard\wizard-4.rtl.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\css\pages\wizard\wizard-5.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\css\pages\wizard\wizard-5.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\css\pages\wizard\wizard-5.rtl.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\css\pages\wizard\wizard-5.rtl.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\css\pages\wizard\wizard-6.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\css\pages\wizard\wizard-6.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\css\pages\wizard\wizard-6.rtl.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\css\pages\wizard\wizard-6.rtl.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\css\style.bundle.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\css\style.bundle.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\css\style.bundle.rtl.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\css\style.bundle.rtl.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\images\bg\bg-1.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\images\bg\bg-2.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\components\app.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\components\app.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\components\card.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\components\card.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\components\cookie.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\components\cookie.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\components\datatable\core.datatable.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\components\datatable\core.datatable.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\components\datatable\datatable.checkbox.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\components\datatable\datatable.checkbox.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\components\datatable\datatable.rtl.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\components\datatable\datatable.rtl.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\components\dialog.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\components\dialog.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\components\header.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\components\header.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\components\image-input.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\components\image-input.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\components\menu.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\components\menu.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\components\offcanvas.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\components\offcanvas.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\components\scrolltop.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\components\scrolltop.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\components\toggle.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\components\toggle.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\components\util.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\components\util.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\components\wizard.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\components\wizard.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\layout\base\aside-menu.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\layout\base\aside-menu.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\layout\base\aside.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\layout\base\aside.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\layout\base\content.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\layout\base\content.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\layout\base\footer.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\layout\base\footer.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\layout\base\header-menu.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\layout\base\header-menu.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\layout\base\header-topbar.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\layout\base\header-topbar.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\layout\base\header.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\layout\base\header.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\layout\base\sticky-card.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\layout\base\sticky-card.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\layout\base\stretched-card.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\layout\base\stretched-card.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\layout\base\subheader.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\layout\base\subheader.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\layout\extended\chat.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\layout\extended\chat.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\layout\extended\demo-panel.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\layout\extended\demo-panel.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\layout\extended\examples.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\layout\extended\examples.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\layout\extended\quick-actions.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\layout\extended\quick-actions.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\layout\extended\quick-cart.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\layout\extended\quick-cart.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\layout\extended\quick-notifications.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\layout\extended\quick-notifications.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\layout\extended\quick-panel.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\layout\extended\quick-panel.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\layout\extended\quick-search.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\layout\extended\quick-search.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\layout\extended\quick-user.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\layout\extended\quick-user.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\layout\extended\scrolltop.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\layout\extended\scrolltop.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\layout\extended\search.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\layout\extended\search.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\layout\initialize.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\layout\initialize.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\settings.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\js\settings.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\metronic\themes\theme8\media\bg\bg-7.jpg" />
+    <_ContentIncludedByDefault Remove="Areas\App\Views\Layout\Theme11\_Layout.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\App\Views\Layout\Theme2\_Layout.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\App\Views\Layout\Theme3\_Layout.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\App\Views\Layout\Theme4\_Layout.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\App\Views\Layout\Theme5\_Layout.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\App\Views\Layout\Theme6\_Layout.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\App\Views\Layout\Theme7\_Layout.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\App\Views\Layout\Theme8\_Layout.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\App\Views\Layout\Theme9\_Layout.cshtml" />
+  </ItemGroup>
+
+</Project>
