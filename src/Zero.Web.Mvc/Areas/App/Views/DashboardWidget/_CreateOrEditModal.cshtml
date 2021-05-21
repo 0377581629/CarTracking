@@ -1,0 +1,101 @@
+﻿@using Zero.Web.Areas.App.Models.Common.Modals
+@model Zero.Web.Areas.App.Models.DashboardWidget.CreateOrEditDashboardWidgetModalViewModel
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(Model.IsEditMode ? (L("Edit")) : L("Create")))
+
+<div class="modal-body">
+    <div id="DashboardWidgetInformationsTab">
+        <form name="DashboardWidgetInformationsForm" role="form" novalidate class="form-validation">
+
+            @if (Model.IsEditMode)
+            {
+                <input type="hidden" name="id" value="@Model.DashboardWidget.Id"/>
+            }
+            <input type="hidden" name="language" id="DashboardWidget_Language" value=""/>
+            <input type="hidden" name="widgetId" id="DashboardWidget_WidgetId" value="@Model.DashboardWidget.WidgetId"/>
+
+            <div class="row">
+                <div class="col-9">
+                    <div class="form-group">
+                        <label>
+                            Name <span class="text-danger">*</span>
+                        </label>
+                        <input class="form-control" id="DashboardWidget_Name" value="@Model.DashboardWidget.Name" required type="text" name="name"/>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="form-group text-center mb-0">
+                        <label>@L("IsDefault")</label>
+                        <div class="form-control no-border">
+                            <label class="checkbox checkbox-outline checkbox-primary inline-block">
+                                <input type="checkbox" id="DashboardWidget_IsDefault" name="isDefault" value="true" @Html.Raw(!Model.DashboardWidget.IsDefault ? "" : "checked=\"checked\"")>
+                                <span></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <label>
+                            Description
+                        </label>
+                        <input class="form-control" id="DashboardWidget_Description" value="@Model.DashboardWidget.Description" type="text" name="description"/>
+                    </div>
+                </div>
+                
+                <div class="col-4">
+                    <div class="form-group">
+                        <label>
+                            ViewName <span class="text-danger">*</span>
+                        </label>
+                        <input class="form-control" id="DashboardWidget_ViewName" value="@Model.DashboardWidget.ViewName" required type="text" name="viewName"/>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label>
+                            JS File Name <span class="text-danger">*</span>
+                        </label>
+                        <input class="form-control" id="DashboardWidget_JsPath" value="@Model.DashboardWidget.JsPath" required type="text" name="jsPath"/>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label>
+                            CSS File Name
+                        </label>
+                        <input class="form-control" id="DashboardWidget_CssPath" value="@Model.DashboardWidget.CssPath" type="text" name="cssPath"/>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3">
+                    <div class="form-group">
+                        <label>Width - Default - (1-12)</label>
+                        <input class="form-control number" id="DashboardWidget_Width" value="@Model.DashboardWidget.Width" type="text" name="width"/>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="form-group">
+                        <label>Height - Default - (>=6)</label>
+                        <input class="form-control number" id="DashboardWidget_Height" value="@Model.DashboardWidget.Height" type="text" name="height"/>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="form-group">
+                        <label>PositionX - Default</label>
+                        <input class="form-control number" id="DashboardWidget_PositionX" value="@Model.DashboardWidget.PositionX" type="text" name="positionX"/>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="form-group">
+                        <label>PositionY - Default</label>
+                        <input class="form-control number" id="DashboardWidget_PositionY" value="@Model.DashboardWidget.PositionY" type="text" name="positionY"/>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalFooterWithSaveAndCancel.cshtml")

@@ -505,6 +505,21 @@
     <_ContentIncludedByDefault Remove="Areas\App\Views\Layout\Theme7\_Layout.cshtml" />
     <_ContentIncludedByDefault Remove="Areas\App\Views\Layout\Theme8\_Layout.cshtml" />
     <_ContentIncludedByDefault Remove="Areas\App\Views\Layout\Theme9\_Layout.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\App\Views\Shared\Components\CustomizableDashboard\Index.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\App\Views\Shared\Components\CustomizableDashboard\Widgets\DailySales.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\App\Views\Shared\Components\CustomizableDashboard\Widgets\DateRangeFilter.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\App\Views\Shared\Components\CustomizableDashboard\Widgets\EditionStatistics.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\App\Views\Shared\Components\CustomizableDashboard\Widgets\GeneralStats.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\App\Views\Shared\Components\CustomizableDashboard\Widgets\HostTopStats.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\App\Views\Shared\Components\CustomizableDashboard\Widgets\IncomeStatistics.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\App\Views\Shared\Components\CustomizableDashboard\Widgets\MemberActivity.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\App\Views\Shared\Components\CustomizableDashboard\Widgets\ProfitShare.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\App\Views\Shared\Components\CustomizableDashboard\Widgets\RecentTenants.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\App\Views\Shared\Components\CustomizableDashboard\Widgets\RegionalStats.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\App\Views\Shared\Components\CustomizableDashboard\Widgets\SalesSummary.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\App\Views\Shared\Components\CustomizableDashboard\Widgets\SubscriptionExpiringTenants.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\App\Views\Shared\Components\CustomizableDashboard\Widgets\TopStats.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\App\Views\Shared\Components\CustomizableDashboard\_AddWidgetModal.cshtml" />
   </ItemGroup>
 
 </Project>

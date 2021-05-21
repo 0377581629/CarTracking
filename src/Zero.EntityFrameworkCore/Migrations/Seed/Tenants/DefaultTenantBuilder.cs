@@ -32,6 +32,7 @@ namespace Zero.Migrations.Seed.Tenants
                 var defaultEdition = _context.Editions.IgnoreQueryFilters().FirstOrDefault(e => e.Name == EditionManager.DefaultEditionName);
                 if (defaultEdition != null)
                 {
+                    defaultTenant.Code = "000001";
                     defaultTenant.EditionId = defaultEdition.Id;
                 }
 

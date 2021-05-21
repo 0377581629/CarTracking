@@ -5,6 +5,7 @@ using Zero.Authorization.Delegation;
 using Zero.Authorization.Roles;
 using Zero.Authorization.Users;
 using Zero.Chat;
+using Zero.Customize.Dashboard;
 using Zero.Editions;
 using Zero.Friendships;
 using Zero.MultiTenancy;
@@ -36,6 +37,14 @@ namespace Zero.EntityFrameworkCore
 
         public virtual DbSet<UserDelegation> UserDelegations { get; set; }
 
+        #region Abp Customize
+
+        public virtual DbSet<DashboardWidget> DashboardWidgets { get; set; }
+        public virtual DbSet<EditionDashboardWidget> EditionDashboardWidgets { get; set; }
+        public virtual DbSet<RoleDashboardWidget> RoleDashboardWidgets { get; set; }
+        
+        #endregion
+        
         public ZeroDbContext(DbContextOptions<ZeroDbContext> options)
             : base(options)
         {

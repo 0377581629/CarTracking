@@ -15,11 +15,10 @@ namespace Zero.Web.Areas.App.Startup
 
             menu
                 .AddItem(new MenuItemDefinition(
-                        AppPageNames.Host.Dashboard,
+                        AppPageNames.Common.Dashboard,
                         L("Dashboard"),
-                        url: "App/HostDashboard",
-                        icon: "flaticon-line-graph",
-                        permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_Administration_Host_Dashboard)
+                        icon: "la la-dashboard",
+                        permissionDependency: new SimplePermissionDependency(AppPermissions.Dashboard)
                     )
                 ).AddItem(new MenuItemDefinition(
                     AppPageNames.Host.Tenants,
@@ -34,13 +33,6 @@ namespace Zero.Web.Areas.App.Startup
                         url: "App/Editions",
                         icon: "flaticon-app",
                         permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_Editions)
-                    )
-                ).AddItem(new MenuItemDefinition(
-                        AppPageNames.Tenant.Dashboard,
-                        L("Dashboard"),
-                        url: "App/TenantDashboard",
-                        icon: "flaticon-line-graph",
-                        permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_Tenant_Dashboard)
                     )
                 ).AddItem(new MenuItemDefinition(
                         AppPageNames.Common.Administration,

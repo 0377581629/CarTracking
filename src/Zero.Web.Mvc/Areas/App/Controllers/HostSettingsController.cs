@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Abp.AspNetCore.Mvc.Authorization;
 using Abp.Configuration;
+using Abp.Configuration.Startup;
 using Abp.Runtime.Session;
 using Microsoft.AspNetCore.Mvc;
 using Zero.Authorization;
@@ -24,19 +25,21 @@ namespace Zero.Web.Areas.App.Controllers
         private readonly IEditionAppService _editionAppService;
         private readonly ITimingAppService _timingAppService;
         private readonly IAppConfigurationAccessor _configurationAccessor;
-
+        private readonly IMultiTenancyConfig _multiTenancyConfig;
         public HostSettingsController(
             IHostSettingsAppService hostSettingsAppService,
             UserManager userManager,
             IEditionAppService editionAppService,
             ITimingAppService timingAppService,
-            IAppConfigurationAccessor configurationAccessor)
+            IAppConfigurationAccessor configurationAccessor, 
+            IMultiTenancyConfig multiTenancyConfig)
         {
             _hostSettingsAppService = hostSettingsAppService;
             _userManager = userManager;
             _editionAppService = editionAppService;
             _timingAppService = timingAppService;
             _configurationAccessor = configurationAccessor;
+            _multiTenancyConfig = multiTenancyConfig;
         }
 
         public async Task<ActionResult> Index()
@@ -52,7 +55,8 @@ namespace Zero.Web.Areas.App.Controllers
             var user = await _userManager.GetUserAsync(AbpSession.ToUserIdentifier());
 
             ViewBag.CurrentUserEmail = user.EmailAddress;
-
+            ViewBag.IsMultiTenancyEnabled = _multiTenancyConfig.IsEnabled;
+            
             var model = new HostSettingsViewModel
             {
                 Settings = hostSettings,

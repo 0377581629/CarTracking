@@ -1,0 +1,35 @@
+﻿@using ZERO.Web.Areas.App.Models.Common.Modals
+@using ZERO.Web.Areas.App.Startup
+@model ZERO.Web.Areas.App.Models.Dashboard.AddWidgetViewModel
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(L("AddWidget")))
+
+<div class="modal-body">
+
+    @if (Model.Widgets.Any())
+    {
+        <input hidden id="DashboardName" value="@Model.DashboardName" />
+        <input hidden id="PageId" value="@Model.PageId" />
+        <div class="form-group">
+            <label>@L("SelectDashboardWidget")</label>
+            <select class="form-control" id="WidgetSelect">
+                @foreach (var widget in Model.Widgets)
+                {
+                    <option value="@widget.WidgetId">@widget.Name</option>
+                }
+            </select>
+            @foreach (var widget in Model.Widgets)
+            {
+                <input hidden id="@(widget.Id + "Height")" value="@widget.Height" />
+                <input hidden id="@(widget.Id + "Width")" value="@widget.Width" />
+            }
+        </div>
+    }
+    else
+    {
+        <p>@L("NoWidgetAvailableMessage")</p>
+    }
+
+</div>
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalFooterWithSaveAndCancel.cshtml")

@@ -62,11 +62,14 @@
             @L("EmailSmtp")
         </a>
     </li>
-    <li class="nav-item">
-        <a href="#BillingTab" data-toggle="tab" role="tab" class="nav-link">
-            @L("Invoice")
-        </a>
-    </li>
+    @if (ViewBag.IsMultiTenancyEnabled)
+    {
+        <li class="nav-item">
+            <a href="#BillingTab" data-toggle="tab" role="tab" class="nav-link">
+                @L("Invoice")
+            </a>
+        </li>
+    }
     <li class="nav-item">
         <a href="#OtherSettingsTab" data-toggle="tab" role="tab" class="nav-link">
             @L("OtherSettings")

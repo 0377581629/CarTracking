@@ -4,6 +4,8 @@
     {
         public static class Common
         {
+            public const string Dashboard = "Dashboard";
+            
             public const string Administration = "Administration";
             public const string Roles = "Administration.Roles";
             public const string Users = "Administration.Users";
@@ -23,12 +25,12 @@
             public const string Editions = "Editions";
             public const string Maintenance = "Administration.Maintenance";
             public const string Settings = "Administration.Settings.Host";
-            public const string Dashboard = "Dashboard";
+            
+            public const string DashboardWidget = "DashboardWidget";
         }
 
         public static class Tenant
         {
-            public const string Dashboard = "Dashboard.Tenant";
             public const string Settings = "Administration.Settings.Tenant";
             public const string SubscriptionManagement = "Administration.SubscriptionManagement.Tenant";
         }
