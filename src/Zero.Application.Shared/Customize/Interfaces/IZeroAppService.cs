@@ -7,7 +7,7 @@ using Zero.Dto;
 using Zero.Editions.Dto;
 using Zero.MultiTenancy.Dto;
 
-namespace ZERO
+namespace Zero
 {
     public interface IZeroAppService : IApplicationService 
     {

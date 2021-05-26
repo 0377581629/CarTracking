@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
-using Zero.DashboardCustomization.Dto;
+using Zero.Customize.Dto.Dashboard.DashboardWidget;
 
-namespace Zero.Web.Areas.App.Models.CustomizableDashboard
+namespace Zero.Web.Areas.App.Models.Dashboard
 {
     public class AddWidgetViewModel
     {
-        public List<WidgetOutput> Widgets { get; set; }
+        public List<DashboardWidgetDto> Widgets { get; set; }
 
         public string DashboardName { get; set; }
 

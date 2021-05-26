@@ -520,6 +520,20 @@ function buildNestedItem(item, showEditButton = false, showDeleteButton = false,
         baseHelper.NestedItemHtml = function(item, showSettingButton = false, handleIconClass='la la-bars', customLabel = 'customLabelClass', customEditClass = 'customSettingClass', customDeleteClass = 'customDeleteClass') {
             return buildNestedItem(item, showSettingButton, handleIconClass,customLabel, customEditClass, customDeleteClass);
         }
+
+        baseHelper.ValidSelectors = function(){
+            let res = true;
+            $('body').find('select.requiredSelect2').each(function() {
+                let selectId = $(this).attr('id');
+                if ($(this).hasClass('requiredSelect2') && ($(this).val() === null || $(this).val() === undefined || $(this).val() === '')) {
+                    $('body').find('#select2-' + selectId + '-container').parent().addClass('invalid');
+                    res = false;
+                } else {
+                    $('body').find('#select2-' + selectId + '-container').parent().removeClass('invalid');
+                }
+            });
+            return res;
+        }
         
         $('.kt-select2').select2({
             width: '100%',

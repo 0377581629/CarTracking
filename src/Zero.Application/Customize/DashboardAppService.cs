@@ -8,7 +8,7 @@ using Abp.Domain.Repositories;
 using Abp.UI;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using ZERO;
+using Zero;
 using Zero.Configuration;
 using Zero.Customize.Dashboard;
 using Zero.Customize.Dto.Dashboard.Config;

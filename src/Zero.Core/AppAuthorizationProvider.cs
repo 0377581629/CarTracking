@@ -29,10 +29,15 @@ namespace Zero.Authorization
             //COMMON PERMISSIONS (FOR BOTH OF TENANTS AND HOST)
 
             var pages = context.GetPermissionOrNull(AppPermissions.Pages) ?? context.CreatePermission(AppPermissions.Pages, L("Pages"));
-            pages.CreateChildPermission(AppPermissions.Pages_DemoUiComponents, L("DemoUiComponents"));
+            pages.CreateChildPermission(AppPermissions.Dashboard, L("Dashboard"));
 
             var administration = pages.CreateChildPermission(AppPermissions.Pages_Administration, L("Administration"));
 
+            var dashboardWidgets = administration.CreateChildPermission(AppPermissions.DashboardWidget, L("DashboardWidget"), multiTenancySides: MultiTenancySides.Host);
+            dashboardWidgets.CreateChildPermission(AppPermissions.DashboardWidget_Create, L("Create"), multiTenancySides: MultiTenancySides.Host);
+            dashboardWidgets.CreateChildPermission(AppPermissions.DashboardWidget_Edit, L("Edit"), multiTenancySides: MultiTenancySides.Host);
+            dashboardWidgets.CreateChildPermission(AppPermissions.DashboardWidget_Delete, L("Delete"), multiTenancySides: MultiTenancySides.Host);
+            
             var roles = administration.CreateChildPermission(AppPermissions.Pages_Administration_Roles, L("Roles"));
             roles.CreateChildPermission(AppPermissions.Pages_Administration_Roles_Create, L("CreatingNewRole"));
             roles.CreateChildPermission(AppPermissions.Pages_Administration_Roles_Edit, L("EditingRole"));
@@ -91,8 +96,6 @@ namespace Zero.Authorization
 
             //TENANT-SPECIFIC PERMISSIONS
 
-            pages.CreateChildPermission(AppPermissions.Pages_Tenant_Dashboard, L("Dashboard"), multiTenancySides: MultiTenancySides.Tenant);
-
             administration.CreateChildPermission(AppPermissions.Pages_Administration_Tenant_Settings, L("Settings"), multiTenancySides: MultiTenancySides.Tenant);
             if (ZeroConsts.MultiTenancyEnabled)
                 administration.CreateChildPermission(AppPermissions.Pages_Administration_Tenant_SubscriptionManagement, L("Subscription"), multiTenancySides: MultiTenancySides.Tenant);
@@ -115,7 +118,6 @@ namespace Zero.Authorization
             administration.CreateChildPermission(AppPermissions.Pages_Administration_Host_Settings, L("Settings"), multiTenancySides: MultiTenancySides.Host);
             administration.CreateChildPermission(AppPermissions.Pages_Administration_Host_Maintenance, L("Maintenance"), multiTenancySides: _isMultiTenancyEnabled ? MultiTenancySides.Host : MultiTenancySides.Tenant);
             administration.CreateChildPermission(AppPermissions.Pages_Administration_HangfireDashboard, L("HangfireDashboard"), multiTenancySides: _isMultiTenancyEnabled ? MultiTenancySides.Host : MultiTenancySides.Tenant);
-            administration.CreateChildPermission(AppPermissions.Pages_Administration_Host_Dashboard, L("Dashboard"), multiTenancySides: MultiTenancySides.Host);
         }
 
         private static ILocalizableString L(string name)

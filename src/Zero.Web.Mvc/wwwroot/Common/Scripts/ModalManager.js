@@ -50,7 +50,7 @@
             var _containerId = modalId + 'Container';
             return $('<div id="' + _containerId + '"></div>')
                 .append(
-                    '<div id="' + modalId + '" class="modal fade" tabindex="-1" role="modal" aria-hidden="true" style="z-index:' + getModalZIndex() + '">' +
+                    '<div id="' + modalId + '" class="modal fade" role="modal" aria-hidden="true" style="z-index:' + getModalZIndex() + '">' +
                     '  <div class="modal-dialog ' + modalSize + '">' +
                     '    <div class="modal-content"></div>' +
                     '  </div>' +
@@ -108,7 +108,12 @@
                 });
 
                 _$modal.on('shown.bs.modal', function () {
-                    _$modal.find('input:not([type=hidden]):first').focus();
+                    let firstFocus = _$modal.find('.firstFocus');
+                    if (firstFocus !== undefined)
+                        _$modal.find('.firstFocus').first().focus();
+                    else
+                        _$modal.find('input:not([type=hidden]):first').focus();
+
                     if (_onShownCallback) {
                         _onShownCallback(_$modal);
                     }
@@ -187,6 +192,100 @@
                 _onBeforeCloseCallbacks.push(onBeforeCloseCallback);
             };
 
+            var _initControl = function() {
+
+                _$modal.find('.date-picker').datetimepicker({
+                    locale: abp.localization.currentLanguage.name,
+                    format: 'L'
+                });
+
+                _$modal.find('.month-picker').datetimepicker({
+                    locale: abp.localization.currentLanguage.name,
+                    format: 'MM/YYYY'
+                });
+
+                _$modal.find('.datetime-picker').datetimepicker({
+                    locale: abp.localization.currentLanguage.name,
+                    format: 'L LT'
+                });
+
+                _$modal.find('.time-picker').datetimepicker({
+                    locale: abp.localization.currentLanguage.name,
+                    format: 'LT'
+                });
+
+                _$modal.find('.kt-select2').select2({
+                    dropdownParent: _$modal,
+                    width: '100%',
+                    dropdownAutoWidth: true,
+                });
+
+                _$modal.find('.kt-select2-non-search').select2({
+                    dropdownParent: _$modal,
+                    width: '100%',
+                    dropdownAutoWidth: true,
+                    minimumResultsForSearch: -1
+                });
+
+                _$modal.find('.touchSpin').TouchSpin({
+                    verticalbuttons: true,
+                    verticalupclass: 'btn-secondary',
+                    verticaldownclass: 'btn-secondary'
+                });
+
+                _$modal.find('.formRepeater').repeater({
+                    show: function () {
+                        $(this).slideDown();
+                    },
+                    hide: function (deleteElement) {
+                        if(confirm('Are you sure you want to delete this element?')) {
+                            $(this).slideUp(deleteElement);
+                        }
+                    },
+                    isFirstItemUndeletable: true
+                });
+
+                _$modal.find('.number').number(true, 0, whatDecimalSeparator(),whatThousandSeparator());
+                _$modal.find('.number1').number(true, 1, whatDecimalSeparator(),whatThousandSeparator());
+                _$modal.find('.number2').number(true, 2, whatDecimalSeparator(),whatThousandSeparator());
+                _$modal.find('.number3').number(true, 3, whatDecimalSeparator(),whatThousandSeparator());
+                _$modal.find('.numberOther').number(true, 0, '', '');
+
+                _$modal.find(".mScrollBar").mCustomScrollbar({
+                    theme: "minimal-dark"
+                });
+
+                let _language = _$modal.find("#Entity_Language");
+
+                if (_language)
+                    _language.val(abp.localization.currentLanguage.name);
+            };
+
+            var _validSelectors = function() {
+                let res = true;
+
+                _$modal.find('select.requiredSelect2').each(function() {
+                    let selectId = $(this).attr('id');
+                    console.log(selectId);
+                    console.log($(this).val());
+                    if ($(this).hasClass('requiredSelect2') && ($(this).val() === null || $(this).val() === undefined || $(this).val() === '')) {
+                        _$modal.find('#select2-' + selectId + '-container').parent().addClass('invalid');
+                        res = false;
+                    } else {
+                        _$modal.find('#select2-' + selectId + '-container').parent().removeClass('invalid');
+                    }
+                });
+
+                return res;
+            };
+
+            var _setBigModal = function() {
+                _$modal.find('.modal-dialog').addClass('modal-xl');
+            }
+            var _setFullSizeModal = function() {
+                _$modal.find('.modal-dialog').css('max-width','calc(100% - 20px)');
+            }
+            
             function _setBusy(isBusy) {
                 if (!_$modal) {
                     return;
@@ -233,7 +332,15 @@
                     return _modalObject
                 },
 
-                onBeforeClose: _onBeforeClose
+                onBeforeClose: _onBeforeClose,
+                
+                bigModal: _setBigModal,
+                
+                fullSizeModal: _setFullSizeModal,
+                
+                initControl: _initControl,
+                
+                validSelectors: _validSelectors,
             };
 
             return _publicApi;

@@ -29,7 +29,7 @@ using Zero.MultiTenancy;
 using Zero.MultiTenancy.Dto;
 using Zero.Organizations.Dto;
 
-namespace ZERO
+namespace Zero
 {
     [AbpAuthorize]
     public class FileAppService : ZeroAppServiceBase, IFileAppService

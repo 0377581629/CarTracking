@@ -1,8 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <localizationDictionary culture="vi">
   <texts>
-    <!--  Organization Unit  -->
+    <!--  Organization Unit + Roles -->
     <text name="ManagingRoles">Quản lý vai trò</text>
+    <text name="SelectPermissions">Chọn quyền</text>
     <!--    -->
     
     <!--  Dynamic Entity Property  -->
@@ -129,6 +130,24 @@
     <text name="NotExisted">Không tồn tại</text>
     <text name="Existed">Đã tồn tại</text>
     <!-- -->
+
+    <text name="DashboardWidget">Khung tổng hợp</text>
+    <text name="DashboardWidgets">Khung tổng hợp</text>
+    <text name="DashboardWidgetsHeaderInfo">Danh sách khung trên bảng số liệu tổng hợp</text>
+    <text name="DashboardWidgetWarning">Lưu ý: Chức năng này chỉ dùng cho nhà phát triển, cân nhắc trước khi sử dụng</text>
+    <text name="IsDefault">Mặc định</text>
+    
+    <text name="AddWidget">Thêm khung số liệu</text>
+    <text name="AddPage">Thêm trang</text>
+    <text name="NewPageName">Tên trang mới</text>
+    <text name="RenamePage">Đổi tên trang</text>
+    <text name="PageNewName">Tên trang mới</text>
+    <text name="BackToDefaultPage">Tải mặc định</text>
+    <text name="BackToDefaultPageWarningMessage">Cấu hình dashboard hiện tại sẽ bị xoá và khôi phục mặc định, không thể hoàn tác.</text>
+    <text name="WidgetDeleteWarningMessage">Không thể hoàn tác sau khi xoá.</text>
+    <text name="SelectDashboardWidget">Khung số liệu</text>
+    <text name="NoWidgetAvailableMessage">Không có khung số liệu nào khả dụng</text>
+    <!--    -->
     
     <text name="HomePage">Trang chủ</text>
     <text name="AboutUs">Về chúng tôi</text>

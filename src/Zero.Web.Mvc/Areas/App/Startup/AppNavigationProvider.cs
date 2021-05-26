@@ -21,24 +21,34 @@ namespace Zero.Web.Areas.App.Startup
                         permissionDependency: new SimplePermissionDependency(AppPermissions.Dashboard)
                     )
                 ).AddItem(new MenuItemDefinition(
-                    AppPageNames.Host.Tenants,
-                    L("Tenants"),
-                    url: "App/Tenants",
-                    icon: "flaticon-list-3",
-                    permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_Tenants)
-                    )
-                ).AddItem(new MenuItemDefinition(
-                        AppPageNames.Host.Editions,
-                        L("Editions"),
-                        url: "App/Editions",
-                        icon: "flaticon-app",
-                        permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_Editions)
-                    )
-                ).AddItem(new MenuItemDefinition(
                         AppPageNames.Common.Administration,
                         L("Administration"),
                         icon: "flaticon-interface-8"
+                    )
+                    .AddItem(new MenuItemDefinition(
+                            AppPageNames.Host.DashboardWidget,
+                            L("DashboardWidgets"),
+                            url: "App/DashboardWidget",
+                            icon: "la la-database",
+                            permissionDependency: new SimplePermissionDependency(AppPermissions.DashboardWidget)
+                        )
+                    )
+                    .AddItem(new MenuItemDefinition(
+                            AppPageNames.Host.Tenants,
+                            L("Tenants"),
+                            url: "App/Tenants",
+                            icon: "flaticon-list-3",
+                            permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_Tenants)
+                        )
                     ).AddItem(new MenuItemDefinition(
+                            AppPageNames.Host.Editions,
+                            L("Editions"),
+                            url: "App/Editions",
+                            icon: "flaticon-app",
+                            permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_Editions)
+                        )
+                    )
+                    .AddItem(new MenuItemDefinition(
                             AppPageNames.Common.OrganizationUnits,
                             L("OrganizationUnits"),
                             url: "App/OrganizationUnits",
@@ -119,13 +129,6 @@ namespace Zero.Web.Areas.App.Startup
                             icon: "flaticon-settings",
                             permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_Administration_Tenant_Settings)
                         )
-                    )
-                ).AddItem(new MenuItemDefinition(
-                        AppPageNames.Common.DemoUiComponents,
-                        L("DemoUiComponents"),
-                        url: "App/DemoUiComponents",
-                        icon: "flaticon-shapes",
-                        permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_DemoUiComponents)
                     )
                 );
 

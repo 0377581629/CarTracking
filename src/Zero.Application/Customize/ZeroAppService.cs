@@ -12,7 +12,7 @@ using Abp.MultiTenancy;
 using Abp.Runtime.Session;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using ZERO;
+using Zero;
 using Zero.Authorization.Users;
 using Zero.Dto;
 using Zero.Editions;

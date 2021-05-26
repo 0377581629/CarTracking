@@ -1,11 +1,19 @@
 ﻿{
   "scripts": [
     {
+      "output": "view-resources/Areas/App/Views/_Bundles/dashboard-libs.min.js",
+      "input": [
+        "node_modules/gridstack/dist/gridstack.min.js",
+        "wwwroot/view-resources/Dashboard/Widgets/WidgetBase.js",
+        "wwwroot/view-resources/Dashboard/Index.js"
+      ]
+    },
+    {
       "output": "view-resources/Areas/App/Views/_Bundles/customizable-dashboard-libs.min.js",
       "input": [
         "node_modules/gridstack/dist/gridstack.min.js",
-        "wwwroot/view-resources/Areas/App/Views/CustomizableDashboard/Widgets/WidgetBase.js",
-        "wwwroot/view-resources/Areas/App/Views/CustomizableDashboard/Index.js"
+        "wwwroot/view-resources/Areas/Dashboard/Widgets/WidgetBase.js",
+        "wwwroot/view-resources/Areas/Dashboard/Index.js"
       ]
     },
     {
