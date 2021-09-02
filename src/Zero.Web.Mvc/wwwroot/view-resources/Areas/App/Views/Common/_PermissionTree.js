@@ -15,7 +15,7 @@
             });
         }
 
-        function init($treeContainer, options) {
+        function init($treeContainer, options, onSelectCallback) {
             $tree = $treeContainer;
             initialized = false;
             var _jsTreeOptions = {
@@ -66,6 +66,9 @@
                     } else {
                         childrenNodes = $.makeArray($tree.jstree('get_node', data.node).children);
                         $tree.jstree('deselect_node', childrenNodes);
+                    }
+                    if (onSelectCallback) {
+                        onSelectCallback(data.selected);
                     }
                 });
             }

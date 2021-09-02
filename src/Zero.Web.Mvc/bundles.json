@@ -281,7 +281,8 @@
         "wwwroot/view-resources/Areas/App/Views/Common/_FeaturesTree.js",
         "wwwroot/view-resources/Areas/App/Views/Editions/_CreateModal.js",
         "wwwroot/view-resources/Areas/App/Views/Editions/_EditModal.js",
-        "wwwroot/view-resources/Areas/App/Views/Editions/Index.js"
+        "wwwroot/view-resources/Areas/App/Views/Editions/Index.js",
+        "wwwroot/view-resources/Areas/App/Views/Common/_PermissionTree.js"
       ]
     },
     {

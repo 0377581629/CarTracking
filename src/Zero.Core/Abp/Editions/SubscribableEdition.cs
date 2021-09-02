@@ -70,5 +70,9 @@ namespace Zero.Editions
                     return null;
             }
         }
+        
+        #region Customize
+        public bool IsDefault { get; set; }
+        #endregion
     }
 }

@@ -7,22 +7,31 @@
         var $editionInformationForm = null;
         var featuresTree;
 
+        let _permissionsTree = null;
+        let $modal;
+        let dashboardWidgetGroup;
+        
         this.init = function (modalManager) {
             _modalManager = modalManager;
-            var $modal = _modalManager.getModal();
+            $modal = _modalManager.getModal();
 
+            dashboardWidgetGroup = $modal.find('.dashboardWidgetGroup');
+            
             featuresTree = new FeaturesTree();
             featuresTree.init($modal.find('.feature-tree'));
 
-            var $editionItemsDiv = $modal.find('.edition-list');
-            var $priceDivs = $modal.find('.SubscriptionPrice');
-            var $trialDayCountDiv = $modal.find('.trial-day-count');
-            var $waitingDayAfterExpireDiv = $modal.find('.waiting-day-after-expire');
-            var $paidFeatures = $modal.find('.paid-features');
-            var $dailyPrice = $modal.find('.paid-features > .SubscriptionPrice input[name="DailyPrice"]');
-            var $weeklyPrice = $modal.find('.paid-features > .SubscriptionPrice input[name="WeeklyPrice"]');
-            var $monthlyPrice = $modal.find('.paid-features > .SubscriptionPrice input[name="MonthlyPrice"]');
-            var $annualPrice = $modal.find('.paid-features > .SubscriptionPrice input[name="AnnualPrice"]');
+            _permissionsTree = new PermissionsTree()
+            _permissionsTree.init($modal.find('#PermissionFilterTree .permission-tree'), null,DashboardWidgetChange);
+
+            let $editionItemsDiv = $modal.find('.edition-list');
+            let $priceDivs = $modal.find('.SubscriptionPrice');
+            let $trialDayCountDiv = $modal.find('.trial-day-count');
+            let $waitingDayAfterExpireDiv = $modal.find('.waiting-day-after-expire');
+            let $paidFeatures = $modal.find('.paid-features');
+            let $dailyPrice = $modal.find('.paid-features > .SubscriptionPrice input[name="DailyPrice"]');
+            let $weeklyPrice = $modal.find('.paid-features > .SubscriptionPrice input[name="WeeklyPrice"]');
+            let $monthlyPrice = $modal.find('.paid-features > .SubscriptionPrice input[name="MonthlyPrice"]');
+            let $annualPrice = $modal.find('.paid-features > .SubscriptionPrice input[name="AnnualPrice"]');
 
             function toggleEditionItems() {
                 if (!$modal.find('#EditEdition_ExpireAction_AssignEdition').is(':checked')) {
@@ -109,6 +118,23 @@
             $editionInformationForm.validate();
         };
 
+        function DashboardWidgetChange(selectedPermissions) {
+            if (selectedPermissions && jQuery.inArray( "Pages.Dashboard", selectedPermissions ) > -1) {
+                dashboardWidgetGroup.removeClass('hidden');
+            } else {
+                dashboardWidgetGroup.addClass('hidden');
+            }
+        }
+
+        function GetDashboardWidget() {
+            let res = [];
+            $modal.find('.dashboardWidgetChecker').each(function(){
+                if ($(this).prop('checked') === true)
+                    res.push($(this).attr('widgetId'))
+            });
+            return res;
+        }
+        
         this.save = function () {
             if (!$editionInformationForm.valid()) {
                 return;
@@ -124,7 +150,9 @@
             _modalManager.setBusy(true);
             editionService.createEdition({
                 edition: edition,
-                featureValues: featuresTree.getFeatureValues()
+                featureValues: featuresTree.getFeatureValues(),
+                grantedPermissionNames: _permissionsTree.getSelectedPermissionNames(),
+                grantedDashboardWidgets: GetDashboardWidget()
             }).done(function () {
                 abp.notify.info(app.localize('SavedSuccessfully'));
                 _modalManager.close();

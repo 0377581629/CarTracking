@@ -12,6 +12,177 @@ var _fileManagerModal = new app.ModalManager({
     modalClass: 'FileManagerModal'
 });
 
+var select2ViLanguage = {
+    inputTooLong: function (args) {
+        var overChars = args.input.length - args.maximum;
+
+        var message = 'Vui lòng xóa bớt ' + overChars + ' ký tự';
+
+        return message;
+    },
+    inputTooShort: function (args) {
+        var remainingChars = args.minimum - args.input.length;
+
+        var message = 'Vui lòng nhập thêm từ ' + remainingChars +
+            ' ký tự trở lên';
+
+        return message;
+    },
+    loadingMore: function () {
+        return 'Đang lấy thêm kết quả…';
+    },
+    maximumSelected: function (args) {
+        var message = 'Chỉ có thể chọn được ' + args.maximum + ' lựa chọn';
+
+        return message;
+    },
+    noResults: function () {
+        return 'Không tìm thấy kết quả';
+    },
+    searching: function () {
+        return 'Đang tìm…';
+    },
+    removeAllItems: function () {
+        return 'Xóa tất cả các mục';
+    }
+}
+
+var frEditorBaseConfig = {
+    key: "AV:4~?3xROKLJKYHROLDXDR@d2YYGR_Bc1A8@5@4:1B2D2F2F1?1?2A3@1C1",
+    enter: FroalaEditor.ENTER_DIV,
+    attribution: false,
+    charCounterCount: true,
+    toolbarButtons: {
+        'moreText': {
+            'buttons': ['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', 'textColor', 'backgroundColor', 'inlineClass', 'inlineStyle', 'clearFormatting']
+        },
+        'moreParagraph': {
+            'buttons': ['alignLeft', 'alignCenter', 'formatOLSimple', 'alignRight', 'alignJustify', 'formatOL', 'formatUL', 'paragraphFormat', 'paragraphStyle', 'lineHeight', 'outdent', 'indent', 'quote']
+        },
+        'moreRich': {
+            'buttons': ['insertLink', 'insertImage', 'insertVideo', 'insertFile', 'insertTable', 'emoticons', 'fontAwesome', 'specialCharacters', 'embedly', 'insertHR']
+        },
+        'moreMisc': {
+            'buttons': ['undo', 'redo', 'fullscreen', 'print', 'getPDF', 'spellChecker', 'selectAll', 'html', 'help'],
+            'align': 'right',
+            'buttonsVisible': 2
+        }
+    },
+    imageUploadURL: '/FroalaApi/UploadImage',
+    imageUploadParams: {
+        __RequestVerificationToken: abp.security.antiForgery.getToken()
+    },
+    fileUploadURL: '/FroalaApi/UploadFile',
+    imageManagerLoadURL: '/FroalaApi/LoadImages',
+    imageManagerDeleteURL: "/FroalaApi/DeleteImage",
+    imageManagerDeleteMethod: "POST",
+    imageManagerDeleteParams: {
+        __RequestVerificationToken: abp.security.antiForgery.getToken()
+    },
+    // Introduce the Video Upload Buttons
+    videoInsertButtons: ['videoBack', '|', 'videoByURL', 'videoEmbed', 'videoUpload'],
+    // Set the video upload URL.
+    videoUploadURL: '/FroalaApi/UploadVideo',
+    videoUploadParams: {
+        __RequestVerificationToken: abp.security.antiForgery.getToken()
+    },
+    // Set request type.
+    videoUploadMethod: 'POST',
+
+    events: {
+        // Catch image removal from the editor.
+        'image.removed': function ($img) {
+            $.ajax({
+                // Request method.
+                method: "POST",
+
+                // Request URL.
+                url: "/FroalaApi/DeleteImage",
+
+                // Request params.
+                data: {
+                    __RequestVerificationToken: abp.security.antiForgery.getToken(),
+                    src: $img.attr('src')
+                }
+            })
+                .done(function (data) {
+                    console.log('image was deleted');
+                })
+                .fail(function (err) {
+                    console.log('image delete problem: ' + JSON.stringify(err));
+                })
+        },
+        // Catch image removal from the editor.
+        'video.removed': function ($vid) {
+            $.ajax({
+                // Request method.
+                method: "POST",
+
+                // Request URL.
+                url: "/FroalaApi/DeleteVideo",
+
+                // Request params.
+                data: {
+                    __RequestVerificationToken: abp.security.antiForgery.getToken(),
+                    src: $vid.attr('src')
+                }
+            })
+                .done(function (data) {
+                    console.log('video was deleted');
+                })
+                .fail(function (err) {
+                    console.log('video delete problem: ' + JSON.stringify(err));
+                })
+        },
+
+        // Catch image removal from the editor.
+        'file.unlink': function (link) {
+            $.ajax({
+                // Request method.
+                method: "POST",
+
+                // Request URL.
+                url: "/FroalaApi/DeleteFile",
+
+                // Request params.
+                data: {
+                    __RequestVerificationToken: abp.security.antiForgery.getToken(),
+                    src: link.getAttribute('href')
+                }
+            })
+                .done(function (data) {
+                    console.log('file was deleted');
+                })
+                .fail(function (err) {
+                    console.log('file delete problem: ' + JSON.stringify(err));
+                })
+        }
+    }
+};
+
+var frEditorConfig = $.extend({
+    heightMin: 300,
+}, frEditorBaseConfig);
+
+var frEditorConfigInline = $.extend({
+    heightMin: 300,
+    toolbarInline: true,
+}, frEditorBaseConfig);
+
+var frEditorConfigSimple = $.extend({
+    heightMin: 200,
+}, frEditorBaseConfig);
+
+var frEditorConfigSimpleInline = $.extend({
+    heightMin: 200,
+    toolbarInline: true,
+}, frEditorBaseConfig);
+
+let frEditorConfigHide = $.extend({
+    toolbarButtons: ['undo', 'redo', '|', 'bold', 'italic', 'underline'],
+    toolbarButtonsXS: ['undo', 'redo', '-', 'bold', 'italic', 'underline']
+}, frEditorBaseConfig);
+
 function whatDecimalSeparator() {
     let n = 1.1;
     n = new Intl.NumberFormat(abp.localization.currentLanguage.name).format(n).substring(1, 2);
@@ -60,11 +231,43 @@ function buildNestedItem(item, showEditButton = false, showDeleteButton = false,
     return ddItem[0].outerHTML;
 }
 
+function removeTone(str) {
+    str = str.toLowerCase();
+    str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
+    str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
+    str = str.replace(/ì|í|ị|ỉ|ĩ/g, "i");
+    str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o");
+    str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
+    str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
+    str = str.replace(/đ/g, "d");
+    return str;
+}
+// slugify from https://gist.github.com/mathewbyrne/1280286
+function slugify(text) {
+    return text.toString().toLowerCase()
+        .replace(/\s+/g, '-')           // Replace spaces with -
+        .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
+        .replace(/\-\-+/g, '-')         // Replace multiple - with single -
+        .replace(/^-+/, '')             // Trim - from start of text
+        .replace(/-+$/, '');            // Trim - from end of text
+}
+
 (function () {
     $(function () {
         $.fn.exists = function () {
             return this.length !== 0;
         }
+
+        baseHelper.MakeSlug = function (text) {
+            return slugify(removeTone(text));
+        }
+
+        baseHelper.Select2Language = function () {
+            if (abp.localization.currentLanguage.name === 'vi')
+                return select2ViLanguage;
+            return null;
+        }
+        
         baseHelper.UpFirstChar = function(str) {
             return capitalizeFirstLetter(str);
         }
@@ -72,38 +275,76 @@ function buildNestedItem(item, showEditButton = false, showDeleteButton = false,
         baseHelper.RefreshUI = function(element) {
             if (element) {
                 let detailIndex = 1;
+                
                 element.find('.detailOrder').each(function() {
                     $(this).html(detailIndex);
                     detailIndex++;
                 });
+                
                 element.find('.kt-select2').select2({
                     width: '100%',
-                    dropdownAutoWidth: true
+                    dropdownParent: element,
+                    dropdownAutoWidth: true,
+                    language: baseHelper.Select2Language()
                 });
+                
                 element.find('.kt-select2-non-search').select2({
                     width: '100%',
+                    dropdownParent: element,
                     dropdownAutoWidth: true,
-                    minimumResultsForSearch: -1
+                    minimumResultsForSearch: -1,
+                    language: baseHelper.Select2Language()
                 });
+
+                element.find('.kt-select2-multi-select').select2({
+                    width: '100%',
+                    dropdownAutoWidth: true,
+                    multiple: true,
+                    closeOnSelect: false,
+                    language: baseHelper.Select2Language()
+                });
+                
                 element.find('.touchSpin').TouchSpin({
                     verticalbuttons: true,
                     verticalupclass: 'btn-secondary',
                     verticaldownclass: 'btn-secondary'
                 });
 
+                element.find('.date-picker').each(function () {
+                    $(this).datetimepicker({
+                        locale: abp.localization.currentLanguage.name,
+                        format: 'L'
+                    });
+                });
+                
                 element.find('.number').number(true, 0, whatDecimalSeparator(),whatThousandSeparator());
                 element.find('.number1').number(true, 1, whatDecimalSeparator(),whatThousandSeparator());
                 element.find('.number2').number(true, 2, whatDecimalSeparator(),whatThousandSeparator());
                 element.find('.number3').number(true, 3, whatDecimalSeparator(),whatThousandSeparator());
                 element.find('.numberOther').number(true, 0, '', '');
-                element.find('.date-picker').datetimepicker({
-                    locale: abp.localization.currentLanguage.name,
-                    format: 'L'
+
+                element.find('.date-picker').each(function () {
+                    $(this).datetimepicker({
+                        locale: abp.localization.currentLanguage.name,
+                        format: 'L'
+                    });
+
+                    if ($(this).attr('init-value') !== undefined) {
+                        let initDate = moment($(this).attr('init-value'),'DD/MM/YYYY').format('L');
+                        $(this).val(initDate);
+                    }
                 });
 
-                element.find('.datetime-picker').datetimepicker({
-                    locale: abp.localization.currentLanguage.name,
-                    format: 'L LT'
+                element.find('.datetime-picker').each(function(){
+                    $(this).datetimepicker({
+                        locale: abp.localization.currentLanguage.name,
+                        format: 'L LT'
+                    });
+                    if ($(this).attr('init-value') !== undefined) {
+                        let initDate = moment($(this).attr('init-value'),'DD/MM/YYYY hh:mm').format('L LT');
+                        $(this).val(initDate);
+                    }
+
                 });
 
                 element.find('.month-picker').datetimepicker({
@@ -130,6 +371,10 @@ function buildNestedItem(item, showEditButton = false, showDeleteButton = false,
                     return 'la la-edit text-primary';
                 case 'delete':
                     return 'la la-trash text-danger';
+                case 'view':
+                    return 'la la-eye text-info';
+                case 'attach':
+                    return 'la la-paperclip text-success'
             }
             return '';
         };
@@ -144,10 +389,10 @@ function buildNestedItem(item, showEditButton = false, showDeleteButton = false,
                         allowExtension: allow,
                         maxSelectCount: 1
                     }, function (selected) {
-                        if (selected !== undefined && selected.length === 1) {
-                            if (fileUrl) fileUrl.val(selected[0].path);
-                            if (fileName) fileName.val(selected[0].name);
-                            if (imgHolder) imgHolder.attr('src', selected[0].path);
+                        if (selected !== undefined && selected.length >= 1) {
+                            if (fileUrl) fileUrl.val(selected[selected.length-1].path);
+                            if (fileName) fileName.val(selected[selected.length-1].name);
+                            if (imgHolder) imgHolder.attr('src', selected[selected.length-1].path);
                             if (wrapper && customClassAfterChange) wrapper.addClass(customClassAfterChange);
                         }
                     });
@@ -174,16 +419,20 @@ function buildNestedItem(item, showEditButton = false, showDeleteButton = false,
             checkBoxLabel.append(checkBoxSpan[0].outerHTML);
             return checkBoxLabel[0].outerHTML;
         }
-        
-        baseHelper.ShowAvatar = function (avatar) {
+
+        baseHelper.ShowImage = function (image, fallBackImgSrc='../../Common/Images/no_image_available.svg') {
             let img = $("<img>");
-            img.addClass('w-50 h-50 b-rd-50');
-            img.attr('src', '../../Common/Images/default-profile-picture.jpg');
-            img.attr('onerror', "src='../../Common/Images/default-profile-picture.jpg'");
-            if (avatar !== undefined && avatar !== null && avatar.length !== 0) {
-                img.attr('src', avatar);
+            img.addClass('w-50px h-50px b-rd-50');
+            img.attr('src', fallBackImgSrc);
+            img.attr('onerror', "src='" + fallBackImgSrc + "'");
+            if (image !== undefined && image !== null && image.length !== 0) {
+                img.attr('src', image);
             }
             return img[0].outerHTML;
+        }
+        
+        baseHelper.ShowAvatar = function (avatar) {
+            return baseHelper.ShowImage(avatar, '../../Common/Images/default-profile-picture.jpg');
         }
 
         baseHelper.ShowDefaultStatus = function (status) {
@@ -203,56 +452,11 @@ function buildNestedItem(item, showEditButton = false, showDeleteButton = false,
             }
             return $span[0].outerHTML;
         }
-
-        baseHelper.ShowTrainingPlanStatus = function (status) {
-            let $span = $("<span/>");
-            if (status === 0) {
-                $span.addClass("badge badge-danger").text(app.localize('InvalidStatus'));
-            } else if (status === 1) {
-                $span.addClass("badge badge-light").text(app.localize('Draft'));
-            } else if (status === 2) {
-                $span.addClass("badge badge-dark").text(app.localize('WaitingForApproval'));
-            } else if (status === 3) {
-                $span.addClass("badge badge-success").text(app.localize('Approved'));
-            } else if (status === 4) {
-                $span.addClass("badge badge-warning").text(app.localize('Return'));
-            } else if (status === 5) {
-                $span.addClass("badge badge-info").text(app.localize('Locked'));
-            } else if (status === 6) {
-                $span.addClass("badge badge-info").text(app.localize('HaveResult'));
-            }
-            return $span[0].outerHTML;
-        }
-
-        baseHelper.ShowRecruitmentProcessStatus = function (status) {
-            let $span = $("<span/>");
-            if (status === 0) {
-                $span.addClass("badge badge-light").text(app.localize('Recruitment_Process_Waiting'));
-            } else if (status === 1) {
-                $span.addClass("badge badge-info").text(app.localize('Recruitment_Process_Planned'));
-            } else if (status === 2) {
-                $span.addClass("badge badge-primary").text(app.localize('Recruitment_Process_Interviewing'));
-            } else if (status === 3) {
-                $span.addClass("badge badge-warning").text(app.localize('Recruitment_Process_Rejected'));
-            } else if (status === 4) {
-                $span.addClass("badge badge-success").text(app.localize('Recruitment_Process_Passed'));
-            }
-            return $span[0].outerHTML;
-        }
         
         baseHelper.ShowActive = function (isActive) {
             let $span = $("<span/>");
             if (isActive) {
                 $span.addClass("badge badge-success");
-            }
-            return $span[0].outerHTML;
-        }
-
-        baseHelper.ShowColor = function (colorInHex) {
-            console.log(colorInHex);
-            let $span = $("<span/>");
-            if (colorInHex !== undefined && colorInHex !== null && colorInHex.length > 0) {
-                $span.addClass("badge").css('background-color', colorInHex);
             }
             return $span[0].outerHTML;
         }
@@ -265,38 +469,12 @@ function buildNestedItem(item, showEditButton = false, showDeleteButton = false,
             return $span[0].outerHTML;
         }
         
-        baseHelper.ShowFileTypeName = function(type) {
-            switch (type) {
-                case 1:
-                    return app.localize('FileTemplateType_EmployeeCV');
-                case 2:
-                    return app.localize('FileTemplateType_EmployeeContract');
-                case 3:
-                    return app.localize('FileTemplateType_Reward');
-                case 4:
-                    return app.localize('FileTemplateType_Discipline');
-                case 5:
-                    return app.localize('FileTemplateType_ChangeOrganization');
-                case 6:
-                    return app.localize('FileTemplateType_ChangeBenefit');
-                case 7:
-                    return app.localize('FileTemplateType_GrantAssets');
+        baseHelper.ShowColor = function (colorInHex) {
+            let $span = $("<span/>");
+            if (colorInHex !== undefined && colorInHex !== null && colorInHex.length > 0) {
+                $span.addClass("badge").css('background-color', colorInHex);
             }
-        }
-
-        baseHelper.ShowSalaryComponentTypeScopeName = function(type) {
-            switch (type) {
-                case 1:
-                    return app.localize('AllCompany');
-                case 2:
-                    return app.localize('WorkGroup');
-                case 3:
-                    return app.localize('WorkDepartment');
-                case 4:
-                    return app.localize('WorkParty');
-                case 5:
-                    return app.localize('Employee');
-            }
+            return $span[0].outerHTML;
         }
 
         baseHelper.CanEdit = function(havePermission, currentStatus, allowedStatus, allowEdit) {
@@ -432,8 +610,6 @@ function buildNestedItem(item, showEditButton = false, showDeleteButton = false,
         
         baseHelper.ShowCheckInModal = function(record) {
             let obj = record[Object.keys(record)[0]];
-            
-            
             if (obj !== undefined) {
                 let objectDto = obj;
                 let chkInp = $("<input/>").addClass('modalSelectChecker');
@@ -467,45 +643,11 @@ function buildNestedItem(item, showEditButton = false, showDeleteButton = false,
                 return $.number(input,floatCount, whatDecimalSeparator(),whatThousandSeparator());
             return '';
         }
-
-        baseHelper.PayFormTypeName = function(input = 0) {
-            if (input === 1)
-            {
-                return app.localize('PayFormType_ByTime');
-            } else if (input === 2) {
-                return app.localize('PayFormType_ByProduct');
-            } else if (input === 3) {
-                return app.localize('PayFormType_Fixed');
-            }
-            return '';
-        }
         
         baseHelper.ViewFile = function(fileUrl) {
             _globalViewFileModal.open({
                 path: fileUrl
             });
-        }
-        
-        baseHelper.ShowPatientInfo = function(patient) {
-            // depend on IHavePatientInfoDto
-            let container = $('<div>');
-            let name = $('<p>');
-            let code = $('<span>');
-            let phone = $('<span>');
-            let email = $('<span>');
-            code.add($('<i>').addClass('icon fa fa-sharp')).text(patient.patientCode);
-            phone.add($('<i>').addClass('icon fa fa-phone')).text(patient.patientPhone);
-            email.add($('<i>').addClass('icon fa fa-email')).text(patient.patientEmail);
-            name.text(patient.patientFirstName + ' ' + patient.patientLastName);
-            container.add(name);
-            container.add(code);
-            container.add(phone);
-            container.add(email);
-            return container.outerHTML();
-        }
-        
-        baseHelper.ShowDoctorInfo = function(doctor) {
-            // depend on IHaveDoctorInfoDto
         }
         
         baseHelper.NestedItemsHtml = function(items, showEditButton = false, showDeleteButton, handleIconClass='la la-bars', customLabel = 'customLabelClass', customEditClass = 'customSettingClass', customDeleteClass = 'customDeleteClass') {
@@ -537,30 +679,46 @@ function buildNestedItem(item, showEditButton = false, showDeleteButton = false,
         
         $('.kt-select2').select2({
             width: '100%',
-            dropdownAutoWidth: true
+            dropdownAutoWidth: true,
+            language: baseHelper.Select2Language()
         });
 
         $('.kt-select2-non-search').select2({
             width: '100%',
             dropdownAutoWidth: true,
-            minimumResultsForSearch: -1
+            minimumResultsForSearch: -1,
+            language: baseHelper.Select2Language()
         });
 
         $('.kt-select2-multi-select').select2({
             width: '100%',
             dropdownAutoWidth: true,
             multiple: true,
-            closeOnSelect: false
+            closeOnSelect: false,
+            language: baseHelper.Select2Language()
         });
 
-        $('.date-picker').datetimepicker({
-            locale: abp.localization.currentLanguage.name,
-            format: 'L'
+        $('.date-picker').each(function () {
+            $(this).datetimepicker({
+                locale: abp.localization.currentLanguage.name,
+                format: 'L'
+            });
+
+            if ($(this).attr('init-value') !== undefined) {
+                let initDate = moment($(this).attr('init-value'),'DD/MM/YYYY').format('L');
+                $(this).val(initDate);
+            }
         });
 
-        $('.datetime-picker').datetimepicker({
-            locale: abp.localization.currentLanguage.name,
-            format: 'L LT'
+        $('.datetime-picker').each(function(){
+            $(this).datetimepicker({
+                locale: abp.localization.currentLanguage.name,
+                format: 'L LT'
+            });
+            if ($(this).attr('init-value') !== undefined) {
+                let initDate = moment($(this).attr('init-value'),'DD/MM/YYYY hh:mm').format('L LT');
+                $(this).val(initDate);
+            }
         });
 
         $('.month-picker').datetimepicker({

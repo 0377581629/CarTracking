@@ -9,12 +9,17 @@ using Abp.Authorization;
 using Abp.BackgroundJobs;
 using Abp.Collections.Extensions;
 using Abp.Domain.Repositories;
+using Abp.EntityFrameworkCore.Repositories;
 using Abp.Runtime.Session;
 using Abp.UI;
 using Microsoft.EntityFrameworkCore;
+using Z.EntityFramework.Extensions;
 using Zero.Authorization;
 using Zero.Editions.Dto;
 using Zero.MultiTenancy;
+using Zero.Authorization.Roles;
+using Zero.Customize;
+using Zero.Customize.Dashboard;
 
 namespace Zero.Editions
 {
@@ -25,16 +30,29 @@ namespace Zero.Editions
         private readonly IRepository<Tenant> _tenantRepository;
         private readonly IBackgroundJobManager _backgroundJobManager;
 
+        private readonly RoleManager _roleManager;
+        private readonly IRepository<EditionPermission> _editionPermissionRepository;
+        private readonly IRepository<EditionDashboardWidget> _editionDashboardWidgetRepository;
+        private readonly IRepository<RoleDashboardWidget> _roleDashboardWidgetRepository;
+        
         public EditionAppService(
             EditionManager editionManager,
             IRepository<SubscribableEdition> editionRepository,
             IRepository<Tenant> tenantRepository,
-            IBackgroundJobManager backgroundJobManager)
+            IBackgroundJobManager backgroundJobManager, 
+            RoleManager roleManager, 
+            IRepository<EditionPermission> editionPermissionRepository, 
+            IRepository<EditionDashboardWidget> editionDashboardWidgetRepository, 
+            IRepository<RoleDashboardWidget> roleDashboardWidgetRepository)
         {
             _editionManager = editionManager;
             _editionRepository = editionRepository;
             _tenantRepository = tenantRepository;
             _backgroundJobManager = backgroundJobManager;
+            _roleManager = roleManager;
+            _editionPermissionRepository = editionPermissionRepository;
+            _editionDashboardWidgetRepository = editionDashboardWidgetRepository;
+            _roleDashboardWidgetRepository = roleDashboardWidgetRepository;
         }
 
         [AbpAuthorize(AppPermissions.Pages_Editions)]
@@ -93,15 +111,35 @@ namespace Zero.Editions
             };
         }
 
+        private async Task ValidateDataInput(CreateEditionDto input)
+        {
+            var obj = await _editionRepository.FirstOrDefaultAsync(o => o.DisplayName.ToLower().Contains(input.Edition.DisplayName.ToLower()));
+            if (obj != null)
+            {
+                throw new UserFriendlyException(L("Error"), L("DisplayNameAlreadyExists"));
+            }
+        }
+
+        private async Task ValidateDataInput(UpdateEditionDto input)
+        {
+            var obj = await _editionRepository.FirstOrDefaultAsync(o => o.Id != input.Edition.Id && o.DisplayName.ToLower().Contains(input.Edition.DisplayName.ToLower()));
+            if (obj != null)
+            {
+                throw new UserFriendlyException(L("Error"), L("DisplayNameAlreadyExists"));
+            }
+        }
+        
         [AbpAuthorize(AppPermissions.Pages_Editions_Create)]
         public async Task CreateEdition(CreateEditionDto input)
         {
+            await ValidateDataInput(input);
             await CreateEditionAsync(input);
         }
 
         [AbpAuthorize(AppPermissions.Pages_Editions_Edit)]
         public async Task UpdateEdition(UpdateEditionDto input)
         {
+            await ValidateDataInput(input);
             await UpdateEditionAsync(input);
         }
 
@@ -173,6 +211,8 @@ namespace Zero.Editions
         [AbpAuthorize(AppPermissions.Pages_Editions_Create)]
         protected virtual async Task CreateEditionAsync(CreateEditionDto input)
         {
+            EntityFrameworkManager.ContextFactory = _ => _editionPermissionRepository.GetDbContext();
+
             var edition = ObjectMapper.Map<SubscribableEdition>(input.Edition);
 
             if (edition.ExpiringEditionId.HasValue)
@@ -188,6 +228,46 @@ namespace Zero.Editions
             await CurrentUnitOfWork.SaveChangesAsync(); //It's done to get Id of the edition.
 
             await SetFeatureValues(edition, input.FeatureValues);
+            
+            #region Customize
+            // Set permission for edition
+            if (input.GrantedPermissionNames != null)
+            {
+                var lstDetail = input.GrantedPermissionNames.Select(o=>new EditionPermission
+                {
+                    EditionId = edition.Id,
+                    PermissionName = o
+                });
+                await _editionPermissionRepository.GetDbContext().BulkSynchronizeAsync(lstDetail,
+                    options =>
+                    {
+                        options.ColumnSynchronizeDeleteKeySubsetExpression = detail => detail.EditionId;
+                    });
+            }
+            
+            // Dashboard Widget
+            if (input.GrantedDashboardWidgets != null)
+            {
+                var lstDetails = input.GrantedDashboardWidgets.Select(o=>new EditionDashboardWidget
+                {
+                    EditionId = edition.Id,
+                    DashboardWidgetId = o
+                });
+                await _editionDashboardWidgetRepository.GetDbContext().BulkSynchronizeAsync(lstDetails, options => { options.ColumnSynchronizeDeleteKeySubsetExpression = detail => detail.EditionId; });
+            }
+            
+            // Ensure system have only default edition
+            if (input.Edition.IsDefault)
+            {
+                var lstSubEdition = await _editionRepository.GetAllListAsync();
+                foreach (var itm in lstSubEdition)
+                {
+                    itm.IsDefault = itm.Id == edition.Id;
+                    await _editionRepository.UpdateAsync(itm);
+                }
+            }
+            
+            #endregion
         }
 
         [AbpAuthorize(AppPermissions.Pages_Editions_Edit)]
@@ -195,11 +275,110 @@ namespace Zero.Editions
         {
             if (input.Edition.Id != null)
             {
+                EntityFrameworkManager.ContextFactory = _ => _editionPermissionRepository.GetDbContext();
+
                 var edition = await _editionManager.GetByIdAsync(input.Edition.Id.Value);
 
                 edition.DisplayName = input.Edition.DisplayName;
 
                 await SetFeatureValues(edition, input.FeatureValues);
+                
+                #region Customize
+                
+                if (input.Edition.IsDefault)
+                {
+                    var lstSubEdition = await _editionRepository.GetAllListAsync();
+                    foreach (var itm in lstSubEdition)
+                    {
+                        itm.IsDefault = itm.Id == input.Edition.Id;
+                        await _editionRepository.UpdateAsync(itm);
+                    }
+                }
+                
+                await _editionPermissionRepository.DeleteAsync(o => o.EditionId == input.Edition.Id);
+
+                if (input.GrantedPermissionNames != null && input.GrantedPermissionNames.Any())
+                {
+                    var systemPermissions = PermissionManager.GetAllPermissions();
+                    var permissions = systemPermissions.Where(o => input.GrantedPermissionNames.Contains(o.Name)).ToList();
+                    
+                    foreach (var permission in input.GrantedPermissionNames)
+                    {
+                        await _editionPermissionRepository.InsertAsync(new EditionPermission
+                        {
+                            EditionId = edition.Id,
+                            PermissionName = permission
+                        });
+                    }
+                    
+                    var tenantIds = await _tenantRepository.GetAll().Where(o => o.EditionId == edition.Id && o.Name != "Default").Select(o=>o.Id).ToListAsync();
+                    if (tenantIds.Any())
+                    {
+                        foreach (var tenantId in tenantIds)
+                        {
+                            using (CurrentUnitOfWork.SetTenantId(tenantId))
+                            {
+                                var roles = await _roleManager.Roles.ToListAsync();
+                                if (!roles.Any()) continue;
+                                foreach (var role in roles)
+                                {
+                                    // Admin role
+                                    if (role.Name == StaticRoleNames.Tenants.Admin)
+                                    {
+                                        await _roleManager.ResetAllPermissionsAsync(role);
+                                        await _roleManager.SetGrantedPermissionsAsync(role, permissions);
+                                    }
+                                    else
+                                    {
+                                        // Other role
+                                        if (role.Permissions == null || !role.Permissions.Any()) continue;
+                                        var listInTwo = permissions.Select(o => o.Name).Intersect(role.Permissions.Select(o => o.Name)).ToList();
+                                        if (!listInTwo.Any()) continue;
+                                        {
+                                            var permissionLeft = permissions.Where(o => listInTwo.Contains(o.Name)).ToList();
+                                            await _roleManager.ResetAllPermissionsAsync(role);
+                                            await _roleManager.SetGrantedPermissionsAsync(role, permissionLeft);
+                                        }
+                                    }
+                                }
+                                await CurrentUnitOfWork.SaveChangesAsync();
+                            }
+                        }
+                    }
+                }
+
+                // Dashboard Widget
+                await _editionDashboardWidgetRepository.DeleteAsync(o => o.EditionId == input.Edition.Id);
+                if (input.GrantedDashboardWidgets != null)
+                {
+                    var lstDetails = input.GrantedDashboardWidgets.Select(o=>new EditionDashboardWidget
+                    {
+                        EditionId = edition.Id,
+                        DashboardWidgetId = o
+                    }).ToList();
+                    if (lstDetails.Any())
+                        await _editionDashboardWidgetRepository.GetDbContext().BulkSynchronizeAsync(lstDetails, options => { options.ColumnSynchronizeDeleteKeySubsetExpression = detail => detail.EditionId; });
+                    else
+                        await _editionDashboardWidgetRepository.DeleteAsync(o => o.EditionId == edition.Id);
+                    
+                    var tenantIds = await _tenantRepository.GetAll().Where(o => o.EditionId == edition.Id && o.Name != "Default").Select(o=>o.Id).ToListAsync();
+                    if (tenantIds.Any())
+                    {
+                        foreach (var tenantId in tenantIds)
+                        {
+                            using (CurrentUnitOfWork.SetTenantId(tenantId))
+                            {
+                                var roles = await _roleManager.Roles.ToListAsync();
+                                if (!roles.Any()) continue;
+                                var roleIds = roles.Select(o => o.Id).ToList();
+                                var widgetIds = lstDetails.Select(o => o.DashboardWidgetId).ToList();
+                                await _roleDashboardWidgetRepository.DeleteAsync(o => roleIds.Contains(o.RoleId) && !widgetIds.Contains(o.DashboardWidgetId));
+                                await CurrentUnitOfWork.SaveChangesAsync();
+                            }
+                        }
+                    }
+                }
+                #endregion
             }
         }
 

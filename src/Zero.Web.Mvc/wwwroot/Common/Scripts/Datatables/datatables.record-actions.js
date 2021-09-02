@@ -33,7 +33,34 @@
         return $li;
     }
 
+    const _createActionButton = function (record, fieldItem) {
+        const $a = $('<a/>').addClass('btn btn-sm btn-clean btn-icon btn-icon-md mx-0').attr('href', '#');
+        const $i = $('<i/>');
+
+        if (fieldItem.action) {
+            $a.click(function (e) {
+                e.preventDefault();
+                fieldItem.action({
+                    record: record
+                });
+            });
+        }
+
+        if (fieldItem.icon) {
+            $i.addClass(fieldItem.icon);
+        }
+
+        if (fieldItem.text) {
+            $a.attr('title', fieldItem.text);
+        }
+
+        $i.appendTo($a);
+        return $a;
+    };
+
     var _createButtonDropdown = function (record, field) {
+        const $spanContainer = $('<div/>');
+
         var $container = $('<div/>')
             .addClass('btn-group');
 
@@ -61,13 +88,27 @@
                 continue;
             }
 
-            var $dropdownItem = _createDropdownItem(record, fieldItem);
-
+            const $dropdownItem = _createDropdownItem(record, fieldItem);
+            const $actionButton = _createActionButton(record, fieldItem);
             if (fieldItem.enabled && !fieldItem.enabled({ record: record })) {
                 $dropdownItem.addClass('disabled');
             }
 
-            $dropdownItem.appendTo($dropdownItemsContainer);
+            if (field.dropDownStyle !== undefined && field.dropDownStyle === false) {
+                $actionButton.appendTo($spanContainer);
+            } else {
+                $dropdownItem.appendTo($dropdownItemsContainer);
+            }
+        }
+
+        if (field.dropDownStyle !== undefined && field.dropDownStyle === false) {
+            if (field.alignControl) {
+                $spanContainer.addClass(field.alignControl);
+            }
+            if (field.cssClass){
+                $spanContainer.addClass(field.cssClass);
+            }
+            return $spanContainer;
         }
 
         if ($dropdownItemsContainer.find('li').length > 0) {

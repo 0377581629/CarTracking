@@ -11,5 +11,9 @@ namespace Zero.Editions.Dto
 
         [Required]
         public List<NameValueDto> FeatureValues { get; set; }
+        
+        public List<string> GrantedPermissionNames { get; set; }
+        
+        public List<int> GrantedDashboardWidgets { get; set; }
     }
 }

@@ -1,15 +1,20 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Abp.Application.Services.Dto;
 using Abp.Authorization;
+using Abp.Domain.Repositories;
+using Abp.EntityFrameworkCore.Repositories;
 using Abp.Zero.Configuration;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Z.EntityFramework.Extensions;
 using Zero.Authorization.Permissions;
 using Zero.Authorization.Permissions.Dto;
 using Zero.Authorization.Roles.Dto;
+using Zero.Customize.Dashboard;
 
 namespace Zero.Authorization.Roles
 {
@@ -21,13 +26,16 @@ namespace Zero.Authorization.Roles
     {
         private readonly RoleManager _roleManager;
         private readonly IRoleManagementConfig _roleManagementConfig;
-
+        private readonly IPermissionAppService _permissionAppService;
+        private readonly IRepository<RoleDashboardWidget> _roleDashboardWidgetRepository;
         public RoleAppService(
             RoleManager roleManager,
-            IRoleManagementConfig roleManagementConfig)
+            IRoleManagementConfig roleManagementConfig, IRepository<RoleDashboardWidget> roleDashboardWidgetRepository, IPermissionAppService permissionAppService)
         {
             _roleManager = roleManager;
             _roleManagementConfig = roleManagementConfig;
+            _roleDashboardWidgetRepository = roleDashboardWidgetRepository;
+            _permissionAppService = permissionAppService;
         }
 
         [HttpPost]
@@ -63,7 +71,10 @@ namespace Zero.Authorization.Roles
         public async Task<GetRoleForEditOutput> GetRoleForEdit(NullableIdDto input)
         {
             var permissions = PermissionManager.GetAllPermissions();
-            var grantedPermissions = new Permission[0];
+            var permissionsByEdition = await _permissionAppService.GetAllPermissionsByCurrentTenant();
+            permissions = permissions.Where(o => permissionsByEdition.Contains(o.Name)).ToList();
+
+            var grantedPermissions = Array.Empty<Permission>();
             RoleEditDto roleEditDto;
 
             if (input.Id.HasValue) //Editing existing role?
@@ -87,6 +98,7 @@ namespace Zero.Authorization.Roles
 
         public async Task CreateOrUpdateRole(CreateOrUpdateRoleInput input)
         {
+            input.GrantedDashboardWidgets ??= new List<int>();
             if (input.Role.Id.HasValue)
             {
                 await UpdateRoleAsync(input);
@@ -114,6 +126,7 @@ namespace Zero.Authorization.Roles
         [AbpAuthorize(AppPermissions.Pages_Administration_Roles_Edit)]
         protected virtual async Task UpdateRoleAsync(CreateOrUpdateRoleInput input)
         {
+            EntityFrameworkManager.ContextFactory = _ => _roleDashboardWidgetRepository.GetDbContext();
             Debug.Assert(input.Role.Id != null, "input.Role.Id should be set.");
 
             var role = await _roleManager.GetRoleByIdAsync(input.Role.Id.Value);
@@ -121,6 +134,18 @@ namespace Zero.Authorization.Roles
             role.IsDefault = input.Role.IsDefault;
 
             await UpdateGrantedPermissionsAsync(role, input.GrantedPermissionNames);
+            
+            // Dashboard Widget
+            var lstDetail = input.GrantedDashboardWidgets.Select(o => new RoleDashboardWidget
+            {
+                RoleId = role.Id,
+                DashboardWidgetId = o
+            }).ToList();
+            if (lstDetail.Any())
+                await _roleDashboardWidgetRepository.GetDbContext().BulkSynchronizeAsync(lstDetail,
+                    options => { options.ColumnSynchronizeDeleteKeySubsetExpression = detail => detail.RoleId; });
+            else
+                await _roleDashboardWidgetRepository.DeleteAsync(o => o.RoleId == role.Id);
         }
 
         [AbpAuthorize(AppPermissions.Pages_Administration_Roles_Create)]
@@ -130,6 +155,17 @@ namespace Zero.Authorization.Roles
             CheckErrors(await _roleManager.CreateAsync(role));
             await CurrentUnitOfWork.SaveChangesAsync(); //It's done to get Id of the role.
             await UpdateGrantedPermissionsAsync(role, input.GrantedPermissionNames);
+            // Dashboard Widget
+            var lstDetail = input.GrantedDashboardWidgets.Select(o => new RoleDashboardWidget
+            {
+                RoleId = role.Id,
+                DashboardWidgetId = o
+            }).ToList();
+            if (lstDetail.Any())
+                await _roleDashboardWidgetRepository.GetDbContext().BulkSynchronizeAsync(lstDetail,
+                    options => { options.ColumnSynchronizeDeleteKeySubsetExpression = detail => detail.RoleId; });
+            else
+                await _roleDashboardWidgetRepository.DeleteAsync(o => o.RoleId == role.Id);
         }
 
         private async Task UpdateGrantedPermissionsAsync(Role role, List<string> grantedPermissionNames)

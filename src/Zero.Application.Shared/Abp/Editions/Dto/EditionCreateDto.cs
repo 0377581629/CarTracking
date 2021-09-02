@@ -22,5 +22,9 @@ namespace Zero.Editions.Dto
         public int? WaitingDayAfterExpire { get; set; }
 
         public int? ExpiringEditionId { get; set; }
+        
+        #region Customize
+        public bool IsDefault { get; set; }
+        #endregion
     }
 }

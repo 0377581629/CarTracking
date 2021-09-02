@@ -2,6 +2,7 @@
 @using Abp.Application.Services.Dto
 @using Abp.Extensions
 @using Zero
+@using Zero.Authorization
 @using Zero.Web.Areas.App.Models.Common.Modals
 @using Zero.Web.Areas.App.Models.Editions
 @model CreateEditionModalViewModel
@@ -17,14 +18,24 @@
             </a>
         </li>
         <li class="nav-item">
+            <a href="#PermissionTab" class="nav-link" data-toggle="tab" role="tab">
+                @L("Permission")
+            </a>
+        </li>
+        <li class="nav-item dashboardWidgetGroup @(Model.GrantedPermissionNames.Contains(AppPermissions.Dashboard) ? "" : "hidden")">
+            <a href="#DashboardWidgetTab" class="nav-link" data-toggle="tab" role="tab">
+                @L("DashboardWidget")
+            </a>
+        </li>
+        <li class="nav-item">
             <a href="#FeaturesTab" class="nav-link" data-toggle="tab" role="tab">
                 @L("Features")
             </a>
         </li>
     </ul>
 
-    <div class="tab-content">
-        <div class="tab-pane pt-5 active" id="EditionInformationsTab" role="tabpanel">
+    <div class="tab-content pt-20">
+        <div class="tab-pane active" id="EditionInformationsTab" role="tabpanel">
 
             <form name="EditionInformationsForm" role="form" novalidate class="form-validation">
 
@@ -54,7 +65,7 @@
                 </div>
 
                 <div class="paid-features">
-                    <input type="hidden" name="currency" value="@ZeroConsts.CurrencySign" />
+                    <input type="hidden" name="currency" value="@ZeroConsts.CurrencySign"/>
                     <div class="row SubscriptionPrice">
                         <div class="col-md-6">
                             <div class="form-group">
@@ -62,7 +73,7 @@
                                 <input name="DailyPrice"
                                        id="DailyPrice"
                                        type="text"
-                                       class="form-control" />
+                                       class="form-control"/>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -71,7 +82,7 @@
                                 <input name="WeeklyPrice"
                                        id="WeeklyPrice"
                                        type="text"
-                                       class="form-control" />
+                                       class="form-control"/>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -80,7 +91,7 @@
                                 <input name="MonthlyPrice"
                                        id="MonthlyPrice"
                                        type="text"
-                                       class="form-control" />
+                                       class="form-control"/>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -89,14 +100,14 @@
                                 <input name="AnnualPrice"
                                        id="AnnualPrice"
                                        type="text"
-                                       class="form-control" />
+                                       class="form-control"/>
                             </div>
                         </div>
                     </div>
 
                     <div class="checkbox-list">
                         <label for="EditEdition_IsTrialActive" class="checkbox checkbox-outline">
-                            <input id="EditEdition_IsTrialActive" type="checkbox" name="IsTrialActive" value="true" />
+                            <input id="EditEdition_IsTrialActive" type="checkbox" name="IsTrialActive" value="true"/>
                             <span></span>
                             @L("IsTrialActive")
                         </label>
@@ -112,7 +123,7 @@
 
                     <div class="checkbox-list">
                         <label for="EditEdition_IsWaitingDayActive" class="checkbox checkbox-outline">
-                            <input id="EditEdition_IsWaitingDayActive" type="checkbox" name="IsWaitingDayActive" value="true" />
+                            <input id="EditEdition_IsWaitingDayActive" type="checkbox" name="IsWaitingDayActive" value="true"/>
                             <span></span>
                             @L("WaitAfterSubscriptionExpireDate")
                         </label>
@@ -129,12 +140,12 @@
                     <label>@L("WhatWillDoneAfterSubscriptionExpiry")</label>
                     <div class="radio-inline mb-5">
                         <label for="EditEdition_ExpireAction_DeactiveUser" class="radio">
-                            <input id="EditEdition_ExpireAction_DeactiveUser" name="ExpireAction" @(!Model.Edition.ExpiringEditionId.HasValue ? "checked=\" checked\"" : "" ) type="radio">
+                            <input id="EditEdition_ExpireAction_DeactiveUser" name="ExpireAction" @(!Model.Edition.ExpiringEditionId.HasValue ? "checked=\" checked\"" : "") type="radio">
                             <span></span>
                             @L("DeactiveTenant")
                         </label>
                         <label for="EditEdition_ExpireAction_AssignEdition" class="radio">
-                            <input id="EditEdition_ExpireAction_AssignEdition" name="ExpireAction" @(Model.Edition.ExpiringEditionId.HasValue ? "checked=\" checked\"" : "" ) type="radio">
+                            <input id="EditEdition_ExpireAction_AssignEdition" name="ExpireAction" @(Model.Edition.ExpiringEditionId.HasValue ? "checked=\" checked\"" : "") type="radio">
                             <span></span>
                             @L("AssignToAnotherEdition")
                         </label>
@@ -147,7 +158,15 @@
             </form>
 
         </div>
-        <div class="tab-pane pt-5" id="FeaturesTab" role="tabpanel">
+        <div class="tab-pane" id="PermissionTab" role="tabpanel">
+            <div id="PermissionFilterTree">
+                @await Html.PartialAsync("~/Areas/App/Views/Common/_PermissionTree.cshtml", Model)
+            </div>
+        </div>
+        <div class="tab-pane dashboardWidgetGroup @(Model.GrantedPermissionNames.Contains(AppPermissions.Dashboard) ? "" : "hidden")" id="DashboardWidgetTab" role="tabpanel">
+            @await Html.PartialAsync("Components/_CreateDashboardWidgetTab", Model)
+        </div>
+        <div class="tab-pane" id="FeaturesTab" role="tabpanel">
             @await Html.PartialAsync("~/Areas/App/Views/Common/_FeaturesTree.cshtml", Model)
         </div>
     </div>

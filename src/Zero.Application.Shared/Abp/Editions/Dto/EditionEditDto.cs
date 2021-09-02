@@ -10,5 +10,9 @@ namespace Zero.Editions.Dto
         public string DisplayName { get; set; }
 
         public int? ExpiringEditionId { get; set; }
+        
+        #region Customize
+        public bool IsDefault { get; set; }
+        #endregion
     }
 }

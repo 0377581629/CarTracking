@@ -1,0 +1,30 @@
+﻿@using Zero.Web.Areas.App.Models.Editions
+@model EditEditionModalViewModel
+
+<table id="DashboardWidgetTable" class="display table table-bordered table-hover">
+    <thead>
+    <tr>
+        <th></th>
+        <th class="text-center">@L("Name")</th>
+        <th class="text-center">@L("Description")</th>
+    </tr>
+    <tbody>
+    @if (Model.DashboardWidgets != null && Model.DashboardWidgets.Any())
+    {
+        foreach (var wg in Model.DashboardWidgets)
+        {
+            <tr>
+                <td class="text-center w-40px">
+                    <label class="checkbox checkbox-outline" style="display:inline-block">
+                        <input type="checkbox" class="dashboardWidgetChecker" widgetId="@wg.Id" value="true" @((Model.GrantedDashboardWidgets != null && Model.GrantedDashboardWidgets.Any(o=>o.Id == wg.Id))?"checked":"")/>
+                        <span class="mr-0"></span>
+                    </label>
+                </td>
+                <td>@wg.Name</td>
+                <td>@wg.Description</td>
+            </tr>
+        }
+    }
+    </tbody>
+    </thead>
+</table>

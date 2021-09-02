@@ -10,5 +10,7 @@ namespace Zero.Authorization.Roles.Dto
 
         [Required]
         public List<string> GrantedPermissionNames { get; set; }
+        
+        public List<int> GrantedDashboardWidgets { get; set; }
     }
 }

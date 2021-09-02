@@ -1,5 +1,6 @@
 ﻿@using Abp.Application.Editions
 @using Abp.Extensions
+@using Zero.Authorization
 @using Zero.Web.Areas.App.Models.Common.Modals
 @using Zero.Web.Areas.App.Models.Editions
 @model EditEditionModalViewModel
@@ -15,18 +16,29 @@
             </a>
         </li>
         <li class="nav-item">
+            <a href="#PermissionTab" class="nav-link" data-toggle="tab" role="tab">
+                @L("Permission")
+            </a>
+        </li>
+
+        <li class="nav-item dashboardWidgetGroup @(Model.GrantedPermissionNames.Contains(AppPermissions.Dashboard) ? "" : "hidden")">
+            <a href="#DashboardWidgetTab" class="nav-link" data-toggle="tab" role="tab">
+                @L("DashboardWidget")
+            </a>
+        </li>
+        <li class="nav-item">
             <a href="#FeaturesTab" class="nav-link" data-toggle="tab" role="tab">
                 @L("Features")
             </a>
         </li>
     </ul>
 
-    <div class="tab-content">
-        <div class="tab-pane  pt-5 active" id="EditionInformationsTab" role="tabpanel">
+    <div class="tab-content pt-20">
+        <div class="tab-pane active" id="EditionInformationsTab" role="tabpanel">
 
             <form name="EditionInformationsForm" role="form" novalidate class="form-validation">
 
-                <input type="hidden" name="Id" value="@Model.Edition.Id" />
+                <input type="hidden" name="Id" value="@Model.Edition.Id"/>
 
                 <div class="form-group ">
                     <label for="DisplayName">@L("EditionName")</label>
@@ -42,7 +54,15 @@
             </form>
 
         </div>
-        <div class="tab-pane pt-5" id="FeaturesTab" role="tabpanel">
+        <div class="tab-pane" id="PermissionTab" role="tabpanel">
+            <div id="PermissionFilterTree">
+                @await Html.PartialAsync("~/Areas/App/Views/Common/_PermissionTree.cshtml", Model)
+            </div>
+        </div>
+        <div class="tab-pane dashboardWidgetGroup @(Model.GrantedPermissionNames.Contains(AppPermissions.Dashboard) ? "" : "hidden")" id="DashboardWidgetTab" role="tabpanel">
+            @await Html.PartialAsync("Components/_EditDashboardWidgetTab", Model)
+        </div>
+        <div class="tab-pane" id="FeaturesTab" role="tabpanel">
             @await Html.PartialAsync("~/Areas/App/Views/Common/_FeaturesTree.cshtml", Model)
         </div>
     </div>
