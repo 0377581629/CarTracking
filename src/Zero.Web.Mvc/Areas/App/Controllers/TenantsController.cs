@@ -23,19 +23,21 @@ namespace Zero.Web.Areas.App.Controllers
         private readonly TenantManager _tenantManager;
         private readonly IEditionAppService _editionAppService;
         private readonly IPasswordComplexitySettingStore _passwordComplexitySettingStore;
-
+        private readonly IZeroAppService _zeroAppService;
         public TenantsController(
             ITenantAppService tenantAppService,
             TenantManager tenantManager,
             IEditionAppService editionAppService,
             ICommonLookupAppService commonLookupAppService,
-            IPasswordComplexitySettingStore passwordComplexitySettingStore)
+            IPasswordComplexitySettingStore passwordComplexitySettingStore, 
+            IZeroAppService zeroAppService)
         {
             _tenantAppService = tenantAppService;
             _tenantManager = tenantManager;
             _editionAppService = editionAppService;
             _commonLookupAppService = commonLookupAppService;
             _passwordComplexitySettingStore = passwordComplexitySettingStore;
+            _zeroAppService = zeroAppService;
         }
 
         public async Task<ActionResult> Index()
@@ -67,7 +69,8 @@ namespace Zero.Web.Areas.App.Controllers
 
             var viewModel = new CreateTenantViewModel(editionItems)
             {
-                PasswordComplexitySetting = await _passwordComplexitySettingStore.GetSettingsAsync()
+                PasswordComplexitySetting = await _passwordComplexitySettingStore.GetSettingsAsync(),
+                ListTenant = await _zeroAppService.GetChildTenantsDropDown()
             };
 
             return PartialView("_CreateModal", viewModel);
@@ -78,8 +81,9 @@ namespace Zero.Web.Areas.App.Controllers
         {
             var tenantEditDto = await _tenantAppService.GetTenantForEdit(new EntityDto(id));
             var editionItems = await _editionAppService.GetEditionComboboxItems(tenantEditDto.EditionId);
-            var viewModel = new EditTenantViewModel(tenantEditDto, editionItems);
-
+            var viewModel = new EditTenantViewModel(tenantEditDto, editionItems){
+                ListTenant = await _zeroAppService.GetChildTenantsDropDown(currentSelect: tenantEditDto.ParentId)
+            };
             return PartialView("_EditModal", viewModel);
         }
 
