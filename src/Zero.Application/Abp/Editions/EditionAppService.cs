@@ -238,11 +238,7 @@ namespace Zero.Editions
                     EditionId = edition.Id,
                     PermissionName = o
                 });
-                await _editionPermissionRepository.GetDbContext().BulkSynchronizeAsync(lstDetail,
-                    options =>
-                    {
-                        options.ColumnSynchronizeDeleteKeySubsetExpression = detail => detail.EditionId;
-                    });
+                await _editionPermissionRepository.GetDbContext().BulkInsertAsync(lstDetail);
             }
             
             // Dashboard Widget
@@ -253,7 +249,7 @@ namespace Zero.Editions
                     EditionId = edition.Id,
                     DashboardWidgetId = o
                 });
-                await _editionDashboardWidgetRepository.GetDbContext().BulkSynchronizeAsync(lstDetails, options => { options.ColumnSynchronizeDeleteKeySubsetExpression = detail => detail.EditionId; });
+                await _editionDashboardWidgetRepository.GetDbContext().BulkInsertAsync(lstDetails);
             }
             
             // Ensure system have only default edition
@@ -301,15 +297,27 @@ namespace Zero.Editions
                 {
                     var systemPermissions = PermissionManager.GetAllPermissions();
                     var permissions = systemPermissions.Where(o => input.GrantedPermissionNames.Contains(o.Name)).ToList();
-                    
-                    foreach (var permission in input.GrantedPermissionNames)
+
+                    var editionPermissions = input.GrantedPermissionNames.Select(o => new EditionPermission
                     {
-                        await _editionPermissionRepository.InsertAsync(new EditionPermission
-                        {
-                            EditionId = edition.Id,
-                            PermissionName = permission
-                        });
-                    }
+                        EditionId = edition.Id,
+                        PermissionName = o
+                    }).ToList();
+                    await _editionPermissionRepository.GetDbContext().BulkInsertAsync(editionPermissions);
+                    
+                    // Dashboard Widget
+                    await _editionDashboardWidgetRepository.DeleteAsync(o => o.EditionId == input.Edition.Id);
+                    
+                    var lstDetails = input.GrantedDashboardWidgets.Select(o=>new EditionDashboardWidget
+                    {
+                        EditionId = edition.Id,
+                        DashboardWidgetId = o
+                    }).ToList();
+                    
+                    await _editionDashboardWidgetRepository.DeleteAsync(o => o.EditionId == edition.Id);
+                    
+                    if (lstDetails.Any())
+                        await _editionDashboardWidgetRepository.GetDbContext().BulkInsertAsync(lstDetails);
                     
                     var tenantIds = await _tenantRepository.GetAll().Where(o => o.EditionId == edition.Id && o.Name != "Default").Select(o=>o.Id).ToListAsync();
                     if (tenantIds.Any())
@@ -320,6 +328,9 @@ namespace Zero.Editions
                             {
                                 var roles = await _roleManager.Roles.ToListAsync();
                                 if (!roles.Any()) continue;
+                                var roleIds = roles.Select(o => o.Id).ToList();
+                                var widgetIds = lstDetails.Select(o => o.DashboardWidgetId).ToList();
+                                await _roleDashboardWidgetRepository.DeleteAsync(o => roleIds.Contains(o.RoleId) && !widgetIds.Contains(o.DashboardWidgetId));
                                 foreach (var role in roles)
                                 {
                                     // Admin role
@@ -341,39 +352,6 @@ namespace Zero.Editions
                                         }
                                     }
                                 }
-                                await CurrentUnitOfWork.SaveChangesAsync();
-                            }
-                        }
-                    }
-                }
-
-                // Dashboard Widget
-                await _editionDashboardWidgetRepository.DeleteAsync(o => o.EditionId == input.Edition.Id);
-                if (input.GrantedDashboardWidgets != null)
-                {
-                    var lstDetails = input.GrantedDashboardWidgets.Select(o=>new EditionDashboardWidget
-                    {
-                        EditionId = edition.Id,
-                        DashboardWidgetId = o
-                    }).ToList();
-                    if (lstDetails.Any())
-                        await _editionDashboardWidgetRepository.GetDbContext().BulkSynchronizeAsync(lstDetails, options => { options.ColumnSynchronizeDeleteKeySubsetExpression = detail => detail.EditionId; });
-                    else
-                        await _editionDashboardWidgetRepository.DeleteAsync(o => o.EditionId == edition.Id);
-                    
-                    var tenantIds = await _tenantRepository.GetAll().Where(o => o.EditionId == edition.Id && o.Name != "Default").Select(o=>o.Id).ToListAsync();
-                    if (tenantIds.Any())
-                    {
-                        foreach (var tenantId in tenantIds)
-                        {
-                            using (CurrentUnitOfWork.SetTenantId(tenantId))
-                            {
-                                var roles = await _roleManager.Roles.ToListAsync();
-                                if (!roles.Any()) continue;
-                                var roleIds = roles.Select(o => o.Id).ToList();
-                                var widgetIds = lstDetails.Select(o => o.DashboardWidgetId).ToList();
-                                await _roleDashboardWidgetRepository.DeleteAsync(o => roleIds.Contains(o.RoleId) && !widgetIds.Contains(o.DashboardWidgetId));
-                                await CurrentUnitOfWork.SaveChangesAsync();
                             }
                         }
                     }
