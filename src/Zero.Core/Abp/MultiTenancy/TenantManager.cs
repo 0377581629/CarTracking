@@ -22,6 +22,7 @@ using Abp.Localization;
 using Abp.Runtime.Session;
 using Abp.UI;
 using Zero.MultiTenancy.Payments;
+using Castle.Core.Logging;
 
 namespace Zero.MultiTenancy
 {
@@ -42,7 +43,7 @@ namespace Zero.MultiTenancy
         private readonly IAbpZeroDbMigrator _abpZeroDbMigrator;
         private readonly IPasswordHasher<User> _passwordHasher;
         private readonly IRepository<SubscribableEdition> _subscribableEditionRepository;
-
+        private readonly ILogger _logger;
         public TenantManager(
             IRepository<Tenant> tenantRepository,
             IRepository<TenantFeatureSetting, long> tenantFeatureRepository,
@@ -65,7 +66,6 @@ namespace Zero.MultiTenancy
             )
         {
             AbpSession = NullAbpSession.Instance;
-
             _unitOfWorkManager = unitOfWorkManager;
             _roleManager = roleManager;
             _userEmailer = userEmailer;
@@ -76,6 +76,7 @@ namespace Zero.MultiTenancy
             _abpZeroDbMigrator = abpZeroDbMigrator;
             _passwordHasher = passwordHasher;
             _subscribableEditionRepository = subscribableEditionRepository;
+            _logger = NullLogger.Instance;
         }
 
         public async Task<int> CreateWithAdminUserAsync(
@@ -170,7 +171,15 @@ namespace Zero.MultiTenancy
                     if (sendActivationEmail)
                     {
                         adminUser.SetNewEmailConfirmationCode();
-                        await _userEmailer.SendEmailActivationLinkAsync(adminUser, emailActivationLink, adminPassword);
+                        try
+                        {
+                            await _userEmailer.SendEmailActivationLinkAsync(adminUser, emailActivationLink, adminPassword);
+                        }
+                        catch (Exception e)
+                        {
+                            _logger.Error($"Create Tenant - Send Active Email - Active Link : {emailActivationLink} - Admin Psw : {adminPassword}", e);
+                        }
+                        
                     }
 
                     await _unitOfWorkManager.Current.SaveChangesAsync();

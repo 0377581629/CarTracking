@@ -14,7 +14,8 @@
         this.init = function (modalManager) {
             _modalManager = modalManager;
             var modal = _modalManager.getModal();
-
+            _modalManager.initControl();
+            
             _$tenantInformationForm = modal.find('form[name=TenantInformationsForm]');
             _$tenantInformationForm.validate({
                 rules: {

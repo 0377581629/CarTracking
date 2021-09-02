@@ -38,27 +38,32 @@
             <input id="AdminEmailAddress" type="email" name="AdminEmailAddress" class="form-control" required maxlength="@Zero.Authorization.Users.User.MaxEmailAddressLength">
         </div>
 
-        <div class="checkbox-list">
+        <div class="checkbox-list mb-5px">
             <label class="checkbox checkbox-outline">
-                <input id="CreateTenant_SetRandomPassword" type="checkbox" name="SetRandomPassword" value="true" checked="checked" />
+                <input id="CreateTenant_SetRandomPassword" type="checkbox" name="SetRandomPassword" value="true" checked="checked"/>
                 <span></span>
                 @L("SetRandomPassword")
             </label>
         </div>
 
-        <div class="form-group no-hint tenant-admin-password" style="display: none">
-            <label for="CreateTenant_AdminPassword">@L("Password")</label>
-            <input id="CreateTenant_AdminPassword" type="password" name="AdminPassword" class="form-control" maxlength="@Zero.Authorization.Users.User.MaxPlainPasswordLength" autocomplete="new-password">
-        </div>
-
-        <div class="form-group tenant-admin-password" style="display: none">
-            <label for="AdminPasswordRepeat">@L("PasswordRepeat")</label>
-            <input id="AdminPasswordRepeat" type="password" name="AdminPasswordRepeat" class="form-control" maxlength="@Zero.Authorization.Users.User.MaxPlainPasswordLength" equalto="#CreateTenant_AdminPassword" autocomplete="new-password">
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group no-hint tenant-admin-password" style="display: none">
+                    <label for="CreateTenant_AdminPassword">@L("Password")</label>
+                    <input id="CreateTenant_AdminPassword" type="password" name="AdminPassword" class="form-control" maxlength="@Zero.Authorization.Users.User.MaxPlainPasswordLength" autocomplete="new-password">
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group tenant-admin-password" style="display: none">
+                    <label for="AdminPasswordRepeat">@L("PasswordRepeat")</label>
+                    <input id="AdminPasswordRepeat" type="password" name="AdminPasswordRepeat" class="form-control" maxlength="@Zero.Authorization.Users.User.MaxPlainPasswordLength" equalto="#CreateTenant_AdminPassword" autocomplete="new-password">
+                </div>
+            </div>
         </div>
 
         <div class="form-group no-hint">
             <label for="EditionId">@L("Edition")</label>
-            <select class="form-control" id="EditionId" name="EditionId">
+            <select class="form-control kt-select2-non-search" id="EditionId" name="EditionId">
                 @foreach (var edition in Model.EditionItems)
                 {
                     <option value="@edition.Value" data-isfree="@edition.IsFree">@edition.DisplayText</option>
@@ -66,9 +71,9 @@
             </select>
         </div>
 
-        <div class="checkbox-list subscription-component">
+        <div class="checkbox-list subscription-component mb-5px">
             <label for="CreateTenant_IsUnlimited" class="checkbox checkbox-outline">
-                <input id="CreateTenant_IsUnlimited" type="checkbox" name="IsUnlimited" value="true" />
+                <input id="CreateTenant_IsUnlimited" type="checkbox" name="IsUnlimited" value="true"/>
                 <span></span>
                 @L("UnlimitedTimeSubscription")
             </label>
@@ -79,9 +84,9 @@
             <input id="SubscriptionEndDateUtc" type="datetime" name="SubscriptionEndDateUtc" class="form-control date-time-picker" required>
         </div>
 
-        <div class="checkbox-list subscription-component">
+        <div class="checkbox-list subscription-component mb-5px">
             <label for="CreateTenant_IsInTrialPeriod" class="checkbox checkbox-outline">
-                <input id="CreateTenant_IsInTrialPeriod" type="checkbox" name="IsInTrialPeriod" value="true" />
+                <input id="CreateTenant_IsInTrialPeriod" type="checkbox" name="IsInTrialPeriod" value="true"/>
                 <span></span>
                 @L("IsInTrialPeriod")
             </label>

@@ -30,7 +30,7 @@
 
         <div class="form-group">
             <label for="EditionId">@L("Edition")</label>
-            <select class="form-control" id="EditionId" name="EditionId">
+            <select class="form-control kt-select2-non-search" id="EditionId" name="EditionId">
                 @foreach (var edition in Model.EditionItems)
                 {
                     <option value="@edition.Value" data-isfree="@edition.IsFree" selected="@edition.IsSelected">@edition.DisplayText</option>
@@ -38,7 +38,7 @@
             </select>
         </div>
 
-        <div class="checkbox-list subscription-component">
+        <div class="checkbox-list subscription-component mb-5px">
             <label class="checkbox checkbox-outline">
                 <input id="CreateTenant_IsUnlimited" type="checkbox" name="IsUnlimited" value="true" @(!Model.Tenant.SubscriptionEndDateUtc.HasValue ? "checked=\"checked\"" : "") />
                 <span></span>
@@ -51,7 +51,7 @@
             <input id="SubscriptionEndDateUtc" type="datetime" name="SubscriptionEndDateUtc" value="@(Model.Tenant.SubscriptionEndDateUtc)" class="form-control edited date-time-picker" @(!Model.Tenant.SubscriptionEndDateUtc.HasValue ? "required" : "")>
         </div>
 
-        <div class="checkbox-list subscription-component">
+        <div class="checkbox-list subscription-component mb-5px">
             <label class="checkbox checkbox-outline">
                 <input id="EditTenant_IsInTrialPeriod" type="checkbox" name="IsInTrialPeriod" value="true" @(Model.Tenant.IsInTrialPeriod ? "checked=\"checked\"" : "") />
                 <span></span>
