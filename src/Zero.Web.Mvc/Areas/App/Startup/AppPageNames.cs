@@ -5,6 +5,7 @@
         public static class Common
         {
             public const string Dashboard = "Dashboard";
+            public const string EmailTemplate = "Administration.EmailTemplate";
             
             public const string Administration = "Administration";
             public const string Roles = "Administration.Roles";

@@ -6,7 +6,7 @@ using Abp;
 using Abp.Application.Features;
 using Abp.Application.Services.Dto;
 using Abp.Authorization;
-using Abp.Authorization.Users;
+using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
 using Abp.Events.Bus;
 using Abp.Extensions;
@@ -14,6 +14,8 @@ using Abp.Linq.Extensions;
 using Abp.Runtime.Security;
 using Microsoft.EntityFrameworkCore;
 using Zero.Authorization;
+using Zero.Authorization.Roles;
+using Zero.Customize;
 using Zero.Editions.Dto;
 using Zero.MultiTenancy.Dto;
 using Zero.Url;
@@ -26,8 +28,14 @@ namespace Zero.MultiTenancy
         public IAppUrlService AppUrlService { get; set; }
         public IEventBus EventBus { get; set; }
 
-        public TenantAppService()
+        private readonly RoleManager _roleManager;
+        
+        private readonly IRepository<EditionPermission> _editionPermissionRepository;
+        
+        public TenantAppService(RoleManager roleManager, IRepository<EditionPermission> editionPermissionRepository)
         {
+            _roleManager = roleManager;
+            _editionPermissionRepository = editionPermissionRepository;
             AppUrlService = NullAppUrlService.Instance;
             EventBus = NullEventBus.Instance;
         }
@@ -56,7 +64,9 @@ namespace Zero.MultiTenancy
         [UnitOfWork(IsDisabled = true)]
         public async Task CreateTenant(CreateTenantInput input)
         {
-            await TenantManager.CreateWithAdminUserAsync(input.TenancyName,
+            await TenantManager.CreateWithAdminUserAsync(
+                input.ParentId,
+                input.TenancyName,
                 input.Name,
                 input.AdminPassword,
                 input.AdminEmailAddress,
@@ -101,6 +111,41 @@ namespace Zero.MultiTenancy
             tenant.SubscriptionEndDateUtc = tenant.SubscriptionEndDateUtc?.ToUniversalTime();
 
             await TenantManager.UpdateAsync(tenant);
+            
+            #region Customize
+            using (CurrentUnitOfWork.SetTenantId(tenant.Id))
+            {
+                var roles = await _roleManager.Roles.ToListAsync();
+                if (roles.Any())
+                {
+                    var systemPermissions = PermissionManager.GetAllPermissions();
+                    var permissionsByEdition = await _editionPermissionRepository.GetAllListAsync(o => o.EditionId == tenant.EditionId);
+                    var permissions = systemPermissions.Where(o => permissionsByEdition.Select(p=>p.PermissionName).Contains(o.Name)).ToList();
+                    foreach (var role in roles)
+                    {
+                        // Admin role
+                        if (role.Name == StaticRoleNames.Tenants.Admin)
+                        {
+                            await _roleManager.ResetAllPermissionsAsync(role);
+                            await _roleManager.SetGrantedPermissionsAsync(role, permissions);
+                        }
+                        else
+                        {
+                            // Other role
+                            if (role.Permissions == null || !role.Permissions.Any()) continue;
+                            var listInTwo = permissions.Select(o => o.Name).Intersect(role.Permissions.Select(o => o.Name)).ToList();
+                            if (!listInTwo.Any()) continue;
+                            {
+                                var permissionLeft = permissions.Where(o => listInTwo.Contains(o.Name)).ToList();
+                                await _roleManager.ResetAllPermissionsAsync(role);
+                                await _roleManager.SetGrantedPermissionsAsync(role, permissionLeft);
+                            }
+                        }
+                    }
+                    await CurrentUnitOfWork.SaveChangesAsync();
+                }
+            }
+            #endregion
         }
 
         [AbpAuthorize(AppPermissions.Pages_Tenants_Delete)]
@@ -141,10 +186,7 @@ namespace Zero.MultiTenancy
             using (CurrentUnitOfWork.SetTenantId(input.Id))
             {
                 var tenantAdmin = await UserManager.GetAdminAsync();
-                if (tenantAdmin != null)
-                {
-                    tenantAdmin.Unlock();
-                }
+                tenantAdmin?.Unlock();
             }
         }
     }

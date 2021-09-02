@@ -4,6 +4,12 @@ namespace Zero
 {
     public class ZEROEnums
     {
+        public enum EmailTemplateType
+        {
+            [StringValue("EmailTemplateType_EmployeeBirthDay")] EmployeeBirthDay = 1,
+            [StringValue("EmailTemplateType_NewEmployee")] NewEmployee = 2,
+        }
+        
         public enum DefaultStatus
         {
             [StringValue("Draft")] Draft = 1,

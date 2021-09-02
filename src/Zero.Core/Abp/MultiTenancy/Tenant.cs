@@ -35,7 +35,7 @@ namespace Zero.MultiTenancy
 
         public SubscriptionPaymentType SubscriptionPaymentType { get; set; }
 
-        protected Tenant()
+        public Tenant()
         {
 
         }

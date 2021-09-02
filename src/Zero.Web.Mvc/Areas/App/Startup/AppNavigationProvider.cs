@@ -34,6 +34,14 @@ namespace Zero.Web.Areas.App.Startup
                         )
                     )
                     .AddItem(new MenuItemDefinition(
+                            AppPageNames.Common.EmailTemplate,
+                            L("EmailTemplates"),
+                            url: "App/EmailTemplate",
+                            icon: "flaticon-email",
+                            permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_EmailTemplates)
+                        )
+                    )
+                    .AddItem(new MenuItemDefinition(
                             AppPageNames.Host.Tenants,
                             L("Tenants"),
                             url: "App/Tenants",

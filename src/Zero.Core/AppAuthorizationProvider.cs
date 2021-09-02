@@ -38,6 +38,11 @@ namespace Zero.Authorization
             dashboardWidgets.CreateChildPermission(AppPermissions.DashboardWidget_Edit, L("Edit"), multiTenancySides: MultiTenancySides.Host);
             dashboardWidgets.CreateChildPermission(AppPermissions.DashboardWidget_Delete, L("Delete"), multiTenancySides: MultiTenancySides.Host);
             
+            var emailTemplates = administration.CreateChildPermission(AppPermissions.Pages_EmailTemplates, L("EmailTemplates"));
+            emailTemplates.CreateChildPermission(AppPermissions.Pages_EmailTemplates_Create, L("Create"));
+            emailTemplates.CreateChildPermission(AppPermissions.Pages_EmailTemplates_Edit, L("Edit"));
+            emailTemplates.CreateChildPermission(AppPermissions.Pages_EmailTemplates_Delete, L("Delete"));
+            
             var roles = administration.CreateChildPermission(AppPermissions.Pages_Administration_Roles, L("Roles"));
             roles.CreateChildPermission(AppPermissions.Pages_Administration_Roles_Create, L("CreatingNewRole"));
             roles.CreateChildPermission(AppPermissions.Pages_Administration_Roles_Edit, L("EditingRole"));

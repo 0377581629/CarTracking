@@ -2,7 +2,7 @@
 
 namespace Zero.Migrations
 {
-    public partial class Abp_Customize_Tenants_Add_IsDefault : Migration
+    public partial class Abp_Customize_Edition_Add_IsDefault : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

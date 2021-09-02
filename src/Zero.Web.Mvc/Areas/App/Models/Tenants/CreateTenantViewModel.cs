@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Zero.Editions.Dto;
 using Zero.Security;
 
@@ -14,5 +15,7 @@ namespace Zero.Web.Areas.App.Models.Tenants
         {
             EditionItems = editionItems;
         }
+        
+        public List<SelectListItem> ListTenant { get; set; }
     }
 }

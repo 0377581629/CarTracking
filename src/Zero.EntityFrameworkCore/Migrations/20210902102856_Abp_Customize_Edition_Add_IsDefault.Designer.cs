@@ -10,8 +10,8 @@ using Zero.EntityFrameworkCore;
 namespace Zero.Migrations
 {
     [DbContext(typeof(ZeroDbContext))]
-    [Migration("20210902025842_Abp_Customize_Tenants_Add_IsDefault")]
-    partial class Abp_Customize_Tenants_Add_IsDefault
+    [Migration("20210902102856_Abp_Customize_Edition_Add_IsDefault")]
+    partial class Abp_Customize_Edition_Add_IsDefault
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

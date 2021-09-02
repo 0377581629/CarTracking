@@ -44,6 +44,7 @@ namespace Zero.EntityFrameworkCore
         public virtual DbSet<EditionPermission> EditionPermissions { get; set; }
         public virtual DbSet<EditionDashboardWidget> EditionDashboardWidgets { get; set; }
         public virtual DbSet<RoleDashboardWidget> RoleDashboardWidgets { get; set; }
+        public virtual DbSet<EmailTemplate> EmailTemplates { get; set; }
         
         #endregion
         

@@ -1,7 +1,8 @@
 ﻿@using Abp.Json
-@using Zero.MultiTenancy
 @using Zero.Web.Areas.App.Models.Common.Modals
 @using Zero.Web.Areas.App.Models.Tenants
+@using Abp.Authorization.Users
+@using Zero.MultiTenancy
 @model CreateTenantViewModel
 <script>
     window.passwordComplexitySetting = @Html.Raw(Model.PasswordComplexitySetting.ToJsonString(indented: true));
@@ -10,16 +11,26 @@
 
 <div class="modal-body">
     <form name="TenantInformationsForm">
-        <div class="form-group">
-            <label for="TenancyName">@L("TenancyName")</label>
-            <input id="TenancyName" class="form-control" type="text" name="TenancyName" required maxlength="@Tenant.MaxTenancyNameLength" regex="@Tenant.TenancyNameRegex">
+        <div class="row">
+            <div class="col-4">
+                <div class="form-group">
+                    <label>@L("ParentTenant")</label>
+                    @Html.DropDownList("ParentId", SelectListHelper.ListWithNull(L("NoneSelect"), Model.ListTenant), new { @class = "form-control kt-select2" })
+                </div>
+            </div>
         </div>
-
-        <div class="form-group no-hint">
-            <label for="Name">@L("Name")</label>
-            <input id="Name" type="text" name="Name" class="form-control" required maxlength="@Tenant.MaxNameLength">
+        <div class="col-4">
+            <div class="form-group">
+                <label for="TenancyName">@L("TenancyName")</label>
+                <input id="TenancyName" class="form-control" type="text" name="TenancyName" required maxlength="@Tenant.MaxTenancyNameLength" regex="@Tenant.TenancyNameRegex">
+            </div>
         </div>
-
+        <div class="col-4">
+            <div class="form-group no-hint">
+                <label for="Name">@L("Name")</label>
+                <input id="Name" type="text" name="Name" class="form-control" required maxlength="@Tenant.MaxNameLength">
+            </div>
+        </div>
         <div class="checkbox-list">
             <label class="checkbox checkbox-outline">
                 <input id="CreateTenant_UseHostDb" type="checkbox" name="UseHostDb" value="true" checked="checked">
@@ -35,7 +46,7 @@
 
         <div class="form-group">
             <label for="AdminEmailAddress">@L("AdminEmailAddress")</label>
-            <input id="AdminEmailAddress" type="email" name="AdminEmailAddress" class="form-control" required maxlength="@Zero.Authorization.Users.User.MaxEmailAddressLength">
+            <input id="AdminEmailAddress" type="email" name="AdminEmailAddress" class="form-control" required maxlength="@AbpUserBase.MaxEmailAddressLength">
         </div>
 
         <div class="checkbox-list mb-5px">
@@ -50,13 +61,13 @@
             <div class="col-6">
                 <div class="form-group no-hint tenant-admin-password" style="display: none">
                     <label for="CreateTenant_AdminPassword">@L("Password")</label>
-                    <input id="CreateTenant_AdminPassword" type="password" name="AdminPassword" class="form-control" maxlength="@Zero.Authorization.Users.User.MaxPlainPasswordLength" autocomplete="new-password">
+                    <input id="CreateTenant_AdminPassword" type="password" name="AdminPassword" class="form-control" maxlength="@AbpUserBase.MaxPlainPasswordLength" autocomplete="new-password">
                 </div>
             </div>
             <div class="col-6">
                 <div class="form-group tenant-admin-password" style="display: none">
                     <label for="AdminPasswordRepeat">@L("PasswordRepeat")</label>
-                    <input id="AdminPasswordRepeat" type="password" name="AdminPasswordRepeat" class="form-control" maxlength="@Zero.Authorization.Users.User.MaxPlainPasswordLength" equalto="#CreateTenant_AdminPassword" autocomplete="new-password">
+                    <input id="AdminPasswordRepeat" type="password" name="AdminPasswordRepeat" class="form-control" maxlength="@AbpUserBase.MaxPlainPasswordLength" equalto="#CreateTenant_AdminPassword" autocomplete="new-password">
                 </div>
             </div>
         </div>

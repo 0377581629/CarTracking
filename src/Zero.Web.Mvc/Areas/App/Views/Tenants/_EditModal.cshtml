@@ -1,4 +1,5 @@
 ﻿@using Abp.Extensions
+@using Abp.MultiTenancy
 @using Zero.MultiTenancy
 @using Zero.Web.Areas.App.Models.Common.Modals
 @using Zero.Web.Areas.App.Models.Tenants
@@ -8,12 +9,22 @@
 
 <div class="modal-body">
     <form name="TenantInformationsForm">
-        <input type="hidden" name="Id" value="@Model.Tenant.Id" />
-        <input type="hidden" name="TenancyName" value="@Model.Tenant.TenancyName" />
+        <input type="hidden" name="Id" value="@Model.Tenant.Id"/>
+        <input type="hidden" name="TenancyName" value="@Model.Tenant.TenancyName"/>
 
-        <div class="form-group">
-            <label for="Name">@L("Name")</label>
-            <input id="Name" type="text" name="Name" value="@Model.Tenant.Name" class="form-control edited" required maxlength="@Tenant.MaxNameLength">
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label>@L("ParentTenant")</label>
+                    @Html.DropDownList("ParentId", SelectListHelper.ListWithNull(L("NoneSelect"), Model.ListTenant, Model.Tenant.ParentId), new { @class = "form-control kt-select2" })
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="Name">@L("Name")</label>
+                    <input id="Name" type="text" name="Name" value="@Model.Tenant.Name" class="form-control edited" required maxlength="@Tenant.MaxNameLength">
+                </div>
+            </div>
         </div>
 
         @if (!Model.Tenant.ConnectionString.IsNullOrEmpty())
@@ -40,7 +51,7 @@
 
         <div class="checkbox-list subscription-component mb-5px">
             <label class="checkbox checkbox-outline">
-                <input id="CreateTenant_IsUnlimited" type="checkbox" name="IsUnlimited" value="true" @(!Model.Tenant.SubscriptionEndDateUtc.HasValue ? "checked=\"checked\"" : "") />
+                <input id="CreateTenant_IsUnlimited" type="checkbox" name="IsUnlimited" value="true" @(!Model.Tenant.SubscriptionEndDateUtc.HasValue ? "checked=\"checked\"" : "")/>
                 <span></span>
                 @L("UnlimitedTimeSubscription")
             </label>
@@ -53,7 +64,7 @@
 
         <div class="checkbox-list subscription-component mb-5px">
             <label class="checkbox checkbox-outline">
-                <input id="EditTenant_IsInTrialPeriod" type="checkbox" name="IsInTrialPeriod" value="true" @(Model.Tenant.IsInTrialPeriod ? "checked=\"checked\"" : "") />
+                <input id="EditTenant_IsInTrialPeriod" type="checkbox" name="IsInTrialPeriod" value="true" @(Model.Tenant.IsInTrialPeriod ? "checked=\"checked\"" : "")/>
                 <span></span>
                 @L("IsInTrialPeriod")
             </label>

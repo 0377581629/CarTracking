@@ -1,6 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <localizationDictionary culture="vi">
   <texts>
+    <!--  Common  -->
+    <text name="Title">Tiêu đề</text>
+    <text name="Content">Nội dung</text>
+    <text name="Note">Ghi chú</text>
+    <text name="Description">Mô tả</text>
+    <!--    -->
+    
+    <!--  Email Template  -->
+    <text name="EmailTemplateType">Loại Email mẫu</text>
+    <text name="EmailTemplate">Email mẫu</text>
+    <text name="EmailTemplates">Email mẫu</text>
+    <text name="EmailTemplatesHeaderInfo">Danh sách Email mẫu trong hệ thống</text>
+    <text name="AutoCreateForNewTenant">Tự tạo cho đơn vị mới</text>
+    <!--    -->
+    
     <!--  Organization Unit + Roles -->
     <text name="ManagingRoles">Quản lý vai trò</text>
     <text name="SelectPermissions">Chọn quyền</text>
@@ -131,6 +146,7 @@
     <text name="Existed">Đã tồn tại</text>
     <!-- -->
 
+    <!--  Dashboard Widget  -->
     <text name="DashboardWidget">Khung tổng hợp</text>
     <text name="DashboardWidgets">Khung tổng hợp</text>
     <text name="DashboardWidgetsHeaderInfo">Danh sách khung trên bảng số liệu tổng hợp</text>

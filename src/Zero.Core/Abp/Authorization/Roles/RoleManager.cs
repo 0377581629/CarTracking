@@ -61,6 +61,11 @@ namespace Zero.Authorization.Roles
             return base.SetGrantedPermissionsAsync(role, permissions);
         }
 
+        public Task SetGrantedPermissionsAsyncByEditionPermission(Role role, IEnumerable<Permission> permissions)
+        {
+            return base.SetGrantedPermissionsAsync(role, permissions);
+        }
+        
         public virtual async Task<Role> GetRoleByIdAsync(long roleId)
         {
             var role = await FindByIdAsync(roleId.ToString());

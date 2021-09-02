@@ -1042,6 +1042,21 @@ namespace Zero
         }
     }
 
+    public static class EmailHelper
+    {
+        public static string EmailTemplateType(int emailTemplateType, ILocalizationSource lang)
+        {
+            var type = (ZEROEnums.EmailTemplateType) emailTemplateType;
+            return lang.GetString(type.GetStringValue());
+        }
+
+        public static List<SelectListItem> ListEmailTemplateType(int currentType, ILocalizationSource lang)
+        {
+            return (from emailTemplateType in (ZEROEnums.EmailTemplateType[]) Enum.GetValues(typeof(ZEROEnums.EmailTemplateType))
+                select new SelectListItem(lang.GetString(emailTemplateType.GetStringValue()), ((int) emailTemplateType).ToString(), currentType == (int) emailTemplateType)).ToList();
+        }
+    }
+
     public static class SelectListHelper
     {
         public static List<SelectListItem> ListWithNull(string nullContent, List<SelectListItem> lstSource, long? current=null)
