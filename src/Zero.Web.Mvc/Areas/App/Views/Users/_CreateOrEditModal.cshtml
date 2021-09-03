@@ -11,9 +11,9 @@
 
 @{
     var isSMTPSettingsProvided = !((await SettingManager.GetSettingValueAsync(EmailSettingNames.DefaultFromAddress)).IsNullOrEmpty() ||
-                                 (await SettingManager.GetSettingValueAsync(EmailSettingNames.Smtp.Host)).IsNullOrEmpty() ||
-                                 (await SettingManager.GetSettingValueAsync(EmailSettingNames.Smtp.UserName)).IsNullOrEmpty() ||
-                                 (await SettingManager.GetSettingValueAsync(EmailSettingNames.Smtp.Password)).IsNullOrEmpty());
+                                   (await SettingManager.GetSettingValueAsync(EmailSettingNames.Smtp.Host)).IsNullOrEmpty() ||
+                                   (await SettingManager.GetSettingValueAsync(EmailSettingNames.Smtp.UserName)).IsNullOrEmpty() ||
+                                   (await SettingManager.GetSettingValueAsync(EmailSettingNames.Smtp.Password)).IsNullOrEmpty());
 }
 <script>
     window.passwordComplexitySetting = @Html.Raw(Model.PasswordComplexitySetting.ToJsonString(indented: true));
@@ -51,7 +51,7 @@
                     <div class="col-sm-3 text-center margin-top-15 margin-bottom-15">
                         @if (Model.User.Id > 0)
                         {
-                            <img src="@Url.Action("GetProfilePictureByUser", "Profile", new {area = string.Empty})?userId=@(Model.User.Id)" width="128" height="128" class="img-thumbnail img-rounded user-edit-dialog-profile-image"/>
+                            <img src="@Url.Action("GetProfilePictureByUser", "Profile", new { area = string.Empty })?userId=@(Model.User.Id)" width="128" height="128" class="img-thumbnail img-rounded user-edit-dialog-profile-image"/>
                         }
                         else
                         {
@@ -98,16 +98,21 @@
                     </label>
                 </div>
 
-                <div class="form-group user-password" style="@(Model.IsEditMode ? "display:block" : "display:none")">
-                    <label for="EditUser_Password">@L("Password")</label>
-                    <input id="EditUser_Password" type="password" name="Password" class="form-control auto-complete-off" readonly onfocus="this.removeAttribute('readonly');"
-                           maxlength="@Zero.Authorization.Users.User.MaxPlainPasswordLength" autocomplete="new-password">
-                </div>
-
-                <div class="form-group user-password" style="@(Model.IsEditMode ? "display:block" : "display:none")">
-                    <label for="PasswordRepeat">@L("PasswordRepeat")</label>
-                    <input id="PasswordRepeat" type="password" name="PasswordRepeat" class="form-control auto-complete-off" readonly onfocus="this.removeAttribute('readonly');"
-                           maxlength="@Zero.Authorization.Users.User.MaxPlainPasswordLength" equalto="#EditUser_Password" autocomplete="new-password">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group user-password" style="@(Model.IsEditMode ? "display:block" : "display:none")">
+                            <label for="EditUser_Password">@L("Password")</label>
+                            <input id="EditUser_Password" type="password" name="Password" class="form-control auto-complete-off" readonly onfocus="this.removeAttribute('readonly');"
+                                   maxlength="@Zero.Authorization.Users.User.MaxPlainPasswordLength" autocomplete="new-password">
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group user-password" style="@(Model.IsEditMode ? "display:block" : "display:none")">
+                            <label for="PasswordRepeat">@L("PasswordRepeat")</label>
+                            <input id="PasswordRepeat" type="password" name="PasswordRepeat" class="form-control auto-complete-off" readonly onfocus="this.removeAttribute('readonly');"
+                                   maxlength="@Zero.Authorization.Users.User.MaxPlainPasswordLength" equalto="#EditUser_Password" autocomplete="new-password">
+                        </div>
+                    </div>
                 </div>
 
                 <div class="checkbox-list">
@@ -123,7 +128,7 @@
                     }
 
                     <label for="EditUser_SendActivationEmail" class="checkbox checkbox-outline @(!isSMTPSettingsProvided ? "checkbox-disabled" : "")">
-                        <input id="EditUser_SendActivationEmail" type="checkbox" name="SendActivationEmail" value="true" @(!isSMTPSettingsProvided?"disabled='disabled'":"") @Html.Raw(Model.IsEditMode || !isSMTPSettingsProvided ? "" : "checked=\"checked\"")>
+                        <input id="EditUser_SendActivationEmail" type="checkbox" name="SendActivationEmail" value="true" @(!isSMTPSettingsProvided ? "disabled='disabled'" : "") @Html.Raw(Model.IsEditMode || !isSMTPSettingsProvided ? "" : "checked=\"checked\"")>
                         <span></span>
                         @L("SendActivationEmail")
                     </label>

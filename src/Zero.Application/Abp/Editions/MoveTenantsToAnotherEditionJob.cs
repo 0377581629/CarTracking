@@ -135,23 +135,44 @@ namespace Zero.Editions
                 // Remove out of target edition's permissions for all Roles in tenant.
                 // Remove out of target edition's dashboard widgets for all Roles in tenant.
                 
-                var editionPermissions = await _editionPermissionRepository.GetAll().Where(o => o.EditionId == targetEditionId).Select(o=>o.PermissionName).ToListAsync();
-                var editionDashboardWidgets = await _editionDashboardWidgetRepository.GetAll().Where(o => o.EditionId == targetEditionId).Select(o=>o.DashboardWidgetId).ToListAsync();
-                
                 using (CurrentUnitOfWork.SetTenantId(tenantId))
                 {
                     var roles = await _roleManager.Roles.ToListAsync();
                     if (roles.Any())
                     {
+                        var systemPermissions = _permissionManager.GetAllPermissions();
+                        var editionPermissions = await _editionPermissionRepository.GetAllListAsync(o => o.EditionId == tenant.EditionId);
+                        var editionDashboardWidgetIds = await _editionDashboardWidgetRepository.GetAll().Where(o => o.EditionId == tenant.EditionId).Select(o=>o.DashboardWidgetId).ToListAsync();
+                        var permissions = systemPermissions.Where(o => editionPermissions.Select(p=>p.PermissionName).Contains(o.Name)).ToList();
                         foreach (var role in roles)
                         {
-                            await _roleManager.SetGrantedPermissionsAsync(role, role.Permissions.Where(o => editionPermissions.Contains(o.Name)).Select(o => new Permission(o.Name)).ToList());
-                            await _roleDashboardWidgetRepository.DeleteAsync(o => o.RoleId == role.Id && editionDashboardWidgets.Contains(o.DashboardWidgetId));
+                            var verifiedPermissions = StaticRolesHelper.AddRequiredPermissions(role, permissions);
+                            
+                            // Remove Dashboard Widget not in target editions
+                            await _roleDashboardWidgetRepository.DeleteAsync(o => o.RoleId == role.Id && !editionDashboardWidgetIds.Contains(o.DashboardWidgetId));
+                            
+                            // Admin role
+                            if (role.Name == StaticRoleNames.Tenants.Admin)
+                            {
+                                await _roleManager.ResetAllPermissionsAsync(role);
+                                await _roleManager.SetGrantedPermissionsAsync(role, verifiedPermissions);
+                            }
+                            else
+                            {
+                                // Other role
+                                if (role.Permissions == null || !role.Permissions.Any()) continue;
+                                var listInTwo = verifiedPermissions.Select(o => o.Name).Intersect(role.Permissions.Select(o => o.Name)).ToList();
+                                if (!listInTwo.Any()) continue;
+                                {
+                                    var permissionLeft = verifiedPermissions.Where(o => listInTwo.Contains(o.Name)).ToList();
+                                    await _roleManager.ResetAllPermissionsAsync(role);
+                                    await _roleManager.SetGrantedPermissionsAsync(role, permissionLeft);
+                                }
+                            }
                         }
                     }
                 }
                 #endregion
-                
                 
                 await CurrentUnitOfWork.SaveChangesAsync();
 

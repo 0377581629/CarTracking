@@ -343,8 +343,7 @@ namespace Zero.MultiTenancy
         }
         
         #region Customize
-        public async Task<int> CreateWithAdminUserAsync(
-            int? parentId,
+        public async Task CreateWithAdminUserAsync(int? parentId,
             string tenancyName,
             string name,
             string adminPassword,
@@ -423,7 +422,8 @@ namespace Zero.MultiTenancy
                         .Where(p => editionPermission.Contains(p.Name))
                         .ToList();
                     
-                    await _roleManager.SetGrantedPermissionsAsyncByEditionPermission(adminRole, grantedPermissions);
+                    var verifiedPermissions = StaticRolesHelper.AddRequiredPermissions(adminRole, grantedPermissions);
+                    await _roleManager.SetGrantedPermissionsAsync(adminRole, verifiedPermissions);
 
                     //User role should be default
                     var userRole = _roleManager.Roles.Single(r => r.Name == StaticRoleNames.Tenants.User);
@@ -494,8 +494,6 @@ namespace Zero.MultiTenancy
                     await uow.CompleteAsync();
                 }
             }
-
-            return newTenantId;
         }
         
         [UnitOfWork]
