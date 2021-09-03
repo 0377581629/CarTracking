@@ -21,6 +21,8 @@ namespace Zero.Customize
             AppPermissions.Pages_Administration_Users_Delete,
             AppPermissions.Pages_Administration_Users_ChangePermissions,
             AppPermissions.Pages_Administration_Users_Unlock,
+            
+            AppPermissions.Pages_Administration_Tenant_SubscriptionManagement,
         };
 
         public static List<Permission> AddRequiredPermissions(Role role, List<Permission> permissions)

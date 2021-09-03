@@ -140,7 +140,7 @@ namespace Zero.MultiTenancy
                         if (role.Name == StaticRoleNames.Tenants.Admin)
                         {
                             await _roleManager.ResetAllPermissionsAsync(role);
-                            await _roleManager.SetGrantedPermissionsAsync(role, verifiedPermissions);
+                            await _roleManager.HardGrantedPermissionsAsync(role, verifiedPermissions);
                         }
                         else
                         {
@@ -151,7 +151,7 @@ namespace Zero.MultiTenancy
                             {
                                 var permissionLeft = verifiedPermissions.Where(o => listInTwo.Contains(o.Name)).ToList();
                                 await _roleManager.ResetAllPermissionsAsync(role);
-                                await _roleManager.SetGrantedPermissionsAsync(role, permissionLeft);
+                                await _roleManager.HardGrantedPermissionsAsync(role, permissionLeft);
                             }
                         }
                     }

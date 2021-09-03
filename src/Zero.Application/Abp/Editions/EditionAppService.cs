@@ -328,11 +328,34 @@ namespace Zero.Editions
                             {
                                 var roles = await _roleManager.Roles.ToListAsync();
                                 if (!roles.Any()) continue;
-                                var roleIds = roles.Select(o => o.Id).ToList();
-                                var widgetIds = lstDetails.Select(o => o.DashboardWidgetId).ToList();
-                                await _roleDashboardWidgetRepository.DeleteAsync(o => roleIds.Contains(o.RoleId) && !widgetIds.Contains(o.DashboardWidgetId));
+                                var editionDashboardWidgetIds = lstDetails.Select(o => o.DashboardWidgetId).ToList();
+                                
                                 foreach (var role in roles)
                                 {
+                                    var verifiedPermissions = StaticRolesHelper.AddRequiredPermissions(role, editionPermissions.Select(o=>new Permission(o.PermissionName)).ToList());
+                        
+                                    // Remove Dashboard Widget not in target editions
+                                    await _roleDashboardWidgetRepository.DeleteAsync(o => o.RoleId == role.Id && !editionDashboardWidgetIds.Contains(o.DashboardWidgetId));
+                        
+                                    // Admin role
+                                    if (role.Name == StaticRoleNames.Tenants.Admin)
+                                    {
+                                        await _roleManager.ResetAllPermissionsAsync(role);
+                                        await _roleManager.HardGrantedPermissionsAsync(role, verifiedPermissions);
+                                    }
+                                    else
+                                    {
+                                        // Other role
+                                        if (role.Permissions == null || !role.Permissions.Any()) continue;
+                                        var listInTwo = verifiedPermissions.Select(o => o.Name).Intersect(role.Permissions.Select(o => o.Name)).ToList();
+                                        if (!listInTwo.Any()) continue;
+                                        {
+                                            var permissionLeft = verifiedPermissions.Where(o => listInTwo.Contains(o.Name)).ToList();
+                                            await _roleManager.ResetAllPermissionsAsync(role);
+                                            await _roleManager.HardGrantedPermissionsAsync(role, permissionLeft);
+                                        }
+                                    }
+                                    
                                     // Admin role
                                     if (role.Name == StaticRoleNames.Tenants.Admin)
                                     {
