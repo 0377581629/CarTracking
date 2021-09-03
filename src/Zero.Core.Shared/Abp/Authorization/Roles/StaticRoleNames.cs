@@ -1,4 +1,7 @@
-﻿namespace Zero.Authorization.Roles
+﻿using System.Collections.Generic;
+using Abp.Authorization;
+
+namespace Zero.Authorization.Roles
 {
     public static class StaticRoleNames
     {

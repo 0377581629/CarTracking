@@ -16,6 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using Zero.Authorization;
 using Zero.Authorization.Roles;
 using Zero.Customize;
+using Zero.Customize.Dashboard;
 using Zero.Editions.Dto;
 using Zero.MultiTenancy.Dto;
 using Zero.Url;
@@ -32,10 +33,16 @@ namespace Zero.MultiTenancy
         
         private readonly IRepository<EditionPermission> _editionPermissionRepository;
         
-        public TenantAppService(RoleManager roleManager, IRepository<EditionPermission> editionPermissionRepository)
+        private readonly IRepository<EditionDashboardWidget> _editionDashboardWidgetRepository;
+
+        private readonly IRepository<RoleDashboardWidget> _roleDashboardWidgetRepository;
+        
+        public TenantAppService(RoleManager roleManager, IRepository<EditionPermission> editionPermissionRepository, IRepository<EditionDashboardWidget> editionDashboardWidgetRepository, IRepository<RoleDashboardWidget> roleDashboardWidgetRepository)
         {
             _roleManager = roleManager;
             _editionPermissionRepository = editionPermissionRepository;
+            _editionDashboardWidgetRepository = editionDashboardWidgetRepository;
+            _roleDashboardWidgetRepository = roleDashboardWidgetRepository;
             AppUrlService = NullAppUrlService.Instance;
             EventBus = NullEventBus.Instance;
         }
@@ -99,7 +106,7 @@ namespace Zero.MultiTenancy
 
             if (tenant.EditionId != input.EditionId)
             {
-                EventBus.Trigger(new TenantEditionChangedEventData
+                await EventBus.TriggerAsync(new TenantEditionChangedEventData
                 {
                     TenantId = input.Id,
                     OldEditionId = tenant.EditionId,
@@ -119,24 +126,30 @@ namespace Zero.MultiTenancy
                 if (roles.Any())
                 {
                     var systemPermissions = PermissionManager.GetAllPermissions();
-                    var permissionsByEdition = await _editionPermissionRepository.GetAllListAsync(o => o.EditionId == tenant.EditionId);
-                    var permissions = systemPermissions.Where(o => permissionsByEdition.Select(p=>p.PermissionName).Contains(o.Name)).ToList();
+                    var editionPermissions = await _editionPermissionRepository.GetAllListAsync(o => o.EditionId == tenant.EditionId);
+                    var editionDashboardWidgetIds = await _editionDashboardWidgetRepository.GetAll().Where(o => o.EditionId == tenant.EditionId).Select(o=>o.DashboardWidgetId).ToListAsync();
+                    var permissions = systemPermissions.Where(o => editionPermissions.Select(p=>p.PermissionName).Contains(o.Name)).ToList();
                     foreach (var role in roles)
                     {
+                        var verifiedPermissions = StaticRolesHelper.AddRequiredPermissions(role, permissions);
+                        
+                        // Remove Dashboard Widget not in target editions
+                        await _roleDashboardWidgetRepository.DeleteAsync(o => o.RoleId == role.Id && !editionDashboardWidgetIds.Contains(o.DashboardWidgetId));
+                        
                         // Admin role
                         if (role.Name == StaticRoleNames.Tenants.Admin)
                         {
                             await _roleManager.ResetAllPermissionsAsync(role);
-                            await _roleManager.SetGrantedPermissionsAsync(role, permissions);
+                            await _roleManager.SetGrantedPermissionsAsync(role, verifiedPermissions);
                         }
                         else
                         {
                             // Other role
                             if (role.Permissions == null || !role.Permissions.Any()) continue;
-                            var listInTwo = permissions.Select(o => o.Name).Intersect(role.Permissions.Select(o => o.Name)).ToList();
+                            var listInTwo = verifiedPermissions.Select(o => o.Name).Intersect(role.Permissions.Select(o => o.Name)).ToList();
                             if (!listInTwo.Any()) continue;
                             {
-                                var permissionLeft = permissions.Where(o => listInTwo.Contains(o.Name)).ToList();
+                                var permissionLeft = verifiedPermissions.Where(o => listInTwo.Contains(o.Name)).ToList();
                                 await _roleManager.ResetAllPermissionsAsync(role);
                                 await _roleManager.SetGrantedPermissionsAsync(role, permissionLeft);
                             }

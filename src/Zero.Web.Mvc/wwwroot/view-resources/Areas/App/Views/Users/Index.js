@@ -4,7 +4,6 @@
         var _$usersTable = $('#UsersTable');
         var _userService = abp.services.app.user;
         var _$numberOfFilteredPermission = $("#NumberOfFilteredPermission");
-        var _dynamicEntityPropertyManager = new DynamicEntityPropertyManager();
         
         var _selectedPermissionNames = [];
 
@@ -114,17 +113,6 @@
                                     id: data.record.id
                                 }).done(function () {
                                     abp.notify.success(app.localize('UnlockedTheUser', data.record.userName));
-                                });
-                            }
-                        }, {
-                            text: app.localize('DynamicProperties'),
-                            visible: function () {
-                                return _dynamicEntityPropertyManager.canShow('Zero.Authorization.Users.User');
-                            },
-                            action: function (data) {
-                                _dynamicEntityPropertyManager.modal.open({
-                                    entityFullName: 'Zero.Authorization.Users.User',
-                                    rowId: data.record.id
                                 });
                             }
                         }, {
