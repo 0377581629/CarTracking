@@ -129,6 +129,12 @@ namespace Zero.Editions
             try
             {
                 var tenant = await _tenantRepository.GetAsync(tenantId);
+                if (tenant.TenancyName == "Default")
+                {
+                    Logger.Error("Cannot move default tenant to other editions");
+                    return false;
+                }
+
                 tenant.EditionId = targetEditionId;
                 
                 #region Customize
@@ -155,7 +161,7 @@ namespace Zero.Editions
                             if (role.Name == StaticRoleNames.Tenants.Admin)
                             {
                                 await _roleManager.ResetAllPermissionsAsync(role);
-                                await _roleManager.SetGrantedPermissionsAsync(role, verifiedPermissions);
+                                await _roleManager.HardGrantedPermissionsAsync(role, verifiedPermissions);
                             }
                             else
                             {
@@ -166,7 +172,7 @@ namespace Zero.Editions
                                 {
                                     var permissionLeft = verifiedPermissions.Where(o => listInTwo.Contains(o.Name)).ToList();
                                     await _roleManager.ResetAllPermissionsAsync(role);
-                                    await _roleManager.SetGrantedPermissionsAsync(role, permissionLeft);
+                                    await _roleManager.HardGrantedPermissionsAsync(role, permissionLeft);
                                 }
                             }
                         }
