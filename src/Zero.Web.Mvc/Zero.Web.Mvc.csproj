@@ -67,4 +67,39 @@
     </PackageReference>
   </ItemGroup>
 
+  <!-- Report -->
+  <ItemGroup>
+    <Reference Include="Kendo.Mvc, Version=2021.1.119.0, Culture=neutral, PublicKeyToken=121fae78165ba3d4">
+      <HintPath>..\..\3rds\Telerik\Kendo.Mvc.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Telerik.Reporting, Version=15.0.21.120, Culture=neutral, PublicKeyToken=a9d7983dfcc261be">
+      <HintPath>..\..\3rds\Telerik\Reporting\Telerik.Reporting.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Reporting.Data.Schema, Version=0.0.0.0, Culture=neutral, PublicKeyToken=a9d7983dfcc261be">
+      <HintPath>..\..\3rds\Telerik\Reporting\Telerik.Reporting.Data.Schema.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Reporting.JsonSerialization, Version=15.0.21.120, Culture=neutral, PublicKeyToken=a9d7983dfcc261be">
+      <HintPath>..\..\3rds\Telerik\Reporting\Telerik.Reporting.JsonSerialization.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Reporting.OpenXmlRendering.2.7.2, Version=15.0.21.120, Culture=neutral, PublicKeyToken=a9d7983dfcc261be">
+      <HintPath>..\..\3rds\Telerik\Reporting\Telerik.Reporting.OpenXmlRendering.2.7.2.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Reporting.Services.AspNetCore, Version=15.0.21.120, Culture=neutral, PublicKeyToken=a9d7983dfcc261be">
+      <HintPath>..\..\3rds\Telerik\Reporting\Telerik.Reporting.Services.AspNetCore.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Reporting.WebServiceDataSource, Version=15.0.21.120, Culture=neutral, PublicKeyToken=a9d7983dfcc261be">
+      <HintPath>..\..\3rds\Telerik\Reporting\Telerik.Reporting.WebServiceDataSource.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <!-- End Report -->
+
+  <ItemGroup>
+    <Folder Include="Areas\Reporting\Controllers" />
+    <Folder Include="Areas\Reporting\Models" />
+    <Folder Include="Areas\Reporting\Views" />
+  </ItemGroup>
+
 </Project>

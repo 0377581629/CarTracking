@@ -73,7 +73,7 @@ namespace Zero.DataExporting.Excel.NPOI
                 for (var j = 0; j < propertiesName.Count; j++)
                 {
                     var cell = row.CreateCell(j);
-                    object? value = null;
+                    object value = null;
                     if (items[i - 1]?.GetType().GetProperty(propertiesName[j]) != null)
                     {
                         value = items[i - 1]?.GetType().GetProperty(propertiesName[j])?.GetValue(items[i - 1], null);

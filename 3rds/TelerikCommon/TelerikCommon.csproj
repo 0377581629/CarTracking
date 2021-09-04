@@ -1,0 +1,49 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\FroalaSDK\FroalaEditorSDK.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="Telerik.Documents.Core, Version=2021.1.118.20, Culture=neutral, PublicKeyToken=5803cfa389c90ce7">
+        <HintPath>..\TelerikDPL\Telerik.Documents.Core.dll</HintPath>
+      </Reference>
+      <Reference Include="Telerik.Documents.Fixed, Version=2021.1.118.20, Culture=neutral, PublicKeyToken=5803cfa389c90ce7">
+        <HintPath>..\TelerikDPL\Telerik.Documents.Fixed.dll</HintPath>
+      </Reference>
+      <Reference Include="Telerik.Documents.Flow, Version=2021.1.118.20, Culture=neutral, PublicKeyToken=5803cfa389c90ce7">
+        <HintPath>..\TelerikDPL\Telerik.Documents.Flow.dll</HintPath>
+      </Reference>
+      <Reference Include="Telerik.Documents.Flow.FormatProviders.Pdf, Version=2021.1.118.20, Culture=neutral, PublicKeyToken=5803cfa389c90ce7">
+        <HintPath>..\TelerikDPL\Telerik.Documents.Flow.FormatProviders.Pdf.dll</HintPath>
+      </Reference>
+      <Reference Include="Telerik.Documents.ImageUtils, Version=2021.1.118.20, Culture=neutral, PublicKeyToken=5803cfa389c90ce7">
+        <HintPath>..\TelerikDPL\Telerik.Documents.ImageUtils.dll</HintPath>
+      </Reference>
+      <Reference Include="Telerik.Documents.Spreadsheet, Version=2021.1.118.20, Culture=neutral, PublicKeyToken=5803cfa389c90ce7">
+        <HintPath>..\TelerikDPL\Telerik.Documents.Spreadsheet.dll</HintPath>
+      </Reference>
+      <Reference Include="Telerik.Documents.Spreadsheet.FormatProviders.OpenXml, Version=2021.1.118.20, Culture=neutral, PublicKeyToken=5803cfa389c90ce7">
+        <HintPath>..\TelerikDPL\Telerik.Documents.Spreadsheet.FormatProviders.OpenXml.dll</HintPath>
+      </Reference>
+      <Reference Include="Telerik.Documents.Spreadsheet.FormatProviders.Pdf, Version=2021.1.118.20, Culture=neutral, PublicKeyToken=5803cfa389c90ce7">
+        <HintPath>..\TelerikDPL\Telerik.Documents.Spreadsheet.FormatProviders.Pdf.dll</HintPath>
+      </Reference>
+      <Reference Include="Telerik.Documents.SpreadsheetStreaming, Version=2021.1.118.20, Culture=neutral, PublicKeyToken=5803cfa389c90ce7">
+        <HintPath>..\TelerikDPL\Telerik.Documents.SpreadsheetStreaming.dll</HintPath>
+      </Reference>
+      <Reference Include="Telerik.Zip, Version=2021.1.118.20, Culture=neutral, PublicKeyToken=5803cfa389c90ce7">
+        <HintPath>..\TelerikDPL\Telerik.Zip.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="SixLabors.ImageSharp" Version="1.0.3" />
+      <PackageReference Include="TiffLibrary.ImageSharpAdapter" Version="0.5.260" />
+    </ItemGroup>
+
+</Project>

@@ -58,19 +58,13 @@ namespace Zero.Configuration
             {
                 context.Manager.GetSettingDefinition(EmailSettingNames.Smtp.Host).Scopes = SettingScopes.Application;
                 context.Manager.GetSettingDefinition(EmailSettingNames.Smtp.Port).Scopes = SettingScopes.Application;
-                context.Manager.GetSettingDefinition(EmailSettingNames.Smtp.UserName).Scopes =
-                    SettingScopes.Application;
-                context.Manager.GetSettingDefinition(EmailSettingNames.Smtp.Password).Scopes =
-                    SettingScopes.Application;
+                context.Manager.GetSettingDefinition(EmailSettingNames.Smtp.UserName).Scopes = SettingScopes.Application;
+                context.Manager.GetSettingDefinition(EmailSettingNames.Smtp.Password).Scopes = SettingScopes.Application;
                 context.Manager.GetSettingDefinition(EmailSettingNames.Smtp.Domain).Scopes = SettingScopes.Application;
-                context.Manager.GetSettingDefinition(EmailSettingNames.Smtp.EnableSsl).Scopes =
-                    SettingScopes.Application;
-                context.Manager.GetSettingDefinition(EmailSettingNames.Smtp.UseDefaultCredentials).Scopes =
-                    SettingScopes.Application;
-                context.Manager.GetSettingDefinition(EmailSettingNames.DefaultFromAddress).Scopes =
-                    SettingScopes.Application;
-                context.Manager.GetSettingDefinition(EmailSettingNames.DefaultFromDisplayName).Scopes =
-                    SettingScopes.Application;
+                context.Manager.GetSettingDefinition(EmailSettingNames.Smtp.EnableSsl).Scopes = SettingScopes.Application;
+                context.Manager.GetSettingDefinition(EmailSettingNames.Smtp.UseDefaultCredentials).Scopes = SettingScopes.Application;
+                context.Manager.GetSettingDefinition(EmailSettingNames.DefaultFromAddress).Scopes = SettingScopes.Application;
+                context.Manager.GetSettingDefinition(EmailSettingNames.DefaultFromDisplayName).Scopes = SettingScopes.Application;
             }
         }
 

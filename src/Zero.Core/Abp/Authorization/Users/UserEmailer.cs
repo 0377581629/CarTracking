@@ -384,9 +384,9 @@ namespace Zero.Authorization.Users
 
         private async Task CheckMailSettingsEmptyOrNull()
         {
-#if DEBUG
-            return;
-#endif
+            #if DEBUG
+                return;
+            #endif
             if (
                 (await _settingManager.GetSettingValueAsync(EmailSettingNames.DefaultFromAddress)).IsNullOrEmpty() ||
                 (await _settingManager.GetSettingValueAsync(EmailSettingNames.Smtp.Host)).IsNullOrEmpty()

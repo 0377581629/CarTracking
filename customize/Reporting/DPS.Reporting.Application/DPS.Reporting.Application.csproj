@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+    </PropertyGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\src\Zero.Application\Zero.Application.csproj" />
+        <ProjectReference Include="..\DPS.Reporting.Application.Shared\DPS.Reporting.Application.Shared.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+      <PackageReference Include="Humanizer.Core" Version="2.8.26" />
+      <PackageReference Include="Humanizer.Core.vi" Version="2.8.26" />
+    </ItemGroup>
+</Project>
