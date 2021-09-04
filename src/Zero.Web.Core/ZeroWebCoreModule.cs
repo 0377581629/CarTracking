@@ -26,6 +26,7 @@ using Zero.Authentication.TwoFactor;
 using Zero.Chat;
 using Zero.Configuration;
 using Zero.EntityFrameworkCore;
+using Zero.Startup;
 using Zero.Web.Authentication.JwtBearer;
 using Zero.Web.Authentication.TwoFactor;
 using Zero.Web.Chat.SignalR;
@@ -39,6 +40,7 @@ namespace Zero.Web
         typeof(ZeroEntityFrameworkCoreModule),
         typeof(AbpAspNetZeroCoreWebModule),
         typeof(AbpAspNetCoreSignalRModule),
+        typeof(ZeroGraphQLModule),
         typeof(AbpRedisCacheModule), //AbpRedisCacheModule dependency (and Abp.RedisCache nuget package) can be removed if not using Redis cache
         typeof(AbpHangfireAspNetCoreModule), //AbpHangfireModule dependency (and Abp.Hangfire.AspNetCore nuget package) can be removed if not using Hangfire
         typeof(ReportingApplicationModule)

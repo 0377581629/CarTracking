@@ -18,6 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Zero.Application\Zero.Application.csproj" />
     <ProjectReference Include="..\Zero.EntityFrameworkCore\Zero.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\Zero.GraphQL\Zero.GraphQL.csproj" />
     <ProjectReference Include="..\..\customize\Reporting\DPS.Reporting.Application.Shared\DPS.Reporting.Application.Shared.csproj" />
     <ProjectReference Include="..\..\customize\Reporting\DPS.Reporting.Application\DPS.Reporting.Application.csproj" />
   </ItemGroup>
