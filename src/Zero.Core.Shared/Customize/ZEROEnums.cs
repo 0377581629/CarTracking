@@ -6,8 +6,10 @@ namespace Zero
     {
         public enum EmailTemplateType
         {
-            [StringValue("EmailTemplateType_EmployeeBirthDay")] EmployeeBirthDay = 1,
-            [StringValue("EmailTemplateType_NewEmployee")] NewEmployee = 2,
+            // [StringValue("EmailTemplateType_NewTenant")] NewTenant = 1,
+            [StringValue("EmailTemplateType_UserActiveEmail")] UserActiveEmail = 2,
+            [StringValue("EmailTemplateType_UserResetPassword")] UserResetPassword = 3,
+            [StringValue("EmailTemplateType_SecurityCode")] UserTwoFactorSecurityCode = 4
         }
         
         public enum DefaultStatus

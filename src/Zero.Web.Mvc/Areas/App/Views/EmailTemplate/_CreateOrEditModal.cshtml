@@ -23,7 +23,7 @@
                 <div class="col-4">
                         <div class="form-group">
                             <label>@L("EmailTemplateType")</label> <span class="text-danger">*</span>
-                            @Html.DropDownList("emailTemplateType", SelectListHelper.ListWithNoData(L("MissingData"), Model.ListEmailTemplateType, Model.EmailTemplate.EmailTemplateType), new {@class = "form-control kt-select2-non-search"})
+                            @Html.DropDownList("emailTemplateType", SelectListHelper.ListWithNull(L("EmailTemplateType_Default"), Model.ListEmailTemplateType, Model.EmailTemplate.EmailTemplateType), new {@class = "form-control kt-select2-non-search"})
                         </div>
                     </div>
                 

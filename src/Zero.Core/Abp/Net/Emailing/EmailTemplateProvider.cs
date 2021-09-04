@@ -2,10 +2,12 @@
 using System.Collections.Concurrent;
 using System.Text;
 using Abp.Dependency;
+using Abp.Domain.Repositories;
 using Abp.Extensions;
 using Abp.IO.Extensions;
 using Abp.MultiTenancy;
 using Abp.Reflection.Extensions;
+using Zero.Customize;
 using Zero.MultiTenancy;
 using Zero.Url;
 
@@ -16,26 +18,45 @@ namespace Zero.Net.Emailing
         private readonly IWebUrlService _webUrlService;
         private readonly ITenantCache _tenantCache;
         private readonly ConcurrentDictionary<string, string> _defaultTemplates;
+        private readonly IRepository<EmailTemplate> _emailTemplateRepository;
 
-        public EmailTemplateProvider(IWebUrlService webUrlService, ITenantCache tenantCache)
+        public EmailTemplateProvider(IWebUrlService webUrlService, ITenantCache tenantCache, IRepository<EmailTemplate> emailTemplateRepository)
         {
             _webUrlService = webUrlService;
             _tenantCache = tenantCache;
+            _emailTemplateRepository = emailTemplateRepository;
             _defaultTemplates = new ConcurrentDictionary<string, string>();
         }
 
-        public string GetDefaultTemplate(int? tenantId)
+        public string GetDefaultTemplate(int? tenantId, ZEROEnums.EmailTemplateType? emailTemplateType = null)
         {
+            var res = "";
             var tenancyKey = tenantId.HasValue ? tenantId.Value.ToString() : "host";
-
-            return _defaultTemplates.GetOrAdd(tenancyKey, key =>
+            res = _defaultTemplates.GetOrAdd(tenancyKey, key =>
             {
                 using var stream = typeof(EmailTemplateProvider).GetAssembly().GetManifestResourceStream("Zero.Abp.Net.Emailing.EmailTemplates.default.html");
                 var bytes = stream.GetAllBytes();
                 var template = Encoding.UTF8.GetString(bytes, 3, bytes.Length - 3);
-                template = template.Replace("{THIS_YEAR}", DateTime.Now.Year.ToString());
-                return template.Replace("{EMAIL_LOGO_URL}", GetTenantLogoUrl(tenantId));
+                return template;
             });
+
+            if (emailTemplateType.HasValue)
+            {
+                var emailTemplate = _emailTemplateRepository.FirstOrDefault(o => o.TenantId == tenantId && o.IsActive && o.EmailTemplateType == (int)emailTemplateType.Value);
+                if (emailTemplate != null)
+                    res = emailTemplate.Content;    
+            }
+            else
+            {
+                var emailTemplate = _emailTemplateRepository.FirstOrDefault(o => o.TenantId == tenantId && o.IsActive && o.EmailTemplateType == null);
+                if (emailTemplate != null)
+                    res = emailTemplate.Content;
+            }
+            
+            // Replace base info and return
+
+            return res.Replace("{THIS_YEAR}", DateTime.Now.Year.ToString())
+                .Replace("{EMAIL_LOGO_URL}", GetTenantLogoUrl(tenantId));
         }
 
         private string GetTenantLogoUrl(int? tenantId)

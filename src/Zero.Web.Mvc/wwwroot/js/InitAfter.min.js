@@ -643,6 +643,19 @@ function slugify(text) {
                 return $.number(input,floatCount, whatDecimalSeparator(),whatThousandSeparator());
             return '';
         }
+
+        baseHelper.ShowEmailTemplateType = function (type) {
+            switch (type) {
+                case null:
+                    return app.localize('EmailTemplateType_Default');
+                case 2:
+                    return app.localize('EmailTemplateType_UserActiveEmail');
+                case 3:
+                    return app.localize('EmailTemplateType_UserResetPassword');
+                case 4:
+                    return app.localize('EmailTemplateType_SecurityCode');
+            }
+        }
         
         baseHelper.ViewFile = function(fileUrl) {
             _globalViewFileModal.open({
