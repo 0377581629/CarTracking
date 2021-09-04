@@ -32,10 +32,10 @@ namespace Zero.Customize
                     .Where(o => !o.IsDeleted && o.TenantId == AbpSession.TenantId)
                     .WhereIf(input != null && !string.IsNullOrWhiteSpace(input.Filter), e => e.Title.Contains(input.Filter))
                     .WhereIf(id.HasValue, e => e.Id == id.Value)
-                select new EmailTemplateDto()
+                select new EmailTemplateDto
                 {
                     Id = o.Id,
-                    TenantId = o.TenantId,
+                    EmailTemplateType = o.EmailTemplateType,
                     Title = o.Title,
                     Content = o.Content,
                     Sign = o.Sign,
@@ -113,7 +113,6 @@ namespace Zero.Customize
 
         public async Task CreateOrEdit(CreateOrEditEmailTemplateDto input)
         {
-            input.TenantId = AbpSession.TenantId;
             await ValidateDataInput(input);
             if (input.Id == null)
             {
@@ -129,7 +128,15 @@ namespace Zero.Customize
         protected virtual async Task Create(CreateOrEditEmailTemplateDto input)
         {
             var obj = ObjectMapper.Map<EmailTemplate>(input);
+            obj.TenantId = AbpSession.TenantId;
             await _emailTemplateRepository.InsertAndGetIdAsync(obj);
+            if (obj.IsActive)
+            {
+                var otherEmailTemplates = await _emailTemplateRepository.GetAllListAsync(o => o.EmailTemplateType == obj.EmailTemplateType && o.Id != obj.Id && o.IsActive);
+                if (otherEmailTemplates.Any())
+                    foreach (var otherTemplate in otherEmailTemplates)
+                        otherTemplate.IsActive = false;
+            }
         }
 
         [AbpAuthorize(AppPermissions.Pages_EmailTemplates_Edit)]
@@ -143,6 +150,14 @@ namespace Zero.Customize
                     throw new UserFriendlyException(L("NotFound"));
 
                 ObjectMapper.Map(input, obj);
+                
+                if (obj.IsActive)
+                {
+                    var otherEmailTemplates = await _emailTemplateRepository.GetAllListAsync(o => o.EmailTemplateType == obj.EmailTemplateType && o.Id != obj.Id && o.IsActive);
+                    if (otherEmailTemplates.Any())
+                        foreach (var otherTemplate in otherEmailTemplates)
+                            otherTemplate.IsActive = false;
+                }
             }
         }
 

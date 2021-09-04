@@ -2,6 +2,6 @@
 {
     public interface IEmailTemplateProvider
     {
-        string GetDefaultTemplate(int? tenantId);
+        string GetDefaultTemplate(int? tenantId, ZEROEnums.EmailTemplateType? emailTemplateType = null);
     }
 }

@@ -44,8 +44,8 @@ namespace ZERO.Web.Areas.App.Controllers
 				};
 			}
 
-			var viewModel = new CreateOrEditEmailTemplateModalViewModel()
-            {
+			var viewModel = new CreateOrEditEmailTemplateModalViewModel
+			{
 				EmailTemplate = getEmailTemplateForEditOutput.EmailTemplate,
 				ListEmailTemplateType = EmailHelper.ListEmailTemplateType(0,LocalizationSource),
             };

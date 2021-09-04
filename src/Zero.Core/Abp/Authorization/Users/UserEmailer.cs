@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Abp.Authorization.Users;
@@ -79,22 +80,19 @@ namespace Zero.Authorization.Users
             await CheckMailSettingsEmptyOrNull();
             
             if (user.EmailConfirmationCode.IsNullOrEmpty())
-            {
                 throw new Exception("EmailConfirmationCode should be set in order to send email activation link.");
-            }
-
+            
             link = link.Replace("{userId}", user.Id.ToString());
             link = link.Replace("{confirmationCode}", Uri.EscapeDataString(user.EmailConfirmationCode));
 
             if (user.TenantId.HasValue)
-            {
                 link = link.Replace("{tenantId}", user.TenantId.ToString());
-            }
-
+            
             link = EncryptQueryParameters(link);
 
             var tenancyName = GetTenancyNameOrNull(user.TenantId);
             var emailTemplate = GetTitleAndSubTitle(user.TenantId, L("EmailActivation_Title"), L("EmailActivation_SubTitle"));
+            
             var mailMessage = new StringBuilder();
 
             mailMessage.AppendLine("<b>" + L("NameSurname") + "</b>: " + user.Name + " " + user.Surname + "<br />");
@@ -346,6 +344,7 @@ namespace Zero.Authorization.Users
         private StringBuilder GetTitleAndSubTitle(int? tenantId, string title, string subTitle)
         {
             var emailTemplate = new StringBuilder(_emailTemplateProvider.GetDefaultTemplate(tenantId));
+            
             emailTemplate.Replace("{EMAIL_TITLE}", title);
             emailTemplate.Replace("{EMAIL_SUB_TITLE}", subTitle);
 

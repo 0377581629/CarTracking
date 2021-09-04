@@ -5,8 +5,8 @@ namespace Zero.Customize.Dto.EmailTemplate
 {
 	public class EmailTemplateDto : EntityDto
 	{
-		public int? TenantId { get; set; }
-        
+		public int? EmailTemplateType { get; set; }
+		
 		public string Title { get; set; }
         
 		public string Content { get; set; }

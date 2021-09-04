@@ -65,7 +65,7 @@
                             cssClass: 'text-center',
                             items: [
                                 {
-                                    icon: 'la la-edit text-primary',
+                                    icon: baseHelper.SimpleTableIcon('edit'),
                                     text: app.localize('Edit'),
                                     visible: function (data) {
                                         return _permissions.edit;
@@ -75,7 +75,7 @@
                                     }
                                 },
                                 {
-                                    icon: 'la la-trash text-danger',
+                                    icon: baseHelper.SimpleTableIcon('delete'),
                                     text: app.localize('Delete'),
                                     visible: function (data) {
                                         return _permissions.delete;
@@ -88,17 +88,24 @@
                     },
                     {
                         targets: 2,
+                        data: "emailTemplate.emailTemplateType",
+                        name: "emailTemplateType",
+                        render: function(emailTemplateType) {
+                            return baseHelper.ShowEmailTemplateType(emailTemplateType);
+                        }
+                    },
+                    {
+                        targets: 3,
                         data: "emailTemplate.title",
                         name: "title"
                     },
-
                     {
-                        targets: 3,
+                        targets: 4,
                         data: "emailTemplate.note",
                         name: "note"
                     },
                     {
-                        targets: 4,
+                        targets: 5,
                         data: "emailTemplate.autoCreateForNewTenant",
                         name: "autoCreateForNewTenant",
                         class: "text-center",
@@ -107,7 +114,7 @@
                         }
                     },
                     {
-                        targets: 5,
+                        targets: 6,
                         data: "emailTemplate.isActive",
                         name: "isActive",
                         class: "text-center",
@@ -148,7 +155,7 @@
                             cssClass: 'text-center',
                             items: [
                                 {
-                                    icon: 'la la-edit text-primary',
+                                    icon: baseHelper.SimpleTableIcon('edit'),
                                     text: app.localize('Edit'),
                                     visible: function (data) {
                                         return _permissions.edit;
@@ -158,7 +165,7 @@
                                     }
                                 },
                                 {
-                                    icon: 'la la-trash text-danger',
+                                    icon: baseHelper.SimpleTableIcon('delete'),
                                     text: app.localize('Delete'),
                                     visible: function (data) {
                                         return _permissions.delete;
@@ -171,17 +178,25 @@
                     },
                     {
                         targets: 2,
+                        data: "emailTemplate.emailTemplateType",
+                        name: "emailTemplateType",
+                        render: function(emailTemplateType) {
+                            return baseHelper.ShowEmailTemplateType(emailTemplateType);
+                        }
+                    },
+                    {
+                        targets: 3,
                         data: "emailTemplate.title",
                         name: "title"
                     },
                   
                     {
-                        targets: 3,
+                        targets: 4,
                         data: "emailTemplate.note",
                         name: "note"
                     },
                     {
-                        targets: 4,
+                        targets: 5,
                         data: "emailTemplate.isActive",
                         name: "isActive",
                         class: "text-center",

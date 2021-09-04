@@ -25,9 +25,11 @@ using Zero.Authorization.Users.Importing.Dto;
 using Zero.Authorization.Users.Profile.Dto;
 using Zero.Chat;
 using Zero.Chat.Dto;
+using Zero.Customize;
 using Zero.Customize.Dashboard;
 using Zero.Customize.Dto.Dashboard;
 using Zero.Customize.Dto.Dashboard.DashboardWidget;
+using Zero.Customize.Dto.EmailTemplate;
 using Zero.DynamicEntityProperties.Dto;
 using Zero.Editions;
 using Zero.Editions.Dto;
@@ -51,12 +53,17 @@ namespace Zero
     {
         public static void CreateMappings(IMapperConfigurationExpression configuration)
         {
+            // Dashboard Widget
             configuration.CreateMap<CreateOrEditDashboardWidgetDto, DashboardWidget>().ReverseMap();
             configuration.CreateMap<DashboardWidgetDto, DashboardWidget>().ReverseMap();
             configuration.CreateMap<DashboardWidgetDto, CreateOrEditDashboardWidgetDto>().ReverseMap();
             
             configuration.CreateMap<EditionDashboardWidgetDto, EditionDashboardWidget>().ReverseMap();
             configuration.CreateMap<RoleDashboardWidgetDto, RoleDashboardWidget>().ReverseMap();
+            // Email Template
+            configuration.CreateMap<CreateOrEditEmailTemplateDto, EmailTemplate>().ReverseMap();
+            configuration.CreateMap<EmailTemplateDto, EmailTemplate>().ReverseMap();
+            configuration.CreateMap<EmailTemplateDto, CreateOrEditEmailTemplateDto>().ReverseMap();
             
             //Inputs
             configuration.CreateMap<CheckboxInputType, FeatureInputTypeDto>();

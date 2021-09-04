@@ -18,6 +18,12 @@
     <text name="EmailTemplates">Email mẫu</text>
     <text name="EmailTemplatesHeaderInfo">Danh sách Email mẫu trong hệ thống</text>
     <text name="AutoCreateForNewTenant">Tự tạo cho đơn vị mới</text>
+
+    <!--    <text name="EmailTemplateType_NewTenant">Đơn vị sử dụng mới</text>-->
+    <text name="EmailTemplateType_Default">Mặc định</text>
+    <text name="EmailTemplateType_UserActiveEmail">Kích hoạt tài khoản</text>
+    <text name="EmailTemplateType_UserResetPassword">Tạo lại mật khẩu</text>
+    <text name="EmailTemplateType_SecurityCode">Mã bảo mật 2 lớp</text>
     <!--    -->
     
     <!--  Organization Unit + Roles -->
