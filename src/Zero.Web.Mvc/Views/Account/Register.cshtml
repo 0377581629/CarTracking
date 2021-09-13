@@ -2,8 +2,11 @@
 @using Abp.Json
 @using Zero.Localization
 @using Zero.Web.Security.Recaptcha
+@using Abp.Configuration.Startup
+@using Zero.Url
 @addTagHelper *, Owl.reCAPTCHA
-
+@inject IMultiTenancyConfig MultiTenancyConfig
+@inject IWebUrlService WebUrlService
 @section Scripts
 {
     <script>

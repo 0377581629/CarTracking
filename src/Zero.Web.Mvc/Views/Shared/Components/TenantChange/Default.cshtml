@@ -8,13 +8,22 @@
 
 <div class="form-group">
     <select id="TenantPicker" class="form-control h-auto p-10 rounded-lg font-size-h6">
+        @if (Model.Tenant == null)
+        {
+            <option value="" selected>@L("System")</option>    
+        }
+        else
+        {
+            <option value="">@L("System")</option>
+        }
+        
         @if (Model.AvailableTenants != null && Model.AvailableTenants.Any())
         {
             foreach (var tenant in Model.AvailableTenants)
             {
                 if (Model.Tenant != null && tenant.TenancyName == Model.Tenant.TenancyName)
                 {
-                    <option value="@tenant.TenancyName" selected>@tenant.Name</option>    
+                    <option value="@tenant.TenancyName" selected>@tenant.Name</option>
                 }
                 else
                 {

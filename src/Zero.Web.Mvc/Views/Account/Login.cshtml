@@ -13,6 +13,8 @@
 @model Zero.Web.Models.Account.LoginFormViewModel
 @inject SignInManager SignInManager
 @inject IPerRequestSessionCache SessionCache
+@inject IMultiTenancyConfig MultiTenancyConfig
+@inject IWebUrlService WebUrlService
 @{
     var loginInfo = await SessionCache.GetCurrentLoginInformationsAsync();
     var loginLogoImg = "";
