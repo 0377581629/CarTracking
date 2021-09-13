@@ -53,4 +53,36 @@
 
             });
         });
+
+    const _accountService = abp.services.app.account;
+    
+    $('body').on('change', '#TenantPicker', function(){
+        let tenancyName = $(this).val();
+
+        if (!tenancyName) {
+            abp.multiTenancy.setTenantIdCookie(null);
+            location.reload();
+            return;
+        }
+
+        abp.ui.setBusy();
+        _accountService.isTenantAvailable({
+            tenancyName: tenancyName
+        }).done(function (result) {
+            switch (result.state) {
+                case 1: //Available
+                    abp.multiTenancy.setTenantIdCookie(result.tenantId);
+                    location.reload();
+                    return;
+                case 2: //InActive
+                    abp.message.warn(app.localize('TenantIsNotActive', tenancyName));
+                    break;
+                case 3: //NotFound
+                    abp.message.warn(app.localize('ThereIsNoTenantDefinedWithName{0}', tenancyName));
+                    break;
+            }
+        }).always(function () {
+            abp.ui.clearBusy();
+        });
+    });
 })();

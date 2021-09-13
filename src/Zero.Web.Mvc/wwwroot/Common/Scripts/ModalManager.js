@@ -194,24 +194,33 @@
 
             var _initControl = function() {
 
-                _$modal.find('.date-picker').datetimepicker({
-                    locale: abp.localization.currentLanguage.name,
-                    format: 'L'
+                _$modal.find('.date-picker').each(function () {
+                    $(this).datetimepicker({
+                        locale: abp.localization.currentLanguage.name,
+                        format: 'L'
+                    });
+
+                    if ($(this).attr('init-value') !== undefined) {
+                        let initDate = moment($(this).attr('init-value'),'DD/MM/YYYY').format('L');
+                        $(this).val(initDate);
+                    }
+                });
+
+                _$modal.find('.datetime-picker').each(function(){
+                    $(this).datetimepicker({
+                        locale: abp.localization.currentLanguage.name,
+                        format: 'L LT'
+                    });
+                    if ($(this).attr('init-value') !== undefined) {
+                        let initDate = moment($(this).attr('init-value'),'DD/MM/YYYY hh:mm').format('L LT');
+                        $(this).val(initDate);
+                    }
+
                 });
 
                 _$modal.find('.month-picker').datetimepicker({
                     locale: abp.localization.currentLanguage.name,
                     format: 'MM/YYYY'
-                });
-
-                _$modal.find('.datetime-picker').datetimepicker({
-                    locale: abp.localization.currentLanguage.name,
-                    format: 'L LT'
-                });
-
-                _$modal.find('.time-picker').datetimepicker({
-                    locale: abp.localization.currentLanguage.name,
-                    format: 'LT'
                 });
 
                 _$modal.find('.kt-select2').select2({

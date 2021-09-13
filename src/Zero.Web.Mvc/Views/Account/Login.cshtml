@@ -1,4 +1,5 @@
 ﻿@using System.Globalization
+@using Abp.Configuration.Startup
 @using Abp.Extensions
 @using Abp.MultiTenancy
 @using Zero.Identity
@@ -6,6 +7,7 @@
 @using Zero.Web.Security.Recaptcha
 @using Owl.reCAPTCHA
 @using Zero
+@using Zero.Url
 @using Zero.Web.Session
 @addTagHelper *, Owl.reCAPTCHA
 @model Zero.Web.Models.Account.LoginFormViewModel
@@ -71,12 +73,17 @@
         }
 
         <div class="form-group">
-            <input class="form-control form-control-solid h-auto p-10 rounded-lg font-size-h6" type="text" placeholder="@L("UserNameOrEmail")" name="usernameOrEmailAddress" autocomplete="new-password" value="@(Model.UserNameOrEmailAddress ?? "")" required>
+            <input class="form-control h-auto p-10 rounded-lg font-size-h6" type="text" placeholder="@L("UserNameOrEmail")" name="usernameOrEmailAddress" autocomplete="new-password" value="@(Model.UserNameOrEmailAddress ?? "")" required>
         </div>
 
         <div class="form-group">
-            <input class="form-control form-control-solid h-auto p-10 rounded-lg font-size-h6" type="password" placeholder="@L("Password")" name="password" autocomplete="new-password">
+            <input class="form-control h-auto p-10 rounded-lg font-size-h6" type="password" placeholder="@L("Password")" name="password" autocomplete="new-password">
         </div>
+
+        @if (!(ViewBag.DisableTenantChange ?? false) && MultiTenancyConfig.IsEnabled && !WebUrlService.SupportsTenancyNameInUrl)
+        {
+            <vc:tenant-change></vc:tenant-change>
+        }
 
         <div class="form-group d-flex justify-content-between mt-4">
             <label class="checkbox checkbox-outline">
@@ -85,7 +92,7 @@
                 </span>
                 @L("RememberMe")
             </label>
-            <a href="@Url.Action("ForgotPassword", "Account")" id="forget-password" class="text-primary font-size-h6 font-weight-bolder text-hover-primary">@L("ForgotPassword")</a>
+            <a href="@Url.Action("ForgotPassword", "Account")" id="forget-password" class="text-primary font-size-h7 font-weight-bolder text-hover-primary">@L("ForgotPassword")</a>
         </div>
 
         <!--begin::Action-->

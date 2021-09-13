@@ -5,17 +5,22 @@
 @{
     WebResourceManager.AddScript(ApplicationPath + "view-resources/Views/Shared/Components/TenantChange/Default.js");
 }
-<span class="tenant-change-component">
-    @L("CurrentTenant"):
 
-    @if (Model.Tenant != null)
-    {
-        <span title="@Model.Tenant.Name"><strong>@Model.Tenant.TenancyName</strong></span>
-    }
-    else
-    {
-        <span>@L("NotSelected")</span>
-    }
-
-    (<a href="#">@L("Change")</a>)
-</span>
+<div class="form-group">
+    <select id="TenantPicker" class="form-control h-auto p-10 rounded-lg font-size-h6">
+        @if (Model.AvailableTenants != null && Model.AvailableTenants.Any())
+        {
+            foreach (var tenant in Model.AvailableTenants)
+            {
+                if (Model.Tenant != null && tenant.TenancyName == Model.Tenant.TenancyName)
+                {
+                    <option value="@tenant.TenancyName" selected>@tenant.Name</option>    
+                }
+                else
+                {
+                    <option value="@tenant.TenancyName">@tenant.Name</option>
+                }
+            }
+        }
+    </select>
+</div>

@@ -1,4 +1,6 @@
-﻿using Abp.AutoMapper;
+﻿using System.Collections.Generic;
+using Abp.AutoMapper;
+using Zero.MultiTenancy.Dto;
 using Zero.Sessions.Dto;
 
 namespace Zero.Web.Views.Shared.Components.TenantChange
@@ -7,5 +9,7 @@ namespace Zero.Web.Views.Shared.Components.TenantChange
     public class TenantChangeViewModel
     {
         public TenantLoginInfoDto Tenant { get; set; }
+        
+        public List<TenantListDto> AvailableTenants { get; set; }
     }
 }

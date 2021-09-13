@@ -1,4 +1,6 @@
-﻿namespace Zero.Web.Models.Account
+﻿using Zero.Web.Views.Shared.Components.TenantChange;
+
+namespace Zero.Web.Models.Account
 {
     public class LoginFormViewModel
     {

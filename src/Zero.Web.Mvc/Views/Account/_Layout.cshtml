@@ -92,14 +92,6 @@
                         <div class="card card-custom gutter-b shadow-lg">
                             <div class="card-body">
                                 <div class="row justify-content-center my-0">
-                                    @if (!(ViewBag.DisableTenantChange ?? false) && MultiTenancyConfig.IsEnabled && !WebUrlService.SupportsTenancyNameInUrl)
-                                    {
-                                        <div class="col-12 pb-10">
-                                            <div class="login__signup-label tenant-change-box">
-                                                <vc:tenant-change></vc:tenant-change>
-                                            </div>
-                                        </div>
-                                    }
                                     <div class="col-12 min-w-300px">
                                         <!--begin::Form-->
                                         @RenderBody()

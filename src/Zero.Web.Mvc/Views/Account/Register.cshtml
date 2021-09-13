@@ -69,6 +69,11 @@
             <input type="hidden" name="@RecaptchaValidator.RecaptchaResponseKey" id="recaptchaResponse"/>
         }
 
+        @if (!(ViewBag.DisableTenantChange ?? false) && MultiTenancyConfig.IsEnabled && !WebUrlService.SupportsTenancyNameInUrl)
+        {
+            <vc:tenant-change></vc:tenant-change>
+        }
+        
         <div class="form-group">
             <input class="form-control form-control-solid h-auto p-10 rounded-lg font-size-h6" type="text" placeholder="@L("Name")" name="Name" required value="@Model.Name" maxlength="@Zero.Authorization.Users.User.MaxNameLength"/>
         </div>
