@@ -17,10 +17,7 @@ namespace Zero.Web.Views.Shared.Components.AccountLogo
         public string GetLogoUrl(string appPath)
         {
             if (LoginInformations?.Tenant?.LogoId == null)
-            {
-                return appPath + "Common/Images/app-logo-on-" + _skin + ".svg";
-            }
-
+                return GlobalConfig.AppDefaultLogoLogin;
             return appPath + "TenantCustomization/GetLogo?tenantId=" + LoginInformations?.Tenant?.Id;
         }
     }
