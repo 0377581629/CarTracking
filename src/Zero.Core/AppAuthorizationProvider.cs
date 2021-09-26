@@ -101,9 +101,10 @@ namespace Zero.Authorization
 
             //TENANT-SPECIFIC PERMISSIONS
 
-            administration.CreateChildPermission(AppPermissions.Pages_Administration_Tenant_Settings, L("Settings"), multiTenancySides: MultiTenancySides.Tenant);
+            administration.CreateChildPermission(AppPermissions.Pages_Administration_Tenant_Settings, L("TenantSettings"));
+            
             if (ZeroConsts.MultiTenancyEnabled)
-                administration.CreateChildPermission(AppPermissions.Pages_Administration_Tenant_SubscriptionManagement, L("Subscription"), multiTenancySides: MultiTenancySides.Tenant);
+                administration.CreateChildPermission(AppPermissions.Pages_Administration_Tenant_SubscriptionManagement, L("TenantSubscription"));
 
             //HOST-SPECIFIC PERMISSIONS
 
@@ -120,7 +121,7 @@ namespace Zero.Authorization
             tenants.CreateChildPermission(AppPermissions.Pages_Tenants_Delete, L("DeletingTenant"), multiTenancySides: MultiTenancySides.Host);
             tenants.CreateChildPermission(AppPermissions.Pages_Tenants_Impersonation, L("LoginForTenants"), multiTenancySides: MultiTenancySides.Host);
 
-            administration.CreateChildPermission(AppPermissions.Pages_Administration_Host_Settings, L("Settings"), multiTenancySides: MultiTenancySides.Host);
+            administration.CreateChildPermission(AppPermissions.Pages_Administration_Host_Settings, L("SystemSettings"), multiTenancySides: MultiTenancySides.Host);
             administration.CreateChildPermission(AppPermissions.Pages_Administration_Host_Maintenance, L("Maintenance"), multiTenancySides: _isMultiTenancyEnabled ? MultiTenancySides.Host : MultiTenancySides.Tenant);
             administration.CreateChildPermission(AppPermissions.Pages_Administration_HangfireDashboard, L("HangfireDashboard"), multiTenancySides: _isMultiTenancyEnabled ? MultiTenancySides.Host : MultiTenancySides.Tenant);
         }

@@ -95,6 +95,13 @@
             public const string AllowOneConcurrentLoginPerUser = "App.UserManagement.AllowOneConcurrentLoginPerUser";
             public const string AllowUsingGravatarProfilePicture = "App.UserManagement.AllowUsingGravatarProfilePicture";
             public const string UseGravatarProfilePicture = "App.UserManagement.UseGravatarProfilePicture";
+            
+            // Subscription User
+            public const string SubscriptionUser = "App.UserManagement.SubscriptionUser";
+            public const string SubscriptionTrialDays = "App.UserManagement.SubscriptionTrialDays";
+            public const string SubscriptionCurrency = "App.UserManagement.SubscriptionCurrency";
+            public const string SubscriptionMonthlyPrice = "App.UserManagement.SubscriptionMonthlyPrice";
+            public const string SubscriptionYearlyPrice = "App.UserManagement.SubscriptionYearlyPrice";
         }
 
         public static class Email

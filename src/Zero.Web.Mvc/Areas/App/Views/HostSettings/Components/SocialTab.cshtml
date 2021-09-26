@@ -1,0 +1,173 @@
+﻿@using Abp.Application.Services.Dto
+@using Abp.Extensions
+@using Abp.Timing;
+@using Zero.Web.Areas.App.Startup
+@model Zero.Web.Areas.App.Models.HostSettings.HostSettingsViewModel
+
+@if (Model.EnabledSocialLoginSettings.Any())
+{
+    <div class="tab-pane" id="ExternalLoginSettingsTab">
+        @if (Model.EnabledSocialLoginSettings.Contains("Facebook"))
+        {
+            <form id="ExternalLoginFacebookSettingsForm" class="form">
+                <h5>Facebook</h5>
+                <div class="form-group">
+                    <label for="Setting_Facebook_AppId">@L("AppId")*</label>
+                    <input id="Setting_Facebook_AppId" type="text" class="form-control" name="AppId" value="@Model.Settings.ExternalLoginProviderSettings.Facebook.AppId">
+                </div>
+                <div class="form-group">
+                    <label for="Setting_Facebook_AppSecret">@L("AppSecret")*</label>
+                    <div class="input-group">
+                        <input id="Setting_Facebook_AppSecret" type="password" class="form-control" name="AppSecret" value="@Model.Settings.ExternalLoginProviderSettings.Facebook.AppSecret">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary passwordShowButton" type="button" data-id="Setting_Facebook_AppSecret">
+                                <i class="far fa-eye text-white"></i> <span> @L("Show")</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        }
+
+        @if (Model.EnabledSocialLoginSettings.Contains("Google"))
+        {
+            <form id="ExternalLoginGoogleSettingsForm" class="form">
+                <h5>Google</h5>
+                <div class="form-group">
+                    <label for="Setting_Google_ClientId">@L("ClientId")*</label>
+                    <input id="Setting_Google_ClientId" type="text" class="form-control" name="ClientId" value="@Model.Settings.ExternalLoginProviderSettings.Google.ClientId">
+                </div>
+                <div class="form-group">
+                    <label for="Setting_Google_ClientSecret">@L("ClientSecret")*</label>
+                    <div class="input-group">
+                        <input id="Setting_Google_ClientSecret" type="password" class="form-control" name="ClientSecret" value="@Model.Settings.ExternalLoginProviderSettings.Google.ClientSecret">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary passwordShowButton" type="button" data-id="Setting_Google_ClientSecret">
+                                <i class="far fa-eye text-white"></i> <span> @L("Show")</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="Setting_Google_UserInfoEndpoint">@L("UserInfoEndpoint")</label>
+                    <input id="Setting_Google_UserInfoEndpoint" type="text" class="form-control" name="UserInfoEndpoint" value="@Model.Settings.ExternalLoginProviderSettings.Google.UserInfoEndpoint">
+                </div>
+            </form>
+        }
+
+        @if (Model.EnabledSocialLoginSettings.Contains("Twitter"))
+        {
+            <form id="ExternalLoginTwitterSettingsForm" class="form">
+                <h5>Twitter</h5>
+                <div class="form-group">
+                    <label for="Setting_Twitter_ConsumerKey">@L("ConsumerKey")*</label>
+                    <input id="Setting_Twitter_ConsumerKey" type="text" class="form-control" name="ConsumerKey" value="@Model.Settings.ExternalLoginProviderSettings.Twitter.ConsumerKey">
+                </div>
+                <div class="form-group">
+                    <label for="Setting_Twitter_ConsumerSecret">@L("ConsumerSecret")*</label>
+                    <div class="input-group">
+                        <input id="Setting_Twitter_ConsumerSecret" type="password" class="form-control" name="ConsumerSecret" value="@Model.Settings.ExternalLoginProviderSettings.Twitter.ConsumerSecret">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary passwordShowButton" type="button" data-id="Setting_Twitter_ConsumerSecret">
+                                <i class="far fa-eye text-white"></i> <span> @L("Show")</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        }
+
+        @if (Model.EnabledSocialLoginSettings.Contains("Microsoft"))
+        {
+            <form id="ExternalLoginMicrosoftSettingsForm" class="form">
+                <h5>Microsoft</h5>
+                <div class="form-group">
+                    <label for="Setting_Microsoft_ClientId">@L("ClientId")*</label>
+                    <input id="Setting_Microsoft_ClientId" type="text" class="form-control" name="ClientId" value="@Model.Settings.ExternalLoginProviderSettings.Microsoft.ClientId">
+                </div>
+                <div class="form-group">
+                    <label for="Setting_Microsoft_ClientSecret">@L("ClientSecret")*</label>
+                    <div class="input-group">
+                        <input id="Setting_Microsoft_ClientSecret" type="password" class="form-control" name="ClientSecret" value="@Model.Settings.ExternalLoginProviderSettings.Microsoft.ClientSecret">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary passwordShowButton" type="button" data-id="Setting_Microsoft_ClientSecret">
+                                <i class="far fa-eye text-white"></i> <span> @L("Show")</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        }
+        @if (Model.EnabledSocialLoginSettings.Contains("OpenId"))
+        {
+            <hr>
+            <form id="ExternalLoginOpenIdConnectSettingsForm" class="form">
+                <h5>OpenID Connect</h5>
+                <div class="form-group">
+                    <label for="Setting_OpenIdConnect_ClientId">@L("ClientId")*</label>
+                    <input id="Setting_OpenIdConnect_ClientId" type="text" class="form-control" name="ClientId" value="@Model.Settings.ExternalLoginProviderSettings.OpenIdConnect.ClientId">
+                </div>
+                <div class="form-group">
+                    <label for="Setting_OpenIdConnect_ClientSecret">@L("ClientSecret")</label>
+                    <div class="input-group">
+                        <input id="Setting_OpenIdConnect_ClientSecret" type="password" class="form-control" name="ClientSecret" value="@Model.Settings.ExternalLoginProviderSettings.OpenIdConnect.ClientSecret">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary passwordShowButton" type="button" data-id="Setting_OpenIdConnect_ClientSecret">
+                                <i class="far fa-eye text-white"></i> <span> @L("Show")</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="Setting_OpenIdConnect_Authority">@L("Authority")*</label>
+                    <input id="Setting_OpenIdConnect_Authority" type="text" class="form-control" name="Authority" value="@Model.Settings.ExternalLoginProviderSettings.OpenIdConnect.Authority">
+                </div>
+                <label for="Setting_OpenIdConnect_ValidateIssuer" class="checkbox checkbox-outline">
+                    <input id="Setting_OpenIdConnect_ValidateIssuer" type="checkbox" name="OpenIdConnect_ValidateIssuer" value="true"
+                           @(Model.Settings.ExternalLoginProviderSettings.OpenIdConnect.ValidateIssuer ? "checked=\"checked\"" : "")>
+                    <span></span>
+                    @L("ValidateIssuer")
+                </label>
+
+                <div class="form-group col-12">
+                    <label>@L("ClaimsMapping")</label>
+                    <div id="claimsMappingsContainer"></div>
+                </div>
+            </form>
+        }
+        @if (Model.EnabledSocialLoginSettings.Contains("WsFederation"))
+        {
+            <hr>
+            <form id="ExternalLoginWsFederationSettingsForm" class="form">
+                <div class="accordion">
+                    <h5>WsFederation</h5>
+                    <div class="form-group">
+                        <label for="Setting_WsFederation_ClientId">@L("ClientId")</label>
+                        <input id="Setting_WsFederation_ClientId" type="text" class="form-control" name="ClientId" value="@Model.Settings.ExternalLoginProviderSettings.WsFederation.ClientId">
+                    </div>
+                    <div class="form-group">
+                        <label for="Setting_WsFederation_Tenant">@L("Tenant")</label>
+                        <input id="Setting_WsFederation_Tenant" type="text" class="form-control" name="Tenant" value="@Model.Settings.ExternalLoginProviderSettings.WsFederation.Tenant">
+                    </div>
+                    <div class="form-group">
+                        <label for="Setting_WsFederation_MetaDataAddress">@L("MetaDataAddress")</label>
+                        <input id="Setting_WsFederation_MetaDataAddress" type="text" class="form-control" name="MetaDataAddress" value="@Model.Settings.ExternalLoginProviderSettings.WsFederation.MetaDataAddress">
+                    </div>
+                    <div class="form-group">
+                        <label for="Setting_WsFederation_Wtrealm">@L("Wtrealm")</label>
+                        <input id="Setting_WsFederation_Wtrealm" type="text" class="form-control" name="Wtrealm" value="@Model.Settings.ExternalLoginProviderSettings.WsFederation.Wtrealm">
+                    </div>
+                    <div class="form-group">
+                        <label for="Setting_WsFederation_Authority">@L("Authority")</label>
+                        <input id="Setting_WsFederation_Authority" type="text" class="form-control" name="Authority" value="@Model.Settings.ExternalLoginProviderSettings.WsFederation.Authority">
+                    </div>
+
+                    <div class="form-group col-12">
+                        <label>@L("ClaimsMapping")</label>
+                        <div id="Setting_WsFederation_ClaimsMappingsContainer"></div>
+                    </div>
+                </div>
+            </form>
+        }
+    </div>
+}

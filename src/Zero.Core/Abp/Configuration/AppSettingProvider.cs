@@ -34,7 +34,9 @@ namespace Zero.Configuration
             // Change scope of Email settings
             ChangeEmailSettingScopes(context);
 
-            return GetHostSettings().Union(GetTenantSettings()).Union(GetSharedSettings())
+            return GetHostSettings()
+                .Union(GetTenantSettings())
+                .Union(GetSharedSettings())
                 // theme settings
                 .Union(GetDefaultThemeSettings())
                 .Union(GetTheme2Settings())
@@ -162,7 +164,24 @@ namespace Zero.Configuration
                     isVisibleToClients: true, scopes: SettingScopes.Application | SettingScopes.Tenant),
                 new SettingDefinition(AppSettings.UserManagement.UseGravatarProfilePicture,
                     GetFromAppSettings(AppSettings.UserManagement.UseGravatarProfilePicture, "false"),
-                    isVisibleToClients: true, scopes: SettingScopes.User)
+                    isVisibleToClients: true, scopes: SettingScopes.User),
+                
+                // Subscription User
+                new SettingDefinition(AppSettings.UserManagement.SubscriptionUser,
+                GetFromAppSettings(AppSettings.UserManagement.SubscriptionUser, "false"),
+                isVisibleToClients: false, scopes: SettingScopes.Application | SettingScopes.Tenant),
+                new SettingDefinition(AppSettings.UserManagement.SubscriptionCurrency,
+                    GetFromAppSettings(AppSettings.UserManagement.SubscriptionCurrency, "VND"),
+                    isVisibleToClients: false, scopes: SettingScopes.Application | SettingScopes.Tenant),
+                new SettingDefinition(AppSettings.UserManagement.SubscriptionTrialDays,
+                    GetFromAppSettings(AppSettings.UserManagement.SubscriptionTrialDays, "7"),
+                    isVisibleToClients: false, scopes: SettingScopes.Application | SettingScopes.Tenant),
+                new SettingDefinition(AppSettings.UserManagement.SubscriptionMonthlyPrice,
+                    GetFromAppSettings(AppSettings.UserManagement.SubscriptionMonthlyPrice, "30000"),
+                    isVisibleToClients: false, scopes: SettingScopes.Application | SettingScopes.Tenant),
+                new SettingDefinition(AppSettings.UserManagement.SubscriptionYearlyPrice,
+                    GetFromAppSettings(AppSettings.UserManagement.SubscriptionYearlyPrice, "50000"),
+                    isVisibleToClients: false, scopes: SettingScopes.Application | SettingScopes.Tenant),
             };
         }
 

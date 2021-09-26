@@ -124,7 +124,7 @@ namespace Zero.Web.Areas.App.Startup
                     )
                     .AddItem(new MenuItemDefinition(
                             AppPageNames.Host.Settings,
-                            L("Settings"),
+                            L("SystemSettings"),
                             url: "App/HostSettings",
                             icon: "flaticon-settings",
                             permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_Administration_Host_Settings)
@@ -132,7 +132,7 @@ namespace Zero.Web.Areas.App.Startup
                     )
                     .AddItem(new MenuItemDefinition(
                             AppPageNames.Tenant.Settings,
-                            L("Settings"),
+                            L("TenantSettings"),
                             url: "App/Settings",
                             icon: "flaticon-settings",
                             permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_Administration_Tenant_Settings)

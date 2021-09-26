@@ -15,5 +15,16 @@
         public bool AllowUsingGravatarProfilePicture { get; set; }
         
         public SessionTimeOutSettingsEditDto SessionTimeOutSettings { get; set; }
+        
+        // Subscription
+        public bool UseSubscription { get; set; }
+        
+        public int SubscriptionTrialDays { get; set; }
+        
+        public string SubscriptionCurrency { get; set; }
+        
+        public int SubscriptionMonthlyPrice { get; set; }
+        
+        public int SubscriptionYearlyPrice { get; set; }
     }
 }

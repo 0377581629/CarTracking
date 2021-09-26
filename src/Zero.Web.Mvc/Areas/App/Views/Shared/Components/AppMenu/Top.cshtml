@@ -1,4 +1,5 @@
 ﻿@using Zero.Web.Areas.App.Models.Layout
+@using Zero.Web.Areas.App.Startup
 @using Zero.Web.Areas.App.Views.Shared.Components.AppMenu
 @using Zero.Web.Navigation
 @model MenuViewModel
@@ -26,6 +27,10 @@
                     {
                         var menuItem = orderedMenuItems[i];
                         if (!menuItem.IsVisible)
+                        {
+                            continue;
+                        }
+                        if (AbpSession.TenantId == null && (menuItem.Name == AppPageNames.Tenant.SubscriptionManagement || menuItem.Name == AppPageNames.Tenant.Settings))
                         {
                             continue;
                         }

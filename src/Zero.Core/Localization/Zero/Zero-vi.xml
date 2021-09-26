@@ -1,7 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <localizationDictionary culture="vi">
   <texts>
+    <!--  User Subscription  -->
+    <text name="UserSubscriptionEnable">Kích hoạt thuê bao tài khoản</text>
+    <text name="Currency">Tiền tệ</text>
+    <text name="TrialDays">Dùng thử - Ngày</text>
+    <text name="Price">Đơn giá</text>
+    <text name="Yearly">Hàng năm</text>
+    <!--    -->
+    
     <!--  Common  -->
+    <text name="System">Hệ thống</text>
+    
     <text name="Title">Tiêu đề</text>
     <text name="Content">Nội dung</text>
     <text name="Note">Ghi chú</text>
@@ -18,8 +28,7 @@
     <text name="EmailTemplates">Email mẫu</text>
     <text name="EmailTemplatesHeaderInfo">Danh sách Email mẫu trong hệ thống</text>
     <text name="AutoCreateForNewTenant">Tự tạo cho đơn vị mới</text>
-
-    <!--    <text name="EmailTemplateType_NewTenant">Đơn vị sử dụng mới</text>-->
+    
     <text name="EmailTemplateType_Default">Mặc định</text>
     <text name="EmailTemplateType_UserActiveEmail">Kích hoạt tài khoản</text>
     <text name="EmailTemplateType_UserResetPassword">Tạo lại mật khẩu</text>
@@ -260,6 +269,10 @@
     <text name="ResetSpecialPermissions">Đặt lại quyền đặc biệt</text>
     <text name="SavingWithThreeDot">Tiết kiệm...</text>
     <text name="Settings">Cài đặt</text>
+
+    <text name="SystemSettings">Cài đặt hệ thống</text>
+    <text name="TenantSettings">Cài đặt đơn vị</text>
+    
     <text name="SaveAll">Lưu tất cả</text>
     <text name="SettingsHeaderInfo">Hiển thị và thay đổi cài đặt ứng dụng.</text>
     <text name="EmailSmtp">Email (SMTP)</text>
@@ -810,6 +823,7 @@
     <text name="Notification">Thông báo</text>
     <text name="TotalRecordsCount">Tổng cộng: {0}</text>
     <text name="SubscriptionInformation">Thông tin đăng ký</text>
+    <text name="TenantSubscription">Thông tin thuê bao đơn vị</text>
     <text name="PaymentHistory">Lịch sử thanh toán</text>
     <text name="Gateway">Gateway</text>
     <text name="Amount">Số tiền</text>

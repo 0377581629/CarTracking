@@ -54,6 +54,8 @@ namespace Zero.Web.Controllers
 {
     public class AccountController : ZeroControllerBase
     {
+        
+        #region Constructor
         private readonly UserManager _userManager;
         private readonly TenantManager _tenantManager;
         private readonly IMultiTenancyConfig _multiTenancyConfig;
@@ -133,7 +135,8 @@ namespace Zero.Web.Controllers
             _settingManager = settingManager;
             _userDelegationManager = userDelegationManager;
         }
-
+        #endregion
+        
         #region Login / Logout
 
         public async Task<ActionResult> Login(string userNameOrEmailAddress = "", string returnUrl = "", string successMessage = "", string ss = "")

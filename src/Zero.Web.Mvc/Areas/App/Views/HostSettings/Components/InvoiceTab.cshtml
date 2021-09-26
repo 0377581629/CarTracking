@@ -1,0 +1,20 @@
+﻿@using Abp.Application.Services.Dto
+@using Abp.Extensions
+@using Abp.Timing;
+@using Zero.Web.Areas.App.Startup
+@model Zero.Web.Areas.App.Models.HostSettings.HostSettingsViewModel
+
+
+<div class="tab-pane" id="BillingTab">
+    <form id="BillingSettingsForm" class="form">
+        <div class="form-group">
+            <label for="LegalName">@L("LegalName")</label>
+            <input id="LegalName" type="text" name="LegalName" class="form-control" value="@Model.Settings.Billing.LegalName" maxlength="64">
+        </div>
+
+        <div class="form-group">
+            <label for="Address">@L("Address")</label>
+            <textarea id="Address" rows="5" name="Address" class="form-control" maxlength="256">@Model.Settings.Billing.Address</textarea>
+        </div>
+    </form>
+</div>
