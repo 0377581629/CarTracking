@@ -1,0 +1,21 @@
+﻿@using Abp.Application.Services.Dto
+@using Zero
+@using Abp.Timing;
+@using Zero.Web.Areas.App.Models.Settings
+@using Zero.Web.Areas.App.Startup
+@model SettingsViewModel
+
+@if (Clock.SupportsMultipleTimezone)
+{
+    <div class="tab-pane active" id="SettingsGeneralTab">
+        <form id="GeneralSettingsForm">
+            <div class="form-group">
+                <label for="Timezone">@L("Timezone")</label>
+                @Html.DropDownList("Timezone", Model.TimezoneItems.Select(i => i.ToSelectListItem()), new { @class = "form-control", id = "Timezone" })
+            </div>
+            <div>
+                @Html.Hidden("TimezoneForComparison", Model.Settings.General.TimezoneForComparison)
+            </div>
+        </form>
+    </div>
+}

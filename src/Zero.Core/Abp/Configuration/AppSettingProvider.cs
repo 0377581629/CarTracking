@@ -181,7 +181,7 @@ namespace Zero.Configuration
                     isVisibleToClients: false, scopes: SettingScopes.Application | SettingScopes.Tenant),
                 new SettingDefinition(AppSettings.UserManagement.SubscriptionYearlyPrice,
                     GetFromAppSettings(AppSettings.UserManagement.SubscriptionYearlyPrice, "50000"),
-                    isVisibleToClients: false, scopes: SettingScopes.Application | SettingScopes.Tenant),
+                    isVisibleToClients: false, scopes: SettingScopes.Application | SettingScopes.Tenant)
             };
         }
 

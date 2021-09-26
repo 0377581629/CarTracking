@@ -145,7 +145,7 @@
     };
 
     var _createRowAction = function (record, field, tableInstance) {
-        if (field.items && field.items.length > 1) {
+        if (field.items && field.items.length >= 1) {
             return _createButtonDropdown(record, field, tableInstance);
         } else if (field.element) {
             var $singleActionButton = _createSingleButton(record, field);

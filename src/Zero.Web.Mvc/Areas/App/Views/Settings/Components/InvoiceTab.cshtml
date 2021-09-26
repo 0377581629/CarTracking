@@ -1,0 +1,29 @@
+﻿@using Abp.Application.Services.Dto
+@using Zero
+@using Abp.Timing;
+@using Zero.Web.Areas.App.Models.Settings
+@using Zero.Web.Areas.App.Startup
+@model SettingsViewModel
+
+@if (ViewBag.IsMultiTenancyEnabled)
+{
+    <div class="tab-pane" id="BillingTab">
+        <form id="BillingSettingsForm" class="form">
+            <h5>@L("InvoiceInformation")</h5>
+            <div class="form-group">
+                <label for="LegalName">@L("LegalName")</label>
+                <input id="LegalName" type="text" class="form-control" name="LegalName" value="@Model.Settings.Billing.LegalName" maxlength="64">
+            </div>
+
+            <div class="form-group">
+                <label for="Address">@L("Address")</label>
+                <textarea id="Address" rows="5" class="form-control" name="Address" class="form-control" maxlength="256">@Model.Settings.Billing.Address</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="TaxVatNo">@L("Tax/VatNo")</label>
+                <input id="TaxVatNo" type="text" class="form-control" name="TaxVatNo" value="@Model.Settings.Billing.TaxVatNo" maxlength="32">
+            </div>
+        </form>
+    </div>
+}

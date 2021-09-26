@@ -10,7 +10,7 @@ namespace Zero
 
         public static bool MultiTenancyEnabled = false;
 
-        public const bool AllowTenantsToChangeEmailSettings = true;
+        public static bool AllowTenantsToChangeEmailSettings = true;
 
         public const string Currency = "VND";
 

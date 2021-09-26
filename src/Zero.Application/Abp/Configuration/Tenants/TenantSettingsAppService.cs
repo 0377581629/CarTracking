@@ -163,7 +163,19 @@ namespace Zero.Configuration.Tenants
                     TimeOutSecond = await SettingManager.GetSettingValueAsync<int>(AppSettings.UserManagement.SessionTimeOut.TimeOutSecond),
                     ShowTimeOutNotificationSecond = await SettingManager.GetSettingValueAsync<int>(AppSettings.UserManagement.SessionTimeOut.ShowTimeOutNotificationSecond),
                     ShowLockScreenWhenTimedOut = await SettingManager.GetSettingValueAsync<bool>(AppSettings.UserManagement.SessionTimeOut.ShowLockScreenWhenTimedOut)
-                }
+                },
+                
+                // Subscription
+                UseSubscription = await SettingManager.GetSettingValueForTenantAsync<bool>(AppSettings.UserManagement
+                .SubscriptionUser, AbpSession.GetTenantId()),
+                SubscriptionCurrency = await SettingManager.GetSettingValueForTenantAsync(AppSettings.UserManagement
+                    .SubscriptionCurrency, AbpSession.GetTenantId()),
+                SubscriptionTrialDays = await SettingManager.GetSettingValueForTenantAsync<int>(AppSettings.UserManagement
+                    .SubscriptionTrialDays, AbpSession.GetTenantId()),
+                SubscriptionMonthlyPrice = await SettingManager.GetSettingValueForTenantAsync<int>(AppSettings.UserManagement
+                    .SubscriptionMonthlyPrice, AbpSession.GetTenantId()),
+                SubscriptionYearlyPrice = await SettingManager.GetSettingValueForTenantAsync<int>(AppSettings.UserManagement
+                    .SubscriptionYearlyPrice, AbpSession.GetTenantId())
             };
         }
 
@@ -462,6 +474,33 @@ namespace Zero.Configuration.Tenants
             );
             
             await UpdateUserManagementSessionTimeOutSettingsAsync(settings.SessionTimeOutSettings);
+            
+            // Subscription
+            await SettingManager.ChangeSettingForTenantAsync(
+                AbpSession.GetTenantId(),
+                AppSettings.UserManagement.SubscriptionUser,
+                settings.UseSubscription.ToString().ToLowerInvariant()
+            );
+            await SettingManager.ChangeSettingForTenantAsync(
+                AbpSession.GetTenantId(),
+                AppSettings.UserManagement.SubscriptionCurrency,
+                settings.SubscriptionCurrency.ToString().ToLowerInvariant()
+            );
+            await SettingManager.ChangeSettingForTenantAsync(
+                AbpSession.GetTenantId(),
+                AppSettings.UserManagement.SubscriptionTrialDays,
+                settings.SubscriptionTrialDays.ToString().ToLowerInvariant()
+            );
+            await SettingManager.ChangeSettingForTenantAsync(
+                AbpSession.GetTenantId(),
+                AppSettings.UserManagement.SubscriptionMonthlyPrice,
+                settings.SubscriptionMonthlyPrice.ToString().ToLowerInvariant()
+            );
+            await SettingManager.ChangeSettingForTenantAsync(
+                AbpSession.GetTenantId(),
+                AppSettings.UserManagement.SubscriptionYearlyPrice,
+                settings.SubscriptionYearlyPrice.ToString().ToLowerInvariant()
+            );
         }
 
         private async Task UpdateUserManagementSessionTimeOutSettingsAsync(SessionTimeOutSettingsEditDto settings)

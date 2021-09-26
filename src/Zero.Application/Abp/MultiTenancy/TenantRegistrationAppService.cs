@@ -99,6 +99,7 @@ namespace Zero.MultiTenancy
                 }
 
                 var tenantId = await _tenantManager.CreateWithAdminUserAsync(
+                    null,
                     input.TenancyName,
                     input.Name,
                     input.AdminPassword,

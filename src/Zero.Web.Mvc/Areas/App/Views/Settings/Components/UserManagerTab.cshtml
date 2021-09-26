@@ -1,0 +1,150 @@
+﻿@using Abp.Application.Services.Dto
+@using Zero
+@using Abp.Timing;
+@using Zero.Web.Areas.App.Models.Settings
+@using Zero.Web.Areas.App.Startup
+@model SettingsViewModel
+
+<div class="tab-pane" id="SettingsUserManagementTab">
+
+    <form id="FormBasedRegistrationSettingsForm" class="form">
+        <h5>@L("FormBasedRegistration")</h5>
+        <div class="checkbox-list">
+            <div class="form-group">
+                <label for="Setting_AllowSelfRegistration" class="checkbox checkbox-outline col-lg-12">
+                    <input id="Setting_AllowSelfRegistration" type="checkbox" name="AllowSelfRegistration" value="true" @(Model.Settings.UserManagement.AllowSelfRegistration ? "checked=\"checked\"" : "")>
+                    <span></span>
+                    @L("AllowUsersToRegisterThemselves")
+                </label>
+                <span class="form-text text-muted">@L("AllowUsersToRegisterThemselves_Hint")</span>
+            </div>
+            <div id="Setting_AllowSelfRegistration_Content">
+                <div class="form-group">
+                    <label for="Setting_IsNewRegisteredUserActiveByDefault" class="checkbox checkbox-outline col-lg-12">
+                        <input id="Setting_IsNewRegisteredUserActiveByDefault" type="checkbox" name="IsNewRegisteredUserActiveByDefault" value="true" @(Model.Settings.UserManagement.IsNewRegisteredUserActiveByDefault ? "checked=\"checked\"" : "")>
+                        <span></span>
+                        @L("NewRegisteredUsersIsActiveByDefault")
+                    </label>
+                    <span class="form-text text-muted">@L("NewRegisteredUsersIsActiveByDefault_Hint")</span>
+                </div>
+                <div class="form-group">
+                    <label for="Setting_UseCaptchaOnRegistration" class="checkbox checkbox-outline">
+                        <input id="Setting_UseCaptchaOnRegistration" type="checkbox" name="UseCaptchaOnRegistration" value="true" @(Model.Settings.UserManagement.UseCaptchaOnRegistration ? "checked=\"checked\"" : "")>
+                        <span></span>
+                        @L("UseCaptchaOnRegistration")
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label for="Setting_UseCaptchaOnLogin" class="checkbox checkbox-outline">
+                        <input id="Setting_UseCaptchaOnLogin" type="checkbox" name="UseCaptchaOnLogin" value="true" @(Model.Settings.UserManagement.UseCaptchaOnLogin ? "checked=\"checked\"" : "")>
+                        <span></span>
+                        @L("UseCaptchaOnLogin")
+                    </label>
+                </div>
+            </div>
+            <h5>@L("SessionTimeOut")</h5>
+            <label for="Setting_IsSessionTimeOutEnabled" class="checkbox checkbox-outline">
+                <input id="Setting_IsSessionTimeOutEnabled" type="checkbox" name="IsEnabled" value="true" @(Model.Settings.UserManagement.SessionTimeOutSettings.IsEnabled ? "checked=\"checked\"" : "")>
+                <span></span>
+                @L("IsSessionTimeOutEnabled")
+            </label>
+            <div class="divSessionTimeOut">
+                <label for="Setting_ShowLockScreenWhenTimedOut" class="checkbox checkbox-outline">
+                    <input id="Setting_ShowLockScreenWhenTimedOut" type="checkbox" name="ShowLockScreenWhenTimedOut" value="true" @(Model.Settings.UserManagement.SessionTimeOutSettings.ShowLockScreenWhenTimedOut ? "checked=\"checked\"" : "")>
+                    <span></span>
+                    @L("ShowLockScreenWhenTimedOut")
+                </label>
+                <div class="form-group">
+                    <label for="Setting_SessionTimeOutSecond">@L("SessionTimeOutSecond")</label>
+                    <input id="Setting_SessionTimeOutSecond" type="number" name="TimeOutSecond" class="form-control edited" min="10" value="@Model.Settings.UserManagement.SessionTimeOutSettings.TimeOutSecond">
+                </div>
+                <div class="form-group">
+                    <label for="Setting_ShowTimeOutNotificationSecond">@L("ShowTimeOutNotificationSecond")</label>
+                    <input id="Setting_ShowTimeOutNotificationSecond" type="number" name="ShowTimeOutNotificationSecond" class="form-control edited" min="10" value="@Model.Settings.UserManagement.SessionTimeOutSettings.ShowTimeOutNotificationSecond">
+                </div>
+            </div>
+        </div>
+    </form>
+
+    @if (Model.Settings.Ldap.IsModuleEnabled)
+    {
+        <form id="LdapSettingsForm">
+            <h5 class="margin-top-20">@L("LdapSettings")</h5>
+            <label for="Setting_LdapIsEnabled" class="checkbox checkbox-outline">
+                <input id="Setting_LdapIsEnabled" type="checkbox" name="IsEnabled" value="true" @(Model.Settings.Ldap.IsEnabled ? "checked=\"checked\"" : "")>
+                <span></span>
+                @L("EnableLdapAuthentication")
+            </label>
+            <div class="form-group">
+                <label for="Domain">@L("DomainName")</label>
+                <input id="Domain" type="text" name="Domain" class="form-control" value="@Model.Settings.Ldap.Domain" maxlength="128">
+            </div>
+            <div class="form-group">
+                <label for="UserName">@L("UserName")</label>
+                <input id="UserName" type="text" name="UserName" class="form-control" value="@Model.Settings.Ldap.UserName" maxlength="128">
+            </div>
+            <div class="form-group">
+                <label for="Password">@L("Password")</label>
+                <input id="Password" type="password" name="Password" class="form-control" value="@Model.Settings.Ldap.Password" maxlength="128" autocomplete="new-password">
+            </div>
+        </form>
+    }
+
+    <form id="UserManagementOtherSettingsForm">
+        <h5 class="mt-5">@L("OtherSettings")</h5>
+        <label for="Settings_IsEmailConfirmationRequiredForLogin" class="checkbox checkbox-outline">
+            <input id="Settings_IsEmailConfirmationRequiredForLogin" type="checkbox" name="IsEmailConfirmationRequiredForLogin" value="true" @(Model.Settings.UserManagement.IsEmailConfirmationRequiredForLogin ? "checked=\"checked\"" : "")>
+            <span></span>
+            @L("EmailConfirmationRequiredForLogin")
+        </label>
+        <h5 class="mt-5">@L("CookieConsent")</h5>
+        <label for="Setting_IsCookieConsentEnabled" class="checkbox checkbox-outline">
+            <input id="Setting_IsCookieConsentEnabled" type="checkbox" name="IsCookieConsentEnabled" value="true" @(Model.Settings.UserManagement.IsCookieConsentEnabled ? "checked=\"checked\"" : "")>
+            <span></span>
+            @L("IsCookieConsentEnabled")
+        </label>
+        <h5 class="mt-5">@L("Profile")</h5>
+        <label for="Setting_AllowUsingGravatarProfilePicture" class="checkbox checkbox-outline">
+            <input id="Setting_AllowUsingGravatarProfilePicture" type="checkbox" name="AllowUsingGravatarProfilePicture" value="true" @(Model.Settings.UserManagement.AllowUsingGravatarProfilePicture ? "checked=\"checked\"" : "")>
+            <span></span>
+            @L("AllowUsingGravatarProfilePicture")
+        </label>
+    </form>
+
+    <form id="UserManagementSubscriptionSettingsForm" class="pt-5">
+        <h5>@L("Subscription")</h5>
+        <label for="Setting_UserUseSubscription" class="checkbox checkbox-outline">
+            <input id="Setting_UserUseSubscription" type="checkbox" name="useSubscription" value="true" @(Model.Settings.UserManagement.UseSubscription ? "checked=\"checked\"" : "")>
+            <span></span>
+            @L("UserSubscriptionEnable")
+        </label>
+        <div class="divSubscription">
+            <div class="row">
+                <div class="col-3">
+                    <div class="form-group">
+                        <label>@L("Currency")</label>
+                        <input id="Setting_SubscriptionCurrency" type="text" name="subscriptionCurrency" class="form-control edited" value="@Model.Settings.UserManagement.SubscriptionCurrency" readonly>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="form-group">
+                        <label>@L("TrialDays")</label>
+                        <input id="Setting_SubscriptionTrialDays" type="number" name="subscriptionTrialDays" class="form-control edited" min="3" value="@Model.Settings.UserManagement.SubscriptionTrialDays">
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="form-group">
+                        <label>@L("Price") - @L("Monthly")</label>
+                        <input id="Setting_SubscriptionMonthlyPrice" type="number" name="subscriptionMonthlyPrice" class="form-control edited" min="30000" value="@Model.Settings.UserManagement.SubscriptionMonthlyPrice">
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="form-group">
+                        <label>@L("Price") - @L("Yearly")</label>
+                        <input id="Setting_SubscriptionYearlyPrice" type="number" name="subscriptionYearlyPrice" class="form-control edited" min="30000" value="@Model.Settings.UserManagement.SubscriptionYearlyPrice">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

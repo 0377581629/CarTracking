@@ -143,6 +143,17 @@ namespace Zero.Web.Controllers
         {
             returnUrl = NormalizeReturnUrl(returnUrl);
 
+            // Rollback to system if current tenant is not active
+            if (AbpSession.TenantId.HasValue)
+            {
+                var tenant = await _tenantManager.GetByIdAsync(AbpSession.TenantId.Value);
+                if (!tenant.IsActive)
+                {
+                    await SwitchToTenantIfNeeded(null);
+                    successMessage += " - " + L("TenantIsNotActive", tenant.TenancyName);
+                }
+            }
+            
             if (!string.IsNullOrEmpty(ss) && ss.Equals("true", StringComparison.OrdinalIgnoreCase) && AbpSession.UserId > 0)
             {
                 var updateUserSignInTokenOutput = await _sessionAppService.UpdateUserSignInToken();
