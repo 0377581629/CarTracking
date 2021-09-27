@@ -84,12 +84,9 @@ namespace Zero.Authorization.Users
 
         public SubscriptionPaymentType SubscriptionPaymentType { get; set; }
         
-        private void ExtendSubscriptionDate(PaymentPeriodType paymentPeriodType)
+        public void ExtendSubscriptionDate(PaymentPeriodType paymentPeriodType)
         {
-            if (SubscriptionEndDateUtc == null)
-            {
-                throw new InvalidOperationException("Can not extend subscription date while it's null!");
-            }
+            SubscriptionEndDateUtc ??= Clock.Now.ToUniversalTime();
 
             if (IsSubscriptionEnded())
             {

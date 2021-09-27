@@ -2,6 +2,7 @@
 using Abp.Authorization;
 using Abp.Localization;
 using Zero.Authorization;
+using Zero.Web.Common;
 
 namespace Zero.Web.Areas.App.Startup
 {
@@ -147,6 +148,16 @@ namespace Zero.Web.Areas.App.Startup
                         url: "App/SubscriptionManagement",
                         icon: "flaticon-refresh",
                         permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_Administration_Tenant_SubscriptionManagement)
+                    )
+                );
+            
+            if (WebConsts.HangfireDashboardEnabled)
+                menu.AddItem(new MenuItemDefinition(
+                        AppPageNames.Host.HangfireDashboard,
+                        L("HangfireDashboard"),
+                        url: WebConsts.HangfireDashboardEndPoint,
+                        icon: "flaticon-refresh",
+                        permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_Administration_HangfireDashboard)
                     )
                 );
         }

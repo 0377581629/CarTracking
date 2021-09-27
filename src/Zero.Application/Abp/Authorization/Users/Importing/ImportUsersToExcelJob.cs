@@ -9,6 +9,7 @@ using Abp.Domain.Uow;
 using Abp.Extensions;
 using Abp.IdentityFramework;
 using Abp.Localization;
+using Abp.Notifications;
 using Abp.ObjectMapping;
 using Abp.UI;
 using Microsoft.AspNetCore.Identity;
@@ -193,7 +194,7 @@ namespace Zero.Authorization.Users.Importing
                     new LocalizableString("AllUsersSuccessfullyImportedFromExcel",
                         ZeroConsts.LocalizationSourceName),
                     null,
-                    Abp.Notifications.NotificationSeverity.Success);
+                    NotificationSeverity.Success);
             }
         }
 
@@ -210,7 +211,7 @@ namespace Zero.Authorization.Users.Importing
                             ZeroConsts.LocalizationSourceName
                         ),
                         null,
-                        Abp.Notifications.NotificationSeverity.Warn);
+                        NotificationSeverity.Warn);
                 }
 
                 await uow.CompleteAsync();

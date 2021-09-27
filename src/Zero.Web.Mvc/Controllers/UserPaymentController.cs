@@ -17,6 +17,9 @@ using Abp.Authorization;
 using Abp.Configuration;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Zero.Abp.Authorization.Payments;
+using Zero.Abp.Authorization.Users.Payments;
+using Zero.Abp.Authorization.Users.Payments.Dto;
 using Zero.Authorization;
 using Zero.Authorization.Roles;
 using Zero.Authorization.Users;
@@ -26,38 +29,39 @@ using Zero.Web.Models.UserPayment;
 
 namespace Zero.Web.Controllers
 {
+    [AbpAuthorize]
     public class UserPaymentController : ZeroControllerBase
     {
         #region Constructor
-        private readonly IPaymentAppService _paymentAppService;
+        private readonly IUserPaymentAppService _userPaymentAppService;
         private readonly ITenantRegistrationAppService _tenantRegistrationAppService;
         private readonly TenantManager _tenantManager;
         private readonly EditionManager _editionManager;
         private readonly IWebUrlService _webUrlService;
-        private readonly ISubscriptionPaymentRepository _subscriptionPaymentRepository;
+        private readonly IUserSubscriptionPaymentRepository _userSubscriptionPaymentRepository;
         private readonly UserClaimsPrincipalFactory<User, Role> _userClaimsPrincipalFactory;
         private readonly UserManager _userManager;
         private readonly SignInManager _signInManager;
 
         private readonly ISettingManager SettingManager;
         public UserPaymentController(
-            IPaymentAppService paymentAppService,
+            IUserPaymentAppService userPaymentAppService,
             ITenantRegistrationAppService tenantRegistrationAppService,
             TenantManager tenantManager,
             EditionManager editionManager,
             IWebUrlService webUrlService,
-            ISubscriptionPaymentRepository subscriptionPaymentRepository,
+            IUserSubscriptionPaymentRepository userSubscriptionPaymentRepository,
             UserClaimsPrincipalFactory<User, Role> userClaimsPrincipalFactory,
             UserManager userManager,
             SignInManager signInManager, 
             ISettingManager settingManager)
         {
-            _paymentAppService = paymentAppService;
+            _userPaymentAppService = userPaymentAppService;
             _tenantRegistrationAppService = tenantRegistrationAppService;
             _tenantManager = tenantManager;
             _editionManager = editionManager;
             _webUrlService = webUrlService;
-            _subscriptionPaymentRepository = subscriptionPaymentRepository;
+            _userSubscriptionPaymentRepository = userSubscriptionPaymentRepository;
             _userClaimsPrincipalFactory = userClaimsPrincipalFactory;
             _userManager = userManager;
             _signInManager = signInManager;
@@ -65,14 +69,13 @@ namespace Zero.Web.Controllers
         }
         #endregion
         
-        [AbpAuthorize]
         public async Task<IActionResult> ExtendSubscription()
         {
             var model = new ExtendUserSubscriptionViewModel
             {
                 UserId = AbpSession.UserId.Value,
                 UserEmail = (await _userManager.GetUserAsync(AbpSession.ToUserIdentifier())).EmailAddress,
-                PaymentGateways = _paymentAppService.GetActiveGateways(new GetActiveGatewaysInput())
+                PaymentGateways = _userPaymentAppService.GetActiveGateways(new GetActiveGatewaysInput())
             };
 
             if (AbpSession.TenantId.HasValue)
@@ -92,23 +95,19 @@ namespace Zero.Web.Controllers
         [HttpPost]
         public async Task<JsonResult> CreatePayment(CreateUserSubscriptionPaymentModel model)
         {
-            // var paymentId = await _paymentAppService.CreatePayment(new CreatePaymentDto
-            // {
-            //     PaymentPeriodType = model.PaymentPeriodType,
-            //     EditionId = model.EditionId,
-            //     EditionPaymentType = model.EditionPaymentType,
-            //     RecurringPaymentEnabled = model.RecurringPaymentEnabled.HasValue && model.RecurringPaymentEnabled.Value,
-            //     SubscriptionPaymentGatewayType = model.Gateway,
-            //     SuccessUrl = _webUrlService.GetSiteRootAddress().EnsureEndsWith('/') + "Payment/" + model.EditionPaymentType + "Succeed",
-            //     ErrorUrl = _webUrlService.GetSiteRootAddress().EnsureEndsWith('/') + "Payment/PaymentFailed"
-            // });
+            var paymentId = await _userPaymentAppService.CreatePayment(new CreateUserPaymentDto
+            {
+                PaymentPeriodType = model.PaymentPeriodType,
+                SubscriptionPaymentGatewayType = model.Gateway,
+                SuccessUrl = _webUrlService.GetSiteRootAddress().EnsureEndsWith('/') + "UserPayment/ExtendSucceed",
+                ErrorUrl = _webUrlService.GetSiteRootAddress().EnsureEndsWith('/') + "UserPayment/PaymentFailed"
+            });
 
             return Json(new AjaxResponse
             {
-                TargetUrl = Url.Action("Purchase", model.Gateway.ToString(), new
+                TargetUrl = Url.Action("UserPurchase", model.Gateway.ToString(), new
                 {
-                    // paymentId = paymentId,
-                    // isUpgrade = model.EditionPaymentType == EditionPaymentType.Upgrade
+                    paymentId
                 })
             });
         }
@@ -116,7 +115,7 @@ namespace Zero.Web.Controllers
         [HttpPost]
         public async Task CancelPayment(CancelPaymentModel model)
         {
-            await _paymentAppService.CancelPayment(new CancelPaymentDto
+            await _userPaymentAppService.CancelPayment(new CancelUserPaymentDto
             {
                 Gateway = model.Gateway,
                 PaymentId = model.PaymentId
@@ -125,21 +124,14 @@ namespace Zero.Web.Controllers
         
         public async Task<IActionResult> ExtendSucceed(long paymentId)
         {
-            await _paymentAppService.ExtendSucceed(paymentId);
-
+            await _userPaymentAppService.ExtendSucceed(paymentId);
             return RedirectToAction("Index", "SubscriptionManagement", new { area = "App" });
         }
 
         public async Task<IActionResult> PaymentFailed(long paymentId)
         {
-            await _paymentAppService.PaymentFailed(paymentId);
-
-            if (AbpSession.UserId.HasValue)
-            {
-                return RedirectToAction("Index", "SubscriptionManagement", new { area = "App" });
-            }
-
-            return RedirectToAction("Index", "Home", new { area = "App" });
+            await _userPaymentAppService.PaymentFailed(paymentId);
+            return RedirectToAction("Index", AbpSession.UserId.HasValue ? "UserSubscriptionManagement" : "Home", new { area = "App" });
         }
 
         

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Zero.EntityFrameworkCore;
 
 namespace Zero.Migrations
 {
     [DbContext(typeof(ZeroDbContext))]
-    partial class ZeroDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210927170753_Abp_Customize_UserSubscriptionPayment_Add_IsRecurring")]
+    partial class Abp_Customize_UserSubscriptionPayment_Add_IsRecurring
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1781,30 +1783,6 @@ namespace Zero.Migrations
                     b.HasIndex("TenantId", "UserId", "ReadState");
 
                     b.ToTable("AppChatMessages");
-                });
-
-            modelBuilder.Entity("Zero.Customize.CurrencyRate", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<double>("Rate")
-                        .HasColumnType("float");
-
-                    b.Property<string>("SourceCurrency")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TargetCurrency")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AbpCurrencyRates");
                 });
 
             modelBuilder.Entity("Zero.Customize.Dashboard.DashboardWidget", b =>

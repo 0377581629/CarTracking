@@ -43,7 +43,7 @@
                     <input class="form-control" type="radio" name="PaymentPeriodType"
                            data-day-count="@((int) PaymentPeriodType.Monthly)"
                            data-payment-period-type-amount="@(Model.MonthlyPrice.ToString(ZeroConsts.NumberFormatInfo))"
-                           value="@PaymentPeriodType.Daily" />
+                           value="@PaymentPeriodType.Monthly" />
                     <span></span>
                     @L("MonthlyPrice"): @Model.MonthlyPrice.ToString("N0") @ZeroConsts.CurrencySign
                 </label>

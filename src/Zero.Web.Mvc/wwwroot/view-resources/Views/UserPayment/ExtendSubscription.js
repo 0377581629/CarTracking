@@ -44,7 +44,9 @@
             for (var key in input) {
                 formData.append(key, input[key]);
             }
-
+            
+            console.log('abc');
+            
             abp.ajax({
                 url: abp.appPath + 'UserPayment/CreatePayment',
                 data: formData,

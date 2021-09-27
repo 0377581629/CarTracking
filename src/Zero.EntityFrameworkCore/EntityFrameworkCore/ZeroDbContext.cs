@@ -48,7 +48,7 @@ namespace Zero.EntityFrameworkCore
         public virtual DbSet<EditionDashboardWidget> EditionDashboardWidgets { get; set; }
         public virtual DbSet<RoleDashboardWidget> RoleDashboardWidgets { get; set; }
         public virtual DbSet<EmailTemplate> EmailTemplates { get; set; }
-        
+        public virtual DbSet<CurrencyRate> CurrencyRates { get; set; }
         #endregion
         
         public ZeroDbContext(DbContextOptions<ZeroDbContext> options)
