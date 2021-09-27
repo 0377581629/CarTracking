@@ -9,6 +9,7 @@
 @using Zero.Web.Areas.App.Views.Shared.Components.AppRecentNotifications
 @using Zero.Web.Areas.App.Views.Shared.Components.AppSubscriptionBar
 @using Zero.Web.Areas.App.Views.Shared.Components.AppUserMenu
+@using Zero.Web.Areas.App.Views.Shared.Components.AppUserSubscriptionBar
 @using Zero.Web.Areas.App.Views.Shared.Themes.Theme11.Components.AppTheme11Brand
 @using Zero.Web.Areas.App.Views.Shared.Themes.Theme11.Components.AppTheme11Footer
 
@@ -61,6 +62,7 @@
                             <div class="d-none d-lg-flex topbar-item subscription-warning d-print-none">
                                 @await Component.InvokeAsync(typeof(AppSubscriptionBarViewComponent))
                             </div>
+                            @await Component.InvokeAsync(typeof(AppUserSubscriptionBarViewComponent))
                             @await Component.InvokeAsync(typeof(AppActiveUserDelegationsComboboxViewComponent))
                             @await Component.InvokeAsync(typeof(AppQuickThemeSelectViewComponent), new {cssClass = "btn btn-icon btn-secondary btn-dropdown"})
                             @await Component.InvokeAsync(typeof(AppLanguageSwitchViewComponent), new {cssClass = "btn btn-icon btn-secondary btn-dropdown"})

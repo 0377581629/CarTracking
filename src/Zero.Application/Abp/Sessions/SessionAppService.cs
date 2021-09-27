@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Abp.Auditing;
+using Abp.Configuration;
 using Abp.Runtime.Session;
 using Microsoft.EntityFrameworkCore;
 using Zero.Authentication.TwoFactor;
@@ -13,6 +14,7 @@ using Zero.Sessions.Dto;
 using Zero.UiCustomization;
 using Zero.Authorization.Delegation;
 using Zero.Authorization.Users;
+using Zero.Configuration;
 
 namespace Zero.Sessions
 {
@@ -21,15 +23,17 @@ namespace Zero.Sessions
         private readonly IUiThemeCustomizerFactory _uiThemeCustomizerFactory;
         private readonly ISubscriptionPaymentRepository _subscriptionPaymentRepository;
         private readonly IUserDelegationConfiguration _userDelegationConfiguration;
-
+        private readonly ISettingManager SettingManager;
         public SessionAppService(
             IUiThemeCustomizerFactory uiThemeCustomizerFactory,
             ISubscriptionPaymentRepository subscriptionPaymentRepository,
-            IUserDelegationConfiguration userDelegationConfiguration)
+            IUserDelegationConfiguration userDelegationConfiguration, 
+            ISettingManager settingManager)
         {
             _uiThemeCustomizerFactory = uiThemeCustomizerFactory;
             _subscriptionPaymentRepository = subscriptionPaymentRepository;
             _userDelegationConfiguration = userDelegationConfiguration;
+            SettingManager = settingManager;
         }
 
         [DisableAuditing]
@@ -60,6 +64,14 @@ namespace Zero.Sessions
                         .Tenants
                         .Include(t => t.Edition)
                         .FirstAsync(t => t.Id == AbpSession.GetTenantId()));
+                
+                output.Tenant.UseSubscriptionUser = await SettingManager.GetSettingValueForTenantAsync<bool>(AppSettings.UserManagement
+                    .SubscriptionUser, AbpSession.GetTenantId());
+            }
+            else
+            {
+                output.Application.UseSubscriptionUser = await SettingManager.GetSettingValueAsync<bool>(AppSettings.UserManagement
+                    .SubscriptionUser);
             }
             
             if (AbpSession.ImpersonatorTenantId.HasValue)
@@ -69,6 +81,9 @@ namespace Zero.Sessions
                         .Tenants
                         .Include(t => t.Edition)
                         .FirstAsync(t => t.Id == AbpSession.ImpersonatorTenantId));
+                
+                output.ImpersonatorTenant.UseSubscriptionUser = await SettingManager.GetSettingValueForTenantAsync<bool>(AppSettings.UserManagement
+                    .SubscriptionUser, AbpSession.ImpersonatorTenantId.Value);
             }
 
             if (AbpSession.UserId.HasValue)

@@ -1,0 +1,55 @@
+﻿@model Zero.Web.Areas.App.Models.Layout.HeaderViewModel
+@{
+    Layout = null;
+}
+
+@if (AbpSession.TenantId.HasValue)
+{
+    if (Model.LoginInformations.Tenant.UseSubscriptionUser)
+    {
+        if (Model.LoginInformations.User.IsInTrialPeriod && !Model.LoginInformations.User.SubscriptionIsExpiringSoon(7))
+        {
+            <a href="@Url.Action("ExtendSubscription", "UserPayment", new { area = "", userId = Model.LoginInformations.User.Id })">
+                <span class="glowing">
+                    <i class="fa fa-exclamation-triangle"></i> @Html.Raw(L("TrialSubscriptionNotification", "<strong>" + Model.LoginInformations.User.EmailAddress + "</strong>", L("ClickHere")))
+                </span>
+            </a>
+        }
+        if (Model.LoginInformations.User.SubscriptionIsExpiringSoon(7))
+        {
+            <a href="@Url.Action("Index", "SubscriptionManagement", new { area = "App" })">
+                <span class="glowing">
+                    <i class="fa fa-exclamation-triangle"></i> @L(Model.LoginInformations.User.IsInTrialPeriod ?
+                                                                   "UserTrialExpireNotification" :
+                                                                   "UserSubscriptionExpireNotification",
+                                                                   Model.LoginInformations.User.GetSubscriptionExpiringDayCount())
+                </span>
+            </a>
+        }
+    }
+}
+else
+{
+    if (Model.LoginInformations.Application.UseSubscriptionUser)
+    {
+        if (Model.LoginInformations.User.IsInTrialPeriod && !Model.LoginInformations.User.SubscriptionIsExpiringSoon(7))
+        {
+            <a href="@Url.Action("ExtendSubscription", "UserPayment", new { area = "", userId = Model.LoginInformations.User.Id })">
+                <span class="glowing">
+                    <i class="fa fa-exclamation-triangle"></i> @Html.Raw(L("UserTrialSubscriptionNotification",  L("ClickHere")))
+                </span>
+            </a>
+        }
+        if (Model.LoginInformations.User.SubscriptionIsExpiringSoon(7))
+        {
+            <a href="@Url.Action("Index", "SubscriptionManagement", new { area = "App" })">
+                <span class="glowing">
+                    <i class="fa fa-exclamation-triangle"></i> @L(Model.LoginInformations.User.IsInTrialPeriod ?
+                                                                   "UserTrialExpireNotification" :
+                                                                   "UserSubscriptionExpireNotification",
+                                                                   Model.LoginInformations.User.GetSubscriptionExpiringDayCount())
+                </span>
+            </a>
+        }
+    }
+}

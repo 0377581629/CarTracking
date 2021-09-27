@@ -88,5 +88,11 @@ namespace Zero.Sessions.Dto
         public string WebFavicon { get; set; }
 
         #endregion
+        
+        #region Subscription User - Depend on settings
+        
+        public bool UseSubscriptionUser { get; set; }
+        
+        #endregion
     }
 }

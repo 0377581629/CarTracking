@@ -1,6 +1,7 @@
 ﻿using Abp.IdentityServer4vNext;
 using Abp.Zero.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Zero.Abp.Authorization.Users;
 using Zero.Authorization.Delegation;
 using Zero.Authorization.Roles;
 using Zero.Authorization.Users;
@@ -38,6 +39,8 @@ namespace Zero.EntityFrameworkCore
 
         public virtual DbSet<UserDelegation> UserDelegations { get; set; }
 
+        public virtual DbSet<UserSubscriptionPayment> UserSubscriptionPayments { get; set; }
+        
         #region Abp Customize
 
         public virtual DbSet<DashboardWidget> DashboardWidgets { get; set; }

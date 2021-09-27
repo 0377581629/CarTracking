@@ -20,5 +20,7 @@ namespace Zero.Sessions.Dto
         public double TwoFactorCodeExpireSeconds { get; set; }
 
         public Dictionary<string, bool> Features { get; set; }
+        
+        public bool UseSubscriptionUser { get; set; }
     }
 }

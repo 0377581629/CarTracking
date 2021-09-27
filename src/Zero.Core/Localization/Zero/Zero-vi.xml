@@ -7,6 +7,12 @@
     <text name="TrialDays">Dùng thử - Ngày</text>
     <text name="Price">Đơn giá</text>
     <text name="Yearly">Hàng năm</text>
+
+    <text name="UserTrialSubscriptionNotification">Bạn đang trong giai đoạn dùng thử, {0} để mua.</text>
+    <text name="UserSubscriptionExpireNotification">Tài khoản của bạn sẽ hết hạn sau {0} ngày.</text>
+    <text name="UserTrialExpireNotification">Thời gian dùng thử của bạn sẽ hết hạn sau {0} ngày.</text>
+    
+    <text name="UserExtentSubscription_Description">Gia hạn tài khoản {0}.</text>
     <!--    -->
     
     <!--  Common  -->

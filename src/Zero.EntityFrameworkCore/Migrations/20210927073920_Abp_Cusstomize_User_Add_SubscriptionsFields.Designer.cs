@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Zero.EntityFrameworkCore;
 
 namespace Zero.Migrations
 {
     [DbContext(typeof(ZeroDbContext))]
-    partial class ZeroDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210927073920_Abp_Cusstomize_User_Add_SubscriptionsFields")]
+    partial class Abp_Cusstomize_User_Add_SubscriptionsFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1387,74 +1389,6 @@ namespace Zero.Migrations
                     b.ToTable("AbpWebhookSubscriptions");
                 });
 
-            modelBuilder.Entity("Zero.Abp.Authorization.Users.UserSubscriptionPayment", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long?>("CreatorUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("DayCount")
-                        .HasColumnType("int");
-
-                    b.Property<long?>("DeleterUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ErrorUrl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ExternalPaymentId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Gateway")
-                        .HasColumnType("int");
-
-                    b.Property<string>("InvoiceNo")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long?>("LastModifierUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<int?>("PaymentPeriodType")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SuccessUrl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("AppUserSubscriptionPayments");
-                });
-
             modelBuilder.Entity("Zero.Authorization.Delegation.UserDelegation", b =>
                 {
                     b.Property<long>("Id")
@@ -2533,17 +2467,6 @@ namespace Zero.Migrations
                         .IsRequired();
 
                     b.Navigation("WebhookEvent");
-                });
-
-            modelBuilder.Entity("Zero.Abp.Authorization.Users.UserSubscriptionPayment", b =>
-                {
-                    b.HasOne("Zero.Authorization.Users.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Zero.Authorization.Roles.Role", b =>
