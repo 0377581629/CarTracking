@@ -1,6 +1,7 @@
 ﻿@using Abp.AspNetZeroCore.Timing
 @using Abp.Configuration.Startup
 @using Abp.Web.Security.AntiForgery
+@using Zero
 @using Zero.Url
 @using Zero.Web.Resources
 @using CultureHelper = Zero.Localization.CultureHelper
@@ -20,15 +21,15 @@
 <!--begin::Head-->
 <head>
     <meta charset="utf-8"/>
-    <title>Zero</title>
+    <title>@GlobalConfig.AppName</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
 
     @* Fill these meta tags upon your project specification *@
-    <meta content="Zero" name="description"/>
-    <meta content="Zero" name="keywords">
-    <meta content="Zero" name="author"/>
+    <meta property="og:description" content="@GlobalConfig.AppName"/>
+    <meta content="@GlobalConfig.AppName" name="author"/>
+    <meta content="@GlobalConfig.AppName" name="keywords">
 
     <link rel="shortcut icon" href="~/favicon.ico"/>
 
@@ -47,10 +48,10 @@
     @await RenderSectionAsync("Styles", false)
 
     <script type="text/javascript">
-	              @* This is used to get the application's root path from javascript.
-	              It's useful if you're running application in a virtual directory under IIS. *@
-	              var abp = abp || {}; abp.appPath = '@ApplicationPath';
-	    </script>
+        @* This is used to get the application's root path from javascript.
+        It's useful if you're running application in a virtual directory under IIS. *@
+        var abp = abp || {}; abp.appPath = '@ApplicationPath';
+	</script>
 
 </head>
 <!--end::Head-->

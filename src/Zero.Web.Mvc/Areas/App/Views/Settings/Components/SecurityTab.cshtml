@@ -1,0 +1,146 @@
+﻿@using Abp.Application.Services.Dto
+@using Zero
+@using Abp.Timing;
+@using Zero.Web.Areas.App.Models.Settings
+@using Zero.Web.Areas.App.Startup
+@model SettingsViewModel
+
+<div id="SecurityManagementTab" class="tab-pane">
+    <div>
+        <h5>@L("PasswordComplexity")</h5>
+        <label for="Setting_PasswordComplexity_UseDefaultSettings" class="checkbox checkbox-outline">
+            <input id="Setting_PasswordComplexity_UseDefaultSettings" type="checkbox" name="UseDefaultSettings" value="true" @(Model.Settings.Security.UseDefaultPasswordComplexitySettings ? "checked=\"checked\"" : "")>
+            <span></span>
+            @L("UseDefaultSettings")
+        </label>
+        <form class="p-5" id="PasswordComplexitySettingsForm" style="@(Model.Settings.Security.UseDefaultPasswordComplexitySettings ? "display:none;" : "")">
+            <div class="checkbox-list">
+                <label for="Setting_PasswordComplexity_RequireDigit" class="checkbox checkbox-outline">
+                    <input id="Setting_PasswordComplexity_RequireDigit" type="checkbox" name="RequireDigit" value="true" @(Model.Settings.Security.PasswordComplexity.RequireDigit ? "checked=\"checked\"" : "")>
+                    <span></span>
+                    @L("PasswordComplexity_RequireDigit")
+                </label>
+                <label for="Setting_PasswordComplexity_RequireLowercase" class="checkbox checkbox-outline">
+                    <input id="Setting_PasswordComplexity_RequireLowercase" type="checkbox" name="RequireLowercase" value="true" @(Model.Settings.Security.PasswordComplexity.RequireLowercase ? "checked=\"checked\"" : "")>
+                    <span></span>
+                    @L("PasswordComplexity_RequireLowercase")
+                </label>
+                <label for="Setting_PasswordComplexity_RequireNonAlphanumeric" class="checkbox checkbox-outline">
+                    <input id="Setting_PasswordComplexity_RequireNonAlphanumeric" type="checkbox" name="RequireNonAlphanumeric" value="true" @(Model.Settings.Security.PasswordComplexity.RequireNonAlphanumeric ? "checked=\"checked\"" : "")>
+                    <span></span>
+                    @L("PasswordComplexity_RequireNonAlphanumeric")
+                </label>
+                <label for="Setting_PasswordComplexity_RequireUppercase" class="checkbox checkbox-outline">
+                    <input id="Setting_PasswordComplexity_RequireUppercase" type="checkbox" name="RequireUppercase" value="true" @(Model.Settings.Security.PasswordComplexity.RequireUppercase ? "checked=\"checked\"" : "")>
+                    <span></span>
+                    @L("PasswordComplexity_RequireUppercase")
+                </label>
+            </div>
+            <div class="form-group">
+                <label for="RequiredLength">@L("PasswordComplexity_RequiredLength")</label>
+                <input id="RequiredLength" type="number" name="RequiredLength" class="form-control" value="@Model.Settings.Security.PasswordComplexity.RequiredLength">
+            </div>
+        </form>
+        <form class="p-5" id="DefaultPasswordComplexitySettingsForm" style="@(!Model.Settings.Security.UseDefaultPasswordComplexitySettings ? "display:none;" : "")">
+            <div class="checkbox-list">
+                <label for="Setting_DefaultPasswordComplexity_RequireDigit" class="checkbox checkbox-outline">
+                    <input id="Setting_DefaultPasswordComplexity_RequireDigit" type="checkbox" name="RequireDigit" value="true" @(Model.Settings.Security.DefaultPasswordComplexity.RequireDigit ? "checked=\"checked\"" : "") disabled>
+                    <span></span>
+                    @L("PasswordComplexity_RequireDigit")
+                </label>
+                <label for="Setting_DefaultPasswordComplexity_RequireLowercase" class="checkbox checkbox-outline">
+                    <input id="Setting_DefaultPasswordComplexity_RequireLowercase" type="checkbox" name="RequireLowercase" value="true" @(Model.Settings.Security.DefaultPasswordComplexity.RequireLowercase ? "checked=\"checked\"" : "") disabled>
+                    <span></span>
+                    @L("PasswordComplexity_RequireLowercase")
+                </label>
+                <label for="Setting_DefaultPasswordComplexity_RequireNonAlphanumeric" class="checkbox checkbox-outline">
+                    <input id="Setting_DefaultPasswordComplexity_RequireNonAlphanumeric" type="checkbox" name="RequireNonAlphanumeric" value="true" @(Model.Settings.Security.DefaultPasswordComplexity.RequireNonAlphanumeric ? "checked=\"checked\"" : "") disabled>
+                    <span></span>
+                    @L("PasswordComplexity_RequireNonAlphanumeric")
+                </label>
+                <label for="Setting_DefaultPasswordComplexity_RequireUppercase" class="checkbox checkbox-outline">
+                    <input id="Setting_DefaultPasswordComplexity_RequireUppercase" type="checkbox" name="RequireUppercase" value="true" @(Model.Settings.Security.DefaultPasswordComplexity.RequireUppercase ? "checked=\"checked\"" : "") disabled>
+                    <span></span>
+                    @L("PasswordComplexity_RequireUppercase")
+                </label>
+            </div>
+            <div class="form-group mb-0">
+                <label for="RequiredLength">@L("PasswordComplexity_RequiredLength")</label>
+                <input id="RequiredLength" type="number" name="RequiredLength" class="form-control" value="@Model.Settings.Security.DefaultPasswordComplexity.RequiredLength" disabled>
+            </div>
+        </form>
+    </div>
+
+    <div>
+        <h5>@L("UserLockOut")</h5>
+        <form id="UserLockOutSettingsForm">
+            <label for="Setting_UserLockOut_IsEnabled" class="checkbox checkbox-outline">
+                <input id="Setting_UserLockOut_IsEnabled" type="checkbox" name="IsEnabled" value="true" @(Model.Settings.Security.UserLockOut.IsEnabled ? "checked=\"checked\"" : "")>
+                <span></span>
+                @L("EnableUserAccountLockingOnFailedLoginAttemts")
+            </label>
+            <div class="form-group">
+                <label for="MaxFailedAccessAttemptsBeforeLockout">@L("MaxFailedAccessAttemptsBeforeLockout")</label>
+                <input id="MaxFailedAccessAttemptsBeforeLockout" type="number" name="MaxFailedAccessAttemptsBeforeLockout" class="form-control" value="@Model.Settings.Security.UserLockOut.MaxFailedAccessAttemptsBeforeLockout">
+            </div>
+            <div class="form-group">
+                <label for="DefaultAccountLockoutSeconds">@L("DefaultAccountLockoutDurationAsSeconds")</label>
+                <input id="DefaultAccountLockoutSeconds" type="number" name="DefaultAccountLockoutSeconds" class="form-control" value="@Model.Settings.Security.UserLockOut.DefaultAccountLockoutSeconds">
+            </div>
+        </form>
+    </div>
+
+    @if (!ViewBag.IsMultiTenancyEnabled || Model.Settings.Security.TwoFactorLogin.IsEnabledForApplication)
+    {
+        <div>
+            <h5>@L("TwoFactorLogin")</h5>
+            <form id="TwoFactorLoginSettingsForm">
+                <div class="checkbox-list">
+                    <label for="Setting_TwoFactorLogin_IsEnabled" class="checkbox checkbox-outline">
+                        <input id="Setting_TwoFactorLogin_IsEnabled" type="checkbox" name="IsEnabled" value="true" @(Model.Settings.Security.TwoFactorLogin.IsEnabled ? "checked=\"checked\"" : "")>
+                        <span></span>
+                        @L("EnableTwoFactorLogin")
+                    </label>
+                    @if (!ViewBag.IsMultiTenancyEnabled)
+                    {
+                        <label for="Setting_TwoFactorLogin_IsEmailProviderEnabled" class="checkbox checkbox-outline">
+                            <input id="Setting_TwoFactorLogin_IsEmailProviderEnabled" type="checkbox" value="true" name="IsEmailProviderEnabled" @(Model.Settings.Security.TwoFactorLogin.IsEmailProviderEnabled ? "checked=\"checked\"" : "")>
+                            <span></span>
+                            @L("IsEmailVerificationEnabled")
+                        </label>
+                        <label for="Setting_TwoFactorLogin_IsSmsProviderEnabled" class="checkbox checkbox-outline">
+                            <input id="Setting_TwoFactorLogin_IsSmsProviderEnabled" type="checkbox" value="true" name="IsSmsProviderEnabled" @(Model.Settings.Security.TwoFactorLogin.IsSmsProviderEnabled ? "checked=\"checked\"" : "")>
+                            <span></span>
+                            @L("IsSmsVerificationEnabled")
+                        </label>
+                        <label for="Setting_TwoFactorLogin_IsGoogleAuthenticatorEnabled" class="checkbox checkbox-outline">
+                            <input id="Setting_TwoFactorLogin_IsGoogleAuthenticatorEnabled" type="checkbox" name="IsGoogleAuthenticatorEnabled" value="true" @(Model.Settings.Security.TwoFactorLogin.IsGoogleAuthenticatorEnabled ? "checked=\"checked\"" : "")>
+                            <span></span>
+                            @L("IsGoogleAuthenticatorEnabled")
+                        </label>
+                    }
+                    <label for="Setting_TwoFactorLogin_IsRememberBrowserEnabled" class="checkbox checkbox-outline">
+                        <input id="Setting_TwoFactorLogin_IsRememberBrowserEnabled" type="checkbox" value="true" name="IsRememberBrowserEnabled" @(Model.Settings.Security.TwoFactorLogin.IsRememberBrowserEnabled ? "checked=\"checked\"" : "")>
+                        <span></span>
+                        @L("AllowToRememberBrowserForTwoFactorLogin")
+                    </label>
+                </div>
+            </form>
+        </div>
+    }
+    @if (!ViewBag.IsMultiTenancyEnabled)
+    {
+        <div>
+            <h5>@L("OneConcurrentLoginPerUser")</h5>
+            <form id="OneConcurrentLoginPerUser">
+                <div class="checkbox-list">
+                    <label for="Setting_AllowOneConcurrentLoginPerUser" class="checkbox checkbox-outline">
+                        <input id="Setting_AllowOneConcurrentLoginPerUser" type="checkbox" name="Setting_AllowOneConcurrentLoginPerUser" value="true" @(Model.Settings.Security.AllowOneConcurrentLoginPerUser ? "checked=\"checked\"" : "")>
+                        <span></span>
+                        @L("OneConcurrentLoginPerUserActive")
+                    </label>
+                </div>
+            </form>
+        </div>
+    }
+</div>

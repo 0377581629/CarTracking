@@ -257,6 +257,20 @@
             }
         }
 
+        // User Subscription
+        var _$SubscriptionItems = $(".divSubscription");
+        function toggleUserSubscription() {
+            if ($('#Setting_UserUseSubscription').is(':checked')) {
+                _$SubscriptionItems.slideDown('fast');
+            } else {
+                _$SubscriptionItems.slideUp('fast');
+            }
+        }
+        toggleUserSubscription();
+        $('#Setting_UserUseSubscription').change(function(){
+            toggleUserSubscription();
+        });
+        
         //Save settings
         $('#SaveAllSettingsButton').click(function () {
             if (!IsSmtpSettingsFormValid())
@@ -264,7 +278,7 @@
                 return;
             }
             
-            var userManagement = $.extend($('#FormBasedRegistrationSettingsForm').serializeFormToObject(), $('#UserManagementOtherSettingsForm').serializeFormToObject());
+            var userManagement = $.extend($('#FormBasedRegistrationSettingsForm').serializeFormToObject(), $('#UserManagementOtherSettingsForm').serializeFormToObject(), $('#UserManagementSubscriptionSettingsForm').serializeFormToObject());
             userManagement.sessionTimeOutSettings = {
                 isEnabled: $('#Setting_IsSessionTimeOutEnabled').is(':checked'),
                 timeOutSecond: $("#Setting_SessionTimeOutSecond").val(),

@@ -1,6 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <localizationDictionary culture="en">
   <texts>
+    <!--  User Subscription  -->
+    <text name="UserSubscriptionEnable">Enable subscription for users</text>
+    <text name="Currency">Currency</text>
+    <text name="TrialDays">Trial days</text>
+    <text name="Yearly">Yearly</text>
+    <!--    -->
+    <text name="SystemSettings">System settings</text>
+    <text name="TenantSettings">Tenant settings</text>
+    
     <text name="HomePage">Home page</text>
     <text name="AboutUs">About us</text>
     <text name="Administration">Administration</text>

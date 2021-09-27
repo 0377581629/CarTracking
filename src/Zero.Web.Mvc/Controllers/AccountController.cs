@@ -54,6 +54,8 @@ namespace Zero.Web.Controllers
 {
     public class AccountController : ZeroControllerBase
     {
+        
+        #region Constructor
         private readonly UserManager _userManager;
         private readonly TenantManager _tenantManager;
         private readonly IMultiTenancyConfig _multiTenancyConfig;
@@ -133,13 +135,25 @@ namespace Zero.Web.Controllers
             _settingManager = settingManager;
             _userDelegationManager = userDelegationManager;
         }
-
+        #endregion
+        
         #region Login / Logout
 
         public async Task<ActionResult> Login(string userNameOrEmailAddress = "", string returnUrl = "", string successMessage = "", string ss = "")
         {
             returnUrl = NormalizeReturnUrl(returnUrl);
 
+            // Rollback to system if current tenant is not active
+            if (AbpSession.TenantId.HasValue)
+            {
+                var tenant = await _tenantManager.GetByIdAsync(AbpSession.TenantId.Value);
+                if (!tenant.IsActive)
+                {
+                    await SwitchToTenantIfNeeded(null);
+                    successMessage += " - " + L("TenantIsNotActive", tenant.TenancyName);
+                }
+            }
+            
             if (!string.IsNullOrEmpty(ss) && ss.Equals("true", StringComparison.OrdinalIgnoreCase) && AbpSession.UserId > 0)
             {
                 var updateUserSignInTokenOutput = await _sessionAppService.UpdateUserSignInToken();

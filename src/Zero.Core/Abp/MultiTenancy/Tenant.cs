@@ -230,9 +230,7 @@ namespace Zero.MultiTenancy
         public static string CalculateNextCode(string code)
         {
             if (code.IsNullOrEmpty())
-            {
-                throw new ArgumentNullException(nameof(code), "code can not be null or empty.");
-            }
+                code = "00001";
 
             var parentCode = GetParentCode(code);
             var lastUnitCode = GetLastUnitCode(code);

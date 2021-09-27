@@ -1,4 +1,5 @@
 ﻿@using Abp.Collections.Extensions
+@using Zero.Web.Areas.App.Startup
 @using Zero.Web.Areas.App.Views.Shared.Components.AppMenu
 @using Zero.Web.Navigation
 @model UserMenuItemViewModel
@@ -7,48 +8,53 @@
     var theme = await GetTheme();
     var orderedChildMenuItems = Model.MenuItem.Items.OrderByCustom().ToList();
 }
-
-@if (Model.MenuItem.Items.IsNullOrEmpty())
+@if (AbpSession.TenantId == null && (Model.MenuItem.Name == AppPageNames.Tenant.SubscriptionManagement || Model.MenuItem.Name == AppPageNames.Tenant.Settings))
 {
-    <li class="menu-item menu-item-submenu menu-item-rel @GetActiveLinkClass(Model)" aria-haspopup="true">
-        <a href="@Model.MenuItem.CalculateUrl(ApplicationPath)" class="menu-link">
-            @if (!Model.RootLevel)
-            {
-                <i class="menu-bullet menu-bullet-dot">
-                    <span></span>
-                </i>
-            }
-            <span class="menu-text">@Model.MenuItem.DisplayName</span>
-        </a>
-    </li>
 }
 else
 {
-    <li class="menu-item menu-item-submenu menu-item-open-dropdown @GetMenuItemClass(Model) @GetActiveMenuClass(Model)" data-menu-toggle="hover" aria-haspopup="true">
-        <a href="javascript:;" class="menu-link menu-toggle">
-            <span class="menu-text">@Model.MenuItem.DisplayName</span>
-            <i class="menu-arrow"></i>
-        </a>
-        <div class="menu-submenu menu-submenu-classic @GetSubMenuClass(Model)">
-            <ul class="menu-subnav">
-                @for (var i = 0; i < Model.MenuItem.Items.Count; i++)
+    if (Model.MenuItem.Items.IsNullOrEmpty())
+    {
+        <li class="menu-item menu-item-submenu menu-item-rel @GetActiveLinkClass(Model)" aria-haspopup="true">
+            <a href="@Model.MenuItem.CalculateUrl(ApplicationPath)" class="menu-link">
+                @if (!Model.RootLevel)
                 {
-                    var childMenuItem = orderedChildMenuItems[i];
-                    if (!childMenuItem.IsVisible)
-                    {
-                        continue;
-                    }
-                    @await Html.PartialAsync("Components/AppMenu/_TopUserMenuItem", new UserMenuItemViewModel
-                    {
-                        MenuItem = childMenuItem,
-                        MenuItemIndex = i,
-                        CurrentPageName = Model.CurrentPageName,
-                        RootLevel = false
-                    })
+                    <i class="menu-bullet menu-bullet-dot">
+                        <span></span>
+                    </i>
                 }
-            </ul>
-        </div>
-    </li>
+                <span class="menu-text">@Model.MenuItem.DisplayName</span>
+            </a>
+        </li>
+    }
+    else
+    {
+        <li class="menu-item menu-item-submenu menu-item-open-dropdown @GetMenuItemClass(Model) @GetActiveMenuClass(Model)" data-menu-toggle="hover" aria-haspopup="true">
+            <a href="javascript:;" class="menu-link menu-toggle">
+                <span class="menu-text">@Model.MenuItem.DisplayName</span>
+                <i class="menu-arrow"></i>
+            </a>
+            <div class="menu-submenu menu-submenu-classic @GetSubMenuClass(Model)">
+                <ul class="menu-subnav">
+                    @for (var i = 0; i < Model.MenuItem.Items.Count; i++)
+                    {
+                        var childMenuItem = orderedChildMenuItems[i];
+                        if (!childMenuItem.IsVisible)
+                        {
+                            continue;
+                        }
+                        @await Html.PartialAsync("Components/AppMenu/_TopUserMenuItem", new UserMenuItemViewModel
+                        {
+                            MenuItem = childMenuItem,
+                            MenuItemIndex = i,
+                            CurrentPageName = Model.CurrentPageName,
+                            RootLevel = false
+                        })
+                    }
+                </ul>
+            </div>
+        </li>
+    }
 }
 
 @functions

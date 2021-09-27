@@ -10,11 +10,11 @@ namespace Zero
 
         public static bool MultiTenancyEnabled = false;
 
-        public const bool AllowTenantsToChangeEmailSettings = true;
+        public static bool AllowTenantsToChangeEmailSettings = true;
 
-        public const string Currency = "USD";
+        public const string Currency = "VND";
 
-        public const string CurrencySign = "$";
+        public const string CurrencySign = "đ";
 
         public const string AbpApiClientUserAgent = "AbpApiClient";
 

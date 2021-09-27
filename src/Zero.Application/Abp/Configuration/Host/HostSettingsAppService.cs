@@ -137,7 +137,19 @@ namespace Zero.Configuration.Host
                     ShowLockScreenWhenTimedOut =
                         await SettingManager.GetSettingValueAsync<bool>(AppSettings.UserManagement.SessionTimeOut
                             .ShowLockScreenWhenTimedOut)
-                }
+                },
+                
+                // Subscription
+                UseSubscription = await SettingManager.GetSettingValueAsync<bool>(AppSettings.UserManagement
+                    .SubscriptionUser),
+                SubscriptionCurrency = await SettingManager.GetSettingValueAsync(AppSettings.UserManagement
+                    .SubscriptionCurrency),
+                SubscriptionTrialDays = await SettingManager.GetSettingValueAsync<int>(AppSettings.UserManagement
+                    .SubscriptionTrialDays),
+                SubscriptionMonthlyPrice = await SettingManager.GetSettingValueAsync<int>(AppSettings.UserManagement
+                    .SubscriptionMonthlyPrice),
+                SubscriptionYearlyPrice = await SettingManager.GetSettingValueAsync<int>(AppSettings.UserManagement
+                    .SubscriptionYearlyPrice)
             };
         }
 
@@ -434,6 +446,28 @@ namespace Zero.Configuration.Host
             );
 
             await UpdateUserManagementSessionTimeOutSettingsAsync(settings.SessionTimeOutSettings);
+            
+            // Subscription
+            await SettingManager.ChangeSettingForApplicationAsync(
+                AppSettings.UserManagement.SubscriptionUser,
+                settings.UseSubscription.ToString().ToLowerInvariant()
+            );
+            await SettingManager.ChangeSettingForApplicationAsync(
+                AppSettings.UserManagement.SubscriptionCurrency,
+                settings.SubscriptionCurrency.ToString().ToLowerInvariant()
+            );
+            await SettingManager.ChangeSettingForApplicationAsync(
+                AppSettings.UserManagement.SubscriptionTrialDays,
+                settings.SubscriptionTrialDays.ToString().ToLowerInvariant()
+            );
+            await SettingManager.ChangeSettingForApplicationAsync(
+                AppSettings.UserManagement.SubscriptionMonthlyPrice,
+                settings.SubscriptionMonthlyPrice.ToString().ToLowerInvariant()
+            );
+            await SettingManager.ChangeSettingForApplicationAsync(
+                AppSettings.UserManagement.SubscriptionYearlyPrice,
+                settings.SubscriptionYearlyPrice.ToString().ToLowerInvariant()
+            );
         }
 
         private async Task UpdateUserManagementSessionTimeOutSettingsAsync(SessionTimeOutSettingsEditDto settings)

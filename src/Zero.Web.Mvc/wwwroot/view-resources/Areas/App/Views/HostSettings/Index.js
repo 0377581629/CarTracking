@@ -28,7 +28,7 @@
 
         var _$SessionTimeOutItems = _$tabPanel
             .find(".divSessionTimeOut");
-
+        
         function toggleSmtpCredentialFormGroups() {
             if ($('#Settings_SmtpUseDefaultCredentials').is(':checked')) {
                 _$smtpCredentialFormGroups.slideUp('fast');
@@ -68,13 +68,14 @@
                 _$SessionTimeOutItems.slideUp('fast');
             }
         }
-
+        
         toggleSmtpCredentialFormGroups();
         toggleTenantManagementFormGroups();
         toggleUserLockOutSettingsFormItems();
         toggleTwoFactorLoginSettingsFormItems();
         toggleSessionTimeOutItems();
-
+        
+        
         $('#Settings_SmtpUseDefaultCredentials').change(function () {
             toggleSmtpCredentialFormGroups();
         });
@@ -94,7 +95,7 @@
         $('#Setting_IsSessionTimeOutEnabled').change(function () {
             toggleSessionTimeOutItems();
         });
-
+        
         $('#Setting_PasswordComplexity_UseDefaultSettings').change(function (val) {
             if ($('#Setting_PasswordComplexity_UseDefaultSettings').is(":checked")) {
                 $('#PasswordComplexitySettingsForm').hide("fast",function(){
@@ -116,6 +117,21 @@
             return defaultPasswordComplexitySettings;
         }
 
+        // User Subscription
+        var _$SubscriptionItems = _$tabPanel
+            .find(".divSubscription");
+        function toggleUserSubscription() {
+            if ($('#Setting_UserUseSubscription').is(':checked')) {
+                _$SubscriptionItems.slideDown('fast');
+            } else {
+                _$SubscriptionItems.slideUp('fast');
+            }
+        }
+        toggleUserSubscription();
+        $('#Setting_UserUseSubscription').change(function(){
+            toggleUserSubscription();
+        });
+        
         $('#SaveAllSettingsButton').click(function () {
             if (!IsSmtpSettingsFormValid()){
                 return;

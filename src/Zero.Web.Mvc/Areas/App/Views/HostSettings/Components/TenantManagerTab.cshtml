@@ -1,0 +1,39 @@
+﻿@using Abp.Application.Services.Dto
+@using Abp.Extensions
+@using Abp.Timing;
+@using Zero.Web.Areas.App.Startup
+@model Zero.Web.Areas.App.Models.HostSettings.HostSettingsViewModel
+
+<div class="tab-pane  @((!Clock.SupportsMultipleTimezone) ? "active" : "")" id="SettingsTenantManagementTab">
+
+    <form id="TenantManagementSettingsForm">
+        <h5>@L("FormBasedRegistration")</h5>
+        <div class="form-group">
+            <label for="Setting_AllowSelfRegistration" class="checkbox checkbox-outline col-lg-12">
+                <input id="Setting_AllowSelfRegistration" type="checkbox" name="AllowSelfRegistration" value="true" @(Model.Settings.TenantManagement.AllowSelfRegistration ? "checked=\"checked\"" : "")>
+                <span></span>
+                @L("AllowTenantsToRegisterThemselves")
+            </label>
+            <span class="form-text text-muted">@L("AllowTenantsToRegisterThemselves_Hint")</span>
+        </div>
+        <div class="form-group">
+            <label for="Setting_IsNewRegisteredTenantActiveByDefault" class="checkbox checkbox-outline col-lg-12">
+                <input id="Setting_IsNewRegisteredTenantActiveByDefault" type="checkbox" name="IsNewRegisteredTenantActiveByDefault" value="true" @(Model.Settings.TenantManagement.IsNewRegisteredTenantActiveByDefault ? "checked=\"checked\"" : "")>
+                <span></span>
+                @L("NewRegisteredTenantsIsActiveByDefault")
+            </label>
+            <span class="form-text text-muted">@L("NewRegisteredTenantsIsActiveByDefault_Hint")</span>
+        </div>
+        <div class="form-group">
+            <label for="Setting_UseCaptchaOnRegistration" class="checkbox checkbox-outline col-lg-12">
+                <input id="Setting_UseCaptchaOnRegistration" type="checkbox" name="UseCaptchaOnRegistration" value="true" @(Model.Settings.TenantManagement.UseCaptchaOnRegistration ? "checked=\"checked\"" : "")>
+                <span></span>
+                @L("UseCaptchaOnRegistration")
+            </label>
+        </div>
+        <div class="form-group">
+            <label for="DefaultEditionId">@L("Edition")</label>
+            @Html.DropDownList("DefaultEditionId", Model.EditionItems.Select(i => i.ToSelectListItem()), new {@class = "form-control edited", id = "DefaultEditionId"})
+        </div>
+    </form>
+</div>

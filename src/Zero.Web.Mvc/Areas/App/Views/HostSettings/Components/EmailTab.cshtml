@@ -1,0 +1,71 @@
+﻿@using Abp.Application.Services.Dto
+@using Abp.Extensions
+@using Abp.Timing;
+@using Zero.Web.Areas.App.Startup
+@model Zero.Web.Areas.App.Models.HostSettings.HostSettingsViewModel
+
+<div class="tab-pane" id="SettingsEmailSmtpTab">
+    <form id="EmailSmtpSettingsForm">
+        <div class="form-group">
+            <label for="DefaultFromAddress">@L("DefaultFromAddress")</label>
+            <input id="DefaultFromAddress" type="email" name="DefaultFromAddress" class="form-control@(Model.Settings.Email.DefaultFromAddress.IsNullOrEmpty() ? "" : " edited")" value="@Model.Settings.Email.DefaultFromAddress" maxlength="@Zero.Authorization.Users.User.MaxEmailAddressLength">
+        </div>
+
+        <div class="form-group">
+            <label for="DefaultFromDisplayName">@L("DefaultFromDisplayName")</label>
+            <input id="DefaultFromDisplayName" type="text" name="DefaultFromDisplayName" class="form-control@(Model.Settings.Email.DefaultFromDisplayName.IsNullOrEmpty() ? "" : " edited")" value="@Model.Settings.Email.DefaultFromDisplayName" maxlength="128">
+        </div>
+
+        <div class="form-group ">
+            <label for="SmtpHost">@L("SmtpHost")</label>
+            <input id="SmtpHost" type="text" name="SmtpHost" class="form-control@(Model.Settings.Email.SmtpHost.IsNullOrEmpty() ? "" : " edited")" value="@Model.Settings.Email.SmtpHost" maxlength="64">
+        </div>
+
+        <div class="form-group ">
+            <label for="SmtpPort">@L("SmtpPort")</label>
+            <input id="SmtpPort" type="number" name="SmtpPort" class="form-control edited" value="@Model.Settings.Email.SmtpPort" maxlength="5">
+        </div>
+
+        <div class="checkbox-list">
+            <label for="Settings_SmtpEnableSsl" class="checkbox checkbox-outline">
+                <input id="Settings_SmtpEnableSsl" type="checkbox" name="SmtpEnableSsl" value="true" @Html.Raw(Model.Settings.Email.SmtpEnableSsl ? "checked=\"checked\"" : "")>
+                <span></span>
+                @L("UseSsl")
+            </label>
+            <label for="Settings_SmtpUseDefaultCredentials" class="checkbox checkbox-outline">
+                <input id="Settings_SmtpUseDefaultCredentials" type="checkbox" name="SmtpUseDefaultCredentials" value="true" @Html.Raw(Model.Settings.Email.SmtpUseDefaultCredentials ? "checked=\"checked\"" : "")>
+                <span></span>
+                @L("UseDefaultCredentials")
+            </label>
+        </div>
+
+        <div class="form-group">
+            <label for="SmtpDomain">@L("DomainName")</label>
+            <input id="SmtpDomain" type="text" name="SmtpDomain" class="form-control@(Model.Settings.Email.SmtpDomain.IsNullOrEmpty() ? "" : " edited")" value="@Model.Settings.Email.SmtpDomain" maxlength="128">
+        </div>
+
+        <div class="form-group">
+            <label for="SmtpUserName">@L("UserName")</label>
+            <input id="SmtpUserName" type="text" name="SmtpUserName" class="form-control@(Model.Settings.Email.SmtpUserName.IsNullOrEmpty() ? "" : " edited")" value="@Model.Settings.Email.SmtpUserName" maxlength="128">
+        </div>
+
+        <div class="form-group">
+            <label for="SmtpPassword">@L("Password")</label>
+            <input id="SmtpPassword" type="password" name="SmtpPassword" class="form-control@(Model.Settings.Email.SmtpPassword.IsNullOrEmpty() ? "" : " edited")" value="@Model.Settings.Email.SmtpPassword" maxlength="128" autocomplete="new-password">
+        </div>
+
+        <hr/>
+
+        <h4>@L("TestEmailSettingsHeader")</h4>
+    </form>
+    <form id="EmailSmtpSettingsTestForm">
+        <div class="row">
+            <div class="form-group  col-md-4">
+                <input id="TestEmailAddressInput" type="email" class="form-control input-sm" value="@ViewBag.CurrentUserEmail">
+            </div>
+            <div class="form-group col-md-2">
+                <button id="SendTestEmailButton" class="btn btn-primary" type="button">@L("SendTestEmail")</button>
+            </div>
+        </div>
+    </form>
+</div>

@@ -7,6 +7,7 @@
 @addTagHelper *, Owl.reCAPTCHA
 @inject IMultiTenancyConfig MultiTenancyConfig
 @inject IWebUrlService WebUrlService
+
 @section Scripts
 {
     <script>
@@ -76,35 +77,41 @@
         {
             <vc:tenant-change></vc:tenant-change>
         }
-        
+
         <div class="form-group">
-            <input class="form-control form-control-solid h-auto p-10 rounded-lg font-size-h6" type="text" placeholder="@L("Name")" name="Name" required value="@Model.Name" maxlength="@Zero.Authorization.Users.User.MaxNameLength"/>
+            <input class="form-control h-auto p-10 rounded-lg font-size-h6" type="text" placeholder="@L("Name")" name="Name" required value="@Model.Name" maxlength="@Zero.Authorization.Users.User.MaxNameLength"/>
         </div>
         <div class="form-group ">
-            <input class="form-control form-control-solid h-auto p-10 rounded-lg font-size-h6" type="text" placeholder="@L("Surname")" name="Surname" required value="@Model.Surname" maxlength="@Zero.Authorization.Users.User.MaxSurnameLength"/>
+            <input class="form-control h-auto p-10 rounded-lg font-size-h6" type="text" placeholder="@L("Surname")" name="Surname" required value="@Model.Surname" maxlength="@Zero.Authorization.Users.User.MaxSurnameLength"/>
         </div>
         <div class="form-group ">
-            <input class="form-control form-control-solid h-auto p-10 rounded-lg font-size-h6" type="email" placeholder="@L("EmailAddress")" name="EmailAddress" required value="@Model.EmailAddress" maxlength="@Zero.Authorization.Users.User.MaxEmailAddressLength"/>
+            <input class="form-control h-auto p-10 rounded-lg font-size-h6" type="email" placeholder="@L("EmailAddress")" name="EmailAddress" required value="@Model.EmailAddress" maxlength="@Zero.Authorization.Users.User.MaxEmailAddressLength"/>
         </div>
 
         @if (!Model.IsExternalLogin)
         {
             <div class="form-group">
-                <input class="form-control input-ltr form-control-solid h-auto p-10 rounded-lg font-size-h6" type="text" autocomplete="new-password" placeholder="@L("UserName")" name="UserName" value="@Model.UserName" required maxlength="@Zero.Authorization.Users.User.MaxUserNameLength"/>
+                <input class="form-control input-ltr h-auto p-10 rounded-lg font-size-h6" type="text" autocomplete="new-password" placeholder="@L("UserName")" name="UserName" value="@Model.UserName" required maxlength="@Zero.Authorization.Users.User.MaxUserNameLength"/>
             </div>
             <div class="form-group pwstrength-div">
-                <input class="form-control form-control-solid h-auto p-10 rounded-lg font-size-h6" type="password" autocomplete="new-password" id="RegisterPassword" placeholder="@L("Password")" name="Password" required/>
+                <input class="form-control h-auto p-10 rounded-lg font-size-h6" type="password" autocomplete="new-password" id="RegisterPassword" placeholder="@L("Password")" name="Password" required/>
             </div>
             <div class="form-group ">
-                <input class="form-control form-control-solid h-auto p-10 rounded-lg font-size-h6" type="password" autocomplete="new-password" placeholder="@L("PasswordRepeat")" name="PasswordRepeat" required/>
+                <input class="form-control h-auto p-10 rounded-lg font-size-h6" type="password" autocomplete="new-password" placeholder="@L("PasswordRepeat")" name="PasswordRepeat" required/>
             </div>
         }
 
         <div class="pb-lg-0 pb-5">
-            <a asp-action="Login">
-                <button type="button" id="register-back-btn" class="btn btn-light-primary font-weight-bolder font-size-h6 p-10 my-3">@L("Back")</button>
-            </a>
-            <button type="submit" id="register-submit-btn" class="btn btn-primary font-weight-bolder font-size-h6 p-10 my-3 mr-3">@L("Submit")</button>
+            <div class="row">
+                <div class="col-6">
+                    <a asp-action="Login">
+                        <button type="button" id="register-back-btn" class="btn btn-light-primary font-weight-bolder font-size-h6 p-10 my-3 w-p100">@L("Back")</button>
+                    </a>
+                </div>
+                <div class="col-6">
+                    <button type="submit" id="register-submit-btn" class="btn btn-primary font-weight-bolder font-size-h6 p-10 my-3 mr-3 w-p100">@L("Submit")</button>
+                </div>
+            </div>
         </div>
     </form>
 </div>

@@ -4,6 +4,7 @@
 @using Zero.Web.Navigation
 @using Abp.Configuration
 @using Abp.Extensions
+@using Zero.Web.Areas.App.Startup
 @model MenuViewModel
 @{
     var theme = await GetTheme();
@@ -36,6 +37,10 @@
         {
             var menuItem = orderedMenuItems[i];
             if (!menuItem.IsVisible)
+            {
+                continue;
+            }
+            if (AbpSession.TenantId == null && (menuItem.Name == AppPageNames.Tenant.SubscriptionManagement || menuItem.Name == AppPageNames.Tenant.Settings))
             {
                 continue;
             }

@@ -31,12 +31,20 @@
                         orderable: false,
                         defaultContent: '',
                         rowAction: {
-                            element: $("<button/>")
-                                .addClass("btn btn-xs btn-primary")
-                                .text(app.localize('ShowInvoice'))
-                                .click(function () {
-                                    createOrShowInvoice($(this).data());
-                                })
+                            dropDownStyle: false,
+                            cssClass: 'text-center',
+                            items: [
+                                {
+                                    icon: baseHelper.SimpleTableIcon('view'),
+                                    text: app.localize('View'),
+                                    visible: function () {
+                                        return true;
+                                    },
+                                    action: function (data) {
+                                        createOrShowInvoice(data.record);
+                                    }
+                                }
+                            ]
                         }
                     },
                     {

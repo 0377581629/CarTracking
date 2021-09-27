@@ -20,12 +20,14 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Abp.Authorization;
+using Abp.Configuration;
 using Abp.Localization;
 using Abp.Runtime.Session;
 using Abp.UI;
 using Zero.MultiTenancy.Payments;
 using Castle.Core.Logging;
 using Microsoft.EntityFrameworkCore;
+using Zero.Configuration;
 using Zero.Customize;
 
 namespace Zero.MultiTenancy
@@ -35,6 +37,7 @@ namespace Zero.MultiTenancy
     /// </summary>
     public class TenantManager : AbpTenantManager<Tenant, User>
     {
+        #region Constructor
         public IAbpSession AbpSession { get; set; }
 
         private readonly IUnitOfWorkManager _unitOfWorkManager;
@@ -52,6 +55,7 @@ namespace Zero.MultiTenancy
         private readonly IRepository<Tenant> _tenantRepository;
         private readonly IRepository<EmailTemplate> _emailTemplateRepository;
         private readonly IPermissionManager _permissionManager;
+        private readonly ISettingManager SettingManager;
         public TenantManager(
             IRepository<Tenant> tenantRepository,
             IRepository<TenantFeatureSetting, long> tenantFeatureRepository,
@@ -69,7 +73,7 @@ namespace Zero.MultiTenancy
             IRepository<SubscribableEdition> subscribableEditionRepository, 
             IRepository<EditionPermission> editionPermissionRepository, 
             IRepository<EmailTemplate> emailTemplateRepository, 
-            IPermissionManager permissionManager) : base(
+            IPermissionManager permissionManager, ISettingManager settingManager) : base(
                 tenantRepository,
                 tenantFeatureRepository,
                 editionManager,
@@ -91,9 +95,11 @@ namespace Zero.MultiTenancy
             _editionPermissionRepository = editionPermissionRepository;
             _emailTemplateRepository = emailTemplateRepository;
             _permissionManager = permissionManager;
+            SettingManager = settingManager;
             _logger = NullLogger.Instance;
         }
-
+        #endregion
+        
         public async Task<int> CreateWithAdminUserAsync(
             string tenancyName,
             string name,
@@ -343,7 +349,7 @@ namespace Zero.MultiTenancy
         }
         
         #region Customize
-        public async Task CreateWithAdminUserAsync(int? parentId,
+        public async Task<int> CreateWithAdminUserAsync(int? parentId,
             string tenancyName,
             string name,
             string adminPassword,
@@ -479,6 +485,34 @@ namespace Zero.MultiTenancy
 
                     newTenantId = tenant.Id;
                     newAdminId = adminUser.Id;
+                    
+                    // Save User Subscription Settings
+                    // Subscription
+                    await SettingManager.ChangeSettingForTenantAsync(
+                        tenant.Id,
+                        AppSettings.UserManagement.SubscriptionUser,
+                        "false"
+                    );
+                    await SettingManager.ChangeSettingForTenantAsync(
+                        tenant.Id,
+                        AppSettings.UserManagement.SubscriptionCurrency,
+                        "vnd"
+                    );
+                    await SettingManager.ChangeSettingForTenantAsync(
+                        tenant.Id,
+                        AppSettings.UserManagement.SubscriptionTrialDays,
+                        "7"
+                    );
+                    await SettingManager.ChangeSettingForTenantAsync(
+                        tenant.Id,
+                        AppSettings.UserManagement.SubscriptionMonthlyPrice,
+                        "300000"
+                    );
+                    await SettingManager.ChangeSettingForTenantAsync(
+                        tenant.Id,
+                        AppSettings.UserManagement.SubscriptionYearlyPrice,
+                        "3000000"
+                    );
                 }
 
                 await uow.CompleteAsync();
@@ -494,6 +528,8 @@ namespace Zero.MultiTenancy
                     await uow.CompleteAsync();
                 }
             }
+
+            return newTenantId;
         }
         
         [UnitOfWork]
