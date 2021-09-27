@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
+using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Zero.Abp.Authorization.Payments;
+using Zero.Customize;
 using Zero.MultiTenancy.Payments;
 using Zero.MultiTenancy.Payments.Paypal;
 using Zero.MultiTenancy.Payments.PayPal;
@@ -16,16 +20,19 @@ namespace Zero.Web.Controllers
         private readonly ISubscriptionPaymentRepository _subscriptionPaymentRepository;
         private readonly IUserSubscriptionPaymentRepository _userSubscriptionPaymentRepository;
         private readonly IPayPalPaymentAppService _payPalPaymentAppService;
-
+        private readonly IRepository<CurrencyRate> _currencyRateRepository;
         public PayPalController(
             PayPalPaymentGatewayConfiguration payPalConfiguration,
             ISubscriptionPaymentRepository subscriptionPaymentRepository, 
-            IPayPalPaymentAppService payPalPaymentAppService, IUserSubscriptionPaymentRepository userSubscriptionPaymentRepository)
+            IPayPalPaymentAppService payPalPaymentAppService,
+            IUserSubscriptionPaymentRepository userSubscriptionPaymentRepository, 
+            IRepository<CurrencyRate> currencyRateRepository)
         {
             _payPalConfiguration = payPalConfiguration;
             _subscriptionPaymentRepository = subscriptionPaymentRepository;
             _payPalPaymentAppService = payPalPaymentAppService;
             _userSubscriptionPaymentRepository = userSubscriptionPaymentRepository;
+            _currencyRateRepository = currencyRateRepository;
             _payPalConfiguration = payPalConfiguration;
         }
 
@@ -41,11 +48,14 @@ namespace Zero.Web.Controllers
             {
                 throw new ApplicationException("PayPal integration doesn't support recurring payments !");
             }
-
+            var latestRate = await _currencyRateRepository.GetAll().OrderByDescending(o => o.Date).FirstOrDefaultAsync(o => o.SourceCurrency == "USD" && o.TargetCurrency == "VND");
+            if (latestRate == null)
+                throw new ApplicationException("Not found currency rate");
             var model = new PayPalPurchaseViewModel
             {
                 PaymentId = payment.Id,
                 Amount = payment.Amount,
+                AmountUsd = payment.Amount/Convert.ToDecimal(latestRate.Rate),
                 Description = payment.Description,
                 Configuration = _payPalConfiguration
             };
@@ -92,16 +102,20 @@ namespace Zero.Web.Controllers
             {
                 throw new ApplicationException("This payment is processed before");
             }
-
+            
             if (payment.IsRecurring)
             {
                 throw new ApplicationException("PayPal integration doesn't support recurring payments !");
             }
+            var latestRate = await _currencyRateRepository.GetAll().OrderByDescending(o => o.Date).FirstOrDefaultAsync(o => o.SourceCurrency == "USD" && o.TargetCurrency == "VND");
+            if (latestRate == null)
+                throw new ApplicationException("Not found currency rate");
 
             var model = new PayPalPurchaseViewModel
             {
                 PaymentId = payment.Id,
                 Amount = payment.Amount,
+                AmountUsd = payment.Amount/Convert.ToDecimal(latestRate.Rate),
                 Description = payment.Description,
                 Configuration = _payPalConfiguration
             };
@@ -115,7 +129,7 @@ namespace Zero.Web.Controllers
         {
             try
             {
-                await _payPalPaymentAppService.ConfirmPayment(paymentId, paypalOrderId);
+                await _payPalPaymentAppService.ConfirmUserPayment(paymentId, paypalOrderId);
             
                 var returnUrl = await GetUserSuccessUrlAsync(paymentId);
                 return Redirect(returnUrl);

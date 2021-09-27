@@ -8,6 +8,8 @@ namespace Zero.MultiTenancy.Payments.PayPal
     {
         Task ConfirmPayment(long paymentId, string paypalOrderId);
 
+        Task ConfirmUserPayment(long paymentId, string paypalOrderId);
+        
         PayPalConfigurationDto GetConfiguration();
     }
 }
