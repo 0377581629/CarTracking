@@ -11,10 +11,8 @@ namespace Zero.Abp.Authorization.Users.Payments.Dto
         public SubscriptionPaymentGatewayType Gateway { get; set; }
 
         public decimal Amount { get; set; }
-
-        public int EditionId { get; set; }
-
-        public int TenantId { get; set; }
+        
+        public string Currency { get; set; }
 
         public int DayCount { get; set; }
 

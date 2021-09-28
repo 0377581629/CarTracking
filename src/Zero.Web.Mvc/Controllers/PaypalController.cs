@@ -55,7 +55,7 @@ namespace Zero.Web.Controllers
             {
                 PaymentId = payment.Id,
                 Amount = payment.Amount,
-                AmountUsd = payment.Amount/Convert.ToDecimal(latestRate.Rate),
+                Currency = "USD",
                 Description = payment.Description,
                 Configuration = _payPalConfiguration
             };
@@ -115,7 +115,7 @@ namespace Zero.Web.Controllers
             {
                 PaymentId = payment.Id,
                 Amount = payment.Amount,
-                AmountUsd = payment.Amount/Convert.ToDecimal(latestRate.Rate),
+                Currency = payment.Currency,
                 Description = payment.Description,
                 Configuration = _payPalConfiguration
             };

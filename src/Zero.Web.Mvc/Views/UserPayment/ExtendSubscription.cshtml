@@ -65,7 +65,9 @@
     @foreach (var paymentGateway in Model.PaymentGateways)
     {
         <div class="form-group">
-            <button data-gateway="@paymentGateway.GatewayType" data-supports-subscription="@paymentGateway.SupportsRecurringPayments.ToString().ToLower()" class="btn btn-success btn-block checkout">@L("CheckoutWith" + paymentGateway.GatewayType)</button>
+            <button data-gateway="@paymentGateway.GatewayType" data-supports-subscription="@paymentGateway.SupportsRecurringPayments.ToString().ToLower()" class="btn btn-success btn-block checkout">
+                @L("CheckoutWith" + paymentGateway.GatewayType)
+            </button>
         </div>
     }
 </div>

@@ -26,55 +26,42 @@
                     },
                     {
                         targets: 1,
-                        data: null,
-                        orderable: false,
-                        defaultContent: '',
-                        rowAction: {
-                            dropDownStyle: false,
-                            cssClass: 'text-center',
-                            items: [
-                                {
-                                    icon: baseHelper.SimpleTableIcon('view'),
-                                    text: app.localize('View'),
-                                    visible: function () {
-                                        return true;
-                                    },
-                                    action: function (data) {
-                                        createOrShowInvoice(data.record);
-                                    }
-                                }
-                            ]
+                        data: "creationTime",
+                        class: "text-center",
+                        render: function (creationTime) {
+                            return moment(creationTime).format('L LT');
                         }
                     },
                     {
                         targets: 2,
-                        data: "creationTime",
-                        render: function (creationTime) {
-                            return moment(creationTime).format('L');
-                        }
-                    },
-                    {
-                        targets: 3,
                         data: "gateway",
                         render: function (gateway) {
                             return app.localize("SubscriptionPaymentGatewayType_" + gateway);
                         }
                     },
                     {
-                        targets: 4,
+                        targets: 3,
                         data: "amount",
+                        class: "text-right",
                         render: $.fn.dataTable.render.number(',', '.', 2)
+                    },
+                    {
+                        targets: 4,
+                        data: "currency",
+                        class: "text-center"
                     },
                     {
                         targets: 5,
                         data: "status",
+                        class: "text-center",
                         render: function (status) {
                             return app.localize("SubscriptionPaymentStatus_" + status);
                         }
                     },
                     {
                         targets: 6,
-                        data: "dayCount"
+                        data: "dayCount",
+                        class:  "text-right"
                     },
                     {
                         targets: 7,
@@ -82,10 +69,6 @@
                     },
                     {
                         targets: 8,
-                        data: "invoiceNo"
-                    },
-                    {
-                        targets: 9,
                         visible: false,
                         data: "id"
                     }

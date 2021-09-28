@@ -38,7 +38,7 @@
             <label class="col-sm-4 control-label">@L("Total")</label>
             <div class="col-sm-8 text-right">
                 <p class="form-control-static text-bold" id="totalPrice">
-                    @(Model.Amount.ToString("N0")) @ZeroConsts.CurrencySign ~ @(Model.AmountUsd.ToString("N2")) USD
+                    @(Model.Amount.ToString("N2")) @Model.Currency
                 </p>
             </div>
         </div>
@@ -47,9 +47,9 @@
     <form id="payPalCheckoutForm" method="post" asp-action="UserConfirmPayment" asp-controller="PayPal" class="register-form">
         <input type="hidden" name="PaymentId" value="@Model.PaymentId"/>
         <input type="hidden" name="PayPalOrderId" value=""/>
-        <input type="hidden" name="Amount" value="@(Math.Round(Model.AmountUsd,2).ToString(ZeroConsts.NumberFormatInfo))"/>
+        <input type="hidden" name="Amount" value="@(Math.Round(Model.Amount,2).ToString(ZeroConsts.NumberFormatInfo))"/>
         <input type="hidden" name="clientId" value="@Model.Configuration.ClientId"/>
-        <input type="hidden" name="currency" value="USD"/>
+        <input type="hidden" name="currency" value="@Model.Currency"/>
 
         @if (!Model.Configuration.DemoUsername.IsNullOrEmpty() && !Model.Configuration.DemoPassword.IsNullOrEmpty())
         {

@@ -10,7 +10,7 @@ namespace Zero.Web.Models.Paypal
 
         public decimal Amount { get; set; }
         
-        public decimal AmountUsd { get; set; }
+        public string Currency { get; set; }
 
         public PayPalPaymentGatewayConfiguration Configuration { get; set; }
     }

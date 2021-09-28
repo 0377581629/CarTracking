@@ -17,6 +17,8 @@ using Zero.Abp.Authorization.Users.Payments.Dto;
 using Zero.Authorization;
 using Zero.Authorization.Users;
 using Zero.Configuration;
+using Zero.Customize;
+using Zero.Customize.Interfaces;
 using Zero.MultiTenancy.Payments;
 using Zero.MultiTenancy.Payments.Dto;
 
@@ -30,18 +32,23 @@ namespace Zero.Abp.Authorization.Users.Payments
         private readonly IPaymentGatewayStore _paymentGatewayStore;
         private readonly IRepository<User, long> _userRepository;
         private readonly UserManager _userManager;
-        private readonly ISettingManager SettingManager;
+        private readonly ISettingManager _settingManager;
 
+        private readonly ICurrencyRateAppService _currencyRateAppService;
         public UserPaymentAppService(
             IUserSubscriptionPaymentRepository userSubscriptionPaymentRepository,
             IPaymentGatewayStore paymentGatewayStore,
-            UserManager userManager, IRepository<User, long> userRepository, ISettingManager settingManager)
+            UserManager userManager, 
+            IRepository<User, long> userRepository, 
+            ISettingManager settingManager,
+            ICurrencyRateAppService currencyRateAppService)
         {
             _userSubscriptionPaymentRepository = userSubscriptionPaymentRepository;
             _paymentGatewayStore = paymentGatewayStore;
             _userManager = userManager;
             _userRepository = userRepository;
-            SettingManager = settingManager;
+            _settingManager = settingManager;
+            _currencyRateAppService = currencyRateAppService;
         }
         
         public async Task<long> CreatePayment(CreateUserPaymentDto input)
@@ -54,17 +61,19 @@ namespace Zero.Abp.Authorization.Users.Payments
             decimal amount=0;
             double monthlyPrice = 0;
             double yearlyPrice = 0;
+            string currency = ZeroConsts.Currency;
+            
             var user = await _userManager.GetUserAsync(AbpSession.ToUserIdentifier());
 
             if (AbpSession.TenantId.HasValue)
             {
-                monthlyPrice = await SettingManager.GetSettingValueForTenantAsync<double>(AppSettings.UserManagement.SubscriptionMonthlyPrice, AbpSession.GetTenantId());
-                yearlyPrice = await SettingManager.GetSettingValueForTenantAsync<double>(AppSettings.UserManagement.SubscriptionYearlyPrice, AbpSession.GetTenantId());
+                monthlyPrice = await _settingManager.GetSettingValueForTenantAsync<double>(AppSettings.UserManagement.SubscriptionMonthlyPrice, AbpSession.GetTenantId());
+                yearlyPrice = await _settingManager.GetSettingValueForTenantAsync<double>(AppSettings.UserManagement.SubscriptionYearlyPrice, AbpSession.GetTenantId());
             }
             else
             {
-                monthlyPrice = await SettingManager.GetSettingValueAsync<double>(AppSettings.UserManagement.SubscriptionMonthlyPrice);
-                yearlyPrice = await SettingManager.GetSettingValueAsync<double>(AppSettings.UserManagement.SubscriptionYearlyPrice);
+                monthlyPrice = await _settingManager.GetSettingValueAsync<double>(AppSettings.UserManagement.SubscriptionMonthlyPrice);
+                yearlyPrice = await _settingManager.GetSettingValueAsync<double>(AppSettings.UserManagement.SubscriptionYearlyPrice);
             }
 
             amount = input.PaymentPeriodType switch
@@ -77,6 +86,16 @@ namespace Zero.Abp.Authorization.Users.Payments
             if (amount == 0)
                 throw new UserFriendlyException(L("Invalid Amount To Create Payment"));
             
+            // Convert to USD if gateway is Paypal or Stripe
+            if (input.SubscriptionPaymentGatewayType == SubscriptionPaymentGatewayType.Paypal || input.SubscriptionPaymentGatewayType == SubscriptionPaymentGatewayType.Stripe)
+            {
+                currency = "USD";
+                var latestRate = await _currencyRateAppService.GetLatestRate();
+                if (latestRate == null)
+                    throw new UserFriendlyException(L("Not found currency rating data"));
+                amount = amount / Convert.ToDecimal(latestRate.Value);
+            }
+            
             var payment = new UserSubscriptionPayment
             {
                 UserId = AbpSession.GetUserId(),
@@ -86,6 +105,8 @@ namespace Zero.Abp.Authorization.Users.Payments
                 
                 Gateway = input.SubscriptionPaymentGatewayType,
                 Amount = amount,
+                Currency = currency,
+                
                 DayCount = input.PaymentPeriodType.HasValue ? (int)input.PaymentPeriodType.Value : 0,
                 
                 SuccessUrl = input.SuccessUrl,
@@ -166,14 +187,12 @@ namespace Zero.Abp.Authorization.Users.Payments
 
         private string GetPaymentDescription(PaymentPeriodType? paymentPeriodType, string userEmail, int? tenantId)
         {
-            var description = L("UserSubscription_Description", userEmail);
+            var description = L("UserSubscription_Payment_Description", userEmail);
 
             if (tenantId.HasValue)
                 description += " Tenant " + tenantId;
-            if (!paymentPeriodType.HasValue)
-                return description;
-
-            return description + " " + paymentPeriodType;
+            
+            return !paymentPeriodType.HasValue ? description : $"{description} {(int)paymentPeriodType} {L("Days").ToLower()}";
         }
         
         [AbpAuthorize(AppPermissions.Pages_Administration_Tenant_SubscriptionManagement)]

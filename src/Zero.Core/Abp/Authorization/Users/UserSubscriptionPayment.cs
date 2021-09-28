@@ -14,6 +14,8 @@ namespace Zero.Abp.Authorization.Users
         public SubscriptionPaymentGatewayType Gateway { get; set; }
 
         public decimal Amount { get; set; }
+        
+        public string Currency { get; set; }
 
         public SubscriptionPaymentStatus Status { get; protected set; }
 
@@ -29,8 +31,6 @@ namespace Zero.Abp.Authorization.Users
         public string InvoiceNo { get; set; }
         
         public bool IsRecurring { get; set; }
-        
-        public string Currency { get; set; }
 
         public string SuccessUrl { get; set; }
 
@@ -72,19 +72,14 @@ namespace Zero.Abp.Authorization.Users
 
         public PaymentPeriodType GetPaymentPeriodType()
         {
-            switch (DayCount)
+            return DayCount switch
             {
-                case 1:
-                    return MultiTenancy.Payments.PaymentPeriodType.Daily;
-                case 7:
-                    return MultiTenancy.Payments.PaymentPeriodType.Weekly;
-                case 30:
-                    return MultiTenancy.Payments.PaymentPeriodType.Monthly;
-                case 365:
-                    return MultiTenancy.Payments.PaymentPeriodType.Annual;
-                default:
-                    throw new NotImplementedException($"PaymentPeriodType for {DayCount} day could not found");
-            }
+                1 => MultiTenancy.Payments.PaymentPeriodType.Daily,
+                7 => MultiTenancy.Payments.PaymentPeriodType.Weekly,
+                30 => MultiTenancy.Payments.PaymentPeriodType.Monthly,
+                365 => MultiTenancy.Payments.PaymentPeriodType.Annual,
+                _ => throw new NotImplementedException($"PaymentPeriodType for {DayCount} day could not found")
+            };
         }
     }
 }

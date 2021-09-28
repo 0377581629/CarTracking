@@ -8,6 +8,8 @@ namespace Zero.Abp.Authorization.Users.Payments.Dto
 
         public decimal Amount { get; set; }
         
+        public string Currency { get; set; }
+        
         public int DayCount { get; set; }
 
         public string PaymentPeriodType { get; set; }

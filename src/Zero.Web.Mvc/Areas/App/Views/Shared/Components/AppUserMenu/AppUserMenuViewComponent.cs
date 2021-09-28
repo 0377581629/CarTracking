@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Abp.Configuration;
 using Abp.Configuration.Startup;
 using Abp.Runtime.Session;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +15,6 @@ namespace Zero.Web.Areas.App.Views.Shared.Components.AppUserMenu
         private readonly IMultiTenancyConfig _multiTenancyConfig;
         private readonly IAbpSession _abpSession;
         private readonly IPerRequestSessionCache _sessionCache;
-
         public AppUserMenuViewComponent(
             IPerRequestSessionCache sessionCache, 
             IMultiTenancyConfig multiTenancyConfig, 

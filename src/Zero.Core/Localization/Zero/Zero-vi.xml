@@ -1,7 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <localizationDictionary culture="vi">
   <texts>
+    <!--  Payment  -->
+    <text name="CheckoutWithPaypal">Thanh toán qua Paypal (USD)</text>
+    <text name="ExternalPaymentId">Mã thanh toán</text>
+
+    <text name="DailyPrice">Giá hàng ngày</text>
+    <text name="WeeklyPrice">Giá hàng tuần</text>
+    <!--    -->
+    
     <!--  User Subscription  -->
+    <text name="UserSubscription">Thuê bao tài khoản</text>
+    <text name="UserSubscriptionInformation">Thông tin thuê bao</text>
+    
     <text name="UserSubscriptionEnable">Kích hoạt thuê bao tài khoản</text>
     <text name="Currency">Tiền tệ</text>
     <text name="TrialDays">Dùng thử - Ngày</text>
@@ -13,6 +24,11 @@
     <text name="UserTrialExpireNotification">Thời gian dùng thử của bạn sẽ hết hạn sau {0} ngày.</text>
     
     <text name="UserExtentSubscription_Description">Gia hạn tài khoản {0}.</text>
+
+    <text name="UserSubscriptionManagement">Quản lý thuê bao tài khoản</text>
+    <text name="UserSubscriptionManagement_Description">Gia hạn và xem lịch sử thanh toán</text>
+    
+    <text name="UserSubscription_Payment_Description">Gia hạn tài khoản {0}</text>
     <!--    -->
     
     <!--  Common  -->
