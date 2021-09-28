@@ -1,6 +1,7 @@
 ﻿using Abp.IdentityServer4vNext;
 using Abp.Zero.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Zero.Abp.Authorization.Accounting;
 using Zero.Abp.Authorization.Users;
 using Zero.Authorization.Delegation;
 using Zero.Authorization.Roles;
@@ -49,6 +50,8 @@ namespace Zero.EntityFrameworkCore
         public virtual DbSet<RoleDashboardWidget> RoleDashboardWidgets { get; set; }
         public virtual DbSet<EmailTemplate> EmailTemplates { get; set; }
         public virtual DbSet<CurrencyRate> CurrencyRates { get; set; }
+        public virtual DbSet<UserInvoice> UserInvoices { get; set; }
+        
         #endregion
         
         public ZeroDbContext(DbContextOptions<ZeroDbContext> options)

@@ -8,7 +8,10 @@ using Abp.Domain.Uow;
 using Abp.Runtime.Session;
 using Abp.Timing;
 using Abp.UI;
+using Zero.Abp.Authorization.Accounting;
+using Zero.Abp.Authorization.Accounting.Dto;
 using Zero.Abp.Authorization.Payments;
+using Zero.Authorization.Users;
 using Zero.Configuration;
 using Zero.Editions;
 using Zero.MultiTenancy.Accounting.Dto;
@@ -16,30 +19,27 @@ using Zero.MultiTenancy.Payments;
 
 namespace Zero.MultiTenancy.Accounting
 {
-    public class InvoiceAppService : ZeroAppServiceBase, IInvoiceAppService
+    public class UserInvoiceAppService : ZeroAppServiceBase, IUserInvoiceAppService
     {
-        private readonly ISubscriptionPaymentRepository _subscriptionPaymentRepository;
-        private readonly IUserSubscriptionPaymentRepository _userSubscriptionPaymentRepository;
+        private readonly IUserSubscriptionPaymentRepository _subscriptionPaymentRepository;
         
         private readonly IInvoiceNumberGenerator _invoiceNumberGenerator;
-        private readonly EditionManager _editionManager;
-        private readonly IRepository<Invoice> _invoiceRepository;
+        private readonly IRepository<UserInvoice> _invoiceRepository;
+        private readonly UserManager _userManager;
 
-        public InvoiceAppService(
-            ISubscriptionPaymentRepository subscriptionPaymentRepository,
+        public UserInvoiceAppService(
             IInvoiceNumberGenerator invoiceNumberGenerator,
-            EditionManager editionManager,
-            IRepository<Invoice> invoiceRepository, 
-            IUserSubscriptionPaymentRepository userSubscriptionPaymentRepository)
+            IRepository<UserInvoice> invoiceRepository, 
+            IUserSubscriptionPaymentRepository userSubscriptionPaymentRepository, 
+            UserManager userManager)
         {
-            _subscriptionPaymentRepository = subscriptionPaymentRepository;
             _invoiceNumberGenerator = invoiceNumberGenerator;
-            _editionManager = editionManager;
             _invoiceRepository = invoiceRepository;
-            _userSubscriptionPaymentRepository = userSubscriptionPaymentRepository;
+            _subscriptionPaymentRepository = userSubscriptionPaymentRepository;
+            _userManager = userManager;
         }
 
-        public async Task<InvoiceDto> GetInvoiceInfo(EntityDto<long> input)
+        public async Task<UserInvoiceDto> GetInvoiceInfo(EntityDto<long> input)
         {
             var payment = await _subscriptionPaymentRepository.GetAsync(input.Id);
 
@@ -48,7 +48,7 @@ namespace Zero.MultiTenancy.Accounting
                 throw new Exception("There is no invoice for this payment !");
             }
 
-            if (payment.TenantId != AbpSession.GetTenantId())
+            if (payment.UserId != AbpSession.GetUserId())
             {
                 throw new UserFriendlyException(L("ThisInvoiceIsNotYours"));
             }
@@ -59,29 +59,18 @@ namespace Zero.MultiTenancy.Accounting
                 throw new UserFriendlyException();
             }
 
-            var edition = await _editionManager.FindByIdAsync(payment.EditionId);
-            var hostAddress = await SettingManager.GetSettingValueAsync(AppSettings.HostManagement.BillingAddress);
-
-            return new InvoiceDto
+            return new UserInvoiceDto
             {
                 InvoiceNo = payment.InvoiceNo,
                 InvoiceDate = invoice.InvoiceDate,
-                Amount = payment.Amount,
-                EditionDisplayName = edition.DisplayName,
-
-                HostAddress = hostAddress.Replace("\r\n", "|").Split('|').ToList(),
-                HostLegalName = await SettingManager.GetSettingValueAsync(AppSettings.HostManagement.BillingLegalName),
-
-                TenantAddress = invoice.TenantAddress.Replace("\r\n", "|").Split('|').ToList(),
-                TenantLegalName = invoice.TenantLegalName,
-                TenantTaxNo = invoice.TenantTaxNo
+                Amount = payment.Amount
             };
         }
 
         [UnitOfWork(IsolationLevel.ReadUncommitted)]
-        public async Task CreateInvoice(CreateInvoiceDto input)
+        public async Task CreateInvoice(CreateUserInvoiceDto input)
         {
-            var payment = await _subscriptionPaymentRepository.GetAsync(input.SubscriptionPaymentId);
+            var payment = await _subscriptionPaymentRepository.GetAsync(input.UserSubscriptionPaymentId);
             if (!string.IsNullOrEmpty(payment.InvoiceNo))
             {
                 throw new Exception("Invoice is already generated for this payment.");
@@ -98,13 +87,10 @@ namespace Zero.MultiTenancy.Accounting
                 throw new UserFriendlyException(L("InvoiceInfoIsMissingOrNotCompleted"));
             }
 
-            await _invoiceRepository.InsertAsync(new Invoice
+            await _invoiceRepository.InsertAsync(new UserInvoice
             {
                 InvoiceNo = invoiceNo,
-                InvoiceDate = Clock.Now,
-                TenantLegalName = tenantLegalName,
-                TenantAddress = tenantAddress,
-                TenantTaxNo = tenantTaxNo
+                InvoiceDate = Clock.Now
             });
 
             payment.InvoiceNo = invoiceNo;

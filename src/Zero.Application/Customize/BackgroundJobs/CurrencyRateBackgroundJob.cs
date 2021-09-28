@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
@@ -33,7 +34,7 @@ namespace Zero.Customize.BackgroundJobs
             
             var latestCurrencyRate = _currencyRateRepository.GetAll().OrderByDescending(o => o.Date).FirstOrDefault();
             if (latestCurrencyRate != null && DateTimeHelper.UnixTimeStampToDateTime(Convert.ToDouble(fixerExchange.Timestamp)) <= latestCurrencyRate.Date) return;
-            var newCurrencyRates = fixerExchange.Rates.Select(rate => new CurrencyRate { Date = DateTimeHelper.UnixTimeStampToDateTime(Convert.ToDouble(fixerExchange.Timestamp)), SourceCurrency = "USD", TargetCurrency = rate.Key, Rate = Convert.ToDouble(rate.Value) }).ToList();
+            var newCurrencyRates = fixerExchange.Rates.Select(rate => new CurrencyRate { Date = DateTimeHelper.UnixTimeStampToDateTime(Convert.ToDouble(fixerExchange.Timestamp)), SourceCurrency = "USD", TargetCurrency = rate.Key, Rate = double.Parse(rate.Value, CultureInfo.InvariantCulture) }).ToList();
             EntityFrameworkManager.ContextFactory = _ => _currencyRateRepository.GetDbContext();    
             AsyncHelper.RunSync(()=> _currencyRateRepository.GetDbContext().BulkInsertAsync(newCurrencyRates));
             unitOfWork.Complete();

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Zero.EntityFrameworkCore;
 
 namespace Zero.Migrations
 {
     [DbContext(typeof(ZeroDbContext))]
-    partial class ZeroDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210928035344_Abp_Customize_Add_UserInvoice")]
+    partial class Abp_Customize_Add_UserInvoice
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1394,9 +1396,6 @@ namespace Zero.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Currency")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("InvoiceDate")
                         .HasColumnType("datetime2");
 
@@ -1432,9 +1431,6 @@ namespace Zero.Migrations
 
                     b.Property<long?>("CreatorUserId")
                         .HasColumnType("bigint");
-
-                    b.Property<string>("Currency")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("DayCount")
                         .HasColumnType("int");

@@ -125,7 +125,7 @@ namespace Zero.Web.Controllers
         public async Task<IActionResult> ExtendSucceed(long paymentId)
         {
             await _userPaymentAppService.ExtendSucceed(paymentId);
-            return RedirectToAction("Index", "SubscriptionManagement", new { area = "App" });
+            return RedirectToAction("Index", "UserSubscriptionManagement", new { area = "App" });
         }
 
         public async Task<IActionResult> PaymentFailed(long paymentId)

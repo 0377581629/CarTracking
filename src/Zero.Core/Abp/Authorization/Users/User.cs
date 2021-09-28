@@ -93,7 +93,8 @@ namespace Zero.Authorization.Users
                 SubscriptionEndDateUtc = Clock.Now.ToUniversalTime();
             }
 
-            SubscriptionEndDateUtc = SubscriptionEndDateUtc.Value.AddDays((int)paymentPeriodType);
+            IsInTrialPeriod = false;
+            SubscriptionEndDateUtc = SubscriptionEndDateUtc?.AddDays((int)paymentPeriodType);
         }
 
         private bool IsSubscriptionEnded()

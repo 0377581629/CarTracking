@@ -29,6 +29,8 @@ namespace Zero.Abp.Authorization.Users
         public string InvoiceNo { get; set; }
         
         public bool IsRecurring { get; set; }
+        
+        public string Currency { get; set; }
 
         public string SuccessUrl { get; set; }
 

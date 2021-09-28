@@ -7,9 +7,7 @@ namespace Zero.Abp.Authorization.Users.Payments.Dto
         public string Gateway { get; set; }
 
         public decimal Amount { get; set; }
-
-        public int EditionId { get; set; }
-
+        
         public int DayCount { get; set; }
 
         public string PaymentPeriodType { get; set; }
@@ -19,9 +17,7 @@ namespace Zero.Abp.Authorization.Users.Payments.Dto
         public string PayerId { get; set; }
 
         public string Status { get; set; }
-
-        public string EditionDisplayName { get; set; }
-
+        
         public int TenantId { get; set; }
 
         public string InvoiceNo { get; set; }
