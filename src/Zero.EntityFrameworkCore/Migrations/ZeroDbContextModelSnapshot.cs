@@ -2133,6 +2133,9 @@ namespace Zero.Migrations
                     b.Property<long?>("CreatorUserId")
                         .HasColumnType("bigint");
 
+                    b.Property<string>("Currency")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("DayCount")
                         .HasColumnType("int");
 

@@ -57,7 +57,7 @@
                     <label class="col-sm-8 control-label">@L("Total")</label>
                     <div class="col-sm-4 text-right">
                         <p class="form-control-static text-bold" id="totalPrice">
-                            @ZeroConsts.CurrencySign@Model.AdditionalPrice.Value.ToString("N2")
+                            @Model.AdditionalPrice.Value.ToString("N2") @ZeroConsts.Currency
                         </p>
                     </div>
                 </div>

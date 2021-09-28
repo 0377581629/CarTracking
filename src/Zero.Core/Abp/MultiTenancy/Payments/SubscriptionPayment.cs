@@ -17,6 +17,8 @@ namespace Zero.MultiTenancy.Payments
         public SubscriptionPaymentGatewayType Gateway { get; set; }
 
         public decimal Amount { get; set; }
+        
+        public string Currency { get; set; }
 
         public SubscriptionPaymentStatus Status { get; protected set; }
 

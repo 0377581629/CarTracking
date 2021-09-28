@@ -7,6 +7,8 @@ namespace Zero.MultiTenancy.Payments.Dto
         public string Gateway { get; set; }
 
         public decimal Amount { get; set; }
+        
+        public string Currency { get; set; }
 
         public int EditionId { get; set; }
 

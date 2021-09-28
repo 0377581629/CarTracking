@@ -8,7 +8,6 @@ using Zero.Customize.Interfaces;
 
 namespace Zero.Customize
 {
-    [AbpAuthorize]
     public class CurrencyRateAppService : ZeroAppServiceBase, ICurrencyRateAppService
     {
         #region Constructor

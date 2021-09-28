@@ -17,6 +17,7 @@ using System.Linq.Dynamic.Core;
 using Abp.Collections.Extensions;
 using Abp.Linq.Extensions;
 using Microsoft.AspNetCore.Authorization;
+using Zero.Customize.Interfaces;
 
 namespace Zero.MultiTenancy.Payments
 {
@@ -26,18 +27,20 @@ namespace Zero.MultiTenancy.Payments
         private readonly EditionManager _editionManager;
         private readonly IPaymentGatewayStore _paymentGatewayStore;
         private readonly TenantManager _tenantManager;
-
+        private readonly ICurrencyRateAppService _currencyRateAppService;
 
         public PaymentAppService(
             ISubscriptionPaymentRepository subscriptionPaymentRepository,
             EditionManager editionManager,
             IPaymentGatewayStore paymentGatewayStore,
-            TenantManager tenantManager)
+            TenantManager tenantManager,
+            ICurrencyRateAppService currencyRateAppService)
         {
             _subscriptionPaymentRepository = subscriptionPaymentRepository;
             _editionManager = editionManager;
             _paymentGatewayStore = paymentGatewayStore;
             _tenantManager = tenantManager;
+            _currencyRateAppService = currencyRateAppService;
         }
 
         [AbpAuthorize(AppPermissions.Pages_Administration_Tenant_SubscriptionManagement)]
@@ -86,7 +89,8 @@ namespace Zero.MultiTenancy.Payments
 
             decimal amount;
             string targetEditionName;
-
+            string currency = ZeroConsts.Currency;
+            
             using (UnitOfWorkManager.Current.SetTenantId(null))
             {
                 var targetEdition = (SubscribableEdition)await _editionManager.GetByIdAsync(input.EditionId);
@@ -96,6 +100,16 @@ namespace Zero.MultiTenancy.Payments
                 amount = await CalculateAmountForPaymentAsync(targetEdition, input.PaymentPeriodType, input.EditionPaymentType, tenant);
             }
 
+            // Convert to USD if gateway is Paypal or Stripe
+            if (input.SubscriptionPaymentGatewayType == SubscriptionPaymentGatewayType.Paypal || input.SubscriptionPaymentGatewayType == SubscriptionPaymentGatewayType.Stripe)
+            {
+                currency = "USD";
+                var latestRate = await _currencyRateAppService.GetLatestRate();
+                if (latestRate == null)
+                    throw new UserFriendlyException(L("Not found currency rating data"));
+                amount = amount / Convert.ToDecimal(latestRate.Value);
+            }
+            
             var payment = new SubscriptionPayment
             {
                 Description = GetPaymentDescription(input.EditionPaymentType, input.PaymentPeriodType, targetEditionName, input.RecurringPaymentEnabled),
@@ -104,6 +118,7 @@ namespace Zero.MultiTenancy.Payments
                 TenantId = AbpSession.GetTenantId(),
                 Gateway = input.SubscriptionPaymentGatewayType,
                 Amount = amount,
+                Currency = currency,
                 DayCount = input.PaymentPeriodType.HasValue ? (int)input.PaymentPeriodType.Value : 0,
                 IsRecurring = input.RecurringPaymentEnabled,
                 SuccessUrl = input.SuccessUrl,

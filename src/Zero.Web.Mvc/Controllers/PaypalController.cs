@@ -16,6 +16,7 @@ namespace Zero.Web.Controllers
 {
     public class PayPalController : ZeroControllerBase
     {
+        #region Constructor
         private readonly PayPalPaymentGatewayConfiguration _payPalConfiguration;
         private readonly ISubscriptionPaymentRepository _subscriptionPaymentRepository;
         private readonly IUserSubscriptionPaymentRepository _userSubscriptionPaymentRepository;
@@ -35,7 +36,8 @@ namespace Zero.Web.Controllers
             _currencyRateRepository = currencyRateRepository;
             _payPalConfiguration = payPalConfiguration;
         }
-
+        #endregion
+        
         public async Task<ActionResult> Purchase(long paymentId)
         {
             var payment = await _subscriptionPaymentRepository.GetAsync(paymentId);

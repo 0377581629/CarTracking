@@ -6,6 +6,8 @@ namespace Zero.MultiTenancy.Accounting.Dto
     public class InvoiceDto
     {
         public decimal Amount { get; set; }
+        
+        public string Currency { get; set; }
 
         public string EditionDisplayName { get; set; }
         

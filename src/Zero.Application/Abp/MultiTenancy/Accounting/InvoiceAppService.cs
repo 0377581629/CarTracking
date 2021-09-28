@@ -67,6 +67,8 @@ namespace Zero.MultiTenancy.Accounting
                 InvoiceNo = payment.InvoiceNo,
                 InvoiceDate = invoice.InvoiceDate,
                 Amount = payment.Amount,
+                Currency = payment.Currency,
+                
                 EditionDisplayName = edition.DisplayName,
 
                 HostAddress = hostAddress.Replace("\r\n", "|").Split('|').ToList(),
