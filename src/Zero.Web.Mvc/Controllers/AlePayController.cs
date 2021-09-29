@@ -67,18 +67,34 @@ namespace Zero.Web.Controllers
 
         [HttpPost]
         [UnitOfWork(IsDisabled = true)]
-        public async Task<ActionResult> MakePayment(long paymentId)
+        public async Task<ActionResult> ConfirmPayment(long paymentId, string paypalOrderId)
         {
             try
             {
-                await _alePayPaymentAppService.ConfirmPayment(paymentId, paypalOrderId);
+                await _payPalPaymentAppService.ConfirmPayment(paymentId, paypalOrderId);
+            
+                var returnUrl = await GetSuccessUrlAsync(paymentId);
                 return Redirect(returnUrl);
             }
             catch (Exception exception)
             {
                 Logger.Error(exception.Message, exception);
+
+                var returnUrl = await GetErrorUrlAsync(paymentId);
                 return Redirect(returnUrl);
             }
+        }
+
+        private async Task<string> GetSuccessUrlAsync(long paymentId)
+        {
+            var payment = await _subscriptionPaymentRepository.GetAsync(paymentId);
+            return payment.SuccessUrl + (payment.SuccessUrl.Contains("?") ? "&" : "?") + "paymentId=" + paymentId;
+        }
+
+        private async Task<string> GetErrorUrlAsync(long paymentId)
+        {
+            var payment = await _subscriptionPaymentRepository.GetAsync(paymentId);
+            return payment.ErrorUrl + (payment.ErrorUrl.Contains("?") ? "&" : "?") + "paymentId=" + paymentId;
         }
         
         public async Task<ActionResult> UserPurchase(long paymentId)
@@ -97,13 +113,13 @@ namespace Zero.Web.Controllers
             if (latestRate == null)
                 throw new ApplicationException("Not found currency rate");
 
-            var model = new AlePayPurchaseViewModel
+            var model = new PayPalPurchaseViewModel
             {
                 PaymentId = payment.Id,
                 Amount = payment.Amount,
                 Currency = payment.Currency,
                 Description = payment.Description,
-                Configuration = _aleAlePayConfiguration
+                Configuration = _payPalConfiguration
             };
 
             return View(model);
@@ -111,17 +127,34 @@ namespace Zero.Web.Controllers
         
         [HttpPost]
         [UnitOfWork(IsDisabled = true)]
-        public async Task<ActionResult> UserConfirmPayment(long paymentId)
+        public async Task<ActionResult> UserConfirmPayment(long paymentId, string paypalOrderId)
         {
             try
             {
+                await _payPalPaymentAppService.ConfirmUserPayment(paymentId, paypalOrderId);
+            
+                var returnUrl = await GetUserSuccessUrlAsync(paymentId);
                 return Redirect(returnUrl);
             }
             catch (Exception exception)
             {
                 Logger.Error(exception.Message, exception);
+
+                var returnUrl = await GetUserErrorUrlAsync(paymentId);
                 return Redirect(returnUrl);
             }
+        }
+        
+        private async Task<string> GetUserSuccessUrlAsync(long paymentId)
+        {
+            var payment = await _userSubscriptionPaymentRepository.GetAsync(paymentId);
+            return payment.SuccessUrl + (payment.SuccessUrl.Contains("?") ? "&" : "?") + "paymentId=" + paymentId;
+        }
+
+        private async Task<string> GetUserErrorUrlAsync(long paymentId)
+        {
+            var payment = await _userSubscriptionPaymentRepository.GetAsync(paymentId);
+            return payment.ErrorUrl + (payment.ErrorUrl.Contains("?") ? "&" : "?") + "paymentId=" + paymentId;
         }
     }
 }

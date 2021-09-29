@@ -1,12 +1,13 @@
 ﻿using System.Threading.Tasks;
 using Abp.Application.Services;
+using Zero.MultiTenancy.Payments.Dto;
 
 namespace Zero.Abp.MultiTenancy.Payments.AlePay
 {
     public interface IAlePayPaymentAppService : IApplicationService
     {
-        Task<string> CreatePayment(long paymentId);
+        Task<string> CreatePayment(AlePayCreatePaymentInput input);
 
-        Task<string> CreateUserPayment(long paymentId);
+        Task<string> CreateUserPayment(AlePayCreatePaymentInput input);
     }
 }

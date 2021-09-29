@@ -2,7 +2,7 @@
 
 namespace Zero.Web.Models.AlePay
 {
-    public class AlePayPurchaseViewModel
+    public class AlePayCreatePurchaseViewModel
     {
         public long PaymentId { get; set; }
 
