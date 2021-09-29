@@ -36,6 +36,13 @@
     <text name="UserSubscriptionManagement_Description">Gia hạn và xem lịch sử thanh toán</text>
     
     <text name="UserSubscription_Payment_Description">Gia hạn tài khoản {0}</text>
+
+    <text name="UserSubscriptionExpiringSoon_Title">Thông báo hết hạn thuê bao</text>
+    <text name="UserSubscriptionExpiringSoon_SubTitle">Email này được gửi cho bạn để thông báo về việc hết hạn thuê bao của bạn.</text>
+    <text name="UserSubscriptionExpiringSoon_Email_Subject">Thông báo hết hạn thuê bao của bạn</text>
+    <text name="UserSubscriptionExpiringSoon_Email_Body">Thuê bao của bạn sẽ hết hạn vào lúc {0}.</text>
+    
+    <text name="UserIsExpiredSubscription">Tài khoản của bạn đã hết hạn thuê bao.</text>
     <!--    -->
     
     <!--  Common  -->

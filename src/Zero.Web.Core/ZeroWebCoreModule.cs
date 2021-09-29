@@ -137,6 +137,12 @@ namespace Zero.Web
             var currencyRateBackgroundJobService = IocManager.Resolve<ICurrencyRateBackgroundJob>();
             RecurringJob.RemoveIfExists("SyncCurrencyRates");
             RecurringJob.AddOrUpdate("SyncCurrencyRates",() => currencyRateBackgroundJobService.UpdateRates(), Cron.Daily);
+            
+            var userSubscriptionBackgroundJobService = IocManager.Resolve<IUserSubscriptionBackgroundJob>();
+            RecurringJob.RemoveIfExists("UserSubscription_ExpirationCheck");
+            RecurringJob.AddOrUpdate("UserSubscription_ExpirationCheck",() => userSubscriptionBackgroundJobService.UserSubscriptionExpirationCheck(), Cron.Daily);
+            RecurringJob.RemoveIfExists("UserSubscription_ExpireEmailNotifier");
+            RecurringJob.AddOrUpdate("UserSubscription_ExpireEmailNotifier",() => userSubscriptionBackgroundJobService.UserSubscriptionExpireEmailNotifier(), Cron.Daily);
         }
 
         private void SetAppFolders()
