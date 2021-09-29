@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Abp.Authorization;
 using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
 using Microsoft.AspNetCore.Mvc;
@@ -97,6 +98,7 @@ namespace Zero.Web.Controllers
             return payment.ErrorUrl + (payment.ErrorUrl.Contains("?") ? "&" : "?") + "paymentId=" + paymentId;
         }
         
+        [AbpAuthorize]
         public async Task<ActionResult> UserPurchase(long paymentId)
         {
             var payment = await _userSubscriptionPaymentRepository.GetAsync(paymentId);
@@ -125,7 +127,9 @@ namespace Zero.Web.Controllers
             return View(model);
         }
         
+        
         [HttpPost]
+        [AbpAuthorize]
         [UnitOfWork(IsDisabled = true)]
         public async Task<ActionResult> UserConfirmPayment(long paymentId, string paypalOrderId)
         {

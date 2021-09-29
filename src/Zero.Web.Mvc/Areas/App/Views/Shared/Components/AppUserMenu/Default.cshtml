@@ -151,7 +151,7 @@ else
         </div>
     </a>
 }
-@if (Model.LoginInformations.Application.UseSubscriptionUser || Model.LoginInformations.Tenant.UseSubscriptionUser)
+@if (Model.LoginInformations.Application.UseSubscriptionUser || Model.LoginInformations.Tenant is { UseSubscriptionUser: true })
 {
     <a href="@Url.Action("Index", "UserSubscriptionManagement", new { area = "App" })" class="navi-item">
         <div class="navi-link">

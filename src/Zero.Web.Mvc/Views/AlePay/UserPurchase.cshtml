@@ -12,7 +12,7 @@
 
 @section Scripts
 {
-    <script abp-src="/view-resources/Views/AlePay/_Purchase.js" asp-append-version="true"></script>
+    @* <script abp-src="/view-resources/Views/AlePay/_Purchase.js" asp-append-version="true"></script> *@
 }
 
 @section Styles{
@@ -43,12 +43,51 @@
         </div>
     </div>
 
-    <form id="payPalCheckoutForm" method="post" asp-action="UserConfirmPayment" asp-controller="PayPal" class="register-form">
-        <input type="hidden" name="PaymentId" value="@Model.PaymentId"/>
-        <input type="hidden" name="PayPalOrderId" value=""/>
-        <input type="hidden" name="Amount" value="@(Math.Round(Model.Amount).ToString(ZeroConsts.NumberFormatInfo))"/>
+    <form id="alePayCheckoutForm" method="post" asp-action="ConfirmUserPayment" asp-controller="AlePay" class="register-form" style="max-width: 500px">
+        <input type="hidden" name="paymentId" value="@Model.PaymentId"/>
+        <input type="hidden" name="amount" value="@(Math.Round(Model.Amount).ToString(ZeroConsts.NumberFormatInfo))"/>
         <input type="hidden" name="currency" value="@Model.Currency"/>
 
-        <div id="paypal-button"></div>
+        <div class="row">
+            <div class="col-12">
+                <div class="form-group text-left">
+                    <label>@L("FullName")</label>
+                    <input type="text" class="form-control" name="buyerName" value="@Model.BuyerName"/>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group text-left">
+                    <label>@L("Email")</label>
+                    <input type="text" class="form-control" name="buyerEmail" value="@Model.BuyerEmail"/>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group text-left">
+                    <label>@L("Phone")</label>
+                    <input type="text" class="form-control" name="buyerPhone" value="@Model.BuyerPhone"/>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group text-left">
+                    <label>@L("Address")</label>
+                    <input type="text" class="form-control" name="buyerAddress"/>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="form-group text-left">
+                    <label>@L("City")</label>
+                    <input type="text" class="form-control" name="buyerCity"/>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="form-group text-left">
+                    <label>@L("Country")</label>
+                    <input type="text" class="form-control" name="buyerCountry"/>
+                </div>
+            </div>
+            <div class="col-12 text-center">
+                <button type="submit" class="btn btn-success">@L("Submit")</button>
+            </div>
+        </div>
     </form>
 </div>

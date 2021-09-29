@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Abp.Authorization.Users;
 using Abp.BackgroundJobs;
+using Abp.Configuration;
 using Abp.Dependency;
 using Abp.Domain.Uow;
 using Abp.Extensions;
@@ -11,11 +12,13 @@ using Abp.IdentityFramework;
 using Abp.Localization;
 using Abp.Notifications;
 using Abp.ObjectMapping;
+using Abp.Timing;
 using Abp.UI;
 using Microsoft.AspNetCore.Identity;
 using Zero.Authorization.Roles;
 using Zero.Authorization.Users.Dto;
 using Zero.Authorization.Users.Importing.Dto;
+using Zero.Configuration;
 using Zero.Notifications;
 using Zero.Storage;
 
@@ -73,23 +76,21 @@ namespace Zero.Authorization.Users.Importing
 
         private async Task<List<ImportUserDto>> GetUserListFromExcelOrNullAsync(ImportUsersFromExcelJobArgs args)
         {
-            using (var uow = _unitOfWorkManager.Begin())
+            using var uow = _unitOfWorkManager.Begin();
+            using (CurrentUnitOfWork.SetTenantId(args.TenantId))
             {
-                using (CurrentUnitOfWork.SetTenantId(args.TenantId))
+                try
                 {
-                    try
-                    {
-                        var file = await _binaryObjectManager.GetOrNullAsync(args.BinaryObjectId);
-                        return _userListExcelDataReader.GetUsersFromExcel(file.Bytes);
-                    }
-                    catch (Exception)
-                    {
-                        return null;
-                    }
-                    finally
-                    {
-                        uow.Complete();
-                    }
+                    var file = await _binaryObjectManager.GetOrNullAsync(args.BinaryObjectId);
+                    return _userListExcelDataReader.GetUsersFromExcel(file.Bytes);
+                }
+                catch (Exception)
+                {
+                    return null;
+                }
+                finally
+                {
+                    await uow.CompleteAsync();
                 }
             }
         }
@@ -100,35 +101,33 @@ namespace Zero.Authorization.Users.Importing
 
             foreach (var user in users)
             {
-                using (var uow = _unitOfWorkManager.Begin())
+                using var uow = _unitOfWorkManager.Begin();
+                using (CurrentUnitOfWork.SetTenantId(args.TenantId))
                 {
-                    using (CurrentUnitOfWork.SetTenantId(args.TenantId))
+                    if (user.CanBeImported())
                     {
-                        if (user.CanBeImported())
+                        try
                         {
-                            try
-                            {
-                                await CreateUserAsync(user);
-                            }
-                            catch (UserFriendlyException exception)
-                            {
-                                user.Exception = exception.Message;
-                                invalidUsers.Add(user);
-                            }
-                            catch (Exception exception)
-                            {
-                                user.Exception = exception.ToString();
-                                invalidUsers.Add(user);
-                            }
+                            await CreateUserAsync(user);
                         }
-                        else
+                        catch (UserFriendlyException exception)
                         {
+                            user.Exception = exception.Message;
+                            invalidUsers.Add(user);
+                        }
+                        catch (Exception exception)
+                        {
+                            user.Exception = exception.ToString();
                             invalidUsers.Add(user);
                         }
                     }
-
-                    await uow.CompleteAsync();
+                    else
+                    {
+                        invalidUsers.Add(user);
+                    }
                 }
+
+                await uow.CompleteAsync();
             }
 
             using (var uow = _unitOfWorkManager.Begin())
@@ -152,9 +151,21 @@ namespace Zero.Authorization.Users.Importing
             }
 
             var user = _objectMapper.Map<User>(input); //Passwords is not mapped (see mapping configuration)
+            
             user.Password = input.Password;
             user.TenantId = tenantId;
 
+            if (tenantId.HasValue
+                ? SettingManager.GetSettingValueForTenant<bool>(AppSettings.UserManagement.SubscriptionUser, tenantId.Value)
+                : SettingManager.GetSettingValue<bool>(AppSettings.UserManagement.SubscriptionUser))
+            {
+                var trialDays = tenantId.HasValue
+                    ? SettingManager.GetSettingValueForTenant<int>(AppSettings.UserManagement.SubscriptionTrialDays, tenantId.Value)
+                    : SettingManager.GetSettingValue<int>(AppSettings.UserManagement.SubscriptionTrialDays);
+                user.IsInTrialPeriod = true;
+                user.SubscriptionEndDateUtc = Clock.Now.ToUniversalTime().AddDays(trialDays);
+            }
+            
             if (!input.Password.IsNullOrEmpty())
             {
                 await UserManager.InitializeOptionsAsync(tenantId);

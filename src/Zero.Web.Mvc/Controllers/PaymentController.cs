@@ -26,6 +26,7 @@ namespace Zero.Web.Controllers
     public class PaymentController : ZeroControllerBase
     {
         private readonly IPaymentAppService _paymentAppService;
+        private readonly IUserPaymentAppService _userPaymentAppService;
         private readonly ITenantRegistrationAppService _tenantRegistrationAppService;
         private readonly TenantManager _tenantManager;
         private readonly EditionManager _editionManager;
@@ -44,7 +45,8 @@ namespace Zero.Web.Controllers
             ISubscriptionPaymentRepository subscriptionPaymentRepository,
             UserClaimsPrincipalFactory<User, Role> userClaimsPrincipalFactory,
             UserManager userManager,
-            SignInManager signInManager)
+            SignInManager signInManager, 
+            IUserPaymentAppService userPaymentAppService)
         {
             _paymentAppService = paymentAppService;
             _tenantRegistrationAppService = tenantRegistrationAppService;
@@ -55,6 +57,7 @@ namespace Zero.Web.Controllers
             _userClaimsPrincipalFactory = userClaimsPrincipalFactory;
             _userManager = userManager;
             _signInManager = signInManager;
+            _userPaymentAppService = userPaymentAppService;
         }
 
         public async Task<IActionResult> Buy(int tenantId, int editionId, int? subscriptionStartType, int? editionPaymentType)
@@ -269,6 +272,18 @@ namespace Zero.Web.Controllers
             return RedirectToAction("Index", "Home", new { area = "App" });
         }
 
+        public async Task<IActionResult> UserPaymentCancelled(long paymentId)
+        {
+            await _userPaymentAppService.PaymentCancelled(paymentId);
+
+            if (AbpSession.UserId.HasValue)
+            {
+                return RedirectToAction("Index", "UserSubscriptionManagement", new { area = "App" });
+            }
+
+            return RedirectToAction("Index", "Home", new { area = "App" });
+        }
+        
         private async Task LoginAdminAsync()
         {
             var user = await _userManager.GetAdminAsync();

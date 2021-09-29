@@ -16,6 +16,7 @@ using Abp.Linq.Extensions;
 using Abp.Notifications;
 using Abp.Organizations;
 using Abp.Runtime.Session;
+using Abp.Timing;
 using Abp.UI;
 using Abp.Zero.Configuration;
 using Microsoft.AspNetCore.Identity;
@@ -26,6 +27,7 @@ using Zero.Authorization.Permissions.Dto;
 using Zero.Authorization.Roles;
 using Zero.Authorization.Users.Dto;
 using Zero.Authorization.Users.Exporting;
+using Zero.Configuration;
 using Zero.Dto;
 using Zero.Notifications;
 using Zero.Url;
@@ -36,6 +38,7 @@ namespace Zero.Authorization.Users
     [AbpAuthorize(AppPermissions.Pages_Administration_Users)]
     public class UserAppService : ZeroAppServiceBase, IUserAppService
     {
+        #region Constructor
         public IAppUrlService AppUrlService { get; set; }
 
         private readonly RoleManager _roleManager;
@@ -55,7 +58,6 @@ namespace Zero.Authorization.Users
         private readonly UserManager _userManager;
         private readonly IRepository<UserOrganizationUnit, long> _userOrganizationUnitRepository;
         private readonly IRepository<OrganizationUnitRole, long> _organizationUnitRoleRepository;
-
         public UserAppService(
             RoleManager roleManager,
             IUserEmailer userEmailer,
@@ -95,7 +97,8 @@ namespace Zero.Authorization.Users
 
             AppUrlService = NullAppUrlService.Instance;
         }
-
+        #endregion
+        
         [HttpPost]
         public async Task<PagedResultDto<UserListDto>> GetUsers(GetUsersInput input)
         {
@@ -326,6 +329,28 @@ namespace Zero.Authorization.Users
             var user = ObjectMapper.Map<User>(input.User); //Passwords is not mapped (see mapping configuration)
             user.TenantId = AbpSession.TenantId;
 
+            // Subscription User
+            if (!AbpSession.TenantId.HasValue)
+            {
+                var useSubscriptionUser = await SettingManager.GetSettingValueAsync<bool>(AppSettings.UserManagement.SubscriptionUser);
+                if (useSubscriptionUser)
+                {
+                    var trialDays = SettingManager.GetSettingValue<int>(AppSettings.UserManagement.SubscriptionTrialDays);
+                    user.IsInTrialPeriod = true;
+                    user.SubscriptionEndDateUtc = Clock.Now.ToUniversalTime().AddDays(trialDays);
+                }
+            }
+            else
+            {
+                var useSubscriptionUser = await SettingManager.GetSettingValueForTenantAsync<bool>(AppSettings.UserManagement.SubscriptionUser, AbpSession.GetTenantId());
+                if (useSubscriptionUser)
+                {
+                    var trialDays = SettingManager.GetSettingValueForTenant<int>(AppSettings.UserManagement.SubscriptionTrialDays, AbpSession.GetTenantId());
+                    user.IsInTrialPeriod = true;
+                    user.SubscriptionEndDateUtc = Clock.Now.ToUniversalTime().AddDays(trialDays);
+                }
+            }
+            
             //Set password
             if (input.SetRandomPassword)
             {

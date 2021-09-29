@@ -183,6 +183,11 @@ namespace Zero.Abp.Payments
             payment.SetAsFailed();
         }
 
+        public async Task PaymentCancelled(long paymentId)
+        {
+            var payment = await _userSubscriptionPaymentRepository.GetAsync(paymentId);
+            payment.SetAsCancelled();
+        }
         private string GetPaymentDescription(PaymentPeriodType? paymentPeriodType, string userEmail, int? tenantId)
         {
             var description = L("UserSubscription_Payment_Description", userEmail);

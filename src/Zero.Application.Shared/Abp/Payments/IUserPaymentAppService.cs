@@ -25,6 +25,8 @@ namespace Zero.Abp.Payments
 
         Task PaymentFailed(long paymentId);
 
+        Task PaymentCancelled(long paymentId);
+        
         Task<bool> HasAnyPayment();
     }
 }

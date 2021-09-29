@@ -17,7 +17,7 @@
         }
         if (Model.LoginInformations.User.SubscriptionIsExpiringSoon(7))
         {
-            <a href="@Url.Action("Index", "SubscriptionManagement", new { area = "App" })">
+            <a href="@Url.Action("Index", "UserSubscriptionManagement", new { area = "App" })">
                 <span class="glowing">
                     <i class="fa fa-exclamation-triangle"></i> @L(Model.LoginInformations.User.IsInTrialPeriod ?
                                                                    "UserTrialExpireNotification" :
@@ -42,7 +42,7 @@ else
         }
         if (Model.LoginInformations.User.SubscriptionIsExpiringSoon(7))
         {
-            <a href="@Url.Action("Index", "SubscriptionManagement", new { area = "App" })">
+            <a href="@Url.Action("Index", "UserSubscriptionManagement", new { area = "App" })">
                 <span class="glowing">
                     <i class="fa fa-exclamation-triangle"></i> @L(Model.LoginInformations.User.IsInTrialPeriod ?
                                                                    "UserTrialExpireNotification" :

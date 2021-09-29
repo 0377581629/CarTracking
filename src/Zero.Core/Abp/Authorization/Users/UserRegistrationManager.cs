@@ -8,6 +8,7 @@ using Abp.IdentityFramework;
 using Abp.Linq;
 using Abp.Notifications;
 using Abp.Runtime.Session;
+using Abp.Timing;
 using Abp.UI;
 using Microsoft.AspNetCore.Identity;
 using Zero.Authorization.Roles;
@@ -20,6 +21,7 @@ namespace Zero.Authorization.Users
 {
     public class UserRegistrationManager : ZeroDomainServiceBase
     {
+        #region Constructor
         public IAbpSession AbpSession { get; set; }
         public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; }
 
@@ -31,7 +33,6 @@ namespace Zero.Authorization.Users
         private readonly IAppNotifier _appNotifier;
         private readonly IUserPolicy _userPolicy;
         
-
         public UserRegistrationManager(
             TenantManager tenantManager,
             UserManager userManager,
@@ -52,7 +53,8 @@ namespace Zero.Authorization.Users
             AbpSession = NullAbpSession.Instance;
             AsyncQueryableExecuter = NullAsyncQueryableExecuter.Instance;
         }
-
+        #endregion
+        
         public async Task<User> RegisterAsync(string name, string surname, string emailAddress, string userName, string plainPassword, bool isEmailConfirmed, string emailActivationLink)
         {
             CheckForTenant();
@@ -75,6 +77,12 @@ namespace Zero.Authorization.Users
                 Roles = new List<UserRole>()
             };
 
+            if (UseSubscriptionUser())
+            {
+                user.IsInTrialPeriod = true;
+                user.SubscriptionEndDateUtc = Clock.Now.ToUniversalTime().AddDays(UserSubscriptionTrialDays());
+            }
+            
             user.SetNormalizedNames();
 
             var defaultRoles = await AsyncQueryableExecuter.ToListAsync(_roleManager.Roles.Where(r => r.IsDefault));
@@ -122,6 +130,16 @@ namespace Zero.Authorization.Users
             return SettingManager.GetSettingValue<bool>(AppSettings.UserManagement.UseCaptchaOnRegistration);
         }
 
+        private bool UseSubscriptionUser()
+        {
+            return AbpSession.TenantId.HasValue ? SettingManager.GetSettingValueForTenant<bool>(AppSettings.UserManagement.SubscriptionUser, AbpSession.GetTenantId()) : SettingManager.GetSettingValue<bool>(AppSettings.UserManagement.SubscriptionUser);
+        }
+        
+        private int UserSubscriptionTrialDays()
+        {
+            return AbpSession.TenantId.HasValue ? SettingManager.GetSettingValueForTenant<int>(AppSettings.UserManagement.SubscriptionTrialDays, AbpSession.GetTenantId()) : SettingManager.GetSettingValue<int>(AppSettings.UserManagement.SubscriptionTrialDays);
+        }
+        
         private async Task<Tenant> GetActiveTenantAsync()
         {
             if (!AbpSession.TenantId.HasValue)
