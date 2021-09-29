@@ -8,7 +8,7 @@ using Abp.Domain.Uow;
 using Abp.Runtime.Session;
 using Abp.Timing;
 using Abp.UI;
-using Zero.Abp.Authorization.Payments;
+using Zero.Abp.Payments;
 using Zero.Configuration;
 using Zero.Editions;
 using Zero.MultiTenancy.Accounting.Dto;

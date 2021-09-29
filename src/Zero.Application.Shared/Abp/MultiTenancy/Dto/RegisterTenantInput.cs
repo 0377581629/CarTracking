@@ -3,7 +3,6 @@ using Abp.Auditing;
 using Abp.Authorization.Users;
 using Abp.MultiTenancy;
 using Zero.MultiTenancy.Payments;
-using Zero.MultiTenancy.Payments.Dto;
 
 namespace Zero.MultiTenancy.Dto
 {

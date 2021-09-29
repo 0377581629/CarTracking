@@ -3,11 +3,12 @@ using System.Threading.Tasks;
 using Abp.Extensions;
 using Abp.Runtime.Session;
 using Microsoft.AspNetCore.Mvc;
+using Zero.Abp.Payments;
+using Zero.Abp.Payments.Stripe;
+using Zero.Abp.Payments.Stripe.Dto;
 using Zero.Editions;
 using Zero.MultiTenancy;
 using Zero.MultiTenancy.Payments;
-using Zero.MultiTenancy.Payments.Stripe;
-using Zero.MultiTenancy.Payments.Stripe.Dto;
 using Zero.Url;
 using Zero.Web.Models.Stripe;
 

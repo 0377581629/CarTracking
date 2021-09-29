@@ -6,7 +6,6 @@ using Zero.Editions;
 using Zero.MultiTenancy;
 using Zero.MultiTenancy.Dto;
 using Zero.MultiTenancy.Payments;
-using Zero.MultiTenancy.Payments.Dto;
 using Zero.Url;
 using Zero.Web.Models.Payment;
 using System;
@@ -14,6 +13,9 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Zero.Abp.Payments;
+using Zero.Abp.Payments.AlePay;
+using Zero.Abp.Payments.Dto;
 using Zero.Authorization;
 using Zero.Authorization.Roles;
 using Zero.Authorization.Users;
@@ -152,7 +154,7 @@ namespace Zero.Web.Controllers
             {
                 model.PaymentGateways = new List<PaymentGatewayModel>
                 {
-                    new PaymentGatewayModel
+                    new()
                     {
                         GatewayType = lastPayment.Gateway,
                         SupportsRecurringPayments = true
@@ -198,7 +200,7 @@ namespace Zero.Web.Controllers
             {
                 TargetUrl = Url.Action("Purchase", model.Gateway.ToString(), new
                 {
-                    paymentId = paymentId,
+                    paymentId,
                     isUpgrade = model.EditionPaymentType == EditionPaymentType.Upgrade
                 })
             });
@@ -217,7 +219,6 @@ namespace Zero.Web.Controllers
         public async Task<IActionResult> BuyNowSucceed(long paymentId)
         {
             await _paymentAppService.BuyNowSucceed(paymentId);
-
             return RedirectToAction("Index", "SubscriptionManagement", new { area = "App" });
         }
 
@@ -247,6 +248,18 @@ namespace Zero.Web.Controllers
         public async Task<IActionResult> PaymentFailed(long paymentId)
         {
             await _paymentAppService.PaymentFailed(paymentId);
+
+            if (AbpSession.UserId.HasValue)
+            {
+                return RedirectToAction("Index", "SubscriptionManagement", new { area = "App" });
+            }
+
+            return RedirectToAction("Index", "Home", new { area = "App" });
+        }
+        
+        public async Task<IActionResult> PaymentCancelled(long paymentId)
+        {
+            await _paymentAppService.PaymentCancelled(paymentId);
 
             if (AbpSession.UserId.HasValue)
             {

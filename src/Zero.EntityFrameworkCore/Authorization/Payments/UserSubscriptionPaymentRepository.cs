@@ -3,8 +3,7 @@ using System.Threading.Tasks;
 using Abp.EntityFrameworkCore;
 using Abp.Linq.Extensions;
 using Microsoft.EntityFrameworkCore;
-using Zero.Abp.Authorization.Payments;
-using Zero.Abp.Authorization.Users;
+using Zero.Abp.Payments;
 using Zero.EntityFrameworkCore;
 using Zero.EntityFrameworkCore.Repositories;
 

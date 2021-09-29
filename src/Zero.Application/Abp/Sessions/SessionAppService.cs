@@ -7,6 +7,7 @@ using Abp.Auditing;
 using Abp.Configuration;
 using Abp.Runtime.Session;
 using Microsoft.EntityFrameworkCore;
+using Zero.Abp.Payments;
 using Zero.Authentication.TwoFactor;
 using Zero.Editions;
 using Zero.MultiTenancy.Payments;

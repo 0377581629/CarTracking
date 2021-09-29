@@ -1,4 +1,4 @@
-﻿using Zero.MultiTenancy.Payments.Paypal;
+﻿using Zero.Abp.Payments.Paypal;
 
 namespace Zero.Web.Models.Paypal
 {

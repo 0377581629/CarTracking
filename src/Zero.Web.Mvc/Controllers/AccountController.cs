@@ -149,8 +149,8 @@ namespace Zero.Web.Controllers
                 var tenant = await _tenantManager.GetByIdAsync(AbpSession.TenantId.Value);
                 if (!tenant.IsActive)
                 {
-                    await SwitchToTenantIfNeeded(null);
-                    successMessage += " - " + L("TenantIsNotActive", tenant.TenancyName);
+                    SetTenantIdCookie(null);
+                    return RedirectToAction("Login", "Account");
                 }
             }
             

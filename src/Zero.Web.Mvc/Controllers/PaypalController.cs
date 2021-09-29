@@ -5,11 +5,11 @@ using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Zero.Abp.Authorization.Payments;
+using Zero.Abp.Payments;
+using Zero.Abp.Payments.Paypal;
+using Zero.Abp.Payments.PayPal;
 using Zero.Customize;
 using Zero.MultiTenancy.Payments;
-using Zero.MultiTenancy.Payments.Paypal;
-using Zero.MultiTenancy.Payments.PayPal;
 using Zero.Web.Models.Paypal;
 
 namespace Zero.Web.Controllers

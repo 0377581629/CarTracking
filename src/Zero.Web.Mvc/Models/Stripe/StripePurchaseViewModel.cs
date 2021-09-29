@@ -1,4 +1,4 @@
-﻿using Zero.MultiTenancy.Payments.Stripe;
+﻿using Zero.Abp.Payments.Stripe;
 
 namespace Zero.Web.Models.Stripe
 {

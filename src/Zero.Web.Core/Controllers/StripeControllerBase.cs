@@ -2,9 +2,9 @@
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Zero.MultiTenancy.Payments.Stripe;
-using Zero.MultiTenancy.Payments.Stripe.Dto;
 using Stripe;
+using Zero.Abp.Payments.Stripe;
+using Zero.Abp.Payments.Stripe.Dto;
 
 namespace Zero.Web.Controllers
 {

@@ -2,7 +2,7 @@
 using Abp.Zero.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Zero.Abp.Authorization.Accounting;
-using Zero.Abp.Authorization.Users;
+using Zero.Abp.Payments;
 using Zero.Authorization.Delegation;
 using Zero.Authorization.Roles;
 using Zero.Authorization.Users;

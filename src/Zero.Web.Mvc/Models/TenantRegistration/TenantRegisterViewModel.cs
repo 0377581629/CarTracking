@@ -2,7 +2,6 @@
 using Zero.Editions.Dto;
 using Zero.MultiTenancy.Payments;
 using Zero.Security;
-using Zero.MultiTenancy.Payments.Dto;
 
 namespace Zero.Web.Models.TenantRegistration
 {

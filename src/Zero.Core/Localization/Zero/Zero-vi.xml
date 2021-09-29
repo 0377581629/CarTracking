@@ -9,6 +9,11 @@
     <text name="DailyPrice">Giá hàng ngày</text>
     <text name="WeeklyPrice">Giá hàng tuần</text>
     <text name="NewRegistration_Edition_Description">Đăng ký đơn vị mới</text>
+
+    <text name="FullName">Họ và tên</text>
+    <text name="Phone">Điện thoại</text>
+    <text name="City">Thành phố</text>
+    <text name="Country">Quốc gia</text>
     <!--    -->
     
     <!--  User Subscription  -->
@@ -858,6 +863,7 @@
     <text name="PaymentId">Id thanh toán</text>
     <text name="SubscriptionPaymentGatewayType_Paypal">Paypal</text>
     <text name="SubscriptionPaymentGatewayType_Stripe">Stripe</text>
+    <text name="SubscriptionPaymentGatewayType_AlePay">AlePay</text>
     <text name="SubscriptionPaymentStatus_Completed">Đã hoàn thành</text>
     <text name="SubscriptionPaymentStatus_NotPaid">Chưa thanh toán</text>
     <text name="SubscriptionPaymentStatus_Paid">Đã thanh toán</text>

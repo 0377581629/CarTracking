@@ -10,7 +10,7 @@ using Abp.Timing;
 using Abp.UI;
 using Zero.Abp.Authorization.Accounting;
 using Zero.Abp.Authorization.Accounting.Dto;
-using Zero.Abp.Authorization.Payments;
+using Zero.Abp.Payments;
 using Zero.Authorization.Users;
 using Zero.Configuration;
 using Zero.Editions;
