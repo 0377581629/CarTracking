@@ -91,7 +91,7 @@ namespace Zero.Authorization.Users
             link = EncryptQueryParameters(link);
 
             var tenancyName = GetTenancyNameOrNull(user.TenantId);
-            var emailTemplate = GetTitleAndSubTitle(user.TenantId, L("EmailActivation_Title"), L("EmailActivation_SubTitle"));
+            var emailTemplate = GetTitleAndSubTitle(user.TenantId, L("EmailActivation_Title", tenancyName), L("EmailActivation_SubTitle"));
             
             var mailMessage = new StringBuilder();
 
@@ -372,7 +372,7 @@ namespace Zero.Authorization.Users
 
             using (_unitOfWorkProvider.Current.SetTenantId(null))
             {
-                return _tenantRepository.Get(tenantId.Value).TenancyName;
+                return _tenantRepository.Get(tenantId.Value).Name;
             }
         }
 

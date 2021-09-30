@@ -57,17 +57,19 @@ namespace Zero.Authorization.Users
         
         public async Task<User> RegisterAsync(string name, string surname, string emailAddress, string userName, string plainPassword, bool isEmailConfirmed, string emailActivationLink)
         {
-            CheckForTenant();
+            // CheckForTenant();
+            
             CheckSelfRegistrationIsEnabled();
 
             var tenant = await GetActiveTenantAsync();
             var isNewRegisteredUserActiveByDefault = await SettingManager.GetSettingValueAsync<bool>(AppSettings.UserManagement.IsNewRegisteredUserActiveByDefault);
 
-            await _userPolicy.CheckMaxUserCountAsync(tenant.Id);
+            if (AbpSession.TenantId.HasValue)
+                await _userPolicy.CheckMaxUserCountAsync(tenant.Id);
 
             var user = new User
             {
-                TenantId = tenant.Id,
+                TenantId = tenant?.Id,
                 Name = name,
                 Surname = surname,
                 EmailAddress = emailAddress,
@@ -88,7 +90,7 @@ namespace Zero.Authorization.Users
             var defaultRoles = await AsyncQueryableExecuter.ToListAsync(_roleManager.Roles.Where(r => r.IsDefault));
             foreach (var defaultRole in defaultRoles)
             {
-                user.Roles.Add(new UserRole(tenant.Id, user.Id, defaultRole.Id));
+                user.Roles.Add(new UserRole(tenant?.Id, user.Id, defaultRole.Id));
             }
 
             await _userManager.InitializeOptionsAsync(AbpSession.TenantId);
