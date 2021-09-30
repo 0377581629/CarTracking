@@ -69,7 +69,7 @@
                                 <div class="form-group row">
                                     <label class="col-md-4 control-label"></label>
                                     <div class="col-md-8">
-                                        @if (!Model.LoginInformations.Tenant.HasRecurringSubscription() && !tenantEdition.IsFree && !tenant.IsInTrialPeriod)
+                                        @if (!Model.LoginInformations.Tenant.HasRecurringSubscription() && !tenantEdition.IsFree && !tenant.IsInTrialPeriod && tenant.SubscriptionEndDateUtc.HasValue)
                                         {
                                             <a id="btnExtend" href="@Url.Action("Extend", "Payment", new { area = "", upgradeEditionId = tenant.Edition.Id, editionPaymentType = EditionPaymentType.Extend })" class="btn btn-info">
                                                 @L("Extend")
