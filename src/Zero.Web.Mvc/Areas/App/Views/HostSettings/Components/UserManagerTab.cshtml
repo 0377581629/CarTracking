@@ -6,6 +6,35 @@
 
 <div class="tab-pane" id="SettingsUserManagementTab">
     <form id="UserManagementSettingsForm">
+        <h5>@L("Registration")</h5>
+        <div class="checkbox-list">
+            <div class="form-group">
+                <label for="SettingUser_AllowSelfRegistration" class="checkbox checkbox-outline">
+                    <input id="SettingUser_AllowSelfRegistration" type="checkbox" name="AllowSelfRegistration" value="true" @(Model.Settings.UserManagement.AllowSelfRegistration ? "checked=\"checked\"" : "")>
+                    <span></span>
+                    @L("AllowUsersToRegisterThemselves")
+                </label>
+                <span class="form-text text-muted">@L("AllowUsersToRegisterThemselves_Hint")</span>
+            </div>
+            <div id="SettingUser_AllowSelfRegistration_Content">
+                <div class="form-group">
+                    <label for="SettingUser_IsNewRegisteredUserActiveByDefault" class="checkbox checkbox-outline">
+                        <input id="SettingUser_IsNewRegisteredUserActiveByDefault" type="checkbox" name="IsNewRegisteredUserActiveByDefault" value="true" @(Model.Settings.UserManagement.IsNewRegisteredUserActiveByDefault ? "checked=\"checked\"" : "")>
+                        <span></span>
+                        @L("NewRegisteredUsersIsActiveByDefault")
+                    </label>
+                    <span class="form-text text-muted">@L("NewRegisteredUsersIsActiveByDefault_Hint")</span>
+                </div>
+                <div class="form-group">
+                    <label for="SettingUser_UseCaptchaOnRegistration" class="checkbox checkbox-outline">
+                        <input id="SettingUser_UseCaptchaOnRegistration" type="checkbox" name="UseCaptchaOnRegistration" value="true" @(Model.Settings.UserManagement.UseCaptchaOnRegistration ? "checked=\"checked\"" : "")>
+                        <span></span>
+                        @L("UseCaptchaOnRegistration")
+                    </label>
+                </div>
+            </div>
+        </div>
+        <h5>@L("Login")</h5>
         <div class="checkbox-list">
             <label for="Settings_IsEmailConfirmationRequiredForLogin" class="checkbox checkbox-outline">
                 <input id="Settings_IsEmailConfirmationRequiredForLogin" type="checkbox" name="IsEmailConfirmationRequiredForLogin" value="true" @(Model.Settings.UserManagement.IsEmailConfirmationRequiredForLogin ? "checked=\"checked\"" : "")>
@@ -64,7 +93,7 @@
             <div class="divSubscription">
                 <div class="row">
                     <div class="col-3">
-                         <div class="form-group">
+                        <div class="form-group">
                             <label>@L("Currency")</label>
                             <input id="Setting_SubscriptionCurrency" type="text" name="subscriptionCurrency" class="form-control edited" value="@Model.Settings.UserManagement.SubscriptionCurrency" readonly>
                         </div>
@@ -73,19 +102,19 @@
                         <div class="form-group">
                             <label>@L("TrialDays")</label>
                             <input id="Setting_SubscriptionTrialDays" type="number" name="subscriptionTrialDays" class="form-control edited" min="3" value="@Model.Settings.UserManagement.SubscriptionTrialDays">
-                        </div>        
+                        </div>
                     </div>
                     <div class="col-3">
-                          <div class="form-group">
-                              <label>@L("Price") - @L("Monthly")</label>
-                              <input id="Setting_SubscriptionMonthlyPrice" type="number" name="subscriptionMonthlyPrice" class="form-control edited" min="30000" value="@Model.Settings.UserManagement.SubscriptionMonthlyPrice">
-                          </div>                   
+                        <div class="form-group">
+                            <label>@L("Price") - @L("Monthly")</label>
+                            <input id="Setting_SubscriptionMonthlyPrice" type="number" name="subscriptionMonthlyPrice" class="form-control edited" min="30000" value="@Model.Settings.UserManagement.SubscriptionMonthlyPrice">
+                        </div>
                     </div>
                     <div class="col-3">
-                         <div class="form-group">
-                             <label>@L("Price") - @L("Yearly")</label>
-                             <input id="Setting_SubscriptionYearlyPrice" type="number" name="subscriptionYearlyPrice" class="form-control edited" min="30000" value="@Model.Settings.UserManagement.SubscriptionYearlyPrice">
-                         </div>            
+                        <div class="form-group">
+                            <label>@L("Price") - @L("Yearly")</label>
+                            <input id="Setting_SubscriptionYearlyPrice" type="number" name="subscriptionYearlyPrice" class="form-control edited" min="30000" value="@Model.Settings.UserManagement.SubscriptionYearlyPrice">
+                        </div>
                     </div>
                 </div>
             </div>

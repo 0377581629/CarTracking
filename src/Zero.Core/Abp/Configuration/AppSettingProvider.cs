@@ -106,15 +106,6 @@ namespace Zero.Configuration
         {
             return new[]
             {
-                new SettingDefinition(AppSettings.UserManagement.AllowSelfRegistration,
-                    GetFromAppSettings(AppSettings.UserManagement.AllowSelfRegistration, "true"),
-                    scopes: SettingScopes.Tenant, isVisibleToClients: true),
-                new SettingDefinition(AppSettings.UserManagement.IsNewRegisteredUserActiveByDefault,
-                    GetFromAppSettings(AppSettings.UserManagement.IsNewRegisteredUserActiveByDefault, "false"),
-                    scopes: SettingScopes.Tenant),
-                new SettingDefinition(AppSettings.UserManagement.UseCaptchaOnRegistration,
-                    GetFromAppSettings(AppSettings.UserManagement.UseCaptchaOnRegistration, "true"),
-                    scopes: SettingScopes.Tenant, isVisibleToClients: true),
                 new SettingDefinition(AppSettings.TenantManagement.BillingLegalName,
                     GetFromAppSettings(AppSettings.TenantManagement.BillingLegalName, ""),
                     scopes: SettingScopes.Tenant),
@@ -166,7 +157,7 @@ namespace Zero.Configuration
                     GetFromAppSettings(AppSettings.UserManagement.UseGravatarProfilePicture, "false"),
                     isVisibleToClients: true, scopes: SettingScopes.User),
                 
-                // Subscription User
+                // User Subscription 
                 new SettingDefinition(AppSettings.UserManagement.SubscriptionUser,
                 GetFromAppSettings(AppSettings.UserManagement.SubscriptionUser, "false"),
                 isVisibleToClients: false, scopes: SettingScopes.Application | SettingScopes.Tenant),
@@ -181,7 +172,18 @@ namespace Zero.Configuration
                     isVisibleToClients: false, scopes: SettingScopes.Application | SettingScopes.Tenant),
                 new SettingDefinition(AppSettings.UserManagement.SubscriptionYearlyPrice,
                     GetFromAppSettings(AppSettings.UserManagement.SubscriptionYearlyPrice, "50000"),
-                    isVisibleToClients: false, scopes: SettingScopes.Application | SettingScopes.Tenant)
+                    isVisibleToClients: false, scopes: SettingScopes.Application | SettingScopes.Tenant),
+                
+                // User Self Registration
+                new SettingDefinition(AppSettings.UserManagement.AllowSelfRegistration,
+                    GetFromAppSettings(AppSettings.UserManagement.AllowSelfRegistration, "true"),
+                    scopes: SettingScopes.Application | SettingScopes.Tenant, isVisibleToClients: true),
+                new SettingDefinition(AppSettings.UserManagement.IsNewRegisteredUserActiveByDefault,
+                    GetFromAppSettings(AppSettings.UserManagement.IsNewRegisteredUserActiveByDefault, "false"),
+                    scopes: SettingScopes.Application | SettingScopes.Tenant),
+                new SettingDefinition(AppSettings.UserManagement.UseCaptchaOnRegistration,
+                    GetFromAppSettings(AppSettings.UserManagement.UseCaptchaOnRegistration, "true"),
+                    scopes: SettingScopes.Application | SettingScopes.Tenant, isVisibleToClients: true)
             };
         }
 

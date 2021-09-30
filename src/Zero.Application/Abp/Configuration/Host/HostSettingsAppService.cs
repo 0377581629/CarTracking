@@ -149,7 +149,15 @@ namespace Zero.Configuration.Host
                 SubscriptionMonthlyPrice = await SettingManager.GetSettingValueAsync<int>(AppSettings.UserManagement
                     .SubscriptionMonthlyPrice),
                 SubscriptionYearlyPrice = await SettingManager.GetSettingValueAsync<int>(AppSettings.UserManagement
-                    .SubscriptionYearlyPrice)
+                    .SubscriptionYearlyPrice),
+                
+                // User Self Registration
+                AllowSelfRegistration = await SettingManager.GetSettingValueAsync<bool>(AppSettings.UserManagement
+                    .AllowSelfRegistration),
+                IsNewRegisteredUserActiveByDefault = await SettingManager.GetSettingValueAsync<bool>(AppSettings.UserManagement
+                    .IsNewRegisteredUserActiveByDefault),
+                UseCaptchaOnRegistration = await SettingManager.GetSettingValueAsync<bool>(AppSettings.UserManagement
+                    .UseCaptchaOnRegistration)
             };
         }
 
@@ -467,6 +475,22 @@ namespace Zero.Configuration.Host
             await SettingManager.ChangeSettingForApplicationAsync(
                 AppSettings.UserManagement.SubscriptionYearlyPrice,
                 settings.SubscriptionYearlyPrice.ToString().ToLowerInvariant()
+            );
+            
+            // User Self Registration
+            await SettingManager.ChangeSettingForApplicationAsync(
+                AppSettings.UserManagement.AllowSelfRegistration,
+                settings.AllowSelfRegistration.ToString().ToLowerInvariant()
+            );
+            
+            await SettingManager.ChangeSettingForApplicationAsync(
+                AppSettings.UserManagement.IsNewRegisteredUserActiveByDefault,
+                settings.IsNewRegisteredUserActiveByDefault.ToString().ToLowerInvariant()
+            );
+            
+            await SettingManager.ChangeSettingForApplicationAsync(
+                AppSettings.UserManagement.UseCaptchaOnRegistration,
+                settings.UseCaptchaOnRegistration.ToString().ToLowerInvariant()
             );
         }
 

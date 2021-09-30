@@ -56,6 +56,8 @@
     <text name="SelectAll">Tất cả</text>
     <text name="NoneSelect">Không lựa chọn</text>
     <text name="MissingData">Chưa khai báo</text>
+    <text name="Login">Đăng nhập</text>
+    <text name="Registration">Đăng ký</text>
     <!--    -->
     
     <!--  Email Template  -->

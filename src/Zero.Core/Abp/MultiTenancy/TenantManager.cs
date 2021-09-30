@@ -486,8 +486,7 @@ namespace Zero.MultiTenancy
                     newTenantId = tenant.Id;
                     newAdminId = adminUser.Id;
                     
-                    // Save User Subscription Settings
-                    // Subscription
+                    // User Subscription
                     await SettingManager.ChangeSettingForTenantAsync(
                         tenant.Id,
                         AppSettings.UserManagement.SubscriptionUser,
@@ -512,6 +511,23 @@ namespace Zero.MultiTenancy
                         tenant.Id,
                         AppSettings.UserManagement.SubscriptionYearlyPrice,
                         "3000000"
+                    );
+                    
+                    // User Self Registration
+                    await SettingManager.ChangeSettingForTenantAsync(
+                        tenant.Id,
+                        AppSettings.UserManagement.AllowSelfRegistration,
+                        "true"
+                    );
+                    await SettingManager.ChangeSettingForTenantAsync(
+                        tenant.Id,
+                        AppSettings.UserManagement.IsNewRegisteredUserActiveByDefault,
+                        "true"
+                    );
+                    await SettingManager.ChangeSettingForTenantAsync(
+                        tenant.Id,
+                        AppSettings.UserManagement.UseCaptchaOnRegistration,
+                        "true"
                     );
                 }
 
