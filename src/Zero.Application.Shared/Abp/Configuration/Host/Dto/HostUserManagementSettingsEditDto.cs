@@ -16,7 +16,7 @@
         
         public SessionTimeOutSettingsEditDto SessionTimeOutSettings { get; set; }
         
-        // Subscription
+        // User Subscription
         public bool UseSubscription { get; set; }
         
         public int SubscriptionTrialDays { get; set; }

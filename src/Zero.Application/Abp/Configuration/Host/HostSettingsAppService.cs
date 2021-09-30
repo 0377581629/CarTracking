@@ -139,7 +139,7 @@ namespace Zero.Configuration.Host
                             .ShowLockScreenWhenTimedOut)
                 },
                 
-                // Subscription
+                // User Subscription
                 UseSubscription = await SettingManager.GetSettingValueAsync<bool>(AppSettings.UserManagement
                     .SubscriptionUser),
                 SubscriptionCurrency = await SettingManager.GetSettingValueAsync(AppSettings.UserManagement
@@ -447,7 +447,7 @@ namespace Zero.Configuration.Host
 
             await UpdateUserManagementSessionTimeOutSettingsAsync(settings.SessionTimeOutSettings);
             
-            // Subscription
+            // User Subscription
             await SettingManager.ChangeSettingForApplicationAsync(
                 AppSettings.UserManagement.SubscriptionUser,
                 settings.UseSubscription.ToString().ToLowerInvariant()

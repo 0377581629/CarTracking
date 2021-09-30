@@ -165,7 +165,7 @@ namespace Zero.Configuration.Tenants
                     ShowLockScreenWhenTimedOut = await SettingManager.GetSettingValueAsync<bool>(AppSettings.UserManagement.SessionTimeOut.ShowLockScreenWhenTimedOut)
                 },
                 
-                // Subscription
+                // User Subscription
                 UseSubscription = await SettingManager.GetSettingValueForTenantAsync<bool>(AppSettings.UserManagement
                 .SubscriptionUser, AbpSession.GetTenantId()),
                 SubscriptionCurrency = await SettingManager.GetSettingValueForTenantAsync(AppSettings.UserManagement
@@ -475,7 +475,7 @@ namespace Zero.Configuration.Tenants
             
             await UpdateUserManagementSessionTimeOutSettingsAsync(settings.SessionTimeOutSettings);
             
-            // Subscription
+            // User Subscription
             await SettingManager.ChangeSettingForTenantAsync(
                 AbpSession.GetTenantId(),
                 AppSettings.UserManagement.SubscriptionUser,
