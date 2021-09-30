@@ -8,7 +8,7 @@
     var theme = await GetTheme();
     var orderedChildMenuItems = Model.MenuItem.Items.OrderByCustom().ToList();
 }
-@if (AbpSession.TenantId == null && (Model.MenuItem.Name == AppPageNames.Tenant.SubscriptionManagement || Model.MenuItem.Name == AppPageNames.Tenant.Settings))
+@if (AbpSession.TenantId == null && Model.MenuItem.Name is AppPageNames.Tenant.SubscriptionManagement or AppPageNames.Tenant.Settings)
 {
 }
 else

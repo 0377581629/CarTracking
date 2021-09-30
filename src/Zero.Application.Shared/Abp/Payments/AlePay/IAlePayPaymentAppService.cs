@@ -22,5 +22,7 @@ namespace Zero.Abp.Payments.AlePay
         Task<string> CreateUserPayment(AlePayCreatePaymentInput input);
 
         Task<GetTransactionInfoResponseModel> GetTransactionInfo(long paymentId);
+        
+        Task<GetTransactionInfoResponseModel> GetUserTransactionInfo(long paymentId);
     }
 }

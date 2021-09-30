@@ -13,6 +13,7 @@ using Abp.Runtime.Session;
 using Abp.UI;
 using Microsoft.EntityFrameworkCore;
 using Zero.Abp.Authorization.Users;
+using Zero.Abp.Payments.AlePay;
 using Zero.Abp.Payments.Dto;
 using Zero.Authorization;
 using Zero.Authorization.Users;
@@ -33,13 +34,16 @@ namespace Zero.Abp.Payments
         private readonly ISettingManager _settingManager;
 
         private readonly ICurrencyRateAppService _currencyRateAppService;
+        private readonly IAlePayPaymentAppService _alePayPaymentAppService;
+        
         public UserPaymentAppService(
             IUserSubscriptionPaymentRepository userSubscriptionPaymentRepository,
             IPaymentGatewayStore paymentGatewayStore,
             UserManager userManager, 
             IRepository<User, long> userRepository, 
             ISettingManager settingManager,
-            ICurrencyRateAppService currencyRateAppService)
+            ICurrencyRateAppService currencyRateAppService, 
+            IAlePayPaymentAppService alePayPaymentAppService)
         {
             _userSubscriptionPaymentRepository = userSubscriptionPaymentRepository;
             _paymentGatewayStore = paymentGatewayStore;
@@ -47,6 +51,7 @@ namespace Zero.Abp.Payments
             _userRepository = userRepository;
             _settingManager = settingManager;
             _currencyRateAppService = currencyRateAppService;
+            _alePayPaymentAppService = alePayPaymentAppService;
         }
         
         public async Task<long> CreatePayment(CreateUserPaymentDto input)
@@ -162,6 +167,20 @@ namespace Zero.Abp.Payments
         public async Task ExtendSucceed(long paymentId)
         {
             var payment = await _userSubscriptionPaymentRepository.GetAsync(paymentId);
+            
+            if (payment.Gateway == SubscriptionPaymentGatewayType.AlePay)
+            {
+                var transactionInfo = await _alePayPaymentAppService.GetUserTransactionInfo(payment.Id);
+                if (transactionInfo.Code == 0)
+                {
+                    payment.SetAsPaid();
+                }
+                else
+                {
+                    throw new UserFriendlyException("Your payment is not completed !");
+                }
+            }
+            
             if (payment.Status != SubscriptionPaymentStatus.Paid)
             {
                 throw new ApplicationException("Your payment is not completed !");

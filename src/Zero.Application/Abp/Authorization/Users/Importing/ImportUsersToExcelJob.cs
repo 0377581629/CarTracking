@@ -155,6 +155,7 @@ namespace Zero.Authorization.Users.Importing
             user.Password = input.Password;
             user.TenantId = tenantId;
 
+            // User Subscription
             if (tenantId.HasValue
                 ? SettingManager.GetSettingValueForTenant<bool>(AppSettings.UserManagement.SubscriptionUser, tenantId.Value)
                 : SettingManager.GetSettingValue<bool>(AppSettings.UserManagement.SubscriptionUser))
@@ -211,22 +212,20 @@ namespace Zero.Authorization.Users.Importing
 
         private async Task SendInvalidExcelNotificationAsync(ImportUsersFromExcelJobArgs args)
         {
-            using (var uow = _unitOfWorkManager.Begin())
+            using var uow = _unitOfWorkManager.Begin();
+            using (CurrentUnitOfWork.SetTenantId(args.TenantId))
             {
-                using (CurrentUnitOfWork.SetTenantId(args.TenantId))
-                {
-                    await _appNotifier.SendMessageAsync(
-                        args.User,
-                        new LocalizableString(
-                            "FileCantBeConvertedToUserList",
-                            ZeroConsts.LocalizationSourceName
-                        ),
-                        null,
-                        NotificationSeverity.Warn);
-                }
-
-                await uow.CompleteAsync();
+                await _appNotifier.SendMessageAsync(
+                    args.User,
+                    new LocalizableString(
+                        "FileCantBeConvertedToUserList",
+                        ZeroConsts.LocalizationSourceName
+                    ),
+                    null,
+                    NotificationSeverity.Warn);
             }
+
+            await uow.CompleteAsync();
         }
 
         private string GetRoleNameFromDisplayName(string displayName, List<Role> roleList)

@@ -17,7 +17,6 @@ using Abp.Runtime.Security;
 using Microsoft.AspNetCore.Identity;
 using Zero.Notifications;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using Abp.Authorization;
 using Abp.Configuration;
@@ -546,103 +545,6 @@ namespace Zero.MultiTenancy
             }
 
             return newTenantId;
-        }
-        
-        [UnitOfWork]
-        public virtual async Task MoveAsync(int id, int? parentId)
-        {
-            var tenant = await _tenantRepository.GetAsync(id);
-            if (parentId.HasValue && parentId > 0)
-            {
-                if (tenant.ParentId == parentId)
-                {
-                    return;
-                }
-
-                //Should find children before Code change
-                var children = await FindChildrenAsync(id, true);
-
-                //Store old code
-                var oldCode = tenant.Code;
-
-                //Move
-                tenant.Code = await GetNextChildCodeAsync(parentId);
-                tenant.ParentId = parentId;
-
-                //Update Children Codes
-                foreach (var child in children)
-                {
-                    child.Code = Tenant.AppendCode(tenant.Code, Tenant.GetRelativeCode(child.Code, oldCode));
-                }
-            }
-            else
-            {
-                // All root node
-                var lstRootNode = _tenantRepository.GetAll()
-                    .Where(o => o.ParentId == null)
-                    .OrderBy(o => o.Code).ToList();
-                if (lstRootNode.Any())
-                {
-                    if (lstRootNode.Count == 1)
-                        return;
-                    var beforeNode = new Tenant();
-                    for (var i = 0; i < lstRootNode.Count; i++)
-                    {
-                        if (lstRootNode[i].Id == tenant.Id && i >0)
-                        {
-                            beforeNode = lstRootNode[i-1];
-                        }
-                    }
-
-                    if (beforeNode.Id > 0)
-                    {
-                        //Swap children code
-                        var children = await FindChildrenAsync(id, true);
-                        var beforeChildren = await FindChildrenAsync(beforeNode.Id, true);
-                        if (children != null && children.Any())
-                        {
-                            foreach (var h in children)
-                            {
-                                var oldCode = h.Code.Split(".");
-                                oldCode[0] = beforeNode.Code;
-                                h.Code = string.Join(".", oldCode);
-                            }
-                        }
-                        if (beforeChildren != null && beforeChildren.Any())
-                        {
-                            foreach (var h in beforeChildren)
-                            {
-                                var oldCode = h.Code.Split(".");
-                                oldCode[0] = tenant.Code;
-                                h.Code = string.Join(".", oldCode);
-                            }
-                        }
-                        // Swap code.
-                        var tempCode = beforeNode.Code;
-                        beforeNode.Code = tenant.Code;
-                        tenant.Code = tempCode;
-                    }
-                }
-            }
-        }
-
-        private async Task<List<Tenant>> FindChildrenAsync(int? parentId, bool recursive = false)
-        {
-            if (!recursive)
-            {
-                return await _tenantRepository.GetAllListAsync(ou => ou.ParentId == parentId);
-            }
-
-            if (!parentId.HasValue)
-            {
-                return await _tenantRepository.GetAllListAsync();
-            }
-
-            var code = await GetCodeAsync(parentId.Value);
-
-            return await _tenantRepository.GetAllListAsync(
-                ou => ou.Code.StartsWith(code) && ou.Id != parentId.Value
-            );
         }
 
         protected virtual async Task<string> GetNextChildCodeAsync(int? parentId)

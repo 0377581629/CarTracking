@@ -24,17 +24,14 @@ namespace Zero.Sessions
         private readonly IUiThemeCustomizerFactory _uiThemeCustomizerFactory;
         private readonly ISubscriptionPaymentRepository _subscriptionPaymentRepository;
         private readonly IUserDelegationConfiguration _userDelegationConfiguration;
-        private readonly ISettingManager SettingManager;
         public SessionAppService(
             IUiThemeCustomizerFactory uiThemeCustomizerFactory,
             ISubscriptionPaymentRepository subscriptionPaymentRepository,
-            IUserDelegationConfiguration userDelegationConfiguration, 
-            ISettingManager settingManager)
+            IUserDelegationConfiguration userDelegationConfiguration)
         {
             _uiThemeCustomizerFactory = uiThemeCustomizerFactory;
             _subscriptionPaymentRepository = subscriptionPaymentRepository;
             _userDelegationConfiguration = userDelegationConfiguration;
-            SettingManager = settingManager;
         }
 
         [DisableAuditing]

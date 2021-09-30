@@ -61,6 +61,19 @@ namespace Zero.Abp.Payments
             });
         }
         
+        public async Task<GetTransactionInfoResponseModel> GetUserTransactionInfo(long paymentId)
+        {
+            var payment = await _userSubscriptionPaymentRepository.GetAsync(paymentId);
+            if (payment.Gateway != SubscriptionPaymentGatewayType.AlePay)
+                throw new UserFriendlyException(L("ThisPaymentNotProcessedByAlePay"));
+            if (string.IsNullOrEmpty(payment.ExternalPaymentId))
+                throw new UserFriendlyException(L("ThisPaymentNotProcessedByAlePayYet"));
+            return await _alePayApiClient.GetTransactionInfoAsync(new GetTransactionInfoRequestModel
+            {
+                TransactionCode = payment.ExternalPaymentId
+            });
+        }
+        
         private void ValidatePaymentRequest(RequestPaymentRequestModel requestModel)
         {
             
