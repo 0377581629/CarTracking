@@ -28,6 +28,7 @@
             public const string Settings = "Administration.Settings.Host";
             
             public const string DashboardWidget = "DashboardWidget";
+            public const string HangfireDashboard = "HangfireDashboard";
         }
 
         public static class Tenant

@@ -106,15 +106,6 @@ namespace Zero.Configuration
         {
             return new[]
             {
-                new SettingDefinition(AppSettings.UserManagement.AllowSelfRegistration,
-                    GetFromAppSettings(AppSettings.UserManagement.AllowSelfRegistration, "true"),
-                    scopes: SettingScopes.Tenant, isVisibleToClients: true),
-                new SettingDefinition(AppSettings.UserManagement.IsNewRegisteredUserActiveByDefault,
-                    GetFromAppSettings(AppSettings.UserManagement.IsNewRegisteredUserActiveByDefault, "false"),
-                    scopes: SettingScopes.Tenant),
-                new SettingDefinition(AppSettings.UserManagement.UseCaptchaOnRegistration,
-                    GetFromAppSettings(AppSettings.UserManagement.UseCaptchaOnRegistration, "true"),
-                    scopes: SettingScopes.Tenant, isVisibleToClients: true),
                 new SettingDefinition(AppSettings.TenantManagement.BillingLegalName,
                     GetFromAppSettings(AppSettings.TenantManagement.BillingLegalName, ""),
                     scopes: SettingScopes.Tenant),
@@ -165,11 +156,11 @@ namespace Zero.Configuration
                 new SettingDefinition(AppSettings.UserManagement.UseGravatarProfilePicture,
                     GetFromAppSettings(AppSettings.UserManagement.UseGravatarProfilePicture, "false"),
                     isVisibleToClients: true, scopes: SettingScopes.User),
-                
-                // Subscription User
+
+                // User Subscription 
                 new SettingDefinition(AppSettings.UserManagement.SubscriptionUser,
-                GetFromAppSettings(AppSettings.UserManagement.SubscriptionUser, "false"),
-                isVisibleToClients: false, scopes: SettingScopes.Application | SettingScopes.Tenant),
+                    GetFromAppSettings(AppSettings.UserManagement.SubscriptionUser, "false"),
+                    isVisibleToClients: false, scopes: SettingScopes.Application | SettingScopes.Tenant),
                 new SettingDefinition(AppSettings.UserManagement.SubscriptionCurrency,
                     GetFromAppSettings(AppSettings.UserManagement.SubscriptionCurrency, "VND"),
                     isVisibleToClients: false, scopes: SettingScopes.Application | SettingScopes.Tenant),
@@ -181,7 +172,18 @@ namespace Zero.Configuration
                     isVisibleToClients: false, scopes: SettingScopes.Application | SettingScopes.Tenant),
                 new SettingDefinition(AppSettings.UserManagement.SubscriptionYearlyPrice,
                     GetFromAppSettings(AppSettings.UserManagement.SubscriptionYearlyPrice, "50000"),
-                    isVisibleToClients: false, scopes: SettingScopes.Application | SettingScopes.Tenant)
+                    isVisibleToClients: false, scopes: SettingScopes.Application | SettingScopes.Tenant),
+
+                // User Self Registration
+                new SettingDefinition(AppSettings.UserManagement.AllowSelfRegistration,
+                    GetFromAppSettings(AppSettings.UserManagement.AllowSelfRegistration, "true"),
+                    scopes: SettingScopes.Application | SettingScopes.Tenant, isVisibleToClients: true),
+                new SettingDefinition(AppSettings.UserManagement.IsNewRegisteredUserActiveByDefault,
+                    GetFromAppSettings(AppSettings.UserManagement.IsNewRegisteredUserActiveByDefault, "false"),
+                    scopes: SettingScopes.Application | SettingScopes.Tenant),
+                new SettingDefinition(AppSettings.UserManagement.UseCaptchaOnRegistration,
+                    GetFromAppSettings(AppSettings.UserManagement.UseCaptchaOnRegistration, "true"),
+                    scopes: SettingScopes.Application | SettingScopes.Tenant, isVisibleToClients: true)
             };
         }
 
@@ -236,8 +238,8 @@ namespace Zero.Configuration
                 new SettingDefinition(themeName + "." + AppSettings.UiManagement.LeftAside.HoverableAside,
                     GetFromAppSettings(themeName + "." + AppSettings.UiManagement.LeftAside.HoverableAside,
                         "false"), isVisibleToClients: true, scopes: SettingScopes.All),
-                
-                
+
+
                 new SettingDefinition(themeName + "." + AppSettings.UiManagement.Footer.FixedFooter,
                     GetFromAppSettings(themeName + "." + AppSettings.UiManagement.Footer.FixedFooter, "false"),
                     isVisibleToClients: true, scopes: SettingScopes.All),
@@ -871,7 +873,7 @@ namespace Zero.Configuration
                     facebookExternalLoginProviderInfo.ToJsonString(),
                     isVisibleToClients: false,
                     scopes: SettingScopes.Application,
-                    isEncrypted:true
+                    isEncrypted: true
                 ),
                 new SettingDefinition(
                     AppSettings.ExternalLoginProvider.Tenant.Facebook_IsDeactivated,
@@ -884,7 +886,7 @@ namespace Zero.Configuration
                     "",
                     isVisibleToClients: false,
                     scopes: SettingScopes.Tenant,
-                    isEncrypted:true
+                    isEncrypted: true
                 )
             };
         }
@@ -909,7 +911,7 @@ namespace Zero.Configuration
                     googleExternalLoginProviderInfo.ToJsonString(),
                     isVisibleToClients: false,
                     scopes: SettingScopes.Application,
-                    isEncrypted:true
+                    isEncrypted: true
                 ),
                 new SettingDefinition(
                     AppSettings.ExternalLoginProvider.Tenant.Google_IsDeactivated,
@@ -922,7 +924,7 @@ namespace Zero.Configuration
                     "",
                     isVisibleToClients: false,
                     scopes: SettingScopes.Tenant,
-                    isEncrypted:true
+                    isEncrypted: true
                 ),
             };
         }
@@ -937,7 +939,7 @@ namespace Zero.Configuration
                 ConsumerKey = consumerKey,
                 ConsumerSecret = consumerSecret
             };
-            
+
             return new[]
             {
                 new SettingDefinition(
@@ -945,7 +947,7 @@ namespace Zero.Configuration
                     twitterExternalLoginProviderInfo.ToJsonString(),
                     isVisibleToClients: false,
                     scopes: SettingScopes.Application,
-                    isEncrypted:true
+                    isEncrypted: true
                 ),
                 new SettingDefinition(
                     AppSettings.ExternalLoginProvider.Tenant.Twitter_IsDeactivated,
@@ -958,7 +960,7 @@ namespace Zero.Configuration
                     "",
                     isVisibleToClients: false,
                     scopes: SettingScopes.Tenant,
-                    isEncrypted:true
+                    isEncrypted: true
                 ),
             };
         }
@@ -982,7 +984,7 @@ namespace Zero.Configuration
                     microsoftExternalLoginProviderInfo.ToJsonString(),
                     isVisibleToClients: false,
                     scopes: SettingScopes.Application,
-                    isEncrypted:true
+                    isEncrypted: true
                 ),
                 new SettingDefinition(
                     AppSettings.ExternalLoginProvider.Tenant.Microsoft_IsDeactivated,
@@ -995,7 +997,7 @@ namespace Zero.Configuration
                     "",
                     isVisibleToClients: false,
                     scopes: SettingScopes.Tenant,
-                    isEncrypted:true
+                    isEncrypted: true
                 ),
             };
         }
@@ -1027,7 +1029,7 @@ namespace Zero.Configuration
                     openIdConnectExternalLoginProviderInfo.ToJsonString(),
                     isVisibleToClients: false,
                     scopes: SettingScopes.Application,
-                    isEncrypted:true
+                    isEncrypted: true
                 ),
                 new SettingDefinition(
                     AppSettings.ExternalLoginProvider.Tenant.OpenIdConnect_IsDeactivated,
@@ -1040,7 +1042,7 @@ namespace Zero.Configuration
                     "",
                     isVisibleToClients: false,
                     scopes: SettingScopes.Tenant,
-                    isEncrypted:true
+                    isEncrypted: true
                 ),
                 new SettingDefinition(
                     AppSettings.ExternalLoginProvider.OpenIdConnectMappedClaims,
@@ -1078,14 +1080,14 @@ namespace Zero.Configuration
                     wsFederationExternalLoginProviderInfo.ToJsonString(),
                     isVisibleToClients: false,
                     scopes: SettingScopes.Application,
-                    isEncrypted:true
+                    isEncrypted: true
                 ),
                 new SettingDefinition( //default is empty for tenants
                     AppSettings.ExternalLoginProvider.Tenant.WsFederation,
                     "",
                     isVisibleToClients: false,
                     scopes: SettingScopes.Tenant,
-                    isEncrypted:true
+                    isEncrypted: true
                 ),
                 new SettingDefinition(
                     AppSettings.ExternalLoginProvider.Tenant.WsFederation_IsDeactivated,

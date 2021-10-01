@@ -1,0 +1,31 @@
+﻿@model alepay.Models.GetListBanksResponseModel
+
+@{
+    ViewData["Title"] = "Danh sách ngân hàng";
+}
+
+
+<div class="row">
+    <div class="col-lg-12 mt-3">
+        @if (Model.Data != null && Model.Data.Count > 0)
+        {
+            foreach (var bank in Model.Data)
+            {
+                <div class="card" style="width: 18rem;">
+                    <img class="card-img-top" src="@(alepay.AlePayDefs.BankLogoBaseUrl + bank.UrlBankLogo)" alt="@Html.Raw(bank.BankFullName)">
+                    <div class="card-body">
+                        <h5 class="card-title">@Html.Raw(bank.BankFullName)</h5>
+                        <p class="card-text">Mã: @Html.Raw(bank.BankCode)</p>
+                        <p class="card-text">Phương thức: @Html.Raw(bank.MethodCode)</p>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <p class="text-center text-warning">Không có dữ liệu!</p>
+        }
+
+
+    </div>
+</div>

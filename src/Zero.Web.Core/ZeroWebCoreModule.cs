@@ -18,6 +18,7 @@ using Abp.Timing;
 using Abp.Zero.Configuration;
 using Castle.Core.Internal;
 using DPS.Reporting.Application;
+using Hangfire;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.Extensions.Configuration;
@@ -25,6 +26,7 @@ using Microsoft.IdentityModel.Tokens;
 using Zero.Authentication.TwoFactor;
 using Zero.Chat;
 using Zero.Configuration;
+using Zero.Customize.BackgroundJobs;
 using Zero.EntityFrameworkCore;
 using Zero.Startup;
 using Zero.Web.Authentication.JwtBearer;
@@ -131,6 +133,16 @@ namespace Zero.Web
 
             IocManager.Resolve<ApplicationPartManager>()
                 .AddApplicationPartsIfNotAddedBefore(typeof(ZeroWebCoreModule).Assembly);
+            
+            var currencyRateBackgroundJobService = IocManager.Resolve<ICurrencyRateBackgroundJob>();
+            RecurringJob.RemoveIfExists("SyncCurrencyRates");
+            RecurringJob.AddOrUpdate("SyncCurrencyRates",() => currencyRateBackgroundJobService.UpdateRates(), Cron.Daily);
+            
+            var userSubscriptionBackgroundJobService = IocManager.Resolve<IUserSubscriptionBackgroundJob>();
+            RecurringJob.RemoveIfExists("UserSubscription_ExpirationCheck");
+            RecurringJob.AddOrUpdate("UserSubscription_ExpirationCheck",() => userSubscriptionBackgroundJobService.UserSubscriptionExpirationCheck(), Cron.Daily);
+            RecurringJob.RemoveIfExists("UserSubscription_ExpireEmailNotifier");
+            RecurringJob.AddOrUpdate("UserSubscription_ExpireEmailNotifier",() => userSubscriptionBackgroundJobService.UserSubscriptionExpireEmailNotifier(), Cron.Daily);
         }
 
         private void SetAppFolders()

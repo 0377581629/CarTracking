@@ -1,0 +1,44 @@
+﻿@{
+    ViewData["Title"] = "Truy vấn trạng thái giao dịch";
+}
+
+<div class="row">
+    <div class="col-lg-8">
+        <form id="frmTransactionInfo" method="post">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control use-fu" name="transactionCode" id="transactionCode" placeholder="Mã giao dịch">
+                <div class="input-group-append">
+                    <button class="btn btn-success" type="submit">Truy vấn</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="col-lg-8 mt-5" id="transactionInfo" style="display: none;">
+        <p>Mã giao dịch: <span class="value readonly-input use-fu" data-name="transactionCode"></span></p>
+        <p>Mã đơn hàng: <span class="value readonly-input use-fu" data-name="orderCode"></span></p>
+        <p>Số tiền: <span class="value readonly-input use-fu" data-name="amount"></span> (<span class="value readonly-input use-fu" data-name="currency"></span>)</p>
+        <p>Email người mua: <span class="value readonly-input use-fu" data-name="buyerEmail"></span></p>
+        <p>Điện thoại người mua: <span class="value readonly-input use-fu" data-name="buyerPhone"></span></p>
+        <p>Số thẻ: <span class="value readonly-input use-fu" data-name="cardNumber"></span></p>
+        <p>Tên người mua: <span class="value readonly-input use-fu" data-name="buyerName"></span></p>
+        <p>Trạng thái: <span class="value readonly-input use-fu" data-name="status"></span></p>
+        <p>Lý do thất bại: <span class="value readonly-input use-fu" data-name="reason"></span></p>
+        <p>Mô tả: <span class="value readonly-input use-fu" data-name="description"></span></p>
+        <p>Trả góp: <span class="value readonly-input use-fu" data-name="installment"></span></p>
+        <p>Thẻ 3D: <span class="value readonly-input use-fu" data-name="is3D"></span></p>
+        <p>Số tháng: <span class="value readonly-input use-fu" data-name="month"></span></p>
+        <p>Mã ngân hàng: <span class="value readonly-input use-fu" data-name="bankCode"></span></p>
+        <p>Tên ngân hàng: <span class="value readonly-input use-fu" data-name="bankName"></span></p>
+        <p>Hình thức thanh toán: <span class="value readonly-input use-fu" data-name="method"></span></p>
+        <p>Thời gian thanh toán: <span class="value readonly-input use-fu" data-name="transactionTime"></span> (<span class="value readonly-input use-fu" data-name="transactionTimeWindows"></span>)</p>
+        <p>Thời gian thành công: <span class="value readonly-input use-fu" data-name="successTime"></span></p>
+        <p>Hotline ngân hàng: <span class="value readonly-input use-fu" data-name="bankHotline"></span></p>
+        <p>Phí người bán: <span class="value readonly-input use-fu" data-name="merchantFee"></span></p>
+        <p>Phí người mua: <span class="value readonly-input use-fu" data-name="payerFee"></span></p>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/transaction.info.js" asp-append-version="true"></script>
+}

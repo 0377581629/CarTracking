@@ -1,12 +1,48 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <localizationDictionary culture="vi">
   <texts>
+    <!--  Payment  -->
+    <text name="CheckoutWithPaypal">Thanh toán qua Paypal (USD)</text>
+    <text name="CheckoutWithAlePay">Thanh toán qua AlePay (VND)</text>
+    <text name="ExternalPaymentId">Mã thanh toán</text>
+
+    <text name="DailyPrice">Giá hàng ngày</text>
+    <text name="WeeklyPrice">Giá hàng tuần</text>
+    <text name="NewRegistration_Edition_Description">Đăng ký đơn vị mới</text>
+
+    <text name="FullName">Họ và tên</text>
+    <text name="Phone">Điện thoại</text>
+    <text name="City">Thành phố</text>
+    <text name="Country">Quốc gia</text>
+    <!--    -->
+    
     <!--  User Subscription  -->
+    <text name="UserSubscription">Thuê bao tài khoản</text>
+    <text name="UserSubscriptionInformation">Thông tin thuê bao</text>
+    
     <text name="UserSubscriptionEnable">Kích hoạt thuê bao tài khoản</text>
     <text name="Currency">Tiền tệ</text>
     <text name="TrialDays">Dùng thử - Ngày</text>
     <text name="Price">Đơn giá</text>
     <text name="Yearly">Hàng năm</text>
+
+    <text name="UserTrialSubscriptionNotification">Bạn đang trong giai đoạn dùng thử, {0} để mua.</text>
+    <text name="UserSubscriptionExpireNotification">Tài khoản của bạn sẽ hết hạn sau {0} ngày.</text>
+    <text name="UserTrialExpireNotification">Thời gian dùng thử của bạn sẽ hết hạn sau {0} ngày.</text>
+    
+    <text name="UserExtentSubscription_Description">Gia hạn tài khoản {0}.</text>
+
+    <text name="UserSubscriptionManagement">Quản lý thuê bao tài khoản</text>
+    <text name="UserSubscriptionManagement_Description">Gia hạn và xem lịch sử thanh toán</text>
+    
+    <text name="UserSubscription_Payment_Description">Gia hạn tài khoản {0}</text>
+
+    <text name="UserSubscriptionExpiringSoon_Title">Thông báo hết hạn thuê bao</text>
+    <text name="UserSubscriptionExpiringSoon_SubTitle">Email này được gửi cho bạn để thông báo về việc hết hạn thuê bao của bạn.</text>
+    <text name="UserSubscriptionExpiringSoon_Email_Subject">Thông báo hết hạn thuê bao của bạn</text>
+    <text name="UserSubscriptionExpiringSoon_Email_Body">Thuê bao của bạn sẽ hết hạn vào lúc {0}.</text>
+    
+    <text name="UserIsExpiredSubscription">Tài khoản của bạn đã hết hạn thuê bao.</text>
     <!--    -->
     
     <!--  Common  -->
@@ -20,6 +56,8 @@
     <text name="SelectAll">Tất cả</text>
     <text name="NoneSelect">Không lựa chọn</text>
     <text name="MissingData">Chưa khai báo</text>
+    <text name="Login">Đăng nhập</text>
+    <text name="Registration">Đăng ký</text>
     <!--    -->
     
     <!--  Email Template  -->
@@ -290,12 +328,12 @@
     <text name="Send">Gửi</text>
     <text name="PasswordReset">Đặt lại mật khẩu</text>
     <text name="InvalidUserNameOrEmailAddress">Tên người dùng hoặc địa chỉ email không hợp lệ</text>
-    <text name="PasswordResetEmail_Subject">DemoCài đặt lại mật khẩu</text>
-    <text name="PasswordResetEmail_Title">DemoCài đặt lại mật khẩu.</text>
+    <text name="PasswordResetEmail_Subject">Cài đặt lại mật khẩu</text>
+    <text name="PasswordResetEmail_Title">Cài đặt lại mật khẩu.</text>
     <text name="PasswordResetEmail_SubTitle">Email này được gửi cho bạn để đặt lại và tạo lại mật khẩu của bạn.</text>
     <text name="PasswordResetEmail_ClickTheLinkBelowToResetYourPassword">Vui lòng nhấp vào liên kết bên dưới để đặt lại mật khẩu của bạn:</text>
-    <text name="EmailActivation_Subject">DemoCài đặt kích hoạt tài khoản email</text>
-    <text name="EmailActivation_Title">Chào mừng bạn đến với DemoCore.</text>
+    <text name="EmailActivation_Subject">Cài đặt kích hoạt tài khoản email</text>
+    <text name="EmailActivation_Title">Chào mừng bạn đến với {0}.</text>
     <text name="EmailActivation_SubTitle">Email này được gửi cho bạn để xác minh email của bạn.</text>
     <text name="EmailActivation_ClickTheLinkBelowToVerifyYourEmail">Vui lòng nhấp vào liên kết bên dưới để xác minh địa chỉ email của bạn:</text>
     <text name="InvalidEmailAddress">địa chỉ email không hợp lệ</text>
@@ -516,7 +554,7 @@
     <text name="SuccessfullyUnlinked">Đã hủy liên kết thành công</text>
     <text name="LinkedUserDeleteWarningMessage">Liên kết tới người dùng {0} sẽ bị xóa.</text>
     <text name="SwitchToLinkedAccountTokenErrorMessage">Mã thông báo mạo danh không hợp lệ hoặc đã hết hạn!</text>
-    <text name="WelcomeToTheApplicationNotificationMessage">Chào mừng bạn đến với DemoCore! Hệ thống thông báo được sử dụng để thông báo cho bạn về các sự kiện dự định. Bạn có thể chọn loại thông báo bạn muốn nhận từ cài đặt thông báo.</text>
+    <text name="WelcomeToTheApplicationNotificationMessage">Chào mừng bạn ! Hệ thống thông báo được sử dụng để thông báo cho bạn về các sự kiện dự định. Bạn có thể chọn loại thông báo bạn muốn nhận từ cài đặt thông báo.</text>
     <text name="NewUserRegisteredNotificationDefinition">Khi có người dùng mới được đăng ký vào ứng dụng.</text>
     <text name="NewUserRegisteredNotificationMessage">Một người dùng mới đã đăng ký vào ứng dụng. Tên người dùng: {userName}, Địa chỉ email: {emailAddress}.</text>
     <text name="SeeAllNotifications">Xem tất cả thông báo</text>
@@ -542,7 +580,7 @@
     <text name="CachesHeaderInfo">Bạn có thể xóa bộ nhớ cache của ứng dụng trên trang này.</text>
     <text name="TestEmailSettingsHeader">Kiểm tra cài đặt email</text>
     <text name="SendTestEmail">Gửi email kiểm tra</text>
-    <text name="TestEmail_Subject">DemoXem thêm email kiểm tra</text>
+    <text name="TestEmail_Subject">Xem thêm email kiểm tra</text>
     <text name="TestEmail_Body">Đây là một email thử nghiệm.</text>
     <text name="TestEmailSentSuccessfully">Kiểm tra e-mail đã được gửi thành công.</text>
     <text name="WebSiteLogs">Nhật ký trang web</text>
@@ -718,10 +756,10 @@
     <text name="RecentTenantsHelpText">{1} khách hàng cuối cùng đã đăng ký sau {0} ngày ...</text>
     <text name="ExpiringTenantsHelpText">{1} khách hàng đầu tiên hết hạn sau {0} ngày ...</text>
     <text name="NoData">Không có dữ liệu</text>
-    <text name="SubscriptionEndDate">Ngày kết thúc đăng ký</text>
+    <text name="SubscriptionEndDate">Ngày kết thúc thuê bao</text>
     <text name="TenantNameOrTenancyCode">Tên đơn vị sử dụng / mã đơn vị sử dụng</text>
     <text name="IncomeWithAmount">Thu nhập: {0}</text>
-    <text name="Subscription">Đăng ký</text>
+    <text name="Subscription">Thuê bao</text>
     <text name="Extend">Mở rộng</text>
     <text name="Upgrade">Nâng cấp</text>
     <text name="PaymentPeriodType">Loại thời gian thanh toán</text>
@@ -742,10 +780,10 @@
     <text name="Start">Bắt đầu</text>
     <text name="FreeTrial">Dùng thử miễn phí</text>
     <text name="BuyNow">Mua ngay</text>
-    <text name="WhatWillDoneAfterSubscriptionExpiry">Điều gì sẽ được thực hiện sau khi hết hạn đăng ký</text>
+    <text name="WhatWillDoneAfterSubscriptionExpiry">Điều gì sẽ được thực hiện sau khi hết hạn thuê bao</text>
     <text name="DeactiveTenant">Đơn vị sử dụng</text>
     <text name="AssignToAnotherEdition">Chỉ định cho một phiên bản khác</text>
-    <text name="SubscriptionPrice">Giá đơn vị sử dụng</text>
+    <text name="SubscriptionPrice">Giá thuê bao</text>
     <text name="Free">Miễn phí</text>
     <text name="Paid">Trả tiền</text>
     <text name="IsTrialActive">Thử nghiệm đang hoạt động</text>
@@ -754,7 +792,7 @@
     <text name="WaitingDayAfterExpire">Chờ một ngày sau khi hết hạn</text>
     <text name="DisplayOrder">Thứ tự hiển thị</text>
     <text name="Annual">Hàng năm</text>
-    <text name="SubscriptionStartDate">Ngày bắt đầu đăng ký</text>
+    <text name="SubscriptionStartDate">Ngày bắt đầu thuê bao</text>
     <text name="Pricing">Định giá</text>
     <text name="ClientIsRequestingYourPermission">{0} đang yêu cầu sự cho phép của bạn</text>
     <text name="ApplicationAccess">Truy cập ứng dụng</text>
@@ -778,20 +816,20 @@
     <text name="ChartDateFormat">% m /% d /% Y</text>
     <text name="ThereIsNoLoggedInUser">Không có người dùng đã đăng nhập.</text>
     <text name="IsInTrialPeriod">Đang trong giai đoạn dùng thử?</text>
-    <text name="FailedSubscriptionTerminations_Email_Subject">Chấm dứt đăng ký không thành công</text>
-    <text name="FailedSubscriptionTerminations_Email_Body">Đăng ký chấm dứt không thành công cho những đơn vị sử dụng sau {0} tại {1}. Bạn có thể tìm thấy thông báo lỗi chi tiết trong nhật ký hệ thống.</text>
-    <text name="SubscriptionExpire_Email_Subject">Đăng ký DemoCore của bạn đã hết hạn</text>
-    <text name="SubscriptionExpire_Email_Body">Đăng ký DemoCore của bạn đã hết hạn vào lúc {0}.</text>
-    <text name="UnlimitedTimeSubscription">Đăng ký thời gian không giới hạn</text>
-    <text name="SubscriptionEndDateUtc">Ngày kết thúc đăng ký (Utc)</text>
+    <text name="FailedSubscriptionTerminations_Email_Subject">Chấm dứt thuê bao không thành công</text>
+    <text name="FailedSubscriptionTerminations_Email_Body">Thuê bao chấm dứt không thành công cho những đơn vị sử dụng sau {0} tại {1}. Bạn có thể tìm thấy thông báo lỗi chi tiết trong nhật ký hệ thống.</text>
+    <text name="SubscriptionExpire_Email_Subject">Thuê bao của bạn đã hết hạn</text>
+    <text name="SubscriptionExpire_Email_Body">Thuê bao của bạn đã hết hạn vào lúc {0}.</text>
+    <text name="UnlimitedTimeSubscription">Thuê bao thời gian không giới hạn</text>
+    <text name="SubscriptionEndDateUtc">Ngày kết thúc thuê bao (Utc)</text>
     <text name="ExpiringEditionMustBeAFreeEdition">Phiên bản hết hạn phải là phiên bản miễn phí</text>
     <text name="ThisEditionIsUsedAsAnExpiringEdition">Phiên bản này được sử dụng làm phiên bản hết hạn cho một phiên bản khác. Nếu bạn muốn làm cho phiên bản này được trả tiền, trước tiên bạn nên xóa nó khỏi phiên bản khác.</text>
     <text name="UpgradedTo">Đã nâng cấp lên phiên bản {0}</text>
     <text name="ExtendedEdition">Phiên bản mở rộng {0}</text>
     <text name="TrialSubscriptionNotification">Bạn đang trong giai đoạn dùng thử cho {0} phiên bản, {1} để mua.</text>
-    <text name="SubscriptionExpireNotification">Đăng ký của bạn sẽ hết hạn sau {0} ngày.</text>
+    <text name="SubscriptionExpireNotification">Thuê bao của bạn sẽ hết hạn sau {0} ngày.</text>
     <text name="TrialExpireNotification">Thời gian dùng thử của bạn sẽ hết hạn sau {0} ngày.</text>
-    <text name="CanNotUpgradeSubscriptionSinceTenantHasNoEditionAssigned">Không thể nâng cấp đăng ký vì đơn vị sử dụng không có phiên bản nào được chỉ định.</text>
+    <text name="CanNotUpgradeSubscriptionSinceTenantHasNoEditionAssigned">Không thể nâng cấp thuê bao vì đơn vị sử dụng không có phiên bản nào được chỉ định.</text>
     <text name="PaymentCouldNotCompleted">Thanh toán không thể hoàn thành</text>
     <text name="TenantEditionIsNotAssigned">Phiên bản đơn vị sử dụng không được chỉ định</text>
     <text name="FreeEditionsCannotHaveTrialVersions">Phiên bản miễn phí không thể có phiên bản dùng thử</text>
@@ -799,7 +837,7 @@
     <text name="Extend_Edition_Description">Mở rộng {0} Phiên bản</text>
     <text name="Upgrade_Edition_Description">Nâng cấp lên {0} Phiên bản</text>
     <text name="PaymentMightBeExpiredWarning">Hoạt động của bạn có thể hết hạn, vui lòng liên hệ với chúng tôi nếu bạn đã thực hiện thanh toán.</text>
-    <text name="GoToSubscriptionManagement">Chuyển tới đăng ký</text>
+    <text name="GoToSubscriptionManagement">Chuyển tới thuê bao</text>
     <text name="DemoPayPalAccount">Tài khoản PayPal Demo</text>
     <text name="IsEnabled">Được kích hoạt</text>
     <text name="IsGoogleAuthenticatorEnabled">Bật Google Authenticator</text>
@@ -808,21 +846,21 @@
     <text name="Profile">Hồ sơ</text>
     <text name="Enable">Bật</text>
     <text name="GoogleAuthenticatorIsNotEnabled">Google Authenticator chưa được kích hoạt cho tài khoản của bạn. Trước tiên, bạn phải bật chức năng này trong cài đặt của mình.</text>
-    <text name="SubscriptionExpiringSoon_Email_Subject">Thông báo hết hạn đăng ký DemoCore của bạn</text>
-    <text name="SubscriptionExpiringSoon_Email_Body">Đăng ký DemoCore của bạn sẽ hết hạn vào lúc {0}.</text>
-    <text name="SubscriptionExpire_Title">DemoChi đăng ký hết hạn</text>
-    <text name="SubscriptionExpire_SubTitle">Email này được gửi cho bạn để thông báo về thời hạn đăng ký của bạn</text>
-    <text name="SubscriptionAssignedToAnother_Email_Body">Đăng ký DemoCore của bạn đã hết hạn vào {1}. Phiên bản hiện tại của bạn được gán cho {0}.</text>
-    <text name="FailedSubscriptionTerminations_Title">Đăng ký không thành công</text>
-    <text name="FailedSubscriptionTerminations_SubTitle">Đăng ký chấm dứt không thành công đối với một số đơn vị sử dụng</text>
-    <text name="SubscriptionExpiringSoon_Title">DemoThông báo hết hạn đăng ký</text>
-    <text name="SubscriptionExpiringSoon_SubTitle">Email này được gửi cho bạn để thông báo về việc hết hạn đăng ký của bạn.</text>
+    <text name="SubscriptionExpiringSoon_Email_Subject">Thông báo hết hạn thuê bao của bạn</text>
+    <text name="SubscriptionExpiringSoon_Email_Body">Thuê bao của bạn sẽ hết hạn vào lúc {0}.</text>
+    <text name="SubscriptionExpire_Title">Thuê bao hết hạn</text>
+    <text name="SubscriptionExpire_SubTitle">Email này được gửi cho bạn để thông báo về thời hạn thuê bao của bạn</text>
+    <text name="SubscriptionAssignedToAnother_Email_Body">Thuê bao của bạn đã hết hạn vào {1}. Phiên bản hiện tại của bạn được gán cho {0}.</text>
+    <text name="FailedSubscriptionTerminations_Title">Chấm dứt thuê bao không thành công</text>
+    <text name="FailedSubscriptionTerminations_SubTitle">Chấm dứt thuê bao không thành công đối với một số đơn vị sử dụng</text>
+    <text name="SubscriptionExpiringSoon_Title">Thông báo hết hạn thuê bao</text>
+    <text name="SubscriptionExpiringSoon_SubTitle">Email này được gửi cho bạn để thông báo về việc hết hạn thuê bao của bạn.</text>
     <text name="AdminRoleCannotRemoveFromAdminUser">Vai trò quản trị không thể xóa khỏi người dùng quản trị</text>
     <text name="YouCannotRemoveUserRolePermissionsFromAdminRole">Bạn không thể xóa chỉnh sửa quyền của người dùng / vai trò khỏi vai trò quản trị</text>
     <text name="YouCannotRemoveUserRolePermissionsFromAdminUser">Bạn không thể xóa chỉnh sửa quyền của người dùng / vai trò khỏi người dùng quản trị</text>
     <text name="Notification">Thông báo</text>
     <text name="TotalRecordsCount">Tổng cộng: {0}</text>
-    <text name="SubscriptionInformation">Thông tin đăng ký</text>
+    <text name="SubscriptionInformation">Thông tin thuê bao</text>
     <text name="TenantSubscription">Thông tin thuê bao đơn vị</text>
     <text name="PaymentHistory">Lịch sử thanh toán</text>
     <text name="Gateway">Gateway</text>
@@ -834,11 +872,12 @@
     <text name="PaymentId">Id thanh toán</text>
     <text name="SubscriptionPaymentGatewayType_Paypal">Paypal</text>
     <text name="SubscriptionPaymentGatewayType_Stripe">Stripe</text>
+    <text name="SubscriptionPaymentGatewayType_AlePay">AlePay</text>
     <text name="SubscriptionPaymentStatus_Completed">Đã hoàn thành</text>
-    <text name="SubscriptionPaymentStatus_NotPaid">Not Paid</text>
-    <text name="SubscriptionPaymentStatus_Paid">Paid</text>
+    <text name="SubscriptionPaymentStatus_NotPaid">Chưa thanh toán</text>
+    <text name="SubscriptionPaymentStatus_Paid">Đã thanh toán</text>
     <text name="SubscriptionPaymentStatus_Failed">Thất bại</text>
-    <text name="SubscriptionPaymentStatus_Cancelled">Cancelled</text>
+    <text name="SubscriptionPaymentStatus_Cancelled">Hủy</text>
     <text name="PaymentPeriodType_Annual">Hàng năm</text>
     <text name="PaymentPeriodType_Monthly">Hàng tháng</text>
     <text name="ProcessTime">Thời gian xử lý</text>
@@ -924,7 +963,7 @@
     <text name="SaveAsSystemDefault">Lưu làm mặc định hệ thống</text>
     <text name="UseSystemDefaults">Sử dụng mặc định hệ thống</text>
     <text name="NewNotifications">Thông báo mới</text>
-    <text name="Subscriptions">Đăng ký</text>
+    <text name="Subscriptions">Thuê bao</text>
     <text name="UiCustomization_DefaultHiddenAside">Mặc định ẩn sang một bên</text>
     <text name="LoadWithThreeDot">Tải...</text>
     <text name="NoInternetConnection">Bạn hiện chưa kết nối với internet</text>
@@ -963,7 +1002,6 @@
     <text name="NewValue">Giá trị mới</text>
     <text name="Detail">Chi tiết</text>
     <text name="CreatedAtByUser"><![CDATA[Được tạo lúc <b>{0}</b> bởi <b>{1}</b>]]></text>
-    <text name="TruongViet.DemoCore.MultiTenancy.Tenant">Đơn vị sử dụng</text>
     <text name="Abp.Organizations.OrganizationUnit">Cơ cấu Tổ chức</text>
     <text name="Search">Tìm kiếm</text>
     <text name="Pin">Ghim</text>

@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <PackageReference Include="Abp.EntityFrameworkCore.EFPlus" Version="6.3.0" />
+    <PackageReference Include="Fixer.io" Version="1.0.1" />
     <PackageReference Include="NPOI" Version="2.5.2" />
   </ItemGroup>
 

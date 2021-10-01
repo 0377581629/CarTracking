@@ -29,7 +29,7 @@ namespace Zero.Web.Views.Shared.Components.TenantChange
             var model = ObjectMapper.Map<TenantChangeViewModel>(loginInfo);
             //using (_unitOfWorkManager.Current.DisableFilter(AbpDataFilters.MayHaveTenant, AbpDataFilters.MustHaveTenant))
             {
-                var availableTenants = await _tenantRepository.GetAllListAsync(o=>o.IsActive) ?? new List<Tenant>();
+                var availableTenants = await _tenantRepository.GetAllListAsync(o=>o.IsActive && o.Name != "Default") ?? new List<Tenant>();
                 model.AvailableTenants = ObjectMapper.Map<List<TenantListDto>>(availableTenants);    
             }
             return View(model);

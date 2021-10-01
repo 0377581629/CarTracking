@@ -8,6 +8,7 @@ using Abp.Domain.Uow;
 using Abp.Runtime.Session;
 using Abp.Timing;
 using Abp.UI;
+using Zero.Abp.Payments;
 using Zero.Configuration;
 using Zero.Editions;
 using Zero.MultiTenancy.Accounting.Dto;
@@ -18,6 +19,8 @@ namespace Zero.MultiTenancy.Accounting
     public class InvoiceAppService : ZeroAppServiceBase, IInvoiceAppService
     {
         private readonly ISubscriptionPaymentRepository _subscriptionPaymentRepository;
+        private readonly IUserSubscriptionPaymentRepository _userSubscriptionPaymentRepository;
+        
         private readonly IInvoiceNumberGenerator _invoiceNumberGenerator;
         private readonly EditionManager _editionManager;
         private readonly IRepository<Invoice> _invoiceRepository;
@@ -26,12 +29,14 @@ namespace Zero.MultiTenancy.Accounting
             ISubscriptionPaymentRepository subscriptionPaymentRepository,
             IInvoiceNumberGenerator invoiceNumberGenerator,
             EditionManager editionManager,
-            IRepository<Invoice> invoiceRepository)
+            IRepository<Invoice> invoiceRepository, 
+            IUserSubscriptionPaymentRepository userSubscriptionPaymentRepository)
         {
             _subscriptionPaymentRepository = subscriptionPaymentRepository;
             _invoiceNumberGenerator = invoiceNumberGenerator;
             _editionManager = editionManager;
             _invoiceRepository = invoiceRepository;
+            _userSubscriptionPaymentRepository = userSubscriptionPaymentRepository;
         }
 
         public async Task<InvoiceDto> GetInvoiceInfo(EntityDto<long> input)
@@ -62,6 +67,8 @@ namespace Zero.MultiTenancy.Accounting
                 InvoiceNo = payment.InvoiceNo,
                 InvoiceDate = invoice.InvoiceDate,
                 Amount = payment.Amount,
+                Currency = payment.Currency,
+                
                 EditionDisplayName = edition.DisplayName,
 
                 HostAddress = hostAddress.Replace("\r\n", "|").Split('|').ToList(),

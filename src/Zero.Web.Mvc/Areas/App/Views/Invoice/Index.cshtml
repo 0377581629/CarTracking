@@ -75,7 +75,7 @@
                                     <tr>
                                         <td class="pl-0 pt-7">1</td>
                                         <td class="pl-0 pt-7">@Model.Invoice.EditionDisplayName</td>
-                                        <td class="text-right pl-0 pt-7">@ZeroConsts.CurrencySign@Model.Invoice.Amount </td>
+                                        <td class="text-right pl-0 pt-7">@Model.Invoice.Amount @Model.Invoice.Currency</td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -99,7 +99,7 @@
                                         <td>&nbsp;</td>
                                         <td>&nbsp;</td>
                                         <td>&nbsp;</td>
-                                        <td class="text-danger text-right font-size-h3 font-weight-boldest">@ZeroConsts.CurrencySign@Model.Invoice.Amount.ToString("N2")</td>
+                                        <td class="text-danger text-right font-size-h3 font-weight-boldest">@Model.Invoice.Amount.ToString("N2") @Model.Invoice.Currency</td>
                                     </tr>
                                     </tbody>
                                 </table>

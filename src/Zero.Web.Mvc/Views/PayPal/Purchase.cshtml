@@ -12,7 +12,7 @@
 
 @section Scripts
 {
-    <script src="https://www.paypal.com/sdk/js?client-id=@Model.Configuration.ClientId&currency=@ZeroConsts.Currency" asp-append-version="true"></script>
+    <script src="https://www.paypal.com/sdk/js?client-id=@Model.Configuration.ClientId&currency=USD" asp-append-version="true"></script>
     <script abp-src="/view-resources/Views/PayPal/_Purchase.js" asp-append-version="true"></script>
 }
 
@@ -27,7 +27,7 @@
     <hr class="border-green"/>
     <div class="form-actions">
         <div class="form-group row">
-            <label class="col-sm-4 control-label">@L("Item")</label>
+            <label class="col-sm-4 control-label">@L("Description")</label>
             <div class="col-sm-8 text-right">
                 <p class="form-control-static text-bold">
                     @Model.Description
@@ -38,7 +38,7 @@
             <label class="col-sm-4 control-label">@L("Total")</label>
             <div class="col-sm-8 text-right">
                 <p class="form-control-static text-bold" id="totalPrice">
-                    @ZeroConsts.CurrencySign@(Model.Amount.ToString("N2"))
+                    @(Model.Amount.ToString("N2")) @Model.Currency
                 </p>
             </div>
         </div>
@@ -49,7 +49,7 @@
         <input type="hidden" name="PayPalOrderId" value=""/>
         <input type="hidden" name="Amount" value="@(Math.Round(Model.Amount,2).ToString(ZeroConsts.NumberFormatInfo))"/>
         <input type="hidden" name="clientId" value="@Model.Configuration.ClientId"/>
-        <input type="hidden" name="currency" value="@ZeroConsts.Currency"/>
+        <input type="hidden" name="currency" value="@Model.Currency"/>
 
         @if (!Model.Configuration.DemoUsername.IsNullOrEmpty() && !Model.Configuration.DemoPassword.IsNullOrEmpty())
         {

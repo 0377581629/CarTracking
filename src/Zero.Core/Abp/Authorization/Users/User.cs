@@ -4,6 +4,7 @@ using Abp.Auditing;
 using Abp.Authorization.Users;
 using Abp.Extensions;
 using Abp.Timing;
+using Zero.MultiTenancy.Payments;
 
 namespace Zero.Authorization.Users
 {
@@ -24,7 +25,6 @@ namespace Zero.Authorization.Users
 
         public List<UserOrganizationUnit> OrganizationUnits { get; set; }
 
-        //Can add application specific user properties here
 
         public User()
         {
@@ -75,5 +75,46 @@ namespace Zero.Authorization.Users
             SignInToken = Guid.NewGuid().ToString();
             SignInTokenExpireTimeUtc = Clock.Now.AddMinutes(1).ToUniversalTime();
         }
+
+        #region Subscription User
+
+        public bool IsInTrialPeriod { get; set; }
+        
+        public DateTime? SubscriptionEndDateUtc { get; set; }
+
+        public SubscriptionPaymentType SubscriptionPaymentType { get; set; }
+        
+        public void ExtendSubscriptionDate(PaymentPeriodType paymentPeriodType)
+        {
+            SubscriptionEndDateUtc ??= Clock.Now.ToUniversalTime();
+
+            if (IsSubscriptionEnded())
+            {
+                SubscriptionEndDateUtc = Clock.Now.ToUniversalTime();
+            }
+
+            IsInTrialPeriod = false;
+            SubscriptionEndDateUtc = SubscriptionEndDateUtc?.AddDays((int)paymentPeriodType);
+        }
+
+        private bool IsSubscriptionEnded()
+        {
+            return SubscriptionEndDateUtc < Clock.Now.ToUniversalTime();
+        }
+
+        public int CalculateRemainingHoursCount()
+        {
+            return SubscriptionEndDateUtc != null
+                ? (int)(SubscriptionEndDateUtc.Value - Clock.Now.ToUniversalTime())
+                .TotalHours //converting it to int is not a problem since max value ((DateTime.MaxValue - DateTime.MinValue).TotalHours = 87649416) is in range of integer.
+                : 0;
+        }
+
+        public bool HasUnlimitedTimeSubscription()
+        {
+            return SubscriptionEndDateUtc == null;
+        }
+
+        #endregion
     }
 }

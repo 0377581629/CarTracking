@@ -68,36 +68,44 @@
                     {
                         targets: 5,
                         data: "amount",
-                        render: $.fn.dataTable.render.number(',', '.', 2)
+                        render: $.fn.dataTable.render.number(',', '.', 2),
+                        class: "text-right"
                     },
                     {
                         targets: 6,
+                        data: "currency",
+                        class: "text-center"
+                    },
+                    {
+                        targets: 7,
                         data: "status",
+                        class: "text-center",
                         render: function (status) {
                             return app.localize("SubscriptionPaymentStatus_" + status);
                         }
                     },
                     {
-                        targets: 7,
+                        targets: 8,
                         data: "paymentPeriodType",
                         render: function (paymentPeriodType) {
                             return app.localize("PaymentPeriodType_" + paymentPeriodType);
                         }
                     },
                     {
-                        targets: 8,
-                        data: "dayCount"
-                    },
-                    {
                         targets: 9,
-                        data: "externalPaymentId"
+                        data: "dayCount",
+                        class: "text-center"
                     },
                     {
                         targets: 10,
-                        data: "invoiceNo"
+                        data: "externalPaymentId"
                     },
                     {
                         targets: 11,
+                        data: "invoiceNo"
+                    },
+                    {
+                        targets: 12,
                         visible: false,
                         data: "id"
                     }

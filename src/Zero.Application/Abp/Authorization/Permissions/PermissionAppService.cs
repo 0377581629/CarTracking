@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Zero.Authorization.Permissions.Dto;
 using Zero.Customize;
 using Zero.MultiTenancy;
+
 namespace Zero.Authorization.Permissions
 {
     public class PermissionAppService : ZeroAppServiceBase, IPermissionAppService
@@ -27,20 +28,20 @@ namespace Zero.Authorization.Permissions
             var permissions = PermissionManager.GetAllPermissions();
             if (tenantSide)
                 permissions = permissions.Where(o => o.MultiTenancySides != MultiTenancySides.Host).ToList();
-            
+
             if (AbpSession.MultiTenancySide == MultiTenancySides.Tenant)
             {
                 var tenant = _tenantRepository.FirstOrDefault(o => o.Id == AbpSession.TenantId.Value);
                 if (tenant != null)
                 {
-                    var permissionsByEdition = _editionPermissionRepository.GetAllList(o => o.EditionId == tenant.EditionId).Select(o=>o.PermissionName);
+                    var permissionsByEdition = _editionPermissionRepository.GetAllList(o => o.EditionId == tenant.EditionId).Select(o => o.PermissionName);
                     permissions = permissions.Where(o => permissionsByEdition.Contains(o.Name)).ToList();
                 }
             }
-            
+
             var rootPermissions = permissions.Where(p => p.Parent == null);
             var result = new List<FlatPermissionWithLevelDto>();
-            
+
             foreach (var rootPermission in rootPermissions)
             {
                 var level = 0;
@@ -58,10 +59,10 @@ namespace Zero.Authorization.Permissions
             var lstPermissionId = await _editionPermissionRepository.GetAll().Where(o => o.EditionId == editionId)
                 .Select(o => o.PermissionName).ToListAsync();
             var permissions = PermissionManager.GetAllPermissions();
-            var result = permissions.Where(o => lstPermissionId.Contains(o.Name)).Select(o=>o.Name).ToList();
+            var result = permissions.Where(o => lstPermissionId.Contains(o.Name)).Select(o => o.Name).ToList();
             return result;
         }
-        
+
         public async Task<List<string>> GetAllPermissionsByCurrentTenant()
         {
             var permissions = PermissionManager.GetAllPermissions();
@@ -69,9 +70,9 @@ namespace Zero.Authorization.Permissions
             var tenant = await _tenantRepository.FirstOrDefaultAsync(o => o.Id == AbpSession.TenantId);
             var lstPermissionId = await _editionPermissionRepository.GetAll().Where(o => o.EditionId == tenant.EditionId)
                 .Select(o => o.PermissionName).ToListAsync();
-            return permissions.Where(o => lstPermissionId.Contains(o.Name)).Select(o=>o.Name).ToList();
+            return permissions.Where(o => lstPermissionId.Contains(o.Name)).Select(o => o.Name).ToList();
         }
-        
+
         private void AddPermission(Permission permission, IReadOnlyList<Permission> allPermissions, List<FlatPermissionWithLevelDto> result, int level)
         {
             var flatPermission = ObjectMapper.Map<FlatPermissionWithLevelDto>(permission);

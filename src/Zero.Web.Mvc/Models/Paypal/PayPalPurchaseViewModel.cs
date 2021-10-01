@@ -1,4 +1,4 @@
-﻿using Zero.MultiTenancy.Payments.Paypal;
+﻿using Zero.Abp.Payments.Paypal;
 
 namespace Zero.Web.Models.Paypal
 {
@@ -9,6 +9,8 @@ namespace Zero.Web.Models.Paypal
         public string Description { get; set; }
 
         public decimal Amount { get; set; }
+        
+        public string Currency { get; set; }
 
         public PayPalPaymentGatewayConfiguration Configuration { get; set; }
     }

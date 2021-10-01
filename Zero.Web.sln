@@ -41,6 +41,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zero.GraphQL", "src\Zero.Gr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zero.Migrator", "src\Zero.Migrator\Zero.Migrator.csproj", "{C1514727-6771-4DC5-985F-C8A4CE6766CF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "alepay_api_client", "3rds\Alepay\alepay_api_client\alepay_api_client.csproj", "{80C12DFC-696D-4049-AA8E-CE6C8343BCAD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -99,6 +101,10 @@ Global
 		{C1514727-6771-4DC5-985F-C8A4CE6766CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C1514727-6771-4DC5-985F-C8A4CE6766CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C1514727-6771-4DC5-985F-C8A4CE6766CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80C12DFC-696D-4049-AA8E-CE6C8343BCAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80C12DFC-696D-4049-AA8E-CE6C8343BCAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80C12DFC-696D-4049-AA8E-CE6C8343BCAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80C12DFC-696D-4049-AA8E-CE6C8343BCAD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -118,6 +124,7 @@ Global
 		{63543B65-BA11-4A08-AB9E-F04EE7267BC5} = {B57AF337-BDC4-4734-82A1-2E59237FEA44}
 		{9B1DFD95-DFA5-43F1-90FD-45F5C98F0443} = {D24F68B3-FE2E-40F5-B77D-D372E8D8900B}
 		{C1514727-6771-4DC5-985F-C8A4CE6766CF} = {43A84B72-16CF-4E1A-8461-FD61B924B5FA}
+		{80C12DFC-696D-4049-AA8E-CE6C8343BCAD} = {B57AF337-BDC4-4734-82A1-2E59237FEA44}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {23CD4D4B-B131-473D-9ECB-5DD96E739671}

@@ -7,6 +7,7 @@ using Abp.Authorization;
 using Abp.Domain.Repositories;
 using Abp.Timing;
 using Microsoft.EntityFrameworkCore;
+using Zero.Abp.Payments;
 using Zero.Authorization;
 using Zero.MultiTenancy.HostDashboard.Dto;
 using Zero.MultiTenancy.Payments;

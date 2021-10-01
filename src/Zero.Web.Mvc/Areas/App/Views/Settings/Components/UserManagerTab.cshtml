@@ -8,10 +8,10 @@
 <div class="tab-pane" id="SettingsUserManagementTab">
 
     <form id="FormBasedRegistrationSettingsForm" class="form">
-        <h5>@L("FormBasedRegistration")</h5>
+        <h5>@L("Registration")</h5>
         <div class="checkbox-list">
             <div class="form-group">
-                <label for="Setting_AllowSelfRegistration" class="checkbox checkbox-outline col-lg-12">
+                <label for="Setting_AllowSelfRegistration" class="checkbox checkbox-outline">
                     <input id="Setting_AllowSelfRegistration" type="checkbox" name="AllowSelfRegistration" value="true" @(Model.Settings.UserManagement.AllowSelfRegistration ? "checked=\"checked\"" : "")>
                     <span></span>
                     @L("AllowUsersToRegisterThemselves")
@@ -20,7 +20,7 @@
             </div>
             <div id="Setting_AllowSelfRegistration_Content">
                 <div class="form-group">
-                    <label for="Setting_IsNewRegisteredUserActiveByDefault" class="checkbox checkbox-outline col-lg-12">
+                    <label for="Setting_IsNewRegisteredUserActiveByDefault" class="checkbox checkbox-outline">
                         <input id="Setting_IsNewRegisteredUserActiveByDefault" type="checkbox" name="IsNewRegisteredUserActiveByDefault" value="true" @(Model.Settings.UserManagement.IsNewRegisteredUserActiveByDefault ? "checked=\"checked\"" : "")>
                         <span></span>
                         @L("NewRegisteredUsersIsActiveByDefault")
@@ -34,13 +34,14 @@
                         @L("UseCaptchaOnRegistration")
                     </label>
                 </div>
-                <div class="form-group">
-                    <label for="Setting_UseCaptchaOnLogin" class="checkbox checkbox-outline">
-                        <input id="Setting_UseCaptchaOnLogin" type="checkbox" name="UseCaptchaOnLogin" value="true" @(Model.Settings.UserManagement.UseCaptchaOnLogin ? "checked=\"checked\"" : "")>
-                        <span></span>
-                        @L("UseCaptchaOnLogin")
-                    </label>
-                </div>
+            </div>
+            <h5>@L("Login")</h5>
+            <div class="form-group">
+                <label for="Setting_UseCaptchaOnLogin" class="checkbox checkbox-outline">
+                    <input id="Setting_UseCaptchaOnLogin" type="checkbox" name="UseCaptchaOnLogin" value="true" @(Model.Settings.UserManagement.UseCaptchaOnLogin ? "checked=\"checked\"" : "")>
+                    <span></span>
+                    @L("UseCaptchaOnLogin")
+                </label>
             </div>
             <h5>@L("SessionTimeOut")</h5>
             <label for="Setting_IsSessionTimeOutEnabled" class="checkbox checkbox-outline">

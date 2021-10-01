@@ -1387,6 +1387,110 @@ namespace Zero.Migrations
                     b.ToTable("AbpWebhookSubscriptions");
                 });
 
+            modelBuilder.Entity("Zero.Abp.Authorization.Accounting.UserInvoice", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Currency")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("InvoiceDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("InvoiceNo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserLegalName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserTaxNo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AppUserInvoices");
+                });
+
+            modelBuilder.Entity("Zero.Abp.Authorization.Users.UserSubscriptionPayment", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("CreatorUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Currency")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("DayCount")
+                        .HasColumnType("int");
+
+                    b.Property<long?>("DeleterUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ErrorUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ExternalPaymentId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Gateway")
+                        .HasColumnType("int");
+
+                    b.Property<string>("InvoiceNo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsRecurring")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("LastModifierUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int?>("PaymentPeriodType")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SuccessUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AppUserSubscriptionPayments");
+                });
+
             modelBuilder.Entity("Zero.Authorization.Delegation.UserDelegation", b =>
                 {
                     b.Property<long>("Id")
@@ -1561,6 +1665,9 @@ namespace Zero.Migrations
                     b.Property<bool>("IsEmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsInTrialPeriod")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsLockoutEnabled")
                         .HasColumnType("bit");
 
@@ -1622,6 +1729,12 @@ namespace Zero.Migrations
 
                     b.Property<DateTime?>("SignInTokenExpireTimeUtc")
                         .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("SubscriptionEndDateUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("SubscriptionPaymentType")
+                        .HasColumnType("int");
 
                     b.Property<string>("Surname")
                         .IsRequired()
@@ -1701,6 +1814,30 @@ namespace Zero.Migrations
                     b.HasIndex("TenantId", "UserId", "ReadState");
 
                     b.ToTable("AppChatMessages");
+                });
+
+            modelBuilder.Entity("Zero.Customize.CurrencyRate", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<double>("Rate")
+                        .HasColumnType("float");
+
+                    b.Property<string>("SourceCurrency")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TargetCurrency")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AbpCurrencyRates");
                 });
 
             modelBuilder.Entity("Zero.Customize.Dashboard.DashboardWidget", b =>
@@ -1995,6 +2132,9 @@ namespace Zero.Migrations
 
                     b.Property<long?>("CreatorUserId")
                         .HasColumnType("bigint");
+
+                    b.Property<string>("Currency")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("DayCount")
                         .HasColumnType("int");
@@ -2456,6 +2596,17 @@ namespace Zero.Migrations
                         .IsRequired();
 
                     b.Navigation("WebhookEvent");
+                });
+
+            modelBuilder.Entity("Zero.Abp.Authorization.Users.UserSubscriptionPayment", b =>
+                {
+                    b.HasOne("Zero.Authorization.Users.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Zero.Authorization.Roles.Role", b =>

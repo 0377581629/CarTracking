@@ -1,0 +1,90 @@
+﻿@using Zero.Editions
+@using Zero.MultiTenancy.Payments
+@using Zero.Web.Areas.App.Models.Editions
+@using Zero.Web.Areas.App.Startup
+@model SubscriptionDashboardViewModel
+@{
+    ViewBag.CurrentPageName = AppPageNames.Tenant.SubscriptionManagement;
+    var user = Model.LoginInformations.User;
+}
+
+@section Scripts
+{
+    <script abp-src="/view-resources/Areas/App/Views/UserSubscriptionManagement/Index.js" asp-append-version="true"></script>
+}
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <abp-page-subheader title="@L("UserSubscription")"></abp-page-subheader>
+
+    <div class="@(await GetContainerClass())">
+        <div class="card card-custom gutter-b">
+            <div class="card-body">
+                <div id="SettingsTabPanel" class="tabbable-line">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item">
+                            <a href="#SubscriptionManagementInformationTab" class="nav-link active" data-toggle="tab" role="tab">
+                                @L("UserSubscriptionInformation")
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#SubscriptionManagementPaymentHistoryTab" data-toggle="tab" role="tab" class="nav-link">
+                                @L("PaymentHistory")
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content m-5">
+                        <div class="tab-pane active" id="SubscriptionManagementInformationTab">
+                            <form class="form">
+                                <div class="form-group row">
+                                    <label class="col-md-4 control-label font-weight-bold text-right">@L("Users")</label>
+                                    <div class="col-md-8">
+                                        <p class="form-control-static">
+                                        @user.EmailAddress
+
+                                        @if (user.IsInTrialPeriod)
+                                        {
+                                            <span class="label label-warning label-inline">@L("Trial")</span>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-4 control-label font-weight-bold text-right">@L("SubscriptionEndDate")</label>
+                                    <div class="col-md-8">
+                                        <p class="form-control-static">
+                                            <span>@(!user.SubscriptionEndDateUtc.HasValue? L("Unlimited"): user.SubscriptionEndDateUtc?.ToString("d"))</span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-4 control-label"></label>
+                                    <div class="col-md-8">
+                                        <a id="btnExtend" href="@Url.Action("ExtendSubscription", "UserPayment", new { area = "" })" class="btn btn-info">
+                                            @L("Extend")
+                                        </a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div id="SubscriptionManagementPaymentHistoryTab" class="tab-pane">
+                            <table id="PaymentHistoryTable" class="display table table-separate table-head-custom no-footer dtr-inline dt-responsive nowrap">
+                                <thead>
+                                <tr>
+                                    <th>@L("Invoice")</th>
+                                    <th>@L("ProcessTime")</th>
+                                    <th>@L("Gateway")</th>
+                                    <th>@L("Amount")</th>
+                                    <th>@L("Currency")</th>
+                                    <th>@L("Status")</th>
+                                    <th>@L("DayCount")</th>
+                                    <th>@L("ExternalPaymentId")</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

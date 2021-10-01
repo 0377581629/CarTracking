@@ -20,7 +20,6 @@ using Zero.Web.Security.Recaptcha;
 using System.Threading.Tasks;
 using Abp.Collections.Extensions;
 using Zero.Editions;
-using Zero.MultiTenancy.Payments.Dto;
 using Zero.Web.Models.TenantRegistration;
 
 namespace Zero.Web.Controllers

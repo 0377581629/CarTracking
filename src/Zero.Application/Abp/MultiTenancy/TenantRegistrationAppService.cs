@@ -14,7 +14,6 @@ using Zero.Editions;
 using Zero.Editions.Dto;
 using Zero.Features;
 using Zero.MultiTenancy.Dto;
-using Zero.MultiTenancy.Payments.Dto;
 using Zero.Notifications;
 using Zero.Security.Recaptcha;
 using Zero.Url;
@@ -22,6 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Zero.Abp.Payments;
 using Zero.MultiTenancy.Payments;
 
 namespace Zero.MultiTenancy

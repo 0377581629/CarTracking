@@ -91,7 +91,7 @@ namespace Zero.Authorization.Users
             link = EncryptQueryParameters(link);
 
             var tenancyName = GetTenancyNameOrNull(user.TenantId);
-            var emailTemplate = GetTitleAndSubTitle(user.TenantId, L("EmailActivation_Title"), L("EmailActivation_SubTitle"));
+            var emailTemplate = GetTitleAndSubTitle(user.TenantId, L("EmailActivation_Title", tenancyName), L("EmailActivation_SubTitle"));
             
             var mailMessage = new StringBuilder();
 
@@ -328,6 +328,41 @@ namespace Zero.Authorization.Users
             }
         }
 
+        public async Task TryToSendUserSubscriptionExpiringSoonEmail(long userId, DateTime dateToCheckRemainingDayCount)
+        {
+            try
+            {
+                using (_unitOfWorkManager.Begin())
+                {
+                    var user = await _userManager.GetUserByIdAsync(userId);
+                    using (_unitOfWorkManager.Current.SetTenantId(user.TenantId))
+                    {
+                        await CheckMailSettingsEmptyOrNull();
+                        
+                        if (string.IsNullOrEmpty(user.EmailAddress))
+                        {
+                            return;
+                        }
+
+                        var userLanguage = await _settingManager.GetSettingValueForUserAsync(LocalizationSettingNames.DefaultLanguage, user.TenantId, user.Id);
+                        var culture = CultureHelper.GetCultureInfoByChecking(userLanguage);
+
+                        var emailTemplate = GetTitleAndSubTitle(null, L("UserSubscriptionExpiringSoon_Title"), L("UserSubscriptionExpiringSoon_SubTitle"));
+                        var mailMessage = new StringBuilder();
+
+                        mailMessage.AppendLine("<b>" + L("Message") + "</b>: " + L("UserSubscriptionExpiringSoon_Email_Body", culture, dateToCheckRemainingDayCount.ToString("yyyy-MM-dd") + " UTC") + "<br />");
+                        mailMessage.AppendLine("<br />");
+
+                        await ReplaceBodyAndSend(user.EmailAddress, L("UserSubscriptionExpiringSoon_Email_Subject"), emailTemplate, mailMessage);
+                    }
+                }
+            }
+            catch (Exception exception)
+            {
+                Logger.Error(exception.Message, exception);
+            }
+        }
+        
         private string GetTenancyNameOrNull(int? tenantId)
         {
             if (tenantId == null)
@@ -337,7 +372,7 @@ namespace Zero.Authorization.Users
 
             using (_unitOfWorkProvider.Current.SetTenantId(null))
             {
-                return _tenantRepository.Get(tenantId.Value).TenancyName;
+                return _tenantRepository.Get(tenantId.Value).Name;
             }
         }
 

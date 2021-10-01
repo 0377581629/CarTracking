@@ -12,6 +12,9 @@ using Abp.UI.Inputs;
 using Abp.Webhooks;
 using AutoMapper;
 using IdentityServer4.Extensions;
+using Zero.Abp.Authorization.Users;
+using Zero.Abp.Payments;
+using Zero.Abp.Payments.Dto;
 using Zero.Auditing.Dto;
 using Zero.Authorization.Accounts.Dto;
 using Zero.Authorization.Delegation;
@@ -41,7 +44,6 @@ using Zero.MultiTenancy;
 using Zero.MultiTenancy.Dto;
 using Zero.MultiTenancy.HostDashboard.Dto;
 using Zero.MultiTenancy.Payments;
-using Zero.MultiTenancy.Payments.Dto;
 using Zero.Notifications.Dto;
 using Zero.Organizations.Dto;
 using Zero.Sessions.Dto;
@@ -146,6 +148,9 @@ namespace Zero
             configuration.CreateMap<UserLoginAttemptDto, UserLoginAttempt>().ReverseMap();
             configuration.CreateMap<ImportUserDto, User>();
 
+            configuration.CreateMap<UserSubscriptionPaymentDto, UserSubscriptionPayment>().ReverseMap();
+            configuration.CreateMap<UserSubscriptionPaymentListDto, UserSubscriptionPayment>().ReverseMap();
+            
             //AuditLog
             configuration.CreateMap<AuditLog, AuditLogListDto>();
             configuration.CreateMap<EntityChange, EntityChangeListDto>();

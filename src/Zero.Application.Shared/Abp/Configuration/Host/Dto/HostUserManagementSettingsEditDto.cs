@@ -16,7 +16,7 @@
         
         public SessionTimeOutSettingsEditDto SessionTimeOutSettings { get; set; }
         
-        // Subscription
+        // User Subscription
         public bool UseSubscription { get; set; }
         
         public int SubscriptionTrialDays { get; set; }
@@ -26,5 +26,13 @@
         public int SubscriptionMonthlyPrice { get; set; }
         
         public int SubscriptionYearlyPrice { get; set; }
+        
+        // User Self Registration
+        
+        public bool AllowSelfRegistration { get; set; }
+        
+        public bool IsNewRegisteredUserActiveByDefault { get; set; }
+        
+        public bool UseCaptchaOnRegistration { get; set; }
     }
 }

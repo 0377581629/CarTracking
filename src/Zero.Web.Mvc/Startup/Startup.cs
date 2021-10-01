@@ -29,6 +29,7 @@ using System.Reflection;
 using Abp.AspNetCore.Configuration;
 using Abp.AspNetCore.Mvc.Antiforgery;
 using Abp.AspNetCore.Mvc.Extensions;
+using Hangfire.SqlServer;
 using HealthChecks.UI;
 using HealthChecks.UI.Client;
 using IdentityServer4.Configuration;
@@ -59,12 +60,9 @@ namespace Zero.Web.Startup
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             LoadGlobalConfig();
-            
+
             // MVC
-            services.AddControllersWithViews(options =>
-                {
-                    options.Filters.Add(new AbpAutoValidateAntiforgeryTokenAttribute());
-                })
+            services.AddControllersWithViews(options => { options.Filters.Add(new AbpAutoValidateAntiforgeryTokenAttribute()); })
 #if DEBUG
                 .AddRazorRuntimeCompilation()
 #endif
@@ -95,7 +93,7 @@ namespace Zero.Web.Startup
                 //Swagger - Enable this line and the related lines in Configure method to enable swagger UI
                 services.AddSwaggerGen(options =>
                 {
-                    options.SwaggerDoc("v1", new OpenApiInfo() {Title = "Zero API", Version = "v1"});
+                    options.SwaggerDoc("v1", new OpenApiInfo() { Title = "Zero API", Version = "v1" });
                     options.DocInclusionPredicate((docName, description) => true);
                     options.ParameterFilter<SwaggerEnumParameterFilter>();
                     options.SchemaFilter<SwaggerEnumSchemaFilter>();
@@ -115,20 +113,15 @@ namespace Zero.Web.Startup
             if (WebConsts.HangfireDashboardEnabled)
             {
                 //Hangfire (Enable to use Hangfire instead of default job manager)
-                services.AddHangfire(config =>
-                {
-                    config.UseSqlServerStorage(_appConfiguration.GetConnectionString("Default"));
-                });
+                services.AddHangfire(config => { config.UseSqlServerStorage(_appConfiguration.GetConnectionString("Default")); });
+                JobStorage.Current = new SqlServerStorage(_appConfiguration.GetConnectionString("Default"));
             }
 
             services.AddScoped<IWebResourceManager, WebResourceManager>();
 
             services.AddSignalR();
 
-            services.Configure<SecurityStampValidatorOptions>(options =>
-            {
-                options.ValidationInterval = TimeSpan.Zero;
-            });
+            services.Configure<SecurityStampValidatorOptions>(options => { options.ValidationInterval = TimeSpan.Zero; });
 
             if (bool.Parse(_appConfiguration["HealthChecks:HealthChecksEnabled"]))
             {
@@ -138,20 +131,14 @@ namespace Zero.Web.Startup
 
                 if (bool.Parse(healthCheckUISection["HealthChecksUIEnabled"]))
                 {
-                    services.Configure<HealthChecksUISettings>(settings =>
-                    {
-                        healthCheckUISection.Bind(settings, c => c.BindNonPublicProperties = true);
-                    });
+                    services.Configure<HealthChecksUISettings>(settings => { healthCheckUISection.Bind(settings, c => c.BindNonPublicProperties = true); });
 
                     services.AddHealthChecksUI()
                         .AddInMemoryStorage();
                 }
             }
 
-            services.Configure<RazorViewEngineOptions>(options =>
-            {
-                options.ViewLocationExpanders.Add(new RazorViewLocationExpander());
-            });
+            services.Configure<RazorViewEngineOptions>(options => { options.ViewLocationExpanders.Add(new RazorViewLocationExpander()); });
 
             //Configure Abp and Dependency Injection
             return services.AddAbp<ZeroWebMvcModule>(options =>
@@ -221,7 +208,9 @@ namespace Zero.Web.Startup
                 app.UseHangfireDashboard("/hangfire", new DashboardOptions
                 {
                     Authorization = new[]
-                        {new AbpHangfireAuthorizationFilter(AppPermissions.Pages_Administration_HangfireDashboard)}
+                    {
+                        new AbpHangfireAuthorizationFilter(AppPermissions.Pages_Administration_HangfireDashboard)
+                    }
                 });
                 app.UseHangfireServer();
             }
@@ -247,7 +236,7 @@ namespace Zero.Web.Startup
                         ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
                     });
                 }
-                
+
                 app.ApplicationServices.GetRequiredService<IAbpAspNetCoreConfiguration>().EndpointConfiguration.ConfigureAllEndpoints(endpoints);
             });
 
@@ -292,18 +281,21 @@ namespace Zero.Web.Startup
                     });
             });
         }
-        
+
         private void LoadGlobalConfig()
         {
             #region System
+
             ZeroConsts.MultiTenancyEnabled = bool.Parse(_appConfiguration["GlobalConfig:AllowMultiTenancy"]);
             SystemConfig.DisableMailService = bool.Parse(_appConfiguration["GlobalConfig:DisableMailService"]);
             SystemConfig.LogIndex = _appConfiguration["GlobalConfig:LogIndex"];
             if (!string.IsNullOrEmpty(_appConfiguration["GlobalConfig:DefaultPassword"]))
                 SystemConfig.DefaultPassword = _appConfiguration["GlobalConfig:DefaultPassword"];
+
             #endregion
-            
+
             #region Layout
+
             GlobalConfig.AppName = _appConfiguration["GlobalConfig:AppName"];
             GlobalConfig.AppFooter = _appConfiguration["GlobalConfig:AppFooter"];
             GlobalConfig.AppDescription = _appConfiguration["GlobalConfig:AppDescription"];
@@ -312,10 +304,11 @@ namespace Zero.Web.Startup
 
             GlobalConfig.AppFaviconName = _appConfiguration["GlobalConfig:AppFaviconName"];
             GlobalConfig.AppDefaultLogo = _appConfiguration["GlobalConfig:AppDefaultLogo"];
+
             #endregion
-            
+
             #region Account Layout
-            
+
             GlobalConfig.AppLoginTitle = _appConfiguration["LoginPage:AppLoginTitle"];
             GlobalConfig.AppLoginSubtitle = _appConfiguration["LoginPage:AppLoginSubtitle"];
 
@@ -332,14 +325,16 @@ namespace Zero.Web.Startup
             GlobalConfig.AppDefaultMenuLogo = _appConfiguration["AppMenuLogo:Url"];
 
             #endregion
-            
+
             #region Upload , Import
+
             GlobalConfig.AppPhysPath = _hostingEnvironment.WebRootPath;
             GlobalConfig.UploadPath = _appConfiguration["GlobalConfig:UploadPath"];
             GlobalConfig.MaxUploadFileSize = Convert.ToUInt32(_appConfiguration["GlobalConfig:MaxUploadFileSize"]);
             GlobalConfig.ImportTemplatePath = _appConfiguration["GlobalConfig:ImportTemplatePath"];
             if (!string.IsNullOrEmpty(_appConfiguration["GlobalConfig:ImportSampleFolders"]))
                 GlobalConfig.ImportSampleFolders = _appConfiguration["GlobalConfig:ImportSampleFolders"];
+
             #endregion
         }
     }

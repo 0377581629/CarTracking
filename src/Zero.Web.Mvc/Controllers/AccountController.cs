@@ -149,8 +149,8 @@ namespace Zero.Web.Controllers
                 var tenant = await _tenantManager.GetByIdAsync(AbpSession.TenantId.Value);
                 if (!tenant.IsActive)
                 {
-                    await SwitchToTenantIfNeeded(null);
-                    successMessage += " - " + L("TenantIsNotActive", tenant.TenancyName);
+                    SetTenantIdCookie(null);
+                    return RedirectToAction("Login", "Account");
                 }
             }
             
@@ -267,15 +267,27 @@ namespace Zero.Web.Controllers
 
         private async Task<AbpLoginResult<Tenant, User>> GetLoginResultAsync(string usernameOrEmailAddress, string password, string tenancyName)
         {
-            var loginResult = await _logInManager.LoginAsync(usernameOrEmailAddress, password, tenancyName);
-
-            switch (loginResult.Result)
+            try
             {
-                case AbpLoginResultType.Success:
-                    return loginResult;
-                default:
-                    throw _abpLoginResultTypeHelper.CreateExceptionForFailedLoginAttempt(loginResult.Result, usernameOrEmailAddress, tenancyName);
+                var loginResult = await _logInManager.LoginAsync(usernameOrEmailAddress, password, tenancyName);
+
+                switch (loginResult.Result)
+                {
+                    case AbpLoginResultType.Success:
+                        return loginResult;
+                    default:
+                        throw _abpLoginResultTypeHelper.CreateExceptionForFailedLoginAttempt(loginResult.Result, usernameOrEmailAddress, tenancyName);
+                }
             }
+            catch (Exception err)
+            {
+                if (err.Message == "UserIsExpiredSubscription")
+                {
+                    throw new UserFriendlyException(L("UserIsExpiredSubscription"));
+                }
+            }
+
+            return null;
         }
 
         private string AddSingleSignInParametersToReturnUrl(string returnUrl, string signInToken, long userId, int? tenantId)
@@ -516,21 +528,24 @@ namespace Zero.Web.Controllers
 
                 await _unitOfWorkManager.Current.SaveChangesAsync();
 
-                Debug.Assert(user.TenantId != null);
-
-                var tenant = await _tenantManager.GetByIdAsync(user.TenantId.Value);
-
+                string tenancyName = null;
+                if (user.TenantId != null)
+                {
+                    var tenant = await _tenantManager.GetByIdAsync(user.TenantId.Value);
+                    tenancyName = tenant.TenancyName;
+                }
+                
                 //Directly login if possible
                 if (user.IsActive && (user.IsEmailConfirmed || !isEmailConfirmationRequiredForLogin))
                 {
                     AbpLoginResult<Tenant, User> loginResult;
                     if (externalLoginInfo != null)
                     {
-                        loginResult = await _logInManager.LoginAsync(externalLoginInfo, tenant.TenancyName);
+                        loginResult = await _logInManager.LoginAsync(externalLoginInfo, tenancyName);
                     }
                     else
                     {
-                        loginResult = await GetLoginResultAsync(user.UserName, model.Password, tenant.TenancyName);
+                        loginResult = await GetLoginResultAsync(user.UserName, model.Password, tenancyName);
                     }
 
                     if (loginResult.Result == AbpLoginResultType.Success)
@@ -552,7 +567,7 @@ namespace Zero.Web.Controllers
 
                 return View("RegisterResult", new RegisterResultViewModel
                 {
-                    TenancyName = tenant.TenancyName,
+                    TenancyName = tenancyName??L("System"),
                     NameAndSurname = user.Name + " " + user.Surname,
                     UserName = user.UserName,
                     EmailAddress = user.EmailAddress,
@@ -573,12 +588,6 @@ namespace Zero.Web.Controllers
 
         private bool UseCaptchaOnRegistration()
         {
-            if (!AbpSession.TenantId.HasValue)
-            {
-                //Host users can not register
-                throw new InvalidOperationException();
-            }
-
             return SettingManager.GetSettingValue<bool>(AppSettings.UserManagement.UseCaptchaOnRegistration);
         }
 
@@ -597,22 +606,12 @@ namespace Zero.Web.Controllers
 
         private bool IsSelfRegistrationEnabled()
         {
-            if (!AbpSession.TenantId.HasValue)
-            {
-                return false; //No registration enabled for host users!
-            }
-
             return SettingManager.GetSettingValue<bool>(AppSettings.UserManagement.AllowSelfRegistration);
         }
 
         private bool IsTenantSelfRegistrationEnabled()
         {
-            if (AbpSession.TenantId.HasValue)
-            {
-                return false;
-            }
-
-            return SettingManager.GetSettingValue<bool>(AppSettings.TenantManagement.AllowSelfRegistration);
+            return !AbpSession.TenantId.HasValue && SettingManager.GetSettingValue<bool>(AppSettings.TenantManagement.AllowSelfRegistration);
         }
 
         #endregion

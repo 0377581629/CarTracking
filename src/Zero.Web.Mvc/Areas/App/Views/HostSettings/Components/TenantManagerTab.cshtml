@@ -7,7 +7,7 @@
 <div class="tab-pane  @((!Clock.SupportsMultipleTimezone) ? "active" : "")" id="SettingsTenantManagementTab">
 
     <form id="TenantManagementSettingsForm">
-        <h5>@L("FormBasedRegistration")</h5>
+        <h5>@L("Registration")</h5>
         <div class="form-group">
             <label for="Setting_AllowSelfRegistration" class="checkbox checkbox-outline col-lg-12">
                 <input id="Setting_AllowSelfRegistration" type="checkbox" name="AllowSelfRegistration" value="true" @(Model.Settings.TenantManagement.AllowSelfRegistration ? "checked=\"checked\"" : "")>

@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Abp.EntityFrameworkCore;
+using Zero.Abp.Payments;
 using Zero.EntityFrameworkCore;
 using Zero.EntityFrameworkCore.Repositories;
 

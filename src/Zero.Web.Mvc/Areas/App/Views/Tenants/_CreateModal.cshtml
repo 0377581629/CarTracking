@@ -18,19 +18,20 @@
                     @Html.DropDownList("ParentId", SelectListHelper.ListWithNull(L("NoneSelect"), Model.ListTenant), new { @class = "form-control kt-select2" })
                 </div>
             </div>
-        </div>
-        <div class="col-4">
-            <div class="form-group">
-                <label for="TenancyName">@L("TenancyName")</label>
-                <input id="TenancyName" class="form-control" type="text" name="TenancyName" required maxlength="@Tenant.MaxTenancyNameLength" regex="@Tenant.TenancyNameRegex">
+            <div class="col-4">
+                <div class="form-group">
+                    <label for="TenancyName">@L("TenancyName")</label>
+                    <input id="TenancyName" class="form-control" type="text" name="TenancyName" required maxlength="@Tenant.MaxTenancyNameLength" regex="@Tenant.TenancyNameRegex">
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group no-hint">
+                    <label for="Name">@L("Name")</label>
+                    <input id="Name" type="text" name="Name" class="form-control" required maxlength="@Tenant.MaxNameLength">
+                </div>
             </div>
         </div>
-        <div class="col-4">
-            <div class="form-group no-hint">
-                <label for="Name">@L("Name")</label>
-                <input id="Name" type="text" name="Name" class="form-control" required maxlength="@Tenant.MaxNameLength">
-            </div>
-        </div>
+
         <div class="checkbox-list">
             <label class="checkbox checkbox-outline">
                 <input id="CreateTenant_UseHostDb" type="checkbox" name="UseHostDb" value="true" checked="checked">
