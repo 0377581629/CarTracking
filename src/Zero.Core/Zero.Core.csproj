@@ -3,7 +3,6 @@
   <Import Project="..\..\common.props"></Import>
 
   <PropertyGroup>
-    <TargetFrameworks>net5.0</TargetFrameworks>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
     <AssemblyName>Zero.Core</AssemblyName>
     <PackageId>Zero.Core</PackageId>
@@ -14,6 +13,7 @@
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <UserSecretsId>MyCompanyName-Zero-894FDFC1-6482-4A56-926A-3C46C9FE0329</UserSecretsId>
     <RootNamespace>Zero</RootNamespace>
+    <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
