@@ -1,3 +1,4 @@
+import 'package:aspnet_zero_app/abp_client/models/auth/authenticate_result_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'ajax_response.g.dart';
 
@@ -27,21 +28,21 @@ class ErrorInfo {
   Map<String, dynamic> toJson() => _$ErrorInfoToJson(this);
 }
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, genericArgumentFactories: true)
 class AjaxResponse<T> {
-  String targetUrl = '';
+  String? targetUrl;
   bool success = false;
   bool unAuthorizedRequest = false;
 
   @JsonKey(name: "__abp")
   bool abp = false;
   ErrorInfo? errorInfo;
-  @_Converter()
+
   T? result;
 
   AjaxResponse(
-      {String inpTargetUrl = '',
-      T? inpResult,
+      {T? inpResult,
+      String inpTargetUrl = '',
       ErrorInfo? inpErrorInfo,
       bool inpUnAuthorizedRequest = false}) {
     targetUrl = inpTargetUrl;
@@ -54,26 +55,10 @@ class AjaxResponse<T> {
     errorInfo = inpErrorInfo;
     unAuthorizedRequest = inpUnAuthorizedRequest;
   }
-  factory AjaxResponse.fromJson(Map<String, dynamic> json) =>
-      _$AjaxResponseFromJson(json);
+  factory AjaxResponse.fromJson(
+          Map<String, dynamic> json, T Function(Object? json) fromJsonT) =>
+      _$AjaxResponseFromJson(json, fromJsonT);
 
-  Map<String, dynamic> toJson() => _$AjaxResponseToJson(this);
-}
-
-class _Converter<T> implements JsonConverter<T, Object?> {
-  const _Converter();
-
-  @override
-  T fromJson(Object? json) {
-    // This will only work if `json` is a native JSON type:
-    //   num, String, bool, null, etc
-    // *and* is assignable to `T`.
-    return json as T;
-  }
-
-  // This will only work if `object` is a native JSON type:
-  //   num, String, bool, null, etc
-  // Or if it has a `toJson()` function`.
-  @override
-  Object? toJson(T object) => object;
+  Map<String, dynamic> toJson(Object? Function(T value) toJsonT) =>
+      _$AjaxResponseToJson(this, toJsonT);
 }

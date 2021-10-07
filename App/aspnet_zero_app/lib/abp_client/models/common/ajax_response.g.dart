@@ -42,23 +42,41 @@ Map<String, dynamic> _$ErrorInfoToJson(ErrorInfo instance) => <String, dynamic>{
       'validationErrors': instance.validationErrors,
     };
 
-AjaxResponse<T> _$AjaxResponseFromJson<T>(Map<String, dynamic> json) =>
+AjaxResponse<T> _$AjaxResponseFromJson<T>(
+  Map<String, dynamic> json,
+  T Function(Object? json) fromJsonT,
+) =>
     AjaxResponse<T>()
-      ..targetUrl = json['targetUrl'] as String
+      ..targetUrl = json['targetUrl'] as String?
       ..success = json['success'] as bool
       ..unAuthorizedRequest = json['unAuthorizedRequest'] as bool
       ..abp = json['__abp'] as bool
       ..errorInfo = json['errorInfo'] == null
           ? null
           : ErrorInfo.fromJson(json['errorInfo'] as Map<String, dynamic>)
-      ..result = _Converter<T?>().fromJson(json['result']);
+      ..result = _$nullableGenericFromJson(json['result'], fromJsonT);
 
-Map<String, dynamic> _$AjaxResponseToJson<T>(AjaxResponse<T> instance) =>
+Map<String, dynamic> _$AjaxResponseToJson<T>(
+  AjaxResponse<T> instance,
+  Object? Function(T value) toJsonT,
+) =>
     <String, dynamic>{
       'targetUrl': instance.targetUrl,
       'success': instance.success,
       'unAuthorizedRequest': instance.unAuthorizedRequest,
       '__abp': instance.abp,
       'errorInfo': instance.errorInfo?.toJson(),
-      'result': _Converter<T?>().toJson(instance.result),
+      'result': _$nullableGenericToJson(instance.result, toJsonT),
     };
+
+T? _$nullableGenericFromJson<T>(
+  Object? input,
+  T Function(Object? json) fromJson,
+) =>
+    input == null ? null : fromJson(input);
+
+Object? _$nullableGenericToJson<T>(
+  T? input,
+  Object? Function(T value) toJson,
+) =>
+    input == null ? null : toJson(input);

@@ -1,7 +1,25 @@
+import 'package:aspnet_zero_app/abp_client/access_token_manager.dart';
+import 'package:aspnet_zero_app/abp_client/application_context.dart';
+import 'package:aspnet_zero_app/abp_client/interfaces/access_token_manager.dart';
+import 'package:aspnet_zero_app/abp_client/interfaces/multi_tenancy_config.dart';
+import 'package:aspnet_zero_app/abp_client/models/multi_tenancy/multi_tenancy_config.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
-void main() {
+import 'abp_client/interfaces/application_context.dart';
+import 'abp_client/models/auth/authenticate_model.dart';
+
+final getIt = GetIt.I;
+void main() async {
+  await setupGetIt();
   runApp(const MyApp());
+}
+
+setupGetIt() async {
+  getIt.registerSingleton<IApplicationContext>(ApplicationContext());
+  getIt.registerSingleton<IAccessTokenManager>(
+      AccessTokenManager(getIt.get<IApplicationContext>()));
+  getIt.registerSingleton<IMultiTenancyConfig>(MultiTenancyConfig());
 }
 
 class MyApp extends StatelessWidget {
@@ -50,7 +68,13 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
-  void _incrementCounter() {
+  void _incrementCounter() async {
+    // var _client = AbpApiClient();
+    var accessTokenManager = getIt.get<IAccessTokenManager>();
+    accessTokenManager.authenticateModel =
+        AuthenticateModel("admin", "123qwe123", false);
+    await accessTokenManager.loginAsync();
+
     setState(() {
       // This call to setState tells the Flutter framework that something has
       // changed in this State, which causes it to rerun the build method below

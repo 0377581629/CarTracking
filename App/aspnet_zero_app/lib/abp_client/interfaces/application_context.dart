@@ -4,28 +4,24 @@ import 'package:aspnet_zero_app/abp_client/models/multi_tenancy/tenant_informati
 import 'package:aspnet_zero_app/abp_client/models/user/user_configuration.dart';
 
 abstract class IApplicationContext {
-  final TenantInformation? _currentTenant;
+  TenantInformation? _currentTenant;
 
   TenantInformation? get currentTenant => _currentTenant;
 
-  UserConfiguration configuration;
+  LoginInformations? _loginInfo;
 
-  final LoginInformations _loginInfo;
+  LoginInformations? get loginInfo => _loginInfo;
 
-  LoginInformations get loginInfo => _loginInfo;
+  UserConfiguration? configuration;
 
+  LanguageInfo? currentLanguage;
   void clearLoginInfo();
 
   void setLoginInfo(LoginInformations loginInfo);
 
   void setAsHost();
 
-  void setAsTenant(String tenancyName, int tenantId);
-
-  LanguageInfo currentLanguage;
+  void setAsTenant(int tenantId, String tenancyName);
 
   void load(TenantInformation currentTenant, LoginInformations loginInfo);
-
-  IApplicationContext(this.configuration, this.currentLanguage,
-      this._currentTenant, this._loginInfo);
 }

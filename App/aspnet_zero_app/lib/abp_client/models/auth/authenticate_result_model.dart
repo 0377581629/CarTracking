@@ -44,4 +44,7 @@ class AbpAuthenticateResultModel {
       _$AbpAuthenticateResultModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$AbpAuthenticateResultModelToJson(this);
+
+  static AbpAuthenticateResultModel fromJsonModel(Map<String, dynamic> json) =>
+      AbpAuthenticateResultModel.fromJson(json);
 }
