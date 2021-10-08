@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:aspnet_zero_app/abp_client/access_token_manager.dart';
 import 'package:aspnet_zero_app/abp_client/application_context.dart';
 import 'package:aspnet_zero_app/abp_client/interfaces/access_token_manager.dart';
@@ -12,6 +14,7 @@ import 'abp_client/models/auth/authenticate_model.dart';
 final getIt = GetIt.I;
 void main() async {
   await setupGetIt();
+  HttpOverrides.global = MyHttpOverrides();
   runApp(const MyApp());
 }
 
@@ -20,6 +23,15 @@ setupGetIt() async {
   getIt.registerSingleton<IAccessTokenManager>(
       AccessTokenManager(getIt.get<IApplicationContext>()));
   getIt.registerSingleton<IMultiTenancyConfig>(MultiTenancyConfig());
+}
+
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -72,7 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // var _client = AbpApiClient();
     var accessTokenManager = getIt.get<IAccessTokenManager>();
     accessTokenManager.authenticateModel =
-        AuthenticateModel("admin", "123qwe123", false);
+        AuthenticateModel("admin", "123qwe", false);
     await accessTokenManager.loginAsync();
 
     setState(() {
