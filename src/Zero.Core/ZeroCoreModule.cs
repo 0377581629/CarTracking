@@ -131,6 +131,8 @@ namespace Zero
             IocManager.Register<DashboardConfiguration>();
             
             Configuration.ReplaceService<IBackgroundJobManager, MyBackgroundJobManager>(DependencyLifeStyle.Singleton);
+            
+            Configuration.MultiTenancy.TenantIdResolveKey = "abp.tenantid";
         }
 
         public override void Initialize()

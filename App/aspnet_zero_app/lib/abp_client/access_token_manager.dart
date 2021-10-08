@@ -1,5 +1,5 @@
 import 'package:aspnet_zero_app/abp_client/configuration/abp_config.dart';
-import 'package:aspnet_zero_app/abp_client/http_client.dart';
+import 'package:aspnet_zero_app/helpers/http_client.dart';
 import 'package:aspnet_zero_app/abp_client/interfaces/access_token_manager.dart';
 import 'package:aspnet_zero_app/abp_client/models/auth/authenticate_model.dart';
 import 'package:aspnet_zero_app/abp_client/models/auth/authenticate_result_model.dart';
@@ -44,9 +44,9 @@ class AccessTokenManager implements IAccessTokenManager {
           "userNameOrEmailAddress and password cannot be empty");
     }
 
-    _applicationContext.setAsTenant(100, "ABC");
+    _applicationContext.setAsTenant(1017, "test");
 
-    var client = HttpClient().init();
+    var client = await HttpClient().init();
 
     var clientResponse =
         await client.post(AbpConfig.loginUrlSegment, data: authenticateModel);
@@ -84,7 +84,7 @@ class AccessTokenManager implements IAccessTokenManager {
       throw UnimplementedError("No refresh token!");
     }
 
-    var client = HttpClient().init();
+    var client = await HttpClient().init();
 
     if (_applicationContext.currentTenant != null) {
       client.options.headers[AbpConfig.tenantResolveKey] =

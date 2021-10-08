@@ -42,6 +42,9 @@ dependencies:
   retrofit_generator: ^2.0.1+1
   built_value: ^8.1.2
   built_value_generator: ^8.1.2
+  dio_cookie_manager: ^2.0.0
+  cookie_jar: ^3.0.1
+  path_provider: ^2.0.5
 dev_dependencies:
   flutter_test:
     sdk: flutter
