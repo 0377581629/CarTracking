@@ -3,11 +3,11 @@ part 'authenticate_model.g.dart';
 
 @JsonSerializable()
 class AuthenticateModel {
-  String userNameOrEmailAddress;
+  String? userNameOrEmailAddress;
 
-  String password;
+  String? password;
 
-  bool rememberClient;
+  bool? rememberClient;
 
   String? twoFactorVerificationCode;
 
@@ -20,7 +20,7 @@ class AuthenticateModel {
   bool get isTwoFactorVerification => twoFactorVerificationCode!.isNotEmpty;
 
   AuthenticateModel(
-      this.userNameOrEmailAddress, this.password, this.rememberClient);
+      {this.userNameOrEmailAddress, this.password, this.rememberClient});
 
   factory AuthenticateModel.fromJson(Map<String, dynamic> json) =>
       _$AuthenticateModelFromJson(json);

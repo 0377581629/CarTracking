@@ -1,5 +1,9 @@
 import 'dart:io';
 
+import 'package:aspnet_zero_app/abp_base/interfaces/data_storage_service.dart';
+import 'package:aspnet_zero_app/abp_base/interfaces/session_service.dart';
+import 'package:aspnet_zero_app/abp_base/services/data_storage_service.dart';
+import 'package:aspnet_zero_app/abp_base/services/session_service.dart';
 import 'package:aspnet_zero_app/abp_client/access_token_manager.dart';
 import 'package:aspnet_zero_app/abp_client/application_context.dart';
 import 'package:aspnet_zero_app/abp_client/interfaces/access_token_manager.dart';
@@ -19,10 +23,11 @@ void main() async {
 }
 
 setupGetIt() async {
+  getIt.registerSingleton<IDataStorageService>(DataStorageService());
   getIt.registerSingleton<IApplicationContext>(ApplicationContext());
-  getIt.registerSingleton<IAccessTokenManager>(
-      AccessTokenManager(getIt.get<IApplicationContext>()));
+  getIt.registerSingleton<IAccessTokenManager>(AccessTokenManager());
   getIt.registerSingleton<IMultiTenancyConfig>(MultiTenancyConfig());
+  getIt.registerSingleton<ISessionAppService>(SessionAppService());
 }
 
 class MyHttpOverrides extends HttpOverrides {
@@ -83,16 +88,26 @@ class _MyHomePageState extends State<MyHomePage> {
   void _incrementCounter() async {
     // var _client = AbpApiClient();
     var accessTokenManager = getIt.get<IAccessTokenManager>();
+    var dataStorageService = getIt.get<IDataStorageService>();
+
     accessTokenManager.authenticateModel =
         AuthenticateModel("admin", "123qwe", false);
-    await accessTokenManager.loginAsync();
+    var authenResult = await accessTokenManager.loginAsync();
+
+    await dataStorageService.storeAuthenticateResult(authenResult);
 
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
+      _counter++;
+    });
+  }
+
+  void _callApi() async {
+    var dataStorageService = getIt.get<IDataStorageService>();
+
+    var sessionAppService = getIt.get<ISessionAppService>();
+    var loginInfos = await sessionAppService.getCurrentLoginInformations();
+    await dataStorageService.storeLoginInfomation(loginInfos);
+    setState(() {
       _counter++;
     });
   }
@@ -141,10 +156,20 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          FloatingActionButton(
+            onPressed: _incrementCounter,
+            tooltip: 'Login',
+            child: const Icon(Icons.add),
+          ),
+          FloatingActionButton(
+            onPressed: _callApi,
+            tooltip: 'CallAPI',
+            child: const Icon(Icons.nearby_off),
+          ),
+        ],
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }

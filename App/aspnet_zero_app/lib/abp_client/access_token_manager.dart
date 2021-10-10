@@ -1,52 +1,60 @@
-import 'package:aspnet_zero_app/abp_client/configuration/abp_config.dart';
+import 'package:aspnet_zero_app/configuration/abp_config.dart';
 import 'package:aspnet_zero_app/helpers/http_client.dart';
 import 'package:aspnet_zero_app/abp_client/interfaces/access_token_manager.dart';
 import 'package:aspnet_zero_app/abp_client/models/auth/authenticate_model.dart';
 import 'package:aspnet_zero_app/abp_client/models/auth/authenticate_result_model.dart';
 import 'package:aspnet_zero_app/abp_client/models/auth/refresh_token_result.dart';
-import 'package:get_it/get_it.dart';
-import 'interfaces/application_context.dart';
 import 'models/common/ajax_response.dart';
 
 class AccessTokenManager implements IAccessTokenManager {
+  @override
   AuthenticateModel? authenticateModel;
-  IApplicationContext _applicationContext;
-
-  AccessTokenManager(this._applicationContext) {
-    GetIt getIt = GetIt.I;
-    _applicationContext = getIt.get<IApplicationContext>();
-  }
 
   @override
-  AbpAuthenticateResultModel? authenticateResult;
+  AuthenticateResultModel? authenticateResult;
 
   @override
   String getAccessToken() {
     if (authenticateResult == null) {
-      throw UnimplementedError();
+      return '';
     }
     return authenticateResult!.accessToken!;
   }
 
   @override
-  bool get isRefreshTokenExpired =>
-      authenticateResult == null ||
-      DateTime.now().isAfter(authenticateResult!.refreshTokenExpireDate!);
+  bool isTokenExpired() {
+    if (authenticateResult == null) {
+      return false;
+    } else {
+      return DateTime.now().isAfter(authenticateResult!.tokenExpireDate!);
+    }
+  }
 
   @override
-  bool get isUserLoggedIn => authenticateResult!.accessToken != null;
+  bool isRefreshTokenExpired() {
+    if (authenticateResult == null) {
+      return false;
+    } else {
+      return DateTime.now()
+          .isAfter(authenticateResult!.refreshTokenExpireDate!);
+    }
+  }
 
   @override
-  Future<AbpAuthenticateResultModel> loginAsync() async {
-    if (authenticateModel!.userNameOrEmailAddress.isEmpty ||
-        authenticateModel!.password.isEmpty) {
+  bool isUserLoggedIn() {
+    return authenticateResult != null &&
+        authenticateResult!.accessToken != null;
+  }
+
+  @override
+  Future<AuthenticateResultModel> loginAsync() async {
+    if (authenticateModel!.userNameOrEmailAddress!.isEmpty ||
+        authenticateModel!.password!.isEmpty) {
       throw UnimplementedError(
           "userNameOrEmailAddress and password cannot be empty");
     }
 
-    _applicationContext.setAsTenant(1017, "test");
-
-    var client = await HttpClient().init();
+    var client = await HttpClient().createClient();
 
     var clientResponse =
         await client.post(AbpConfig.loginUrlSegment, data: authenticateModel);
@@ -56,10 +64,10 @@ class AccessTokenManager implements IAccessTokenManager {
       throw UnimplementedError('Login failed');
     }
 
-    var ajaxReponse = AjaxResponse<AbpAuthenticateResultModel>.fromJson(
+    var ajaxReponse = AjaxResponse<AuthenticateResultModel>.fromJson(
         clientResponse.data,
         (data) =>
-            AbpAuthenticateResultModel.fromJson(data as Map<String, dynamic>));
+            AuthenticateResultModel.fromJson(data as Map<String, dynamic>));
 
     if (!ajaxReponse.success) {
       throw UnimplementedError(
@@ -67,8 +75,15 @@ class AccessTokenManager implements IAccessTokenManager {
     }
 
     authenticateResult = ajaxReponse.result!;
-    authenticateResult!.refreshTokenExpireDate = DateTime.now()
-        .add(const Duration(days: AbpConfig.refreshTokenExpirationDays));
+
+    if (authenticateResult!.expireInSeconds != null) {
+      authenticateResult!.tokenExpireDate = DateTime.now()
+          .add(Duration(seconds: authenticateResult!.expireInSeconds!));
+    }
+    if (authenticateResult!.refreshTokenExpireInSeconds != null) {
+      authenticateResult!.refreshTokenExpireDate = DateTime.now().add(
+          Duration(seconds: authenticateResult!.refreshTokenExpireInSeconds!));
+    }
 
     return authenticateResult!;
   }
@@ -80,16 +95,11 @@ class AccessTokenManager implements IAccessTokenManager {
 
   @override
   Future refreshTokenAsync() async {
-    if (authenticateResult!.refreshToken!.isNotEmpty) {
+    if (authenticateResult!.refreshToken!.isEmpty) {
       throw UnimplementedError("No refresh token!");
     }
 
-    var client = await HttpClient().init();
-
-    if (_applicationContext.currentTenant != null) {
-      client.options.headers[AbpConfig.tenantResolveKey] =
-          _applicationContext.currentTenant!.tenantId;
-    }
+    var client = await HttpClient().createClient();
 
     var clientResponse = await client.post(AbpConfig.refreshTokenUrlSegment,
         data: {'refreshToken': authenticateResult!.refreshToken});

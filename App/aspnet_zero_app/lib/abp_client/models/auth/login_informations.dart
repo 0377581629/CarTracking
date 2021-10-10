@@ -1,9 +1,10 @@
 import 'package:aspnet_zero_app/abp_client/enums/payment_period_type.dart';
 import 'package:aspnet_zero_app/abp_client/enums/subscription_payment_type.dart';
 import 'package:aspnet_zero_app/abp_client/models/edition/edition_info.dart';
-import 'package:tuple/tuple.dart';
-import 'package:uuid/uuid.dart';
+import 'package:json_annotation/json_annotation.dart';
+part 'login_informations.g.dart';
 
+@JsonSerializable()
 class UserLoginInfo {
   int id;
   String name;
@@ -13,7 +14,8 @@ class UserLoginInfo {
   String profilePictureId;
   bool isInTrialPeriod;
   DateTime? subscriptionEndDateUtc;
-  SubscriptionPaymentType subscriptionPaymentType;
+  String subscriptionPaymentType;
+
   bool isInTrial() {
     return isInTrialPeriod;
   }
@@ -50,24 +52,30 @@ class UserLoginInfo {
       this.isInTrialPeriod,
       this.subscriptionEndDateUtc,
       this.subscriptionPaymentType);
+
+  factory UserLoginInfo.fromJson(Map<String, dynamic> json) =>
+      _$UserLoginInfoFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UserLoginInfoToJson(this);
 }
 
+@JsonSerializable()
 class TenantLoginInfo {
   String tenancyName;
 
   String name;
 
-  UuidValue? logoId;
+  String? logoId;
 
   String logoFileType;
 
-  UuidValue? customCssId;
+  String? customCssId;
 
   DateTime? subscriptionEndDateUtc;
 
   bool isInTrialPeriod;
 
-  SubscriptionPaymentType subscriptionPaymentType;
+  String subscriptionPaymentType;
 
   EditionInfo edition;
 
@@ -109,11 +117,11 @@ class TenantLoginInfo {
     return subscriptionPaymentType != SubscriptionPaymentType.manual;
   }
 
-  UuidValue? loginLogoId;
+  String? loginLogoId;
 
-  UuidValue? menuLogoId;
+  String? menuLogoId;
 
-  UuidValue? loginBackgroundId;
+  String? loginBackgroundId;
 
   String loginLogoFileType;
 
@@ -159,20 +167,26 @@ class TenantLoginInfo {
       this.webFavicon,
       this.webKeyword,
       this.webTitle);
+
+  factory TenantLoginInfo.fromJson(Map<String, dynamic> json) =>
+      _$TenantLoginInfoFromJson(json);
+
+  Map<String, dynamic> toJson() => _$TenantLoginInfoToJson(this);
 }
 
+@JsonSerializable()
 class ApplicationLoginInfo {
-  String version;
-  DateTime releaseDate;
-  String currency;
-  String currencySign;
-  bool allowTenantsToChangeEmailSettings;
-  bool userDelegationIsEnabled;
-  double twoFactorCodeExpireSeconds;
-  Tuple2<String, bool> features;
-  bool useSubscriptionUser;
+  String? version;
+  DateTime? releaseDate;
+  String? currency;
+  String? currencySign;
+  bool? allowTenantsToChangeEmailSettings;
+  bool? userDelegationIsEnabled;
+  double? twoFactorCodeExpireSeconds;
+  Map<String, bool>? features;
+  bool? useSubscriptionUser;
   ApplicationLoginInfo(
-      this.version,
+      {this.version,
       this.releaseDate,
       this.currency,
       this.currencySign,
@@ -180,15 +194,41 @@ class ApplicationLoginInfo {
       this.userDelegationIsEnabled,
       this.twoFactorCodeExpireSeconds,
       this.features,
-      this.useSubscriptionUser);
+      this.useSubscriptionUser});
+  factory ApplicationLoginInfo.fromJson(Map<String, dynamic> json) =>
+      _$ApplicationLoginInfoFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ApplicationLoginInfoToJson(this);
 }
 
+@JsonSerializable()
 class LoginInformations {
-  UserLoginInfo user;
-  UserLoginInfo impersonatorUser;
-  TenantLoginInfo tenant;
-  TenantLoginInfo impersonatorTenant;
-  ApplicationLoginInfo application;
-  LoginInformations(this.user, this.impersonatorUser, this.tenant,
-      this.impersonatorTenant, this.application);
+  UserLoginInfo? user;
+  UserLoginInfo? impersonatorUser;
+  TenantLoginInfo? tenant;
+  TenantLoginInfo? impersonatorTenant;
+  ApplicationLoginInfo? application;
+  LoginInformations(
+      {this.user,
+      this.impersonatorUser,
+      this.tenant,
+      this.impersonatorTenant,
+      this.application});
+  factory LoginInformations.fromJson(Map<String, dynamic> json) =>
+      _$LoginInformationsFromJson(json);
+
+  Map<String, dynamic> toJson() => _$LoginInformationsToJson(this);
+}
+
+@JsonSerializable()
+class UpdateUserSignInToken {
+  String? signInToken;
+  String? encodedUserId;
+  String? encodedTenantId;
+  UpdateUserSignInToken(
+      {this.signInToken, this.encodedUserId, this.encodedTenantId});
+  factory UpdateUserSignInToken.fromJson(Map<String, dynamic> json) =>
+      _$UpdateUserSignInTokenFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UpdateUserSignInTokenToJson(this);
 }

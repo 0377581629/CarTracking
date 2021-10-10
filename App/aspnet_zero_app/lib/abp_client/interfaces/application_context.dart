@@ -15,6 +15,7 @@ abstract class IApplicationContext {
   UserConfiguration? configuration;
 
   LanguageInfo? currentLanguage;
+
   void clearLoginInfo();
 
   void setLoginInfo(LoginInformations loginInfo);
