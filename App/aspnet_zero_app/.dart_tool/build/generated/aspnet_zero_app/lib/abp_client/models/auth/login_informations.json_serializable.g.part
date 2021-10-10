@@ -4,17 +4,17 @@
 
 UserLoginInfo _$UserLoginInfoFromJson(Map<String, dynamic> json) =>
     UserLoginInfo(
-      json['id'] as int,
-      json['name'] as String,
-      json['surname'] as String,
-      json['userName'] as String,
-      json['emailAddress'] as String,
-      json['profilePictureId'] as String,
-      json['isInTrialPeriod'] as bool,
-      json['subscriptionEndDateUtc'] == null
+      id: json['id'] as int?,
+      name: json['name'] as String?,
+      surname: json['surname'] as String?,
+      userName: json['userName'] as String?,
+      emailAddress: json['emailAddress'] as String?,
+      profilePictureId: json['profilePictureId'] as String?,
+      isInTrialPeriod: json['isInTrialPeriod'] as bool?,
+      subscriptionEndDateUtc: json['subscriptionEndDateUtc'] == null
           ? null
           : DateTime.parse(json['subscriptionEndDateUtc'] as String),
-      json['subscriptionPaymentType'] as String,
+      subscriptionPaymentType: json['subscriptionPaymentType'] as int?,
     );
 
 Map<String, dynamic> _$UserLoginInfoToJson(UserLoginInfo instance) =>
@@ -33,33 +33,37 @@ Map<String, dynamic> _$UserLoginInfoToJson(UserLoginInfo instance) =>
 
 TenantLoginInfo _$TenantLoginInfoFromJson(Map<String, dynamic> json) =>
     TenantLoginInfo(
-      DateTime.parse(json['creationTime'] as String),
-      json['creationTimeString'] as String,
-      json['customCssId'] as String?,
-      EditionInfo.fromJson(json['edition'] as Map<String, dynamic>),
-      json['isInTrialPeriod'] as bool,
-      json['loginBackgroundFileType'] as String,
-      json['loginBackgroundId'] as String?,
-      json['loginLogoFileType'] as String,
-      json['loginLogoId'] as String?,
-      json['logoFileType'] as String,
-      json['logoId'] as String?,
-      json['menuLogoFileType'] as String,
-      json['menuLogoId'] as String?,
-      json['name'] as String,
-      _$enumDecode(_$PaymentPeriodTypeEnumMap, json['paymentPeriodType']),
-      json['subscriptionDateString'] as String,
-      json['subscriptionEndDateUtc'] == null
+      creationTime: json['creationTime'] == null
+          ? null
+          : DateTime.parse(json['creationTime'] as String),
+      creationTimeString: json['creationTimeString'] as String?,
+      customCssId: json['customCssId'] as String?,
+      edition: json['edition'] == null
+          ? null
+          : EditionInfo.fromJson(json['edition'] as Map<String, dynamic>),
+      isInTrialPeriod: json['isInTrialPeriod'] as bool?,
+      loginBackgroundFileType: json['loginBackgroundFileType'] as String?,
+      loginBackgroundId: json['loginBackgroundId'] as String?,
+      loginLogoFileType: json['loginLogoFileType'] as String?,
+      loginLogoId: json['loginLogoId'] as String?,
+      logoFileType: json['logoFileType'] as String?,
+      logoId: json['logoId'] as String?,
+      menuLogoFileType: json['menuLogoFileType'] as String?,
+      menuLogoId: json['menuLogoId'] as String?,
+      name: json['name'] as String?,
+      paymentPeriodType: json['paymentPeriodType'] as int?,
+      subscriptionDateString: json['subscriptionDateString'] as String?,
+      subscriptionEndDateUtc: json['subscriptionEndDateUtc'] == null
           ? null
           : DateTime.parse(json['subscriptionEndDateUtc'] as String),
-      json['subscriptionPaymentType'] as String,
-      json['tenancyName'] as String,
-      json['useSubscriptionUser'] as bool,
-      json['webAuthor'] as String,
-      json['webDescription'] as String,
-      json['webFavicon'] as String,
-      json['webKeyword'] as String,
-      json['webTitle'] as String,
+      subscriptionPaymentType: json['subscriptionPaymentType'] as int?,
+      tenancyName: json['tenancyName'] as String?,
+      useSubscriptionUser: json['useSubscriptionUser'] as bool?,
+      webAuthor: json['webAuthor'] as String?,
+      webDescription: json['webDescription'] as String?,
+      webFavicon: json['webFavicon'] as String?,
+      webKeyword: json['webKeyword'] as String?,
+      webTitle: json['webTitle'] as String?,
     );
 
 Map<String, dynamic> _$TenantLoginInfoToJson(TenantLoginInfo instance) =>
@@ -74,9 +78,8 @@ Map<String, dynamic> _$TenantLoginInfoToJson(TenantLoginInfo instance) =>
       'isInTrialPeriod': instance.isInTrialPeriod,
       'subscriptionPaymentType': instance.subscriptionPaymentType,
       'edition': instance.edition,
-      'creationTime': instance.creationTime.toIso8601String(),
-      'paymentPeriodType':
-          _$PaymentPeriodTypeEnumMap[instance.paymentPeriodType],
+      'creationTime': instance.creationTime?.toIso8601String(),
+      'paymentPeriodType': instance.paymentPeriodType,
       'subscriptionDateString': instance.subscriptionDateString,
       'creationTimeString': instance.creationTimeString,
       'loginLogoId': instance.loginLogoId,
@@ -92,39 +95,6 @@ Map<String, dynamic> _$TenantLoginInfoToJson(TenantLoginInfo instance) =>
       'webFavicon': instance.webFavicon,
       'useSubscriptionUser': instance.useSubscriptionUser,
     };
-
-K _$enumDecode<K, V>(
-  Map<K, V> enumValues,
-  Object? source, {
-  K? unknownValue,
-}) {
-  if (source == null) {
-    throw ArgumentError(
-      'A value must be provided. Supported values: '
-      '${enumValues.values.join(', ')}',
-    );
-  }
-
-  return enumValues.entries.singleWhere(
-    (e) => e.value == source,
-    orElse: () {
-      if (unknownValue == null) {
-        throw ArgumentError(
-          '`$source` is not one of the supported values: '
-          '${enumValues.values.join(', ')}',
-        );
-      }
-      return MapEntry(unknownValue, enumValues.values.first);
-    },
-  ).key;
-}
-
-const _$PaymentPeriodTypeEnumMap = {
-  PaymentPeriodType.daily: 'daily',
-  PaymentPeriodType.weekly: 'weekly',
-  PaymentPeriodType.monthly: 'monthly',
-  PaymentPeriodType.annual: 'annual',
-};
 
 ApplicationLoginInfo _$ApplicationLoginInfoFromJson(
         Map<String, dynamic> json) =>

@@ -21,7 +21,7 @@ class HttpClient {
     applicationContext = getIt.get<IApplicationContext>();
   }
 
-  Future<Dio> createClient({String? accessToken}) async {
+  Future<Dio> createClient() async {
     _dio.options.baseUrl = AbpConfig.hostUrl;
     _dio.options.headers["User-Agent"] = AbpConfig.userAgent;
     _dio.options.headers["X-Requested-With"] = "XMLHttpRequest";
@@ -115,9 +115,9 @@ class CustomInterceptor extends Interceptor {
 
     if (applicationContext!.currentLanguage != null) {
       options.headers[AbpConfig.languageKey] = "c=" +
-          applicationContext!.currentLanguage!.name +
+          applicationContext!.currentLanguage!.name! +
           '|uic=' +
-          applicationContext!.currentLanguage!.name;
+          applicationContext!.currentLanguage!.name!;
     }
 
     if (accessTokenManager != null &&

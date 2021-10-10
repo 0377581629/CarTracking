@@ -2,8 +2,10 @@ import 'dart:io';
 
 import 'package:aspnet_zero_app/abp_base/interfaces/data_storage_service.dart';
 import 'package:aspnet_zero_app/abp_base/interfaces/session_service.dart';
+import 'package:aspnet_zero_app/abp_base/interfaces/user_configration_service.dart';
 import 'package:aspnet_zero_app/abp_base/services/data_storage_service.dart';
 import 'package:aspnet_zero_app/abp_base/services/session_service.dart';
+import 'package:aspnet_zero_app/abp_base/services/user_configuration_service.dart';
 import 'package:aspnet_zero_app/abp_client/access_token_manager.dart';
 import 'package:aspnet_zero_app/abp_client/application_context.dart';
 import 'package:aspnet_zero_app/abp_client/interfaces/access_token_manager.dart';
@@ -28,6 +30,8 @@ setupGetIt() async {
   getIt.registerSingleton<IAccessTokenManager>(AccessTokenManager());
   getIt.registerSingleton<IMultiTenancyConfig>(MultiTenancyConfig());
   getIt.registerSingleton<ISessionAppService>(SessionAppService());
+  getIt
+      .registerSingleton<IUserConfigurationService>(UserConfigurationService());
 }
 
 class MyHttpOverrides extends HttpOverrides {
@@ -90,8 +94,10 @@ class _MyHomePageState extends State<MyHomePage> {
     var accessTokenManager = getIt.get<IAccessTokenManager>();
     var dataStorageService = getIt.get<IDataStorageService>();
 
-    accessTokenManager.authenticateModel =
-        AuthenticateModel("admin", "123qwe", false);
+    accessTokenManager.authenticateModel = AuthenticateModel(
+        userNameOrEmailAddress: "admin",
+        password: "123qwe",
+        rememberClient: false);
     var authenResult = await accessTokenManager.loginAsync();
 
     await dataStorageService.storeAuthenticateResult(authenResult);
@@ -107,6 +113,10 @@ class _MyHomePageState extends State<MyHomePage> {
     var sessionAppService = getIt.get<ISessionAppService>();
     var loginInfos = await sessionAppService.getCurrentLoginInformations();
     await dataStorageService.storeLoginInfomation(loginInfos);
+
+    var userConfigService = getIt.get<IUserConfigurationService>();
+    var userConfig = await userConfigService.getUserConfiguration();
+
     setState(() {
       _counter++;
     });

@@ -8,8 +8,13 @@ class UserSessionConfig {
   int? tenantId;
   int? impersonatorUserId;
   int? impersonatorTenantId;
-  MultiTenancySides multiTenancySide;
-  UserSessionConfig(this.multiTenancySide);
+  int? multiTenancySide;
+  UserSessionConfig(
+      {this.userId,
+      this.tenantId,
+      this.impersonatorTenantId,
+      this.impersonatorUserId,
+      this.multiTenancySide});
 
   factory UserSessionConfig.fromJson(Map<String, dynamic> json) =>
       _$UserSessionConfigFromJson(json);

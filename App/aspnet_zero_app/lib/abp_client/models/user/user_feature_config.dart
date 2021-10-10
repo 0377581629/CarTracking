@@ -5,7 +5,7 @@ part 'user_feature_config.g.dart';
 
 @JsonSerializable()
 class UserFeatureConfig {
-  Map<String, String>? allFeatures;
+  Map<String, dynamic>? allFeatures;
   UserFeatureConfig({this.allFeatures});
   factory UserFeatureConfig.fromJson(Map<String, dynamic> json) =>
       _$UserFeatureConfigFromJson(json);

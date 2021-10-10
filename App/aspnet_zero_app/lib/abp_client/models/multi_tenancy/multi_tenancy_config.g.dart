@@ -11,15 +11,10 @@ MultiTenancyConfig _$MultiTenancyConfigFromJson(Map<String, dynamic> json) =>
       isEnabled: json['isEnabled'] as bool?,
       ignoreFeatureCheckForHostUsers:
           json['ignoreFeatureCheckForHostUsers'] as bool?,
-      sides: json['sides'] == null
-          ? null
-          : MultiTenancySideConfig.fromJson(
-              json['sides'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$MultiTenancyConfigToJson(MultiTenancyConfig instance) =>
     <String, dynamic>{
       'isEnabled': instance.isEnabled,
       'ignoreFeatureCheckForHostUsers': instance.ignoreFeatureCheckForHostUsers,
-      'sides': instance.sides,
     };

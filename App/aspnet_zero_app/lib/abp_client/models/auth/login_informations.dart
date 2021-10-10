@@ -6,18 +6,18 @@ part 'login_informations.g.dart';
 
 @JsonSerializable()
 class UserLoginInfo {
-  int id;
-  String name;
-  String surname;
-  String userName;
-  String emailAddress;
-  String profilePictureId;
-  bool isInTrialPeriod;
+  int? id;
+  String? name;
+  String? surname;
+  String? userName;
+  String? emailAddress;
+  String? profilePictureId;
+  bool? isInTrialPeriod;
   DateTime? subscriptionEndDateUtc;
-  String subscriptionPaymentType;
+  int? subscriptionPaymentType;
 
   bool isInTrial() {
-    return isInTrialPeriod;
+    return isInTrialPeriod!;
   }
 
   bool subscriptionIsExpiringSoon(int notifyDayCount) {
@@ -43,7 +43,7 @@ class UserLoginInfo {
   }
 
   UserLoginInfo(
-      this.id,
+      {this.id,
       this.name,
       this.surname,
       this.userName,
@@ -51,7 +51,7 @@ class UserLoginInfo {
       this.profilePictureId,
       this.isInTrialPeriod,
       this.subscriptionEndDateUtc,
-      this.subscriptionPaymentType);
+      this.subscriptionPaymentType});
 
   factory UserLoginInfo.fromJson(Map<String, dynamic> json) =>
       _$UserLoginInfoFromJson(json);
@@ -61,34 +61,34 @@ class UserLoginInfo {
 
 @JsonSerializable()
 class TenantLoginInfo {
-  String tenancyName;
+  String? tenancyName;
 
-  String name;
+  String? name;
 
   String? logoId;
 
-  String logoFileType;
+  String? logoFileType;
 
   String? customCssId;
 
   DateTime? subscriptionEndDateUtc;
 
-  bool isInTrialPeriod;
+  bool? isInTrialPeriod;
 
-  String subscriptionPaymentType;
+  int? subscriptionPaymentType;
 
-  EditionInfo edition;
+  EditionInfo? edition;
 
-  DateTime creationTime;
+  DateTime? creationTime;
 
-  PaymentPeriodType paymentPeriodType;
+  int? paymentPeriodType;
 
-  String subscriptionDateString;
+  String? subscriptionDateString;
 
-  String creationTimeString;
+  String? creationTimeString;
 
   bool isInTrial() {
-    return isInTrialPeriod;
+    return isInTrialPeriod!;
   }
 
   bool subscriptionIsExpiringSoon(int notifyDayCount) {
@@ -123,26 +123,26 @@ class TenantLoginInfo {
 
   String? loginBackgroundId;
 
-  String loginLogoFileType;
+  String? loginLogoFileType;
 
-  String menuLogoFileType;
+  String? menuLogoFileType;
 
-  String loginBackgroundFileType;
+  String? loginBackgroundFileType;
 
-  String webTitle;
+  String? webTitle;
 
-  String webDescription;
+  String? webDescription;
 
-  String webAuthor;
+  String? webAuthor;
 
-  String webKeyword;
+  String? webKeyword;
 
-  String webFavicon;
+  String? webFavicon;
 
-  bool useSubscriptionUser;
+  bool? useSubscriptionUser;
 
   TenantLoginInfo(
-      this.creationTime,
+      {this.creationTime,
       this.creationTimeString,
       this.customCssId,
       this.edition,
@@ -166,7 +166,7 @@ class TenantLoginInfo {
       this.webDescription,
       this.webFavicon,
       this.webKeyword,
-      this.webTitle);
+      this.webTitle});
 
   factory TenantLoginInfo.fromJson(Map<String, dynamic> json) =>
       _$TenantLoginInfoFromJson(json);

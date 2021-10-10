@@ -8,9 +8,7 @@ part of 'user_setting_config.dart';
 
 UserSettingConfig _$UserSettingConfigFromJson(Map<String, dynamic> json) =>
     UserSettingConfig(
-      values: (json['values'] as Map<String, dynamic>?)?.map(
-        (k, e) => MapEntry(k, e as String),
-      ),
+      values: json['values'] as Map<String, dynamic>?,
     );
 
 Map<String, dynamic> _$UserSettingConfigToJson(UserSettingConfig instance) =>

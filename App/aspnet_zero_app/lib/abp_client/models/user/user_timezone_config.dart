@@ -5,6 +5,10 @@ part 'user_timezone_config.g.dart';
 class UserIanaTimeZoneConfig {
   String? timeZoneId;
   UserIanaTimeZoneConfig({this.timeZoneId});
+  factory UserIanaTimeZoneConfig.fromJson(Map<String, dynamic> json) =>
+      _$UserIanaTimeZoneConfigFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UserIanaTimeZoneConfigToJson(this);
 }
 
 @JsonSerializable()

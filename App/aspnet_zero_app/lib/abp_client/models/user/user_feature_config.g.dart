@@ -8,9 +8,7 @@ part of 'user_feature_config.dart';
 
 UserFeatureConfig _$UserFeatureConfigFromJson(Map<String, dynamic> json) =>
     UserFeatureConfig(
-      allFeatures: (json['allFeatures'] as Map<String, dynamic>?)?.map(
-        (k, e) => MapEntry(k, e as String),
-      ),
+      allFeatures: json['allFeatures'] as Map<String, dynamic>?,
     );
 
 Map<String, dynamic> _$UserFeatureConfigToJson(UserFeatureConfig instance) =>

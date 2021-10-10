@@ -4,7 +4,7 @@ part 'user_setting_config.g.dart';
 
 @JsonSerializable()
 class UserSettingConfig {
-  Map<String, String>? values;
+  Map<String, dynamic>? values;
   UserSettingConfig({this.values});
 
   factory UserSettingConfig.fromJson(Map<String, dynamic> json) =>
