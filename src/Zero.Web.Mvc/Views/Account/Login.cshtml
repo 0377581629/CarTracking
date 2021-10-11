@@ -120,7 +120,7 @@
         };
     }
 
-    @if ((AbpSession.MultiTenancySide != MultiTenancySides.Host || !ViewBag.IsMultiTenancyEnabled) && loginProviders.Count > 0)
+    @if (loginProviders.Count > 0)
     {
         <!--begin::Divider-->
         <div class="divider mt-10 mb-2">
