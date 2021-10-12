@@ -9,11 +9,12 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class DataStorageService implements IDataStorageService {
   final storage = const FlutterSecureStorage();
-
+  final options =
+      const IOSOptions(accessibility: IOSAccessibility.first_unlock);
   @override
   Future storeAccessToken(String newAccessToken) async {
-    var authenStr =
-        await storage.read(key: DataStorageKey.currentSessionTokenInfo);
+    var authenStr = await storage.read(
+        key: DataStorageKey.currentSessionTokenInfo, iOptions: options);
     if (authenStr != null) {
       var authenResult =
           AuthenticateResultModel.fromJson(json.decode(authenStr));
@@ -29,13 +30,14 @@ class DataStorageService implements IDataStorageService {
       AuthenticateResultModel authenResultModel) async {
     await storage.write(
         key: DataStorageKey.currentSessionTokenInfo,
-        value: json.encode(authenResultModel.toJson()));
+        value: json.encode(authenResultModel.toJson()),
+        iOptions: options);
   }
 
   @override
   Future<AuthenticateResultModel> retrieveAuthenticateResult() async {
-    var authenStr =
-        await storage.read(key: DataStorageKey.currentSessionTokenInfo);
+    var authenStr = await storage.read(
+        key: DataStorageKey.currentSessionTokenInfo, iOptions: options);
     if (authenStr == null) {
       throw UnimplementedError("Not found authenticate result in storage");
     }
@@ -44,8 +46,8 @@ class DataStorageService implements IDataStorageService {
 
   @override
   Future<TenantInformation> retrieveTenantInfo() async {
-    var authenStr =
-        await storage.read(key: DataStorageKey.currentSessionTenantInfo);
+    var authenStr = await storage.read(
+        key: DataStorageKey.currentSessionTenantInfo, iOptions: options);
     if (authenStr == null) {
       throw UnimplementedError("Not found authenticate result in storage");
     }
@@ -54,8 +56,8 @@ class DataStorageService implements IDataStorageService {
 
   @override
   Future<LoginInformations> retrieveLoginInfo() async {
-    var loginInfoStr =
-        await storage.read(key: DataStorageKey.currentSessionLoginInfo);
+    var loginInfoStr = await storage.read(
+        key: DataStorageKey.currentSessionLoginInfo, iOptions: options);
     if (loginInfoStr == null) {
       throw UnimplementedError("Not found authenticate result in storage");
     }
@@ -73,13 +75,15 @@ class DataStorageService implements IDataStorageService {
   Future storeLoginInfomation(LoginInformations input) async {
     await storage.write(
         key: DataStorageKey.currentSessionLoginInfo,
-        value: json.encode(input.toJson()));
+        value: json.encode(input.toJson()),
+        iOptions: options);
   }
 
   @override
   Future storeTenantInfo(TenantInformation input) async {
     await storage.write(
         key: DataStorageKey.currentSessionTenantInfo,
-        value: json.encode(input.toJson()));
+        value: json.encode(input.toJson()),
+        iOptions: options);
   }
 }

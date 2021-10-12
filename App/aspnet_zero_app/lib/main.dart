@@ -19,12 +19,12 @@ import 'abp_client/models/auth/authenticate_model.dart';
 
 final getIt = GetIt.I;
 void main() async {
-  await setupGetIt();
+  await appInitialize();
   HttpOverrides.global = MyHttpOverrides();
   runApp(const MyApp());
 }
 
-setupGetIt() async {
+appInitialize() async {
   getIt.registerSingleton<IDataStorageService>(DataStorageService());
   getIt.registerSingleton<IApplicationContext>(ApplicationContext());
   getIt.registerSingleton<IAccessTokenManager>(AccessTokenManager());
@@ -32,6 +32,13 @@ setupGetIt() async {
   getIt.registerSingleton<ISessionAppService>(SessionAppService());
   getIt
       .registerSingleton<IUserConfigurationService>(UserConfigurationService());
+  var dataStorageService = getIt.get<IDataStorageService>();
+  var accessTokenManager = getIt.get<IAccessTokenManager>();
+  var applicationContext = getIt.get<IApplicationContext>();
+  accessTokenManager.authenticateResult =
+      await dataStorageService.retrieveAuthenticateResult();
+  applicationContext.load(await dataStorageService.retrieveTenantInfo(),
+      await dataStorageService.retrieveLoginInfo());
 }
 
 class MyHttpOverrides extends HttpOverrides {
