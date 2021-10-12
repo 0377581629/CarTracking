@@ -30,8 +30,9 @@ appInitialize() async {
   getIt.registerSingleton<IAccessTokenManager>(AccessTokenManager());
   getIt.registerSingleton<IMultiTenancyConfig>(MultiTenancyConfig());
   getIt.registerSingleton<ISessionAppService>(SessionAppService());
-  getIt
-      .registerSingleton<IUserConfigurationService>(UserConfigurationService());
+}
+
+Future<void> loadBaseInfoAfterBuild() async {
   var dataStorageService = getIt.get<IDataStorageService>();
   var accessTokenManager = getIt.get<IAccessTokenManager>();
   var applicationContext = getIt.get<IApplicationContext>();
@@ -56,6 +57,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    loadBaseInfoAfterBuild();
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -108,6 +110,9 @@ class _MyHomePageState extends State<MyHomePage> {
     var authenResult = await accessTokenManager.loginAsync();
 
     await dataStorageService.storeAuthenticateResult(authenResult);
+
+    getIt.registerSingleton<IUserConfigurationService>(
+        UserConfigurationService());
 
     setState(() {
       _counter++;

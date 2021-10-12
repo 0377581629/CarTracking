@@ -5,9 +5,9 @@ import 'package:aspnet_zero_app/abp_client/models/multi_tenancy/tenant_informati
 abstract class IDataStorageService {
   Future storeAccessToken(String newAccessToken);
   Future storeAuthenticateResult(AuthenticateResultModel authenResultModel);
-  Future<AuthenticateResultModel> retrieveAuthenticateResult();
-  Future<LoginInformations> retrieveLoginInfo();
-  Future<TenantInformation> retrieveTenantInfo();
+  Future<AuthenticateResultModel?> retrieveAuthenticateResult();
+  Future<LoginInformations?> retrieveLoginInfo();
+  Future<TenantInformation?> retrieveTenantInfo();
 
   void clearSessionPeristance();
   Future storeLoginInfomation(LoginInformations input);

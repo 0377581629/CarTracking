@@ -1,5 +1,5 @@
 class AbpConfig {
-  static const hostUrl = "https://10.0.2.2:44302/";
+  static const hostUrl = "https://thegioidichvu.vn/";
   static const userAgent = "AbpApiClient";
 
   static const tenantResolveKey = "Abp.TenantId";

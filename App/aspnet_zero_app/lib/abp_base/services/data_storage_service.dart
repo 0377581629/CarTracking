@@ -35,31 +35,31 @@ class DataStorageService implements IDataStorageService {
   }
 
   @override
-  Future<AuthenticateResultModel> retrieveAuthenticateResult() async {
-    var authenStr = await storage.read(
-        key: DataStorageKey.currentSessionTokenInfo, iOptions: options);
+  Future<AuthenticateResultModel?> retrieveAuthenticateResult() async {
+    var authenStr =
+        await storage.read(key: DataStorageKey.currentSessionTokenInfo);
     if (authenStr == null) {
-      throw UnimplementedError("Not found authenticate result in storage");
+      return null;
     }
     return AuthenticateResultModel.fromJson(json.decode(authenStr));
   }
 
   @override
-  Future<TenantInformation> retrieveTenantInfo() async {
+  Future<TenantInformation?> retrieveTenantInfo() async {
     var authenStr = await storage.read(
         key: DataStorageKey.currentSessionTenantInfo, iOptions: options);
     if (authenStr == null) {
-      throw UnimplementedError("Not found authenticate result in storage");
+      return null;
     }
     return TenantInformation.fromJson(json.decode(authenStr));
   }
 
   @override
-  Future<LoginInformations> retrieveLoginInfo() async {
+  Future<LoginInformations?> retrieveLoginInfo() async {
     var loginInfoStr = await storage.read(
         key: DataStorageKey.currentSessionLoginInfo, iOptions: options);
     if (loginInfoStr == null) {
-      throw UnimplementedError("Not found authenticate result in storage");
+      return null;
     }
     return LoginInformations.fromJson(json.decode(loginInfoStr));
   }

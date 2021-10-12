@@ -24,5 +24,5 @@ abstract class IApplicationContext {
 
   void setAsTenant(int tenantId, String tenancyName);
 
-  void load(TenantInformation currentTenant, LoginInformations loginInfo);
+  void load(TenantInformation? currentTenant, LoginInformations? loginInfo);
 }

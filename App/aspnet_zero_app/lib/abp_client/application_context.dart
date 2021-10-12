@@ -44,7 +44,7 @@ class ApplicationContext implements IApplicationContext {
   }
 
   @override
-  void load(TenantInformation currentTenant, LoginInformations loginInfo) {
+  void load(TenantInformation? currentTenant, LoginInformations? loginInfo) {
     _currentTenant = currentTenant;
     _loginInfo = loginInfo;
   }
