@@ -1,8 +1,6 @@
-import 'dart:io';
-
+import 'package:after_layout/after_layout.dart';
 import 'package:aspnet_zero_app/abp_base/interfaces/data_storage_service.dart';
 import 'package:aspnet_zero_app/abp_base/interfaces/session_service.dart';
-import 'package:aspnet_zero_app/abp_base/interfaces/user_configration_service.dart';
 import 'package:aspnet_zero_app/abp_base/services/data_storage_service.dart';
 import 'package:aspnet_zero_app/abp_base/services/session_service.dart';
 import 'package:aspnet_zero_app/abp_base/services/user_configuration_service.dart';
@@ -11,16 +9,21 @@ import 'package:aspnet_zero_app/abp_client/application_context.dart';
 import 'package:aspnet_zero_app/abp_client/interfaces/access_token_manager.dart';
 import 'package:aspnet_zero_app/abp_client/interfaces/multi_tenancy_config.dart';
 import 'package:aspnet_zero_app/abp_client/models/multi_tenancy/multi_tenancy_config.dart';
+import 'package:aspnet_zero_app/configuration/abp_config.dart';
+import 'package:aspnet_zero_app/helpers/localization_helper.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:introduction_screen/introduction_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'abp_client/interfaces/application_context.dart';
-import 'abp_client/models/auth/authenticate_model.dart';
 
 final getIt = GetIt.I;
+final lang = LocalizationHelper();
+
 void main() async {
   await appInitialize();
-  HttpOverrides.global = MyHttpOverrides();
   runApp(const MyApp());
 }
 
@@ -32,22 +35,18 @@ appInitialize() async {
   getIt.registerSingleton<ISessionAppService>(SessionAppService());
 }
 
-Future<void> loadBaseInfoAfterBuild() async {
+Future loadBaseInfoAfterBuild() async {
   var dataStorageService = getIt.get<IDataStorageService>();
   var accessTokenManager = getIt.get<IAccessTokenManager>();
   var applicationContext = getIt.get<IApplicationContext>();
+  var _userConfigService = UserConfigurationService();
   accessTokenManager.authenticateResult =
       await dataStorageService.retrieveAuthenticateResult();
   applicationContext.load(await dataStorageService.retrieveTenantInfo(),
       await dataStorageService.retrieveLoginInfo());
-}
-
-class MyHttpOverrides extends HttpOverrides {
-  @override
-  HttpClient createHttpClient(SecurityContext? context) {
-    return super.createHttpClient(context)
-      ..badCertificateCallback =
-          (X509Certificate cert, String host, int port) => true;
+  if (applicationContext.configuration == null) {
+    var userConfiguartion = await _userConfigService.getUserConfiguration();
+    applicationContext.configuration = userConfiguartion;
   }
 }
 
@@ -59,35 +58,184 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     loadBaseInfoAfterBuild();
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: AbpConfig.appName,
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const OnBoardingPage(),
+    );
+  }
+}
+
+class OnBoardingPage extends StatefulWidget {
+  const OnBoardingPage({Key? key}) : super(key: key);
+
+  @override
+  _OnBoardingPageState createState() => _OnBoardingPageState();
+}
+
+class _OnBoardingPageState extends State<OnBoardingPage>
+    with AfterLayoutMixin<OnBoardingPage> {
+  final introKey = GlobalKey<IntroductionScreenState>();
+
+  void _onIntroEnd(context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => const MyHomePage(title: "ABC")),
+    );
+  }
+
+  Widget _buildFullscrenImage() {
+    return const Image(
+      image: AssetImage('assets/images/fullscreen.jpg'),
+      fit: BoxFit.cover,
+      height: double.infinity,
+      width: double.infinity,
+      alignment: Alignment.center,
+    );
+  }
+
+  Widget _buildImage(String assetName, [double width = 350]) {
+    return Image(image: AssetImage('assets/images/$assetName'), width: width);
+  }
+
+  Future checkFirstSeen() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool _seen = (prefs.getBool('seen') ?? false);
+    if (!_seen) {
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (context) => const MyHomePage(
+                title: "ABC",
+              )));
+    }
+  }
+
+  @override
+  void afterFirstLayout(BuildContext context) => checkFirstSeen();
+
+  @override
+  Widget build(BuildContext context) {
+    const bodyStyle = TextStyle(fontSize: 19.0);
+
+    const pageDecoration = PageDecoration(
+      titleTextStyle: TextStyle(fontSize: 28.0, fontWeight: FontWeight.w700),
+      bodyTextStyle: bodyStyle,
+      descriptionPadding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
+      pageColor: Colors.white,
+      imagePadding: EdgeInsets.zero,
+    );
+
+    return IntroductionScreen(
+      key: introKey,
+      globalBackgroundColor: Colors.white,
+      pages: [
+        PageViewModel(
+          title: lang.getLang("Fractional shares"),
+          body:
+              "Instead of having to buy an entire share, invest any amount you want.",
+          image: _buildImage('img1.jpg'),
+          decoration: pageDecoration,
+        ),
+        PageViewModel(
+          title: "Learn as you go",
+          body:
+              "Download the Stockpile app and master the market with our mini-lesson.",
+          image: _buildImage('img2.jpg'),
+          decoration: pageDecoration,
+        ),
+        PageViewModel(
+          title: "Kids and teens",
+          body:
+              "Kids and teens can track their stocks 24/7 and place trades that you approve.",
+          image: _buildImage('img3.jpg'),
+          decoration: pageDecoration,
+        ),
+        PageViewModel(
+          title: "Full Screen Page",
+          body:
+              "Pages can be full screen as well.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc id euismod lectus, non tempor felis. Nam rutrum rhoncus est ac venenatis.",
+          image: _buildFullscrenImage(),
+          decoration: pageDecoration.copyWith(
+            contentMargin: const EdgeInsets.symmetric(horizontal: 16),
+            fullScreen: true,
+            bodyFlex: 2,
+            imageFlex: 3,
+          ),
+        ),
+        PageViewModel(
+          title: "Another title page",
+          body: "Another beautiful body text for this example onboarding",
+          image: _buildImage('img2.jpg'),
+          footer: ElevatedButton(
+            onPressed: () {
+              introKey.currentState?.animateScroll(0);
+            },
+            child: const Text(
+              'FooButton',
+              style: TextStyle(color: Colors.white),
+            ),
+            style: ElevatedButton.styleFrom(
+              primary: Colors.lightBlue,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+            ),
+          ),
+          decoration: pageDecoration,
+        ),
+        PageViewModel(
+          title: "Title of last page - reversed",
+          bodyWidget: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const [
+              Text("Click on ", style: bodyStyle),
+              Icon(Icons.edit),
+              Text(" to edit a post", style: bodyStyle),
+            ],
+          ),
+          decoration: pageDecoration.copyWith(
+            bodyFlex: 2,
+            imageFlex: 4,
+            bodyAlignment: Alignment.bottomCenter,
+            imageAlignment: Alignment.topCenter,
+          ),
+          image: _buildImage('img1.jpg'),
+          reverse: true,
+        ),
+      ],
+      onDone: () => _onIntroEnd(context),
+      //onSkip: () => _onIntroEnd(context), // You can override onSkip callback
+      showSkipButton: true,
+      skipFlex: 0,
+      nextFlex: 0,
+      //rtl: true, // Display as right-to-left
+      skip: const Text('Skip'),
+      next: const Icon(Icons.arrow_forward),
+      done: const Text('Done', style: TextStyle(fontWeight: FontWeight.w600)),
+      curve: Curves.fastLinearToSlowEaseIn,
+      controlsMargin: const EdgeInsets.all(16),
+      controlsPadding: kIsWeb
+          ? const EdgeInsets.all(12.0)
+          : const EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 4.0),
+      dotsDecorator: const DotsDecorator(
+        size: Size(10.0, 10.0),
+        color: Color(0xFFBDBDBD),
+        activeSize: Size(22.0, 10.0),
+        activeShape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(25.0)),
+        ),
+      ),
+      dotsContainerDecorator: const ShapeDecoration(
+        color: Colors.black87,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(8.0)),
+        ),
+      ),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
 
   final String title;
 
@@ -96,103 +244,25 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() async {
-    // var _client = AbpApiClient();
-    var accessTokenManager = getIt.get<IAccessTokenManager>();
-    var dataStorageService = getIt.get<IDataStorageService>();
-
-    accessTokenManager.authenticateModel = AuthenticateModel(
-        userNameOrEmailAddress: "admin",
-        password: "123qwe",
-        rememberClient: false);
-    var authenResult = await accessTokenManager.loginAsync();
-
-    await dataStorageService.storeAuthenticateResult(authenResult);
-
-    getIt.registerSingleton<IUserConfigurationService>(
-        UserConfigurationService());
-
-    setState(() {
-      _counter++;
-    });
-  }
-
-  void _callApi() async {
-    var dataStorageService = getIt.get<IDataStorageService>();
-
-    var sessionAppService = getIt.get<ISessionAppService>();
-    var loginInfos = await sessionAppService.getCurrentLoginInformations();
-    await dataStorageService.storeLoginInfomation(loginInfos);
-
-    var userConfigService = getIt.get<IUserConfigurationService>();
-    var userConfig = await userConfigService.getUserConfiguration();
-
-    setState(() {
-      _counter++;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
+        appBar: AppBar(
+          title: Text(widget.title),
         ),
-      ),
-      floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[
-          FloatingActionButton(
-            onPressed: _incrementCounter,
-            tooltip: 'Login',
-            child: const Icon(Icons.add),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              const Text(
+                'You have pushed the button this many times:',
+              ),
+              Text(
+                'ABC',
+                style: Theme.of(context).textTheme.headline4,
+              ),
+            ],
           ),
-          FloatingActionButton(
-            onPressed: _callApi,
-            tooltip: 'CallAPI',
-            child: const Icon(Icons.nearby_off),
-          ),
-        ],
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
+        ));
   }
 }

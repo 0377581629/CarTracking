@@ -36,32 +36,44 @@ class DataStorageService implements IDataStorageService {
 
   @override
   Future<AuthenticateResultModel?> retrieveAuthenticateResult() async {
-    var authenStr =
-        await storage.read(key: DataStorageKey.currentSessionTokenInfo);
-    if (authenStr == null) {
-      return null;
+    if (await storage.containsKey(
+        key: DataStorageKey.currentSessionTokenInfo)) {
+      var storedStr =
+          await storage.read(key: DataStorageKey.currentSessionTokenInfo);
+      if (storedStr == null) {
+        return null;
+      }
+      return AuthenticateResultModel.fromJson(json.decode(storedStr));
     }
-    return AuthenticateResultModel.fromJson(json.decode(authenStr));
+    return null;
   }
 
   @override
   Future<TenantInformation?> retrieveTenantInfo() async {
-    var authenStr = await storage.read(
-        key: DataStorageKey.currentSessionTenantInfo, iOptions: options);
-    if (authenStr == null) {
-      return null;
+    if (await storage.containsKey(
+        key: DataStorageKey.currentSessionTenantInfo)) {
+      var storedStr = await storage.read(
+          key: DataStorageKey.currentSessionTenantInfo, iOptions: options);
+      if (storedStr == null) {
+        return null;
+      }
+      return TenantInformation.fromJson(json.decode(storedStr));
     }
-    return TenantInformation.fromJson(json.decode(authenStr));
+    return null;
   }
 
   @override
   Future<LoginInformations?> retrieveLoginInfo() async {
-    var loginInfoStr = await storage.read(
-        key: DataStorageKey.currentSessionLoginInfo, iOptions: options);
-    if (loginInfoStr == null) {
-      return null;
+    if (await storage.containsKey(
+        key: DataStorageKey.currentSessionLoginInfo)) {
+      var storedStr = await storage.read(
+          key: DataStorageKey.currentSessionLoginInfo, iOptions: options);
+      if (storedStr == null) {
+        return null;
+      }
+      return LoginInformations.fromJson(json.decode(storedStr));
     }
-    return LoginInformations.fromJson(json.decode(loginInfoStr));
+    return null;
   }
 
   @override

@@ -8,6 +8,10 @@ class AbpConfig {
   static const refreshTokenUrlSegment = "api/TokenAuth/RefreshToken";
 
   static const languageKey = ".AspNetCore.Culture";
+
+  static const appName = "ZeroBase-App";
+
+  static const languageSource = "Zero";
 }
 
 class DataStorageKey {
