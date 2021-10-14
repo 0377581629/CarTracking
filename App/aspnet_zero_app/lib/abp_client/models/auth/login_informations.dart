@@ -1,4 +1,4 @@
-import 'package:aspnet_zero_app/abp_client/enums/payment_period_type.dart';
+
 import 'package:aspnet_zero_app/abp_client/enums/subscription_payment_type.dart';
 import 'package:aspnet_zero_app/abp_client/models/edition/edition_info.dart';
 import 'package:json_annotation/json_annotation.dart';

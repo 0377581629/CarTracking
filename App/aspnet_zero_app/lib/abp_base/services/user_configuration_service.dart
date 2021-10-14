@@ -2,7 +2,6 @@ import 'package:aspnet_zero_app/abp_base/interfaces/user_configration_service.da
 import 'package:aspnet_zero_app/abp_client/models/common/ajax_response.dart';
 import 'package:aspnet_zero_app/abp_client/models/user/user_configuration.dart';
 import 'package:aspnet_zero_app/helpers/http_client.dart';
-import 'package:dio/dio.dart';
 
 class UserConfigurationService implements IUserConfigurationService {
   @override

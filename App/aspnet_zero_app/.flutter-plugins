@@ -1,11 +1,11 @@
 # This is a generated file; do not edit or check into version control.
-flutter_secure_storage=C:\\Users\\Kael\\Documents\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\flutter_secure_storage-4.2.1\\
-path_provider=C:\\Users\\Kael\\Documents\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\path_provider-2.0.5\\
-path_provider_linux=C:\\Users\\Kael\\Documents\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\path_provider_linux-2.1.0\\
-path_provider_macos=C:\\Users\\Kael\\Documents\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\path_provider_macos-2.0.2\\
-path_provider_windows=C:\\Users\\Kael\\Documents\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\path_provider_windows-2.0.3\\
-shared_preferences=C:\\Users\\Kael\\Documents\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\shared_preferences-2.0.8\\
-shared_preferences_linux=C:\\Users\\Kael\\Documents\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\shared_preferences_linux-2.0.2\\
-shared_preferences_macos=C:\\Users\\Kael\\Documents\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\shared_preferences_macos-2.0.2\\
-shared_preferences_web=C:\\Users\\Kael\\Documents\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\shared_preferences_web-2.0.2\\
-shared_preferences_windows=C:\\Users\\Kael\\Documents\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\shared_preferences_windows-2.0.2\\
+flutter_secure_storage=/Users/kael/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_secure_storage-4.2.1/
+path_provider=/Users/kael/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider-2.0.5/
+path_provider_linux=/Users/kael/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_linux-2.1.0/
+path_provider_macos=/Users/kael/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_macos-2.0.2/
+path_provider_windows=/Users/kael/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_windows-2.0.3/
+shared_preferences=/Users/kael/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences-2.0.8/
+shared_preferences_linux=/Users/kael/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_linux-2.0.2/
+shared_preferences_macos=/Users/kael/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_macos-2.0.2/
+shared_preferences_web=/Users/kael/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_web-2.0.2/
+shared_preferences_windows=/Users/kael/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_windows-2.0.2/

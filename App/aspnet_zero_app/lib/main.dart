@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:after_layout/after_layout.dart';
 import 'package:aspnet_zero_app/configuration/abp_config.dart';
 import 'package:aspnet_zero_app/helpers/localization_helper.dart';
@@ -22,12 +24,22 @@ import 'abp_client/models/multi_tenancy/multi_tenancy_config.dart';
 final lang = LocalizationHelper();
 final getIt = GetIt.I;
 void main() async {
+  HttpOverrides.global = MyHttpOverrides();
   getIt.registerLazySingleton<IDataStorageService>(() => DataStorageService());
   getIt.registerLazySingleton<IApplicationContext>(() => ApplicationContext());
   getIt.registerLazySingleton<IAccessTokenManager>(() => AccessTokenManager());
   getIt.registerLazySingleton<IMultiTenancyConfig>(() => MultiTenancyConfig());
   getIt.registerLazySingleton<ISessionAppService>(() => SessionAppService());
   runApp(const MyApp());
+}
+
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+  }
 }
 
 class MyApp extends StatelessWidget {

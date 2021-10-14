@@ -1,4 +1,3 @@
-import 'package:tuple/tuple.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'user_setting_config.g.dart';
 

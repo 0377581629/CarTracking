@@ -1,4 +1,3 @@
-import 'package:aspnet_zero_app/abp_client/enums/multi_tenancy_sides.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'user_session_config.g.dart';
 

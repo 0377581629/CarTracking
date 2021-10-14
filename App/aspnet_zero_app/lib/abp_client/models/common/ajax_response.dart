@@ -1,4 +1,3 @@
-import 'package:aspnet_zero_app/abp_client/models/auth/authenticate_result_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'ajax_response.g.dart';
 

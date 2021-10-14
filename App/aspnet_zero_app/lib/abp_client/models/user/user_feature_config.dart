@@ -1,6 +1,4 @@
-import 'package:aspnet_zero_app/abp_client/models/common/string_value.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:tuple/tuple.dart';
 part 'user_feature_config.g.dart';
 
 @JsonSerializable()

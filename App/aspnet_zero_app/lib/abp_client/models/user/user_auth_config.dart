@@ -1,5 +1,4 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:tuple/tuple.dart';
 part 'user_auth_config.g.dart';
 
 @JsonSerializable()
