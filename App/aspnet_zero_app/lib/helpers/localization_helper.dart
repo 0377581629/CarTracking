@@ -10,7 +10,7 @@ class LocalizationHelper {
     _applicationContext = getIt.get<IApplicationContext>();
   }
 
-  String getLang(String inputKey) {
+  String get(String inputKey) {
     if (_applicationContext?.configuration?.localization?.values == null) {
       return inputKey;
     }
@@ -23,6 +23,6 @@ class LocalizationHelper {
         return langSources[inputKey].toString();
       }
     }
-    return inputKey;
+    return '[$inputKey]';
   }
 }

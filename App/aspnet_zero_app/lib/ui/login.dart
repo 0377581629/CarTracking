@@ -14,22 +14,20 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title),
-        ),
         body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              const Text(
-                'You have pushed the button this many times:',
-              ),
-              Text(
-                'ABC',
-                style: Theme.of(context).textTheme.headline4,
-              ),
-            ],
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          const Image(image: AssetImage("assets/images/img1.jpg"), width: 300),
+          const Text(
+            'You have pushed the button this many times:',
           ),
-        ));
+          Text(
+            'ABC',
+            style: Theme.of(context).textTheme.headline4,
+          ),
+        ],
+      ),
+    ));
   }
 }
