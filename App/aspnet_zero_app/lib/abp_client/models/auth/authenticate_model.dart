@@ -17,7 +17,9 @@ class AuthenticateModel {
 
   String? returnUrl;
 
-  bool get isTwoFactorVerification => twoFactorVerificationCode!.isNotEmpty;
+  bool get isTwoFactorVerification =>
+      twoFactorVerificationCode != null &&
+      twoFactorVerificationCode!.isNotEmpty;
 
   AuthenticateModel(
       {this.userNameOrEmailAddress, this.password, this.rememberClient});

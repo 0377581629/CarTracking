@@ -50,6 +50,7 @@ dependencies:
   after_layout: ^1.1.0
   introduction_screen: ^2.1.0
   rxdart: ^0.27.2
+  flutter_bloc:
 dev_dependencies:
   flutter_test:
     sdk: flutter

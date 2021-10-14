@@ -1,12 +1,15 @@
 import 'dart:io';
 
 import 'package:after_layout/after_layout.dart';
+import 'package:aspnet_zero_app/abp_base/interfaces/account_service.dart';
+import 'package:aspnet_zero_app/abp_base/services/account_service.dart';
 import 'package:aspnet_zero_app/configuration/abp_config.dart';
 import 'package:aspnet_zero_app/helpers/localization_helper.dart';
 import 'package:aspnet_zero_app/ui/intro.dart';
-import 'package:aspnet_zero_app/ui/login.dart';
+import 'package:aspnet_zero_app/auth/login/login_view.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'abp_base/interfaces/data_storage_service.dart';
@@ -30,6 +33,8 @@ void main() async {
   getIt.registerLazySingleton<IAccessTokenManager>(() => AccessTokenManager());
   getIt.registerLazySingleton<IMultiTenancyConfig>(() => MultiTenancyConfig());
   getIt.registerLazySingleton<ISessionAppService>(() => SessionAppService());
+
+  getIt.registerFactory<IAccountService>(() => AccountService());
   runApp(const MyApp());
 }
 
@@ -85,9 +90,8 @@ class _InitializeApp extends State<InitializeApp>
     bool _seen = (prefs.getBool('introPageSeen') ?? false);
     if (_seen) {
       Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) => LoginPage(
-                title: lang.get('Login'),
-              )));
+          builder: (_) => RepositoryProvider(
+              create: (context) => AccountService(), child: LoginPage())));
     } else {
       await prefs.setBool('seen', true);
       Navigator.of(context).pushReplacement(
@@ -105,7 +109,7 @@ class _InitializeApp extends State<InitializeApp>
         body: Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: const [CircularProgressIndicator()],
+        children: [Image(image: AssetImage("assets/images/img1.jpg"))],
       ),
     ));
   }

@@ -1,8 +1,10 @@
+import 'package:aspnet_zero_app/abp_base/services/account_service.dart';
 import 'package:aspnet_zero_app/helpers/localization_helper.dart';
-import 'package:aspnet_zero_app/ui/login.dart';
+import 'package:aspnet_zero_app/auth/login/login_view.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
 final lang = LocalizationHelper();
@@ -19,7 +21,9 @@ class _IntroPageState extends State<IntroPage> {
 
   void _onIntroEnd(context) {
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => LoginPage(title: lang.get('Login'))),
+      MaterialPageRoute(
+          builder: (_) => RepositoryProvider(
+              create: (context) => AccountService(), child: LoginPage())),
     );
   }
 

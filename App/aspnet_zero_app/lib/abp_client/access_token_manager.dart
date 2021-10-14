@@ -21,6 +21,7 @@ class AccessTokenManager implements IAccessTokenManager {
     _dio.options.baseUrl = AbpConfig.hostUrl;
     _dio.options.headers["User-Agent"] = AbpConfig.userAgent;
     _dio.options.headers["X-Requested-With"] = "XMLHttpRequest";
+    _dio.options.contentType = Headers.jsonContentType;
     if (applicationContext?.currentTenant != null) {
       _dio.options.headers[AbpConfig.tenantResolveKey] =
           applicationContext!.currentTenant!.tenantId;
