@@ -72,7 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // var _client = AbpApiClient();
     var accessTokenManager = getIt.get<IAccessTokenManager>();
     accessTokenManager.authenticateModel =
-        AuthenticateModel("admin", "123qwe123", false);
+        AuthenticateModel("admin", "123qwe", false);
     await accessTokenManager.loginAsync();
 
     setState(() {
