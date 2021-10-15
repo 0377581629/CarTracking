@@ -8,33 +8,35 @@ import 'package:aspnet_zero_app/abp_client/models/user/user_security_config.dart
 import 'package:aspnet_zero_app/abp_client/models/user/user_session_config.dart';
 import 'package:aspnet_zero_app/abp_client/models/user/user_setting_config.dart';
 import 'package:aspnet_zero_app/abp_client/models/user/user_timezone_config.dart';
-import 'package:tuple/tuple.dart';
+import 'package:json_annotation/json_annotation.dart';
+part 'user_configuration.g.dart';
 
+@JsonSerializable()
 class UserConfiguration {
-  MultiTenancyConfig multiTenancy;
+  MultiTenancyConfig? multiTenancy;
 
-  UserSessionConfig session;
+  UserSessionConfig? session;
 
-  UserLocalizationConfig localization;
+  UserLocalizationConfig? localization;
 
-  UserFeatureConfig features;
+  UserFeatureConfig? features;
 
-  UserAuthConfig auth;
+  UserAuthConfig? auth;
 
-  UserNavConfig nav;
+  UserNavConfig? nav;
 
-  UserSettingConfig setting;
+  UserSettingConfig? setting;
 
-  UserClockConfig clock;
+  UserClockConfig? clock;
 
-  UserTimmingConfig timing;
+  UserTimmingConfig? timing;
 
-  UserSecurityConfig security;
+  UserSecurityConfig? security;
 
-  Tuple2<String, dynamic> custom;
+  Map<String, dynamic>? custom;
 
   UserConfiguration(
-      this.multiTenancy,
+      {this.multiTenancy,
       this.session,
       this.localization,
       this.features,
@@ -44,5 +46,10 @@ class UserConfiguration {
       this.clock,
       this.timing,
       this.security,
-      this.custom);
+      this.custom});
+
+  factory UserConfiguration.fromJson(Map<String, dynamic> json) =>
+      _$UserConfigurationFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UserConfigurationToJson(this);
 }

@@ -15,6 +15,7 @@ abstract class IApplicationContext {
   UserConfiguration? configuration;
 
   LanguageInfo? currentLanguage;
+
   void clearLoginInfo();
 
   void setLoginInfo(LoginInformations loginInfo);
@@ -23,5 +24,5 @@ abstract class IApplicationContext {
 
   void setAsTenant(int tenantId, String tenancyName);
 
-  void load(TenantInformation currentTenant, LoginInformations loginInfo);
+  void load(TenantInformation? currentTenant, LoginInformations? loginInfo);
 }

@@ -8,9 +8,9 @@ part of 'authenticate_model.dart';
 
 AuthenticateModel _$AuthenticateModelFromJson(Map<String, dynamic> json) =>
     AuthenticateModel(
-      json['userNameOrEmailAddress'] as String,
-      json['password'] as String,
-      json['rememberClient'] as bool,
+      userNameOrEmailAddress: json['userNameOrEmailAddress'] as String?,
+      password: json['password'] as String?,
+      rememberClient: json['rememberClient'] as bool?,
     )
       ..twoFactorVerificationCode = json['twoFactorVerificationCode'] as String?
       ..twoFactorRememberClientToken =

@@ -1,52 +1,82 @@
-import 'package:aspnet_zero_app/abp_client/configuration/abp_config.dart';
-import 'package:aspnet_zero_app/abp_client/http_client.dart';
+import 'dart:io';
+
+import 'package:aspnet_zero_app/abp_client/interfaces/application_context.dart';
+import 'package:aspnet_zero_app/configuration/abp_config.dart';
 import 'package:aspnet_zero_app/abp_client/interfaces/access_token_manager.dart';
 import 'package:aspnet_zero_app/abp_client/models/auth/authenticate_model.dart';
 import 'package:aspnet_zero_app/abp_client/models/auth/authenticate_result_model.dart';
 import 'package:aspnet_zero_app/abp_client/models/auth/refresh_token_result.dart';
+import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
-import 'interfaces/application_context.dart';
 import 'models/common/ajax_response.dart';
 
 class AccessTokenManager implements IAccessTokenManager {
-  AuthenticateModel? authenticateModel;
-  IApplicationContext _applicationContext;
+  IApplicationContext? applicationContext;
+  AccessTokenManager() {
+    applicationContext = GetIt.I.get<IApplicationContext>();
+  }
 
-  AccessTokenManager(this._applicationContext) {
-    GetIt getIt = GetIt.I;
-    _applicationContext = getIt.get<IApplicationContext>();
+  Dio createApiClient() {
+    var _dio = Dio();
+    _dio.options.baseUrl = AbpConfig.hostUrl;
+    _dio.options.headers["User-Agent"] = AbpConfig.userAgent;
+    _dio.options.headers["X-Requested-With"] = "XMLHttpRequest";
+    _dio.options.contentType = Headers.jsonContentType;
+    if (applicationContext?.currentTenant != null) {
+      _dio.options.headers[AbpConfig.tenantResolveKey] =
+          applicationContext!.currentTenant!.tenantId;
+    }
+    return _dio;
   }
 
   @override
-  AbpAuthenticateResultModel? authenticateResult;
+  AuthenticateModel? authenticateModel;
+
+  @override
+  AuthenticateResultModel? authenticateResult;
 
   @override
   String getAccessToken() {
     if (authenticateResult == null) {
-      throw UnimplementedError();
+      return '';
     }
     return authenticateResult!.accessToken!;
   }
 
   @override
-  bool get isRefreshTokenExpired =>
-      authenticateResult == null ||
-      DateTime.now().isAfter(authenticateResult!.refreshTokenExpireDate!);
+  bool isTokenExpired() {
+    if (authenticateResult == null) {
+      return false;
+    } else {
+      return DateTime.now().isAfter(authenticateResult!.tokenExpireDate!);
+    }
+  }
 
   @override
-  bool get isUserLoggedIn => authenticateResult!.accessToken != null;
+  bool isRefreshTokenExpired() {
+    if (authenticateResult == null) {
+      return false;
+    } else {
+      return DateTime.now()
+          .isAfter(authenticateResult!.refreshTokenExpireDate!);
+    }
+  }
 
   @override
-  Future<AbpAuthenticateResultModel> loginAsync() async {
-    if (authenticateModel!.userNameOrEmailAddress.isEmpty ||
-        authenticateModel!.password.isEmpty) {
+  bool isUserLoggedIn() {
+    return authenticateResult != null &&
+        authenticateResult!.accessToken != null;
+  }
+
+  @override
+  Future<AuthenticateResultModel> loginAsync() async {
+    if (authenticateModel!.userNameOrEmailAddress!.isEmpty ||
+        authenticateModel!.password!.isEmpty) {
       throw UnimplementedError(
           "userNameOrEmailAddress and password cannot be empty");
     }
 
-    _applicationContext.setAsTenant(100, "ABC");
-
-    var client = HttpClient().init();
+    var client = createApiClient();
 
     var clientResponse =
         await client.post(AbpConfig.loginUrlSegment, data: authenticateModel);
@@ -56,10 +86,10 @@ class AccessTokenManager implements IAccessTokenManager {
       throw UnimplementedError('Login failed');
     }
 
-    var ajaxReponse = AjaxResponse<AbpAuthenticateResultModel>.fromJson(
+    var ajaxReponse = AjaxResponse<AuthenticateResultModel>.fromJson(
         clientResponse.data,
         (data) =>
-            AbpAuthenticateResultModel.fromJson(data as Map<String, dynamic>));
+            AuthenticateResultModel.fromJson(data as Map<String, dynamic>));
 
     if (!ajaxReponse.success) {
       throw UnimplementedError(
@@ -67,8 +97,15 @@ class AccessTokenManager implements IAccessTokenManager {
     }
 
     authenticateResult = ajaxReponse.result!;
-    authenticateResult!.refreshTokenExpireDate = DateTime.now()
-        .add(const Duration(days: AbpConfig.refreshTokenExpirationDays));
+
+    if (authenticateResult!.expireInSeconds != null) {
+      authenticateResult!.tokenExpireDate = DateTime.now()
+          .add(Duration(seconds: authenticateResult!.expireInSeconds!));
+    }
+    if (authenticateResult!.refreshTokenExpireInSeconds != null) {
+      authenticateResult!.refreshTokenExpireDate = DateTime.now().add(
+          Duration(seconds: authenticateResult!.refreshTokenExpireInSeconds!));
+    }
 
     return authenticateResult!;
   }
@@ -80,23 +117,23 @@ class AccessTokenManager implements IAccessTokenManager {
 
   @override
   Future refreshTokenAsync() async {
-    if (authenticateResult!.refreshToken!.isNotEmpty) {
-      throw UnimplementedError("No refresh token!");
+    if (authenticateResult!.refreshToken!.isEmpty) {
+      throw Exception("No refresh token!");
     }
 
-    var client = HttpClient().init();
-
-    if (_applicationContext.currentTenant != null) {
-      client.options.headers[AbpConfig.tenantResolveKey] =
-          _applicationContext.currentTenant!.tenantId;
+    if (isRefreshTokenExpired()) {
+      throw Exception('Refresh token expired');
     }
+
+    var client = createApiClient();
 
     var clientResponse = await client.post(AbpConfig.refreshTokenUrlSegment,
-        data: {'refreshToken': authenticateResult!.refreshToken});
+        data: {'refreshToken': authenticateResult!.refreshToken!},
+        options: Options(contentType: Headers.formUrlEncodedContentType));
 
     if (clientResponse.statusCode != 200) {
       authenticateResult = null;
-      throw UnimplementedError('Refresh token failed');
+      throw Exception('Refresh token failed');
     }
 
     var ajaxReponse = AjaxResponse<RefreshTokenResult>.fromJson(
@@ -104,8 +141,7 @@ class AccessTokenManager implements IAccessTokenManager {
         (data) => RefreshTokenResult.fromJson(data as Map<String, dynamic>));
 
     if (!ajaxReponse.success) {
-      throw UnimplementedError(
-          'Refresh token failed' + ajaxReponse.errorInfo!.message!);
+      throw Exception('Refresh token failed' + ajaxReponse.errorInfo!.message!);
     }
 
     authenticateResult!.accessToken = ajaxReponse.result!.accessToken;

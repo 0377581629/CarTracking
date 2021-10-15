@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'authenticate_result_model.g.dart';
 
 @JsonSerializable()
-class AbpAuthenticateResultModel {
+class AuthenticateResultModel {
   String? accessToken;
 
   String? encryptedAccessToken;
@@ -10,6 +10,8 @@ class AbpAuthenticateResultModel {
   String? refreshToken;
 
   int? expireInSeconds;
+
+  DateTime? tokenExpireDate;
 
   bool? shouldResetPassword;
 
@@ -25,10 +27,13 @@ class AbpAuthenticateResultModel {
 
   String? returnUrl;
 
+  int? refreshTokenExpireInSeconds;
+
   DateTime? refreshTokenExpireDate;
 
-  AbpAuthenticateResultModel(
+  AuthenticateResultModel(
       {this.accessToken,
+      this.tokenExpireDate,
       this.encryptedAccessToken,
       this.expireInSeconds,
       this.shouldResetPassword,
@@ -38,13 +43,14 @@ class AbpAuthenticateResultModel {
       this.twoFactorAuthProviders,
       this.twoFactorRememberClientToken,
       this.returnUrl,
+      this.refreshTokenExpireInSeconds,
       this.refreshTokenExpireDate});
 
-  factory AbpAuthenticateResultModel.fromJson(Map<String, dynamic> json) =>
-      _$AbpAuthenticateResultModelFromJson(json);
+  factory AuthenticateResultModel.fromJson(Map<String, dynamic> json) =>
+      _$AuthenticateResultModelFromJson(json);
 
-  Map<String, dynamic> toJson() => _$AbpAuthenticateResultModelToJson(this);
+  Map<String, dynamic> toJson() => _$AuthenticateResultModelToJson(this);
 
-  static AbpAuthenticateResultModel fromJsonModel(Map<String, dynamic> json) =>
-      AbpAuthenticateResultModel.fromJson(json);
+  static AuthenticateResultModel fromJsonModel(Map<String, dynamic> json) =>
+      AuthenticateResultModel.fromJson(json);
 }

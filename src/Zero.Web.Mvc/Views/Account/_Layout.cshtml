@@ -76,6 +76,7 @@
         @* This is used to get the application's root path from javascript.
         It's useful if you're running application in a virtual directory under IIS. *@
         var abp = abp || {}; abp.appPath = '@ApplicationPath';
+        
     </script>
 
 </head>
@@ -122,13 +123,14 @@
 
 @await RenderSectionAsync("Scripts", false)
 <script>
-        app.supportsTenancyNameInUrl = @(WebUrlService.SupportsTenancyNameInUrl.ToString().ToLower());
+    app.supportsTenancyNameInUrl = @(WebUrlService.SupportsTenancyNameInUrl.ToString().ToLower());
 
-        jQuery(document).ready(function () {
-            if (window.CurrentPage) {
-                CurrentPage.init();
-            }
-        });
-    </script>
+    jQuery(document).ready(function () {
+        if (window.CurrentPage) {
+            CurrentPage.init();
+        }
+    });
+    abp.multiTenancy.tenantIdCookieName = 'abp.tenantId';
+</script>
 </body>
 </html>

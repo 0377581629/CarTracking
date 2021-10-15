@@ -130,6 +130,7 @@ namespace Zero.Web.Controllers
         [HttpPost]
         public async Task<AuthenticateResultModel> Authenticate([FromBody] AuthenticateModel model)
         {
+            var request = HttpContext.Request;
             if (UseCaptchaOnLogin())
             {
                 await ValidateReCaptcha(model.CaptchaResponse);

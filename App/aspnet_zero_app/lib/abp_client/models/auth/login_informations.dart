@@ -1,21 +1,23 @@
-import 'package:aspnet_zero_app/abp_client/enums/payment_period_type.dart';
+
 import 'package:aspnet_zero_app/abp_client/enums/subscription_payment_type.dart';
 import 'package:aspnet_zero_app/abp_client/models/edition/edition_info.dart';
-import 'package:tuple/tuple.dart';
-import 'package:uuid/uuid.dart';
+import 'package:json_annotation/json_annotation.dart';
+part 'login_informations.g.dart';
 
+@JsonSerializable()
 class UserLoginInfo {
-  int id;
-  String name;
-  String surname;
-  String userName;
-  String emailAddress;
-  String profilePictureId;
-  bool isInTrialPeriod;
+  int? id;
+  String? name;
+  String? surname;
+  String? userName;
+  String? emailAddress;
+  String? profilePictureId;
+  bool? isInTrialPeriod;
   DateTime? subscriptionEndDateUtc;
-  SubscriptionPaymentType subscriptionPaymentType;
+  int? subscriptionPaymentType;
+
   bool isInTrial() {
-    return isInTrialPeriod;
+    return isInTrialPeriod!;
   }
 
   bool subscriptionIsExpiringSoon(int notifyDayCount) {
@@ -41,7 +43,7 @@ class UserLoginInfo {
   }
 
   UserLoginInfo(
-      this.id,
+      {this.id,
       this.name,
       this.surname,
       this.userName,
@@ -49,38 +51,44 @@ class UserLoginInfo {
       this.profilePictureId,
       this.isInTrialPeriod,
       this.subscriptionEndDateUtc,
-      this.subscriptionPaymentType);
+      this.subscriptionPaymentType});
+
+  factory UserLoginInfo.fromJson(Map<String, dynamic> json) =>
+      _$UserLoginInfoFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UserLoginInfoToJson(this);
 }
 
+@JsonSerializable()
 class TenantLoginInfo {
-  String tenancyName;
+  String? tenancyName;
 
-  String name;
+  String? name;
 
-  UuidValue? logoId;
+  String? logoId;
 
-  String logoFileType;
+  String? logoFileType;
 
-  UuidValue? customCssId;
+  String? customCssId;
 
   DateTime? subscriptionEndDateUtc;
 
-  bool isInTrialPeriod;
+  bool? isInTrialPeriod;
 
-  SubscriptionPaymentType subscriptionPaymentType;
+  int? subscriptionPaymentType;
 
-  EditionInfo edition;
+  EditionInfo? edition;
 
-  DateTime creationTime;
+  DateTime? creationTime;
 
-  PaymentPeriodType paymentPeriodType;
+  int? paymentPeriodType;
 
-  String subscriptionDateString;
+  String? subscriptionDateString;
 
-  String creationTimeString;
+  String? creationTimeString;
 
   bool isInTrial() {
-    return isInTrialPeriod;
+    return isInTrialPeriod!;
   }
 
   bool subscriptionIsExpiringSoon(int notifyDayCount) {
@@ -109,32 +117,32 @@ class TenantLoginInfo {
     return subscriptionPaymentType != SubscriptionPaymentType.manual;
   }
 
-  UuidValue? loginLogoId;
+  String? loginLogoId;
 
-  UuidValue? menuLogoId;
+  String? menuLogoId;
 
-  UuidValue? loginBackgroundId;
+  String? loginBackgroundId;
 
-  String loginLogoFileType;
+  String? loginLogoFileType;
 
-  String menuLogoFileType;
+  String? menuLogoFileType;
 
-  String loginBackgroundFileType;
+  String? loginBackgroundFileType;
 
-  String webTitle;
+  String? webTitle;
 
-  String webDescription;
+  String? webDescription;
 
-  String webAuthor;
+  String? webAuthor;
 
-  String webKeyword;
+  String? webKeyword;
 
-  String webFavicon;
+  String? webFavicon;
 
-  bool useSubscriptionUser;
+  bool? useSubscriptionUser;
 
   TenantLoginInfo(
-      this.creationTime,
+      {this.creationTime,
       this.creationTimeString,
       this.customCssId,
       this.edition,
@@ -158,21 +166,27 @@ class TenantLoginInfo {
       this.webDescription,
       this.webFavicon,
       this.webKeyword,
-      this.webTitle);
+      this.webTitle});
+
+  factory TenantLoginInfo.fromJson(Map<String, dynamic> json) =>
+      _$TenantLoginInfoFromJson(json);
+
+  Map<String, dynamic> toJson() => _$TenantLoginInfoToJson(this);
 }
 
+@JsonSerializable()
 class ApplicationLoginInfo {
-  String version;
-  DateTime releaseDate;
-  String currency;
-  String currencySign;
-  bool allowTenantsToChangeEmailSettings;
-  bool userDelegationIsEnabled;
-  double twoFactorCodeExpireSeconds;
-  Tuple2<String, bool> features;
-  bool useSubscriptionUser;
+  String? version;
+  DateTime? releaseDate;
+  String? currency;
+  String? currencySign;
+  bool? allowTenantsToChangeEmailSettings;
+  bool? userDelegationIsEnabled;
+  double? twoFactorCodeExpireSeconds;
+  Map<String, bool>? features;
+  bool? useSubscriptionUser;
   ApplicationLoginInfo(
-      this.version,
+      {this.version,
       this.releaseDate,
       this.currency,
       this.currencySign,
@@ -180,15 +194,41 @@ class ApplicationLoginInfo {
       this.userDelegationIsEnabled,
       this.twoFactorCodeExpireSeconds,
       this.features,
-      this.useSubscriptionUser);
+      this.useSubscriptionUser});
+  factory ApplicationLoginInfo.fromJson(Map<String, dynamic> json) =>
+      _$ApplicationLoginInfoFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ApplicationLoginInfoToJson(this);
 }
 
+@JsonSerializable()
 class LoginInformations {
-  UserLoginInfo user;
-  UserLoginInfo impersonatorUser;
-  TenantLoginInfo tenant;
-  TenantLoginInfo impersonatorTenant;
-  ApplicationLoginInfo application;
-  LoginInformations(this.user, this.impersonatorUser, this.tenant,
-      this.impersonatorTenant, this.application);
+  UserLoginInfo? user;
+  UserLoginInfo? impersonatorUser;
+  TenantLoginInfo? tenant;
+  TenantLoginInfo? impersonatorTenant;
+  ApplicationLoginInfo? application;
+  LoginInformations(
+      {this.user,
+      this.impersonatorUser,
+      this.tenant,
+      this.impersonatorTenant,
+      this.application});
+  factory LoginInformations.fromJson(Map<String, dynamic> json) =>
+      _$LoginInformationsFromJson(json);
+
+  Map<String, dynamic> toJson() => _$LoginInformationsToJson(this);
+}
+
+@JsonSerializable()
+class UpdateUserSignInToken {
+  String? signInToken;
+  String? encodedUserId;
+  String? encodedTenantId;
+  UpdateUserSignInToken(
+      {this.signInToken, this.encodedUserId, this.encodedTenantId});
+  factory UpdateUserSignInToken.fromJson(Map<String, dynamic> json) =>
+      _$UpdateUserSignInTokenFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UpdateUserSignInTokenToJson(this);
 }
