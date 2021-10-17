@@ -37,7 +37,7 @@ class AccountService implements IAccountService {
     if (authenticateResultModel!.requiresTwoFactorVerification! == true) {
       // TODO: Redirect to two factor code view
     }
-    if (!authenticateModel!.isTwoFactorVerification! == false) {
+    if (!authenticateModel!.isTwoFactorVerification == false) {
       await dataStorageService!
           .storeAuthenticateResult(authenticateResultModel!);
     }

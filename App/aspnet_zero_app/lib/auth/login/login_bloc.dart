@@ -28,7 +28,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         await accountService.loginUser();
         yield state.copyWith(formStatus: SubmissionSuccess());
       } catch (e) {
-        yield state.copyWith(formStatus: SubmissionFailed(e as Exception));
+        yield state.copyWith(
+            formStatus: SubmissionFailed(Exception(e.toString())));
       }
     }
   }
