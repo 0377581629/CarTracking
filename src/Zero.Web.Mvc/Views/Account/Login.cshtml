@@ -75,11 +75,11 @@
         }
 
         <div class="form-group">
-            <input class="form-control h-auto p-10 rounded-lg font-size-h6" type="text" placeholder="@L("UserNameOrEmail")" name="usernameOrEmailAddress" autocomplete="new-password" value="@(Model.UserNameOrEmailAddress ?? "")" required>
+            <input class="form-control h-auto p-10" type="text" placeholder="@L("UserNameOrEmail")" name="usernameOrEmailAddress" autocomplete="new-password" value="@(Model.UserNameOrEmailAddress ?? "")" required>
         </div>
 
         <div class="form-group">
-            <input class="form-control h-auto p-10 rounded-lg font-size-h6" type="password" placeholder="@L("Password")" name="password" autocomplete="new-password">
+            <input class="form-control h-auto p-10" type="password" placeholder="@L("Password")" name="password" autocomplete="new-password">
         </div>
 
         @if (!(ViewBag.DisableTenantChange ?? false) && MultiTenancyConfig.IsEnabled && !WebUrlService.SupportsTenancyNameInUrl)
