@@ -1,31 +1,35 @@
 import 'dart:io';
 
 import 'package:after_layout/after_layout.dart';
-import 'package:aspnet_zero_app/abp_base/interfaces/account_service.dart';
-import 'package:aspnet_zero_app/abp_base/services/account_service.dart';
+import 'package:aspnet_zero_app/abp/abp_base/interfaces/account_service.dart';
+import 'package:aspnet_zero_app/abp/abp_base/services/account_service.dart';
 import 'package:aspnet_zero_app/configuration/abp_config.dart';
+import 'package:aspnet_zero_app/error_page/error_page_widget.dart';
 import 'package:aspnet_zero_app/helpers/localization_helper.dart';
-import 'package:aspnet_zero_app/ui/intro.dart';
 import 'package:aspnet_zero_app/auth/login/login_view.dart';
+import 'package:aspnet_zero_app/onboarding_page/onboarding_page_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'abp_base/interfaces/data_storage_service.dart';
-import 'abp_base/interfaces/session_service.dart';
-import 'abp_base/services/data_storage_service.dart';
-import 'abp_base/services/session_service.dart';
-import 'abp_base/services/user_configuration_service.dart';
-import 'abp_client/access_token_manager.dart';
-import 'abp_client/application_context.dart';
-import 'abp_client/interfaces/access_token_manager.dart';
-import 'abp_client/interfaces/application_context.dart';
-import 'abp_client/interfaces/multi_tenancy_config.dart';
-import 'abp_client/models/multi_tenancy/multi_tenancy_config.dart';
+
+import 'abp/abp_base/interfaces/data_storage_service.dart';
+import 'abp/abp_base/interfaces/session_service.dart';
+import 'abp/abp_base/services/data_storage_service.dart';
+import 'abp/abp_base/services/session_service.dart';
+import 'abp/abp_base/services/user_configuration_service.dart';
+import 'abp/abp_client/access_token_manager.dart';
+import 'abp/abp_client/application_context.dart';
+import 'abp/abp_client/interfaces/access_token_manager.dart';
+import 'abp/abp_client/interfaces/application_context.dart';
+import 'abp/abp_client/interfaces/multi_tenancy_config.dart';
+import 'abp/abp_client/models/multi_tenancy/multi_tenancy_config.dart';
+import 'flutter_flow/flutter_flow_theme.dart';
 
 final lang = LocalizationHelper();
 final getIt = GetIt.I;
+
 void main() async {
   HttpOverrides.global = MyHttpOverrides();
   getIt.registerLazySingleton<IDataStorageService>(() => DataStorageService());
@@ -49,6 +53,7 @@ class MyHttpOverrides extends HttpOverrides {
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -77,26 +82,35 @@ class _InitializeApp extends State<InitializeApp>
     var accessTokenManager = getIt.get<IAccessTokenManager>();
     var applicationContext = getIt.get<IApplicationContext>();
     var _userConfigService = UserConfigurationService();
+
     accessTokenManager.authenticateResult =
         await dataStorageService.retrieveAuthenticateResult();
     applicationContext.load(await dataStorageService.retrieveTenantInfo(),
         await dataStorageService.retrieveLoginInfo());
     if (applicationContext.configuration == null) {
-      var userConfiguartion = await _userConfigService.getUserConfiguration();
-      applicationContext.configuration = userConfiguartion;
-    }
-    // Redirect to Intro pages or homePage
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool _seen = (prefs.getBool('introPageSeen') ?? false);
-    if (_seen) {
-      Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (_) => RepositoryProvider(
-              create: (context) => AccountService(), child: LoginPage())));
-    } else {
-      await prefs.setBool('seen', true);
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const IntroPage()),
-      );
+      try {
+        var userConfiguartion = await _userConfigService.getUserConfiguration();
+        applicationContext.configuration = userConfiguartion;
+        // Redirect to Intro pages or homePage
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        bool _seen = (prefs.getBool('introPageSeen') ?? false);
+        if (_seen) {
+          Navigator.of(context).pushReplacement(MaterialPageRoute(
+              builder: (_) => RepositoryProvider(
+                  create: (context) => AccountService(), child: LoginPage())));
+        } else {
+          await prefs.setBool('introPageSeen', true);
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => const OnboardingPageWidget()),
+          );
+        }
+      } catch (e) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => ErrorPageWidget
+            (errorMessage: 'This app is currently undergoing maintenance. '
+              'Please try again later!',)),
+        );
+      }
     }
   }
 
@@ -106,11 +120,30 @@ class _InitializeApp extends State<InitializeApp>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [Image(image: AssetImage("assets/images/img1.jpg"))],
+      backgroundColor: FlutterFlowTheme.primaryColor,
+      body: SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 50),
+                  child: Image.asset(
+                    'assets/images/trueinvest-logo.png',
+                    width: 270,
+                    height: 100,
+                    fit: BoxFit.fitWidth,
+                  ),
+                )
+              ],
+            )
+          ],
+        ),
       ),
-    ));
+    );
   }
 }

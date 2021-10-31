@@ -9,7 +9,8 @@ Logs/
 project.lock.json
 .vs/
 .idea/
-
+build/
+.dart_tool/
 # mstest test results
 TestResults
 

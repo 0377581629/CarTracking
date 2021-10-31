@@ -51,6 +51,14 @@ dependencies:
   introduction_screen: ^2.1.0
   rxdart: ^0.27.2
   flutter_bloc:
+  google_fonts: ^2.1.0
+  intl: ^0.17.0
+  timeago: ^3.1.0
+  url_launcher: ^6.0.12
+  page_transition: ^2.0.4
+  font_awesome_flutter: ^9.2.0
+  auto_size_text: ^3.0.0
+  smooth_page_indicator: ^1.0.0+2
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -66,7 +74,12 @@ dev_dependencies:
   build_test: ^2.1.0
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
-
+flutter_icons:
+  android: true
+  ios: true
+  remove_alpha_ios: true
+  image_path: 'assets/images/app_launcher_icon.png'
+  
 # The following section is specific to Flutter.
 flutter:
 
@@ -77,10 +90,12 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-   - assets/images/img1.jpg
-   - assets/images/img2.jpg
-   - assets/images/img3.jpg
-   - assets/images/fullscreen.jpg
+    - assets/fonts/
+    - assets/images/
+    - assets/videos/
+    - assets/audios/
+    - assets/lottie_animations/
+    - assets/rive_animations/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

@@ -1,8 +1,10 @@
-import 'package:aspnet_zero_app/abp_base/interfaces/account_service.dart';
+import 'package:aspnet_zero_app/abp/abp_base/interfaces/account_service.dart';
 import 'package:aspnet_zero_app/auth/form_submission_status.dart';
 import 'package:aspnet_zero_app/auth/login/login_event.dart';
+import 'package:aspnet_zero_app/auth/register/register_view.dart';
+import 'package:aspnet_zero_app/flutter_flow/flutter_flow_theme.dart';
+import 'package:aspnet_zero_app/flutter_flow/flutter_flow_widgets.dart';
 import 'package:aspnet_zero_app/helpers/localization_helper.dart';
-import 'package:aspnet_zero_app/ui/widgets/button/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,6 +23,7 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor:  FlutterFlowTheme.primaryColor,
         body: BlocProvider(
             create: (context) =>
                 LoginBloc(accountService: GetIt.I.get<IAccountService>()),
@@ -43,8 +46,9 @@ class LoginPage extends StatelessWidget {
             child: Center(
                 child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
+              children: [
                 _appLogo(),
+                _signInLoginHeader(),
                 _userOrEmailField(),
                 _passwordField(),
                 _loginButton()
@@ -53,7 +57,87 @@ class LoginPage extends StatelessWidget {
   }
 
   Widget _appLogo() {
-    return const Image(image: AssetImage("assets/images/img1.jpg"), width: 300);
+    return  Image.asset(
+      'assets/images/trueinvest-logo.png',
+      width: 240,
+      height: 70,
+      fit: BoxFit.cover,
+    );
+  }
+
+  Widget _signInLoginHeader() {
+    return BlocBuilder<LoginBloc, LoginState>(builder: (context, state)
+    {
+      return Padding(
+        padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Column(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Text(
+                  'Sign In',
+                  style: FlutterFlowTheme.subtitle1.override(
+                    fontFamily: 'Lexend Deca',
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
+                  child: Container(
+                    width: 90,
+                    height: 3,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                )
+              ],
+            ),
+            Column(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                InkWell(
+                  onTap: () async {
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => RegisterPage(),
+                      ),
+                    );
+                  },
+                  child: Text(
+                    'Sign Up',
+                    style: FlutterFlowTheme.subtitle1.override(
+                      fontFamily: 'Lexend Deca',
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
+                  child: Container(
+                    width: 90,
+                    height: 3,
+                    decoration: BoxDecoration(
+                      color: Color(0xFF4B39EF),
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                )
+              ],
+            )
+          ],
+        ),
+      );
+    });
   }
 
   Widget _userOrEmailField() {
@@ -84,12 +168,30 @@ class LoginPage extends StatelessWidget {
       if (state.formStatus is FormSubmitting) {
         return const CircularProgressIndicator();
       }
-
-      return CustomButton(lang.get('Login'), () {
-        if (_formKey.currentState?.validate() ?? false) {
-          BlocProvider.of<LoginBloc>(context).add(LoginSubmitted());
-        }
-      });
+      return FFButtonWidget(
+          onPressed: () {
+            if (_formKey.currentState?.validate() ?? false) {
+              BlocProvider.of<LoginBloc>(context).add(LoginSubmitted());
+            }
+          },
+          text: lang.get('Login'),
+          options: FFButtonOptions(
+            width: 230,
+            height: 60,
+            color: FlutterFlowTheme.secondaryColor,
+            textStyle: FlutterFlowTheme.subtitle2.override(
+              fontFamily: 'Lexend Deca',
+              color: FlutterFlowTheme.primaryColor,
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+            ),
+            elevation: 3,
+            borderSide: const BorderSide(
+              color: Colors.transparent,
+              width: 1,
+            ),
+            borderRadius: 8,
+          ));
     });
   }
 

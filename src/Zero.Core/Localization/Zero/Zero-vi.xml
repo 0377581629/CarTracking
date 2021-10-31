@@ -58,6 +58,8 @@
     <text name="MissingData">Chưa khai báo</text>
     <text name="Login">Đăng nhập</text>
     <text name="Registration">Đăng ký</text>
+
+    <text name="Skip">Bỏ qua</text>
     <!--    -->
     
     <!--  Email Template  -->

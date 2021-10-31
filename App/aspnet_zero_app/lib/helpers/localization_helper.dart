@@ -1,4 +1,4 @@
-import 'package:aspnet_zero_app/abp_client/interfaces/application_context.dart';
+import 'package:aspnet_zero_app/abp/abp_client/interfaces/application_context.dart';
 import 'package:aspnet_zero_app/configuration/abp_config.dart';
 import 'package:get_it/get_it.dart';
 

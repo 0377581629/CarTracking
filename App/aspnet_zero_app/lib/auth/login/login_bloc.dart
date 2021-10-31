@@ -1,5 +1,5 @@
-import 'package:aspnet_zero_app/abp_base/interfaces/account_service.dart';
-import 'package:aspnet_zero_app/abp_client/models/auth/authenticate_model.dart';
+import 'package:aspnet_zero_app/abp/abp_base/interfaces/account_service.dart';
+import 'package:aspnet_zero_app/abp/abp_client/models/auth/authenticate_model.dart';
 import 'package:aspnet_zero_app/auth/form_submission_status.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
