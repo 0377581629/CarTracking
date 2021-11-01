@@ -143,7 +143,6 @@ class AccessTokenManager implements IAccessTokenManager {
     _dio.options.headers["X-Requested-With"] = "XMLHttpRequest";
     _dio.options.contentType = Headers.jsonContentType;
     _dio.interceptors.clear();
-    _dio.interceptors.add(CustomInterceptor());
     if (applicationContext?.currentTenant != null) {
       _dio.options.headers[AbpConfig.tenantResolveKey] =
           applicationContext!.currentTenant!.tenantId;

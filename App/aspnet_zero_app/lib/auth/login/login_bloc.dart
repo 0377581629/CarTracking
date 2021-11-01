@@ -26,12 +26,16 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             password: state.password,
             rememberClient: false);
         var loginResult = await accountService.loginUser();
-        if (loginResult == LoginResult.success) {
+
+        if (loginResult.result == LoginResult.success) {
           yield state.copyWith(formStatus: SubmissionSuccess());
         }
-        yield state.copyWith(
-            formStatus: SubmissionFailed(Exception('LoginFailed')),
-            loginResult: loginResult);
+        else{
+          yield state.copyWith(
+              formStatus: SubmissionFailed(Exception('LoginFailed')),
+              loginResult: loginResult);
+        }
+
       } catch (e) {
         yield state.copyWith(
             formStatus: SubmissionFailed(Exception(e.toString())));

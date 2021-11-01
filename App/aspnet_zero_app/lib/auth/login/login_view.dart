@@ -1,5 +1,6 @@
 import 'package:aspnet_zero_app/abp/abp_base/interfaces/account_service.dart';
 import 'package:aspnet_zero_app/abp/models/auth/login_result.dart';
+import 'package:aspnet_zero_app/auth/forgot_password/forgot_password_view.dart';
 import 'package:aspnet_zero_app/auth/form_submission_status.dart';
 import 'package:aspnet_zero_app/auth/login/login_event.dart';
 import 'package:aspnet_zero_app/auth/register/register_view.dart';
@@ -26,10 +27,7 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: FlutterFlowTheme.primaryColor,
-        body: BlocProvider(
-            create: (context) =>
-                LoginBloc(accountService: GetIt.I.get<IAccountService>()),
-            child: _loginForm()));
+        body: BlocProvider(create: (context) => LoginBloc(accountService: GetIt.I.get<IAccountService>()), child: _loginForm()));
   }
 
   Widget _loginForm() {
@@ -37,32 +35,81 @@ class LoginPage extends StatelessWidget {
         listener: (context, state) {
           final formStatus = state.formStatus;
           if (formStatus is SubmissionFailed) {
-            if (state.loginResult! == LoginResult.needToChangePassword) {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (BuildContext context) {
+
+            if (state.loginResult!.result == LoginResult.needToChangePassword) {
+              Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) {
                 return ResetPasswordPage();
               }));
             }
-            if (state.loginResult! == LoginResult.needToChangePassword) {}
-            _showSnackbar(context, formStatus.exception.toString());
+
+            if (state.loginResult!.result == LoginResult.needToChangePassword) {
+
+            }
+            if (state.loginResult!.exceptionMessage!.isNotEmpty) {
+              _showSnackbar(context, state.loginResult!.exceptionMessage!);
+            } else {
+              _showSnackbar(context, formStatus.exception.toString());
+            }
           }
           if (formStatus is SubmissionSuccess) {
             _showSnackbar(context, "LoginSuccess");
           }
         },
-        child: Form(
-            key: _formKey,
-            child: Center(
-                child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _appLogo(),
-                _signInLoginHeader(),
-                _userOrEmailField(),
-                _passwordField(),
-                _loginButton()
-              ],
-            ))));
+        child: SingleChildScrollView(
+            child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: 700,
+                ),
+                child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [Padding(padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 20), child: _appLogo()), _signInLoginHeader()],
+                      )
+                    ],
+                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                          padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
+                          child: Container(
+                              constraints: const BoxConstraints(
+                                maxWidth: 350,
+                              ),
+                              decoration: const BoxDecoration(
+                                color: FlutterFlowTheme.primaryColor,
+                              ),
+                              child: Form(
+                                  key: _formKey,
+                                  child: Center(
+                                      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                                    Padding(padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 20), child: _userOrEmailField()),
+                                    Padding(padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 20), child: _passwordField()),
+                                    Padding(padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 20), child: _loginButton())
+                                  ])))))
+                    ],
+                  ),
+                  Row(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
+                    Container(
+                        constraints: const BoxConstraints(
+                          maxWidth: 350,
+                        ),
+                        decoration: const BoxDecoration(
+                          color: FlutterFlowTheme.primaryColor,
+                        ),
+                        child: Center(
+                            child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [_forgotPasswordButton()],
+                        )))
+                  ])
+                ]))));
   }
 
   Widget _appLogo() {
@@ -70,80 +117,81 @@ class LoginPage extends StatelessWidget {
       'assets/images/trueinvest-logo.png',
       width: 240,
       height: 70,
-      fit: BoxFit.cover,
+      fit: BoxFit.contain,
     );
   }
 
   Widget _signInLoginHeader() {
     return BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
-      return Padding(
-        padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Column(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Text(
-                  'Sign In',
-                  style: FlutterFlowTheme.subtitle1.override(
-                    fontFamily: 'Lexend Deca',
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
-                  child: Container(
-                    width: 90,
-                    height: 3,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(2),
-                    ),
-                  ),
-                )
-              ],
-            ),
-            Column(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                InkWell(
-                  onTap: () async {
-                    await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => RegisterPage(),
-                      ),
-                    );
-                  },
-                  child: Text(
-                    'Sign Up',
+      return Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Padding(
+              padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Text(
+                    lang.get('Login'),
                     style: FlutterFlowTheme.subtitle1.override(
-                      fontFamily: 'Lexend Deca',
+                      fontFamily: FlutterFlowTheme.defaultFontFamily,
                       color: Colors.white,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
-                  child: Container(
-                    width: 90,
-                    height: 3,
-                    decoration: BoxDecoration(
-                      color: Color(0xFF4B39EF),
-                      borderRadius: BorderRadius.circular(2),
+                  Padding(
+                    padding: const EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
+                    child: Container(
+                      width: 90,
+                      height: 3,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                  )
+                ],
+              )),
+          Padding(
+              padding: const EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  InkWell(
+                    onTap: () async {
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => RegisterPage(),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      lang.get('SignUp'),
+                      style: FlutterFlowTheme.subtitle1.override(
+                        fontFamily: FlutterFlowTheme.defaultFontFamily,
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                )
-              ],
-            )
-          ],
-        ),
+                  Padding(
+                    padding: const EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
+                    child: Container(
+                      width: 90,
+                      height: 3,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF4B39EF),
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                  )
+                ],
+              ))
+        ],
       );
     });
   }
@@ -151,11 +199,40 @@ class LoginPage extends StatelessWidget {
   Widget _userOrEmailField() {
     return BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
       return TextFormField(
-          validator: (value) =>
-              state.isValidUsernameOrEmail ? null : 'Username is too short',
-          onChanged: (value) => context
-              .read<LoginBloc>()
-              .add(LoginUsernameOrEmailChanged(usernameOrEmail: value)));
+          validator: (value) => state.isValidUsernameOrEmail ? null : lang.get('InvalidUsernameOrEmail'),
+          onChanged: (value) => context.read<LoginBloc>().add(LoginUsernameOrEmailChanged(usernameOrEmail: value)),
+          decoration: InputDecoration(
+            hintText: lang.get('EnterYourEmail'),
+            hintStyle: FlutterFlowTheme.bodyText1.override(
+              fontFamily: FlutterFlowTheme.defaultFontFamily,
+              color: FlutterFlowTheme.primaryColor,
+              fontSize: 14,
+              fontWeight: FontWeight.normal,
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Color(0x00000000),
+                width: 1,
+              ),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Color(0x00000000),
+                width: 1,
+              ),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            filled: true,
+            fillColor: FlutterFlowTheme.tertiaryColor,
+            contentPadding: FlutterFlowTheme.formFieldContentPadding,
+          ),
+          style: FlutterFlowTheme.bodyText1.override  (
+            fontFamily: FlutterFlowTheme.defaultFontFamily,
+            color: FlutterFlowTheme.primaryColor,
+            fontSize: 14,
+            fontWeight: FontWeight.normal,
+          ));
     });
   }
 
@@ -163,11 +240,40 @@ class LoginPage extends StatelessWidget {
     return BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
       return TextFormField(
           obscureText: true,
-          validator: (value) =>
-              state.isValidPassword ? null : 'Password is too short',
-          onChanged: (value) => context
-              .read<LoginBloc>()
-              .add(LoginPasswordChanged(password: value)));
+          validator: (value) => state.isValidPassword ? null : lang.get('InvalidPassword'),
+          onChanged: (value) => context.read<LoginBloc>().add(LoginPasswordChanged(password: value)),
+          decoration: InputDecoration(
+            hintText: lang.get('EnterYourPassword'),
+            hintStyle: FlutterFlowTheme.bodyText1.override(
+              fontFamily: FlutterFlowTheme.defaultFontFamily,
+              color: FlutterFlowTheme.primaryColor,
+              fontSize: 14,
+              fontWeight: FontWeight.normal,
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: const BorderSide(
+                color: Color(0x00000000),
+                width: 1,
+              ),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: const BorderSide(
+                color: Color(0x00000000),
+                width: 1,
+              ),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            filled: true,
+            fillColor: FlutterFlowTheme.tertiaryColor,
+            contentPadding: FlutterFlowTheme.formFieldContentPadding,
+          ),
+          style: FlutterFlowTheme.bodyText1.override(
+            fontFamily: FlutterFlowTheme.defaultFontFamily,
+            color: FlutterFlowTheme.primaryColor,
+            fontSize: 14,
+            fontWeight: FontWeight.normal,
+          ));
     });
   }
 
@@ -184,11 +290,43 @@ class LoginPage extends StatelessWidget {
           },
           text: lang.get('Login'),
           options: FFButtonOptions(
-            width: 230,
-            height: 60,
+            width: 220,
+            height: 50,
             color: FlutterFlowTheme.secondaryColor,
             textStyle: FlutterFlowTheme.subtitle2.override(
-              fontFamily: 'Lexend Deca',
+              fontFamily: FlutterFlowTheme.defaultFontFamily,
+              color: FlutterFlowTheme.primaryColor,
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+            ),
+            elevation: 3,
+            borderSide: const BorderSide(
+              color: Colors.transparent,
+              width: 1,
+            ),
+            borderRadius: 8,
+          ));
+    });
+  }
+
+  Widget _forgotPasswordButton() {
+    return BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
+      if (state.formStatus is FormSubmitting) {
+        return Row();
+      }
+      return FFButtonWidget(
+          onPressed: () {
+            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) {
+              return ForgotPasswordPage();
+            }));
+          },
+          text: lang.get('ForgotPassword'),
+          options: FFButtonOptions(
+            width: 180,
+            height: 40,
+            color: FlutterFlowTheme.secondaryColor,
+            textStyle: FlutterFlowTheme.subtitle2.override(
+              fontFamily: FlutterFlowTheme.defaultFontFamily,
               color: FlutterFlowTheme.primaryColor,
               fontSize: 16,
               fontWeight: FontWeight.w500,

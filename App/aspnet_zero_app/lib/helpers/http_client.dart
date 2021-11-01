@@ -43,28 +43,25 @@ class CustomInterceptor extends Interceptor {
   }
 
   @override
-  Future onRequest(
-      RequestOptions options, RequestInterceptorHandler handler) async {
+  Future onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
     if (applicationContext!.currentTenant != null) {
-      options.headers[AbpConfig.tenantResolveKey] =
-          applicationContext!.currentTenant!.tenantId;
+      options.headers[AbpConfig.tenantResolveKey] = applicationContext!.currentTenant!.tenantId;
     }
 
     if (applicationContext!.currentLanguage != null) {
-      options.headers[AbpConfig.languageKey] = "c=" +
-          applicationContext!.currentLanguage!.name! +
-          '|uic=' +
-          applicationContext!.currentLanguage!.name!;
+      options.headers[AbpConfig.languageKey] = "c=" + applicationContext!.currentLanguage!.name! + '|uic=' + applicationContext!.currentLanguage!.name!;
     }
 
-    if (accessTokenManager != null &&
-        accessTokenManager!.getAccessToken().isNotEmpty) {
-      if (accessTokenManager!.isTokenExpired() &&
-          !accessTokenManager!.isRefreshTokenExpired()) {
-        await accessTokenManager!.refreshTokenAsync();
+    if (accessTokenManager != null && accessTokenManager!.getAccessToken().isNotEmpty) {
+      if (accessTokenManager!.isTokenExpired() && !accessTokenManager!.isRefreshTokenExpired()) {
+        try {
+          await accessTokenManager!.refreshTokenAsync();
+        } catch (e) {}
       }
       var accessToken = accessTokenManager!.getAccessToken();
-      options.headers[HttpHeaders.authorizationHeader] = "Bearer $accessToken";
+      if (accessToken.isNotEmpty) {
+        options.headers[HttpHeaders.authorizationHeader] = "Bearer $accessToken";
+      }
     }
 
     return handler.next(options);

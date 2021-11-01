@@ -12,19 +12,11 @@ class LoginState {
 
   final FormSubmissionStatus formStatus;
 
-  LoginResult? loginResult;
+  LoginResultOutput? loginResult;
 
-  LoginState(
-      {this.usernameOrEmail = '',
-      this.password = '',
-      this.formStatus = const InitialFormStatus(),
-      this.loginResult});
+  LoginState({this.usernameOrEmail = '', this.password = '', this.formStatus = const InitialFormStatus(), this.loginResult});
 
-  LoginState copyWith(
-      {String? usernameOrEmail,
-      String? password,
-      FormSubmissionStatus? formStatus,
-      LoginResult? loginResult}) {
+  LoginState copyWith({String? usernameOrEmail, String? password, FormSubmissionStatus? formStatus, LoginResultOutput? loginResult}) {
     return LoginState(
         usernameOrEmail: usernameOrEmail ?? this.usernameOrEmail,
         password: password ?? this.password,

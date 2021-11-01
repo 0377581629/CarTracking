@@ -4,3 +4,8 @@ enum LoginResult {
   needToChangePassword,
   requireTwoFactorVerification
 }
+
+class LoginResultOutput {
+  LoginResult? result;
+  String? exceptionMessage;
+}

@@ -5,8 +5,11 @@ import 'package:aspnet_zero_app/abp/abp_client/interfaces/access_token_manager.d
 import 'package:aspnet_zero_app/abp/abp_client/interfaces/application_context.dart';
 import 'package:aspnet_zero_app/abp/models/auth/authenticate_result_model.dart';
 import 'package:aspnet_zero_app/abp/models/auth/authenticate_model.dart';
+import 'package:aspnet_zero_app/abp/models/auth/forgot_password_model.dart';
 import 'package:aspnet_zero_app/abp/models/auth/login_result.dart';
 import 'package:aspnet_zero_app/abp/models/auth/reset_password_model.dart';
+import 'package:aspnet_zero_app/abp/models/common/ajax_response.dart';
+import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 
 class AccountService implements IAccountService {
@@ -33,31 +36,40 @@ class AccountService implements IAccountService {
   ResetPasswordModel? resetPasswordModel;
 
   @override
-  Future<LoginResult> loginUser() async {
+  ForgotPasswordModel? forgotPasswordModel;
+
+  @override
+  Future<LoginResultOutput> loginUser() async {
+    var res = LoginResultOutput();
     try {
       accessTokenManager!.authenticateModel = authenticateModel;
       authenticateResultModel = await accessTokenManager!.loginAsync();
-
       if (authenticateResultModel!.shouldResetPassword! == true) {
-        return LoginResult.needToChangePassword;
+        res.result = LoginResult.needToChangePassword;
+        res;
       }
-
       if (authenticateResultModel!.requiresTwoFactorVerification! == true) {
-        return LoginResult.requireTwoFactorVerification;
+        res.result = LoginResult.requireTwoFactorVerification;
+        return res;
       }
-
       if (!authenticateModel!.isTwoFactorVerification == false) {
-        await dataStorageService!
-            .storeAuthenticateResult(authenticateResultModel!);
+        await dataStorageService!.storeAuthenticateResult(authenticateResultModel!);
       }
-
       authenticateModel!.password = null;
       var loginInfo = await sessionAppService!.getCurrentLoginInformations();
       await dataStorageService!.storeLoginInfomation(loginInfo);
-      return LoginResult.success;
-    } catch (e) {
-      return LoginResult.fail;
+      res.result = LoginResult.success;
+    } on DioError catch (e) {
+      res.result = LoginResult.fail;
+      res.exceptionMessage = e.toString();
+      if (e.response != null && e.response!.data is Map<String, dynamic>) {
+        var simpleResponse = SimpleAjaxResponse.fromJson(e.response!.data);
+        if (simpleResponse.errorInfo != null) {
+          res.exceptionMessage = simpleResponse.errorInfo!.message;
+        }
+      }
     }
+    return res;
   }
 
   @override
@@ -68,7 +80,8 @@ class AccountService implements IAccountService {
   }
 
   @override
-  Future resetPassword() async {
+  Future resetPassword() async {}
 
-  }
+  @override
+  Future forgotPassword() async {}
 }

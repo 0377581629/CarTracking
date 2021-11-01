@@ -8,6 +8,7 @@ class FlutterFlowTheme {
   static const Color tertiaryColor = Color(0xFFFFFFFF);
 
   static const String defaultFontFamily = 'Lexend Deca';
+  static const EdgeInsetsDirectional formFieldContentPadding = EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10);
 
   String primaryFontFamily = 'Poppins';
   String secondaryFontFamily = 'Roboto';
