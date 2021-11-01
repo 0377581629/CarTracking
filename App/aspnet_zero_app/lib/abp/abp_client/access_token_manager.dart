@@ -1,32 +1,20 @@
 import 'dart:io';
 
 import 'package:aspnet_zero_app/abp/abp_client/interfaces/application_context.dart';
+import 'package:aspnet_zero_app/abp/models/common/ajax_response.dart';
 import 'package:aspnet_zero_app/configuration/abp_config.dart';
 import 'package:aspnet_zero_app/abp/abp_client/interfaces/access_token_manager.dart';
-import 'package:aspnet_zero_app/abp/abp_client/models/auth/authenticate_model.dart';
-import 'package:aspnet_zero_app/abp/abp_client/models/auth/authenticate_result_model.dart';
-import 'package:aspnet_zero_app/abp/abp_client/models/auth/refresh_token_result.dart';
+import 'package:aspnet_zero_app/abp/models/auth/authenticate_model.dart';
+import 'package:aspnet_zero_app/abp/models/auth/authenticate_result_model.dart';
+import 'package:aspnet_zero_app/abp/models/auth/refresh_token_result.dart';
+import 'package:aspnet_zero_app/helpers/http_client.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
-import 'models/common/ajax_response.dart';
 
 class AccessTokenManager implements IAccessTokenManager {
   IApplicationContext? applicationContext;
   AccessTokenManager() {
     applicationContext = GetIt.I.get<IApplicationContext>();
-  }
-
-  Dio createApiClient() {
-    var _dio = Dio();
-    _dio.options.baseUrl = AbpConfig.hostUrl;
-    _dio.options.headers["User-Agent"] = AbpConfig.userAgent;
-    _dio.options.headers["X-Requested-With"] = "XMLHttpRequest";
-    _dio.options.contentType = Headers.jsonContentType;
-    if (applicationContext?.currentTenant != null) {
-      _dio.options.headers[AbpConfig.tenantResolveKey] =
-          applicationContext!.currentTenant!.tenantId;
-    }
-    return _dio;
   }
 
   @override
@@ -146,5 +134,20 @@ class AccessTokenManager implements IAccessTokenManager {
 
     authenticateResult!.accessToken = ajaxReponse.result!.accessToken;
     return ajaxReponse.result!.accessToken;
+  }
+
+  Dio createApiClient() {
+    var _dio = Dio();
+    _dio.options.baseUrl = AbpConfig.hostUrl;
+    _dio.options.headers["User-Agent"] = AbpConfig.userAgent;
+    _dio.options.headers["X-Requested-With"] = "XMLHttpRequest";
+    _dio.options.contentType = Headers.jsonContentType;
+    _dio.interceptors.clear();
+    _dio.interceptors.add(CustomInterceptor());
+    if (applicationContext?.currentTenant != null) {
+      _dio.options.headers[AbpConfig.tenantResolveKey] =
+          applicationContext!.currentTenant!.tenantId;
+    }
+    return _dio;
   }
 }

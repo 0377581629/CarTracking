@@ -1,6 +1,6 @@
 import 'package:aspnet_zero_app/abp/abp_base/interfaces/session_service.dart';
-import 'package:aspnet_zero_app/abp/abp_client/models/auth/login_informations.dart';
-import 'package:aspnet_zero_app/abp/abp_client/models/common/ajax_response.dart';
+import 'package:aspnet_zero_app/abp/models/auth/login_informations.dart';
+import 'package:aspnet_zero_app/abp/models/common/ajax_response.dart';
 import 'package:aspnet_zero_app/helpers/http_client.dart';
 
 class SessionAppService implements ISessionAppService {

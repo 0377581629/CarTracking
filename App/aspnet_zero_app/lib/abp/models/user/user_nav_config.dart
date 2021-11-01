@@ -1,4 +1,4 @@
-import 'package:aspnet_zero_app/abp/abp_client/models/common/user_menu.dart';
+import 'package:aspnet_zero_app/abp/models/common/user_menu.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'user_nav_config.g.dart';
 

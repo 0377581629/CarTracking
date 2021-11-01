@@ -267,27 +267,15 @@ namespace Zero.Web.Controllers
 
         private async Task<AbpLoginResult<Tenant, User>> GetLoginResultAsync(string usernameOrEmailAddress, string password, string tenancyName)
         {
-            try
-            {
-                var loginResult = await _logInManager.LoginAsync(usernameOrEmailAddress, password, tenancyName);
+            var loginResult = await _logInManager.LoginAsync(usernameOrEmailAddress, password, tenancyName);
 
-                switch (loginResult.Result)
-                {
-                    case AbpLoginResultType.Success:
-                        return loginResult;
-                    default:
-                        throw _abpLoginResultTypeHelper.CreateExceptionForFailedLoginAttempt(loginResult.Result, usernameOrEmailAddress, tenancyName);
-                }
-            }
-            catch (Exception err)
+            switch (loginResult.Result)
             {
-                if (err.Message == "UserIsExpiredSubscription")
-                {
-                    throw new UserFriendlyException(L("UserIsExpiredSubscription"));
-                }
+                case AbpLoginResultType.Success:
+                    return loginResult;
+                default:
+                    throw _abpLoginResultTypeHelper.CreateExceptionForFailedLoginAttempt(loginResult.Result, usernameOrEmailAddress, tenancyName);
             }
-
-            return null;
         }
 
         private string AddSingleSignInParametersToReturnUrl(string returnUrl, string signInToken, long userId, int? tenantId)

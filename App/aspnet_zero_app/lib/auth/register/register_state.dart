@@ -1,7 +1,6 @@
-import 'package:aspnet_zero_app/abp/models/auth/login_result.dart';
 import 'package:aspnet_zero_app/auth/form_submission_status.dart';
 
-class LoginState {
+class RegisterState {
   final String usernameOrEmail;
 
   bool get isValidUsernameOrEmail => usernameOrEmail.length > 3;
@@ -12,23 +11,18 @@ class LoginState {
 
   final FormSubmissionStatus formStatus;
 
-  LoginResult? loginResult;
-
-  LoginState(
+  RegisterState(
       {this.usernameOrEmail = '',
       this.password = '',
-      this.formStatus = const InitialFormStatus(),
-      this.loginResult});
+      this.formStatus = const InitialFormStatus()});
 
-  LoginState copyWith(
+  RegisterState copyWith(
       {String? usernameOrEmail,
       String? password,
-      FormSubmissionStatus? formStatus,
-      LoginResult? loginResult}) {
-    return LoginState(
+      FormSubmissionStatus? formStatus}) {
+    return RegisterState(
         usernameOrEmail: usernameOrEmail ?? this.usernameOrEmail,
         password: password ?? this.password,
-        formStatus: formStatus ?? this.formStatus,
-        loginResult: loginResult ?? this.loginResult);
+        formStatus: formStatus ?? this.formStatus);
   }
 }

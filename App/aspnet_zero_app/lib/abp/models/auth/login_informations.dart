@@ -1,5 +1,5 @@
 import 'package:aspnet_zero_app/abp/abp_client/enums/subscription_payment_type.dart';
-import 'package:aspnet_zero_app/abp/abp_client/models/edition/edition_info.dart';
+import 'package:aspnet_zero_app/abp/models/edition/edition_info.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'login_informations.g.dart';
 

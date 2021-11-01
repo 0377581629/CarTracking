@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:aspnet_zero_app/abp/abp_base/interfaces/data_storage_service.dart';
 import 'package:aspnet_zero_app/abp/abp_client/interfaces/access_token_manager.dart';
 import 'package:aspnet_zero_app/abp/abp_client/interfaces/application_context.dart';
+import 'package:aspnet_zero_app/abp/models/common/ajax_response.dart';
 import 'package:aspnet_zero_app/configuration/abp_config.dart';
 import "package:dio/dio.dart";
 import 'package:get_it/get_it.dart';
@@ -33,12 +34,14 @@ class CustomInterceptor extends Interceptor {
   IApplicationContext? applicationContext;
   IAccessTokenManager? accessTokenManager;
   IDataStorageService? dataStorageService;
+
   CustomInterceptor() {
     GetIt getIt = GetIt.I;
     applicationContext = getIt.get<IApplicationContext>();
     accessTokenManager = getIt.get<IAccessTokenManager>();
     dataStorageService = getIt.get<IDataStorageService>();
   }
+
   @override
   Future onRequest(
       RequestOptions options, RequestInterceptorHandler handler) async {
@@ -65,10 +68,5 @@ class CustomInterceptor extends Interceptor {
     }
 
     return handler.next(options);
-  }
-
-  @override
-  Future onError(DioError err, ErrorInterceptorHandler handler) async {
-    return handler.next(err);
   }
 }

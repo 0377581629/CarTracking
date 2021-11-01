@@ -1,37 +1,32 @@
 import 'package:aspnet_zero_app/abp/abp_base/interfaces/account_service.dart';
 import 'package:aspnet_zero_app/abp/models/auth/authenticate_model.dart';
-import 'package:aspnet_zero_app/abp/models/auth/login_result.dart';
 import 'package:aspnet_zero_app/auth/form_submission_status.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'login_event.dart';
-import 'login_state.dart';
+import 'register_event.dart';
+import 'register_state.dart';
 
-class LoginBloc extends Bloc<LoginEvent, LoginState> {
+class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   IAccountService accountService;
 
-  LoginBloc({required this.accountService}) : super(LoginState());
+  RegisterBloc({required this.accountService}) : super(RegisterState());
 
   @override
-  Stream<LoginState> mapEventToState(LoginEvent event) async* {
-    if (event is LoginUsernameOrEmailChanged) {
+  Stream<RegisterState> mapEventToState(RegisterEvent event) async* {
+    if (event is RegisterUsernameOrEmailChanged) {
       yield state.copyWith(usernameOrEmail: event.usernameOrEmail);
-    } else if (event is LoginPasswordChanged) {
+    } else if (event is RegisterPasswordChanged) {
       yield state.copyWith(password: event.password);
-    } else if (event is LoginSubmitted) {
+    } else if (event is RegisterSubmitted) {
       yield state.copyWith(formStatus: FormSubmitting());
+
       try {
         accountService.authenticateModel = AuthenticateModel(
             userNameOrEmailAddress: state.usernameOrEmail,
             password: state.password,
             rememberClient: false);
-        var loginResult = await accountService.loginUser();
-        if (loginResult == LoginResult.success) {
-          yield state.copyWith(formStatus: SubmissionSuccess());
-        }
-        yield state.copyWith(
-            formStatus: SubmissionFailed(Exception('LoginFailed')),
-            loginResult: loginResult);
+
+        yield state.copyWith(formStatus: SubmissionSuccess());
       } catch (e) {
         yield state.copyWith(
             formStatus: SubmissionFailed(Exception(e.toString())));

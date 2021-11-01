@@ -1,3 +1,7 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'ajax_response.dart';
+
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
@@ -47,9 +51,9 @@ AjaxResponse<T> _$AjaxResponseFromJson<T>(
       ..success = json['success'] as bool
       ..unAuthorizedRequest = json['unAuthorizedRequest'] as bool
       ..abp = json['__abp'] as bool
-      ..errorInfo = json['errorInfo'] == null
+      ..errorInfo = json['error'] == null
           ? null
-          : ErrorInfo.fromJson(json['errorInfo'] as Map<String, dynamic>)
+          : ErrorInfo.fromJson(json['error'] as Map<String, dynamic>)
       ..result = _$nullableGenericFromJson(json['result'], fromJsonT);
 
 Map<String, dynamic> _$AjaxResponseToJson<T>(
@@ -61,7 +65,7 @@ Map<String, dynamic> _$AjaxResponseToJson<T>(
       'success': instance.success,
       'unAuthorizedRequest': instance.unAuthorizedRequest,
       '__abp': instance.abp,
-      'errorInfo': instance.errorInfo?.toJson(),
+      'error': instance.errorInfo?.toJson(),
       'result': _$nullableGenericToJson(instance.result, toJsonT),
     };
 
@@ -76,3 +80,22 @@ Object? _$nullableGenericToJson<T>(
   Object? Function(T value) toJson,
 ) =>
     input == null ? null : toJson(input);
+
+SimpleAjaxResponse _$SimpleAjaxResponseFromJson(Map<String, dynamic> json) =>
+    SimpleAjaxResponse()
+      ..targetUrl = json['targetUrl'] as String?
+      ..success = json['success'] as bool
+      ..unAuthorizedRequest = json['unAuthorizedRequest'] as bool
+      ..abp = json['__abp'] as bool
+      ..errorInfo = json['error'] == null
+          ? null
+          : ErrorInfo.fromJson(json['error'] as Map<String, dynamic>);
+
+Map<String, dynamic> _$SimpleAjaxResponseToJson(SimpleAjaxResponse instance) =>
+    <String, dynamic>{
+      'targetUrl': instance.targetUrl,
+      'success': instance.success,
+      'unAuthorizedRequest': instance.unAuthorizedRequest,
+      '__abp': instance.abp,
+      'error': instance.errorInfo?.toJson(),
+    };

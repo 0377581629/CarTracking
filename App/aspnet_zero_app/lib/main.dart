@@ -24,7 +24,7 @@ import 'abp/abp_client/application_context.dart';
 import 'abp/abp_client/interfaces/access_token_manager.dart';
 import 'abp/abp_client/interfaces/application_context.dart';
 import 'abp/abp_client/interfaces/multi_tenancy_config.dart';
-import 'abp/abp_client/models/multi_tenancy/multi_tenancy_config.dart';
+import 'abp/models/multi_tenancy/multi_tenancy_config.dart';
 import 'flutter_flow/flutter_flow_theme.dart';
 
 final lang = LocalizationHelper();

@@ -1,8 +1,8 @@
 import 'package:aspnet_zero_app/abp/abp_client/interfaces/application_context.dart';
-import 'package:aspnet_zero_app/abp/abp_client/models/user/user_configuration.dart';
-import 'package:aspnet_zero_app/abp/abp_client/models/multi_tenancy/tenant_information.dart';
-import 'package:aspnet_zero_app/abp/abp_client/models/localization/language_info.dart';
-import 'package:aspnet_zero_app/abp/abp_client/models/auth/login_informations.dart';
+import 'package:aspnet_zero_app/abp/models/user/user_configuration.dart';
+import 'package:aspnet_zero_app/abp/models/multi_tenancy/tenant_information.dart';
+import 'package:aspnet_zero_app/abp/models/localization/language_info.dart';
+import 'package:aspnet_zero_app/abp/models/auth/login_informations.dart';
 
 class ApplicationContext implements IApplicationContext {
   TenantInformation? _currentTenant;

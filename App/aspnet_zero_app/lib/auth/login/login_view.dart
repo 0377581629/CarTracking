@@ -1,7 +1,9 @@
 import 'package:aspnet_zero_app/abp/abp_base/interfaces/account_service.dart';
+import 'package:aspnet_zero_app/abp/models/auth/login_result.dart';
 import 'package:aspnet_zero_app/auth/form_submission_status.dart';
 import 'package:aspnet_zero_app/auth/login/login_event.dart';
 import 'package:aspnet_zero_app/auth/register/register_view.dart';
+import 'package:aspnet_zero_app/auth/reset_password/reset_password_view.dart';
 import 'package:aspnet_zero_app/flutter_flow/flutter_flow_theme.dart';
 import 'package:aspnet_zero_app/flutter_flow/flutter_flow_widgets.dart';
 import 'package:aspnet_zero_app/helpers/localization_helper.dart';
@@ -23,7 +25,7 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor:  FlutterFlowTheme.primaryColor,
+        backgroundColor: FlutterFlowTheme.primaryColor,
         body: BlocProvider(
             create: (context) =>
                 LoginBloc(accountService: GetIt.I.get<IAccountService>()),
@@ -35,6 +37,13 @@ class LoginPage extends StatelessWidget {
         listener: (context, state) {
           final formStatus = state.formStatus;
           if (formStatus is SubmissionFailed) {
+            if (state.loginResult! == LoginResult.needToChangePassword) {
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (BuildContext context) {
+                return ResetPasswordPage();
+              }));
+            }
+            if (state.loginResult! == LoginResult.needToChangePassword) {}
             _showSnackbar(context, formStatus.exception.toString());
           }
           if (formStatus is SubmissionSuccess) {
@@ -57,7 +66,7 @@ class LoginPage extends StatelessWidget {
   }
 
   Widget _appLogo() {
-    return  Image.asset(
+    return Image.asset(
       'assets/images/trueinvest-logo.png',
       width: 240,
       height: 70,
@@ -66,8 +75,7 @@ class LoginPage extends StatelessWidget {
   }
 
   Widget _signInLoginHeader() {
-    return BlocBuilder<LoginBloc, LoginState>(builder: (context, state)
-    {
+    return BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
       return Padding(
         padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
         child: Row(

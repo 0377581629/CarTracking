@@ -1,6 +1,6 @@
 import 'package:aspnet_zero_app/abp/abp_base/interfaces/user_configration_service.dart';
-import 'package:aspnet_zero_app/abp/abp_client/models/common/ajax_response.dart';
-import 'package:aspnet_zero_app/abp/abp_client/models/user/user_configuration.dart';
+import 'package:aspnet_zero_app/abp/models/common/ajax_response.dart';
+import 'package:aspnet_zero_app/abp/models/user/user_configuration.dart';
 import 'package:aspnet_zero_app/helpers/http_client.dart';
 
 class UserConfigurationService implements IUserConfigurationService {

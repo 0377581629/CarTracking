@@ -1,13 +1,13 @@
-import 'package:aspnet_zero_app/abp/abp_client/models/multi_tenancy/multi_tenancy_config.dart';
-import 'package:aspnet_zero_app/abp/abp_client/models/user/user_auth_config.dart';
-import 'package:aspnet_zero_app/abp/abp_client/models/user/user_clock_config.dart';
-import 'package:aspnet_zero_app/abp/abp_client/models/user/user_feature_config.dart';
-import 'package:aspnet_zero_app/abp/abp_client/models/user/user_localize_config.dart';
-import 'package:aspnet_zero_app/abp/abp_client/models/user/user_nav_config.dart';
-import 'package:aspnet_zero_app/abp/abp_client/models/user/user_security_config.dart';
-import 'package:aspnet_zero_app/abp/abp_client/models/user/user_session_config.dart';
-import 'package:aspnet_zero_app/abp/abp_client/models/user/user_setting_config.dart';
-import 'package:aspnet_zero_app/abp/abp_client/models/user/user_timezone_config.dart';
+import 'package:aspnet_zero_app/abp/models/multi_tenancy/multi_tenancy_config.dart';
+import 'package:aspnet_zero_app/abp/models/user/user_auth_config.dart';
+import 'package:aspnet_zero_app/abp/models/user/user_clock_config.dart';
+import 'package:aspnet_zero_app/abp/models/user/user_feature_config.dart';
+import 'package:aspnet_zero_app/abp/models/user/user_localize_config.dart';
+import 'package:aspnet_zero_app/abp/models/user/user_nav_config.dart';
+import 'package:aspnet_zero_app/abp/models/user/user_security_config.dart';
+import 'package:aspnet_zero_app/abp/models/user/user_session_config.dart';
+import 'package:aspnet_zero_app/abp/models/user/user_setting_config.dart';
+import 'package:aspnet_zero_app/abp/models/user/user_timezone_config.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'user_configuration.g.dart';
 
