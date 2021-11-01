@@ -1,6 +1,7 @@
 import 'package:aspnet_zero_app/abp/abp_base/interfaces/account_service.dart';
 import 'package:aspnet_zero_app/flutter_flow/flutter_flow_theme.dart';
 import 'package:aspnet_zero_app/flutter_flow/flutter_flow_widgets.dart';
+import 'package:aspnet_zero_app/helpers/form_helper.dart';
 import 'package:aspnet_zero_app/helpers/localization_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,20 +15,15 @@ import 'forgot_password_state.dart';
 
 final lang = LocalizationHelper();
 
-class ForgotPasswordPage extends StatefulWidget {
-  const ForgotPasswordPage({Key? key}) : super(key: key);
+class ForgotPasswordPage extends StatelessWidget {
 
-  @override
-  State<StatefulWidget> createState() => _ForgotPasswordPageState();
-}
+  final _formKey = FormHelper.getKey('ForgotPassword');
 
-class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
-  final _formKey = GlobalKey<FormState>();
+  ForgotPasswordPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        key: _formKey,
         backgroundColor: FlutterFlowTheme.primaryColor,
         body: BlocProvider(create: (context) => ForgotPasswordBloc(accountService: GetIt.I.get<IAccountService>()), child: _resetPasswordForm()));
   }
@@ -47,9 +43,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             key: _formKey,
             child: Center(
                 child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [_appLogo(), _emailField(), _submitButton()],
-            ))));
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [_appLogo(), _emailField(), _submitButton()],
+                ))));
   }
 
   Widget _appLogo() {

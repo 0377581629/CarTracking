@@ -7,6 +7,7 @@ import 'package:aspnet_zero_app/auth/register/register_view.dart';
 import 'package:aspnet_zero_app/auth/reset_password/reset_password_view.dart';
 import 'package:aspnet_zero_app/flutter_flow/flutter_flow_theme.dart';
 import 'package:aspnet_zero_app/flutter_flow/flutter_flow_widgets.dart';
+import 'package:aspnet_zero_app/helpers/form_helper.dart';
 import 'package:aspnet_zero_app/helpers/localization_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -19,7 +20,7 @@ import 'login_state.dart';
 final lang = LocalizationHelper();
 
 class LoginPage extends StatelessWidget {
-  final _formKey = GlobalKey<FormState>();
+  final _formKey = FormHelper.getKey('Login');
 
   LoginPage({Key? key}) : super(key: key);
 
@@ -316,7 +317,7 @@ class LoginPage extends StatelessWidget {
       }
       return FFButtonWidget(
           onPressed: () {
-            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) {
+            Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) {
               return ForgotPasswordPage();
             }));
           },
