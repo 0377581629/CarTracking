@@ -28,6 +28,17 @@ class HttpClient {
 
     return _dio;
   }
+
+  Future<Dio> createSimpleClient() async {
+    var _dio = Dio();
+    _dio.options.baseUrl = AbpConfig.hostUrl;
+    _dio.options.headers["User-Agent"] = AbpConfig.userAgent;
+    _dio.options.headers["X-Requested-With"] = "XMLHttpRequest";
+    _dio.options.contentType = Headers.jsonContentType;
+    _dio.options.connectTimeout = 3000;
+    _dio.interceptors.clear();
+    return _dio;
+  }
 }
 
 class CustomInterceptor extends Interceptor {

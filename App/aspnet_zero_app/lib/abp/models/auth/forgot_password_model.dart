@@ -4,9 +4,10 @@ part 'forgot_password_model.g.dart';
 
 @JsonSerializable()
 class ForgotPasswordModel {
-  String? email;
 
-  ForgotPasswordModel({this.email});
+  String? emailAddress;
+
+  ForgotPasswordModel({this.emailAddress});
 
   factory ForgotPasswordModel.fromJson(Map<String, dynamic> json) => _$ForgotPasswordModelFromJson(json);
 

@@ -46,6 +46,7 @@ class LoginPage extends StatelessWidget {
             if (state.loginResult!.result == LoginResult.needToChangePassword) {
 
             }
+            
             if (state.loginResult!.exceptionMessage!.isNotEmpty) {
               _showSnackbar(context, state.loginResult!.exceptionMessage!);
             } else {

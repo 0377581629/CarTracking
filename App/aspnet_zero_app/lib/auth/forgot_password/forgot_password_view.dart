@@ -1,4 +1,5 @@
 import 'package:aspnet_zero_app/abp/abp_base/interfaces/account_service.dart';
+import 'package:aspnet_zero_app/auth/login/login_view.dart';
 import 'package:aspnet_zero_app/flutter_flow/flutter_flow_theme.dart';
 import 'package:aspnet_zero_app/flutter_flow/flutter_flow_widgets.dart';
 import 'package:aspnet_zero_app/helpers/form_helper.dart';
@@ -16,7 +17,6 @@ import 'forgot_password_state.dart';
 final lang = LocalizationHelper();
 
 class ForgotPasswordPage extends StatelessWidget {
-
   final _formKey = FormHelper.getKey('ForgotPassword');
 
   ForgotPasswordPage({Key? key}) : super(key: key);
@@ -36,16 +36,52 @@ class ForgotPasswordPage extends StatelessWidget {
             _showSnackbar(context, formStatus.exception.toString());
           }
           if (formStatus is SubmissionSuccess) {
-            _showSnackbar(context, "LoginSuccess");
+            _showSnackbar(context, lang.get("PasswordResetMailSentMessage"));
+            Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) {
+              return LoginPage();
+            }));
           }
         },
-        child: Form(
-            key: _formKey,
-            child: Center(
-                child: Column(
+        child: Center(
+            child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Column(
+                  mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [_appLogo(), _emailField(), _submitButton()],
-                ))));
+                  children: [Padding(padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 20), child: _appLogo())],
+                )
+              ],
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                    padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
+                    child: Container(
+                        constraints: const BoxConstraints(
+                          maxWidth: 350,
+                        ),
+                        decoration: const BoxDecoration(
+                          color: FlutterFlowTheme.primaryColor,
+                        ),
+                        child: Form(
+                            key: _formKey,
+                            child: Center(
+                                child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                              Padding(padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 20), child: _emailField()),
+                              Padding(padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 20), child: _submitButton())
+                            ])))))
+              ],
+            )
+          ],
+        )));
   }
 
   Widget _appLogo() {
@@ -60,9 +96,41 @@ class ForgotPasswordPage extends StatelessWidget {
   Widget _emailField() {
     return BlocBuilder<ForgotPasswordBloc, ForgotPasswordState>(builder: (context, state) {
       return TextFormField(
-          obscureText: true,
+          obscureText: false,
           validator: (value) => state.isValidEmail ? null : lang.get('InvalidEmail'),
-          onChanged: (value) => context.read<ForgotPasswordBloc>().add(ForgotPasswordEmailChanged(email: value)));
+          onChanged: (value) => context.read<ForgotPasswordBloc>().add(ForgotPasswordEmailChanged(email: value)),
+          decoration: InputDecoration(
+            hintText: lang.get('EnterYourEmail'),
+            hintStyle: FlutterFlowTheme.bodyText1.override(
+              fontFamily: FlutterFlowTheme.defaultFontFamily,
+              color: FlutterFlowTheme.primaryColor,
+              fontSize: 14,
+              fontWeight: FontWeight.normal,
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Color(0x00000000),
+                width: 1,
+              ),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Color(0x00000000),
+                width: 1,
+              ),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            filled: true,
+            fillColor: FlutterFlowTheme.tertiaryColor,
+            contentPadding: FlutterFlowTheme.formFieldContentPadding,
+          ),
+          style: FlutterFlowTheme.bodyText1.override(
+            fontFamily: FlutterFlowTheme.defaultFontFamily,
+            color: FlutterFlowTheme.primaryColor,
+            fontSize: 14,
+            fontWeight: FontWeight.normal,
+          ));
     });
   }
 

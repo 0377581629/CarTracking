@@ -7,6 +7,8 @@ class AbpConfig {
   static const loginUrlSegment = "api/TokenAuth/Authenticate";
   static const refreshTokenUrlSegment = "api/TokenAuth/RefreshToken";
 
+  static const forgotPasswordUrlSegment = "Account/SendPasswordResetLink";
+
   static const languageKey = ".AspNetCore.Culture";
 
   static const appName = "ZeroBase-App";

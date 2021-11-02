@@ -9,8 +9,13 @@ import 'package:aspnet_zero_app/abp/models/auth/forgot_password_model.dart';
 import 'package:aspnet_zero_app/abp/models/auth/login_result.dart';
 import 'package:aspnet_zero_app/abp/models/auth/reset_password_model.dart';
 import 'package:aspnet_zero_app/abp/models/common/ajax_response.dart';
+import 'package:aspnet_zero_app/configuration/abp_config.dart';
+import 'package:aspnet_zero_app/helpers/http_client.dart';
+import 'package:aspnet_zero_app/helpers/localization_helper.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+
+final lang = LocalizationHelper();
 
 class AccountService implements IAccountService {
   IApplicationContext? applicationContext;
@@ -83,5 +88,12 @@ class AccountService implements IAccountService {
   Future resetPassword() async {}
 
   @override
-  Future forgotPassword() async {}
+  Future forgotPassword() async {
+    if (forgotPasswordModel != null) {
+      var client = await HttpClient().createSimpleClient();
+      await client.post(AbpConfig.forgotPasswordUrlSegment, data: FormData.fromMap(forgotPasswordModel!.toJson()));
+    } else {
+      throw Exception(lang.get('InvalidData'));
+    }
+  }
 }

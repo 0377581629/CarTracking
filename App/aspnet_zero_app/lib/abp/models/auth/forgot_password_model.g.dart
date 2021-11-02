@@ -8,11 +8,11 @@ part of 'forgot_password_model.dart';
 
 ForgotPasswordModel _$ForgotPasswordModelFromJson(Map<String, dynamic> json) =>
     ForgotPasswordModel(
-      email: json['email'] as String?,
+      emailAddress: json['emailAddress'] as String?,
     );
 
 Map<String, dynamic> _$ForgotPasswordModelToJson(
         ForgotPasswordModel instance) =>
     <String, dynamic>{
-      'email': instance.email,
+      'emailAddress': instance.emailAddress,
     };
