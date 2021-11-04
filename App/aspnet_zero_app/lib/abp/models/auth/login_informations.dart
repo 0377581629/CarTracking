@@ -3,7 +3,7 @@ import 'package:aspnet_zero_app/abp/models/edition/edition_info.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'login_informations.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class UserLoginInfo {
   int? id;
   String? name;
@@ -58,7 +58,7 @@ class UserLoginInfo {
   Map<String, dynamic> toJson() => _$UserLoginInfoToJson(this);
 }
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class TenantLoginInfo {
   String? tenancyName;
 
@@ -173,7 +173,7 @@ class TenantLoginInfo {
   Map<String, dynamic> toJson() => _$TenantLoginInfoToJson(this);
 }
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class ApplicationLoginInfo {
   String? version;
   DateTime? releaseDate;
@@ -200,7 +200,7 @@ class ApplicationLoginInfo {
   Map<String, dynamic> toJson() => _$ApplicationLoginInfoToJson(this);
 }
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class LoginInformations {
   UserLoginInfo? user;
   UserLoginInfo? impersonatorUser;
@@ -219,7 +219,7 @@ class LoginInformations {
   Map<String, dynamic> toJson() => _$LoginInformationsToJson(this);
 }
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class UpdateUserSignInToken {
   String? signInToken;
   String? encodedUserId;

@@ -2,7 +2,7 @@ import 'package:aspnet_zero_app/abp/abp_client/enums/multi_tenancy_sides.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'multi_tenancy_side_config.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class MultiTenancySideConfig {
   MultiTenancySides? host;
   MultiTenancySides? tenant;

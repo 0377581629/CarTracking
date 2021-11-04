@@ -18,7 +18,7 @@ Map<String, dynamic> _$UserMenuToJson(UserMenu instance) => <String, dynamic>{
       'name': instance.name,
       'displayName': instance.displayName,
       'customData': instance.customData,
-      'items': instance.items,
+      'items': instance.items?.map((e) => e.toJson()).toList(),
     };
 
 UserMenuItem _$UserMenuItemFromJson(Map<String, dynamic> json) => UserMenuItem(
@@ -47,5 +47,5 @@ Map<String, dynamic> _$UserMenuItemToJson(UserMenuItem instance) =>
       'target': instance.target,
       'isEnabled': instance.isEnabled,
       'isVisible': instance.isVisible,
-      'items': instance.items,
+      'items': instance.items?.map((e) => e.toJson()).toList(),
     };

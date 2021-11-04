@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 part 'user_clock_config.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class UserClockConfig {
   String? provider;
   UserClockConfig({this.provider});

@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 part 'user_session_config.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class UserSessionConfig {
   int? userId;
   int? tenantId;

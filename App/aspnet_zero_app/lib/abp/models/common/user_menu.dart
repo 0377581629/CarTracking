@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 part 'user_menu.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class UserMenu {
   String? name;
 
@@ -19,7 +19,7 @@ class UserMenu {
   Map<String, dynamic> toJson() => _$UserMenuToJson(this);
 }
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class UserMenuItem {
   String? name;
 

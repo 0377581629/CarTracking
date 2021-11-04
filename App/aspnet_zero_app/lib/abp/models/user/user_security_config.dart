@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 part 'user_security_config.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class UserAntiForgeryConfig {
   String? tokenCookieName;
 
@@ -15,7 +15,7 @@ class UserAntiForgeryConfig {
   Map<String, dynamic> toJson() => _$UserAntiForgeryConfigToJson(this);
 }
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class UserSecurityConfig {
   UserAntiForgeryConfig? antiForgery;
   UserSecurityConfig({this.antiForgery});

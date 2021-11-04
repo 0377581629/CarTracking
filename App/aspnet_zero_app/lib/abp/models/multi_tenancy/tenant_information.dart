@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 part 'tenant_information.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class TenantInformation {
   int tenantId;
   String tenancyName;

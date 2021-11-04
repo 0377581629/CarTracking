@@ -15,7 +15,7 @@ class ValidationErrorInfo {
   Map<String, dynamic> toJson() => _$ValidationErrorInfoToJson(this);
 }
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class ErrorInfo {
   int code;
   String? message;

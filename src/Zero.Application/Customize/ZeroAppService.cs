@@ -214,6 +214,13 @@ namespace Zero
             );
         }
 
+        public async Task<TenantListDto> GetTenancyByName(string tenancyName)
+        {
+            if (string.IsNullOrEmpty(tenancyName)) return null;
+            var tenant = await _tenantRepository.FirstOrDefaultAsync(o => o.TenancyName == tenancyName);
+            return tenant != null ? ObjectMapper.Map<TenantListDto>(tenant) : null;
+        }
+        
         #endregion
 
         #region Role

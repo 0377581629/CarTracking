@@ -81,7 +81,7 @@ Map<String, dynamic> _$TenantLoginInfoToJson(TenantLoginInfo instance) =>
           instance.subscriptionEndDateUtc?.toIso8601String(),
       'isInTrialPeriod': instance.isInTrialPeriod,
       'subscriptionPaymentType': instance.subscriptionPaymentType,
-      'edition': instance.edition,
+      'edition': instance.edition?.toJson(),
       'creationTime': instance.creationTime?.toIso8601String(),
       'paymentPeriodType': instance.paymentPeriodType,
       'subscriptionDateString': instance.subscriptionDateString,
@@ -159,11 +159,11 @@ LoginInformations _$LoginInformationsFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$LoginInformationsToJson(LoginInformations instance) =>
     <String, dynamic>{
-      'user': instance.user,
-      'impersonatorUser': instance.impersonatorUser,
-      'tenant': instance.tenant,
-      'impersonatorTenant': instance.impersonatorTenant,
-      'application': instance.application,
+      'user': instance.user?.toJson(),
+      'impersonatorUser': instance.impersonatorUser?.toJson(),
+      'tenant': instance.tenant?.toJson(),
+      'impersonatorTenant': instance.impersonatorTenant?.toJson(),
+      'application': instance.application?.toJson(),
     };
 
 UpdateUserSignInToken _$UpdateUserSignInTokenFromJson(

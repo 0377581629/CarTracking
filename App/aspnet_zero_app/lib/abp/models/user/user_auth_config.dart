@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 part 'user_auth_config.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class UserAuthConfig {
   Map<String, String>? allPermissions;
   Map<String, String>? grantedPermissions;

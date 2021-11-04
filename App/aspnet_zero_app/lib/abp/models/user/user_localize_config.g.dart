@@ -31,9 +31,9 @@ UserLocalizationConfig _$UserLocalizationConfigFromJson(
 Map<String, dynamic> _$UserLocalizationConfigToJson(
         UserLocalizationConfig instance) =>
     <String, dynamic>{
-      'currentCulture': instance.currentCulture,
-      'languages': instance.languages,
-      'currentLanguage': instance.currentLanguage,
-      'sources': instance.sources,
+      'currentCulture': instance.currentCulture?.toJson(),
+      'languages': instance.languages?.map((e) => e.toJson()).toList(),
+      'currentLanguage': instance.currentLanguage?.toJson(),
+      'sources': instance.sources?.map((e) => e.toJson()).toList(),
       'values': instance.values,
     };

@@ -11,7 +11,7 @@ import 'package:aspnet_zero_app/abp/models/user/user_timezone_config.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'user_configuration.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class UserConfiguration {
   MultiTenancyConfig? multiTenancy;
 

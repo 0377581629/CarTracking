@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 part 'user_timezone_config.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class UserIanaTimeZoneConfig {
   String? timeZoneId;
   UserIanaTimeZoneConfig({this.timeZoneId});
@@ -11,7 +11,7 @@ class UserIanaTimeZoneConfig {
   Map<String, dynamic> toJson() => _$UserIanaTimeZoneConfigToJson(this);
 }
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class UserWindowsTimeZoneConfig {
   String? timeZoneId;
   double? baseUtcOffsetInMilliseconds;
@@ -29,7 +29,7 @@ class UserWindowsTimeZoneConfig {
   Map<String, dynamic> toJson() => _$UserWindowsTimeZoneConfigToJson(this);
 }
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class UserTimeZoneConfig {
   UserWindowsTimeZoneConfig? windows;
   UserIanaTimeZoneConfig? iana;
@@ -41,7 +41,7 @@ class UserTimeZoneConfig {
   Map<String, dynamic> toJson() => _$UserTimeZoneConfigToJson(this);
 }
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class UserTimmingConfig {
   UserTimeZoneConfig? timeZoneInfo;
   UserTimmingConfig({this.timeZoneInfo});

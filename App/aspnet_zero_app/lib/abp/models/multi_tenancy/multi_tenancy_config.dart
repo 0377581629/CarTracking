@@ -2,7 +2,7 @@ import 'package:aspnet_zero_app/abp/abp_client/interfaces/multi_tenancy_config.d
 import 'package:json_annotation/json_annotation.dart';
 part 'multi_tenancy_config.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class MultiTenancyConfig implements IMultiTenancyConfig {
   @override
   bool? isEnabled;

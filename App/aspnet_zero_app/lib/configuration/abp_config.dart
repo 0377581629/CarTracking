@@ -1,6 +1,9 @@
 class AbpConfig {
-  static const hostUrl = "https://10.0.2.2:44302/";
+  static const hostUrl = "https://localhost:44302/";
   static const userAgent = "AbpApiClient";
+
+  static const fixedMultiTenant = false;
+  static const tenantName = '';
 
   static const tenantResolveKey = "Abp.TenantId";
 

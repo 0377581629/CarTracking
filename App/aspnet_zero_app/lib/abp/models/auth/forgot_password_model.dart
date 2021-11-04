@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'forgot_password_model.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class ForgotPasswordModel {
 
   String? emailAddress;

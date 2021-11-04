@@ -4,7 +4,7 @@ import 'package:aspnet_zero_app/abp/models/user/user_current_culture_config.dart
 import 'package:json_annotation/json_annotation.dart';
 part 'user_localize_config.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class UserLocalizationConfig {
   UserCurrentCultureConfig? currentCulture;
   List<LanguageInfo>? languages;

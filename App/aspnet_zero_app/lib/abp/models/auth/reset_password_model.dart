@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'reset_password_model.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class ResetPasswordModel {
   int userId;
 

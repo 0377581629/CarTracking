@@ -15,5 +15,5 @@ UserNavConfig _$UserNavConfigFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$UserNavConfigToJson(UserNavConfig instance) =>
     <String, dynamic>{
-      'menus': instance.menus,
+      'menus': instance.menus?.map((k, e) => MapEntry(k, e.toJson())),
     };

@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 part 'refresh_token_result.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class RefreshTokenResult {
   String accessToken;
   String encryptedAccessToken;

@@ -52,8 +52,8 @@ UserTimeZoneConfig _$UserTimeZoneConfigFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$UserTimeZoneConfigToJson(UserTimeZoneConfig instance) =>
     <String, dynamic>{
-      'windows': instance.windows,
-      'iana': instance.iana,
+      'windows': instance.windows?.toJson(),
+      'iana': instance.iana?.toJson(),
     };
 
 UserTimmingConfig _$UserTimmingConfigFromJson(Map<String, dynamic> json) =>
@@ -66,5 +66,5 @@ UserTimmingConfig _$UserTimmingConfigFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$UserTimmingConfigToJson(UserTimmingConfig instance) =>
     <String, dynamic>{
-      'timeZoneInfo': instance.timeZoneInfo,
+      'timeZoneInfo': instance.timeZoneInfo?.toJson(),
     };

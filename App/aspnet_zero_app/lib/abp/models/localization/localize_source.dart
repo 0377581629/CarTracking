@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 part 'localize_source.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class LocalizationSource {
   String? name;
   String? type;

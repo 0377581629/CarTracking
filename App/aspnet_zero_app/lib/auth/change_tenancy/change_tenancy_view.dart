@@ -1,8 +1,7 @@
 import 'package:aspnet_zero_app/abp/abp_base/interfaces/account_service.dart';
-import 'package:aspnet_zero_app/abp/models/auth/login_result.dart';
 import 'package:aspnet_zero_app/auth/forgot_password/forgot_password_view.dart';
 import 'package:aspnet_zero_app/auth/form_submission_status.dart';
-import 'package:aspnet_zero_app/auth/login/login_event.dart';
+import 'package:aspnet_zero_app/auth/change_tenancy/change_tenancy_event.dart';
 import 'package:aspnet_zero_app/auth/register/register_view.dart';
 import 'package:aspnet_zero_app/auth/reset_password/reset_password_view.dart';
 import 'package:aspnet_zero_app/flutter_flow/flutter_flow_theme.dart';
@@ -15,45 +14,45 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 
-import 'login_bloc.dart';
-import 'login_state.dart';
+import 'change_tenancy_bloc.dart';
+import 'change_tenancy_state.dart';
 
 final lang = LocalizationHelper();
 
-class LoginPage extends StatelessWidget {
-  final _formKey = FormHelper.getKey('Login');
+class ChangeTenancyPage extends StatelessWidget {
+  final _formKey = FormHelper.getKey('ChangeTenancy');
 
-  LoginPage({Key? key}) : super(key: key);
+  ChangeTenancyPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: FlutterFlowTheme.primaryColor,
         body: BlocProvider(
-            create: (context) => LoginBloc(accountService: GetIt.I.get<IAccountService>()), child: _loginForm()));
+            create: (context) => ChangeTenancyBloc(accountService: GetIt.I.get<IAccountService>()), child: _changeTenancyForm()));
   }
 
-  Widget _loginForm() {
-    return BlocListener<LoginBloc, LoginState>(
+  Widget _changeTenancyForm() {
+    return BlocListener<ChangeTenancyBloc, ChangeTenancyState>(
         listener: (context, state) {
           final formStatus = state.formStatus;
           if (formStatus is SubmissionFailed) {
-            if (state.loginResult!.result == LoginResult.needToChangePassword) {
+            if (state.changeTenancyResult!.result == ChangeTenancyResult.needToChangePassword) {
               Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) {
                 return ResetPasswordPage();
               }));
             }
 
-            if (state.loginResult!.result == LoginResult.needToChangePassword) {}
+            if (state.changeTenancyResult!.result == ChangeTenancyResult.needToChangePassword) {}
 
-            if (state.loginResult!.exceptionMessage!.isNotEmpty) {
-              _showSnackbar(context, state.loginResult!.exceptionMessage!);
+            if (state.changeTenancyResult!.exceptionMessage!.isNotEmpty) {
+              _showSnackbar(context, state.changeTenancyResult!.exceptionMessage!);
             } else {
               _showSnackbar(context, formStatus.exception.toString());
             }
           }
           if (formStatus is SubmissionSuccess) {
-            _showSnackbar(context, "LoginSuccess");
+            _showSnackbar(context, "ChangeTenancySuccess");
           }
         },
         child: SingleChildScrollView(
@@ -71,7 +70,7 @@ class LoginPage extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Padding(padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 20), child: UIHelper.appLogo()),
-                          _signInLoginHeader()
+                          _signInChangeTenancyHeader()
                         ],
                       )
                     ],
@@ -101,7 +100,7 @@ class LoginPage extends StatelessWidget {
                                         child: _passwordField()),
                                     Padding(
                                         padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 20),
-                                        child: _loginButton())
+                                        child: _changeTenancyButton())
                                   ])))))
                     ],
                   ),
@@ -122,8 +121,8 @@ class LoginPage extends StatelessWidget {
                 ]))));
   }
 
-  Widget _signInLoginHeader() {
-    return BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
+  Widget _signInChangeTenancyHeader() {
+    return BlocBuilder<ChangeTenancyBloc, ChangeTenancyState>(builder: (context, state) {
       return Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -134,7 +133,7 @@ class LoginPage extends StatelessWidget {
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   Text(
-                    lang.get('Login'),
+                    lang.get('ChangeTenancy'),
                     style: FlutterFlowTheme.subtitle1.override(
                       fontFamily: FlutterFlowTheme.defaultFontFamily,
                       color: Colors.white,
@@ -198,10 +197,10 @@ class LoginPage extends StatelessWidget {
   }
 
   Widget _userOrEmailField() {
-    return BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
+    return BlocBuilder<ChangeTenancyBloc, ChangeTenancyState>(builder: (context, state) {
       return TextFormField(
           validator: (value) => state.isValidUsernameOrEmail ? null : lang.get('InvalidUsernameOrEmail'),
-          onChanged: (value) => context.read<LoginBloc>().add(LoginUsernameOrEmailChanged(usernameOrEmail: value)),
+          onChanged: (value) => context.read<ChangeTenancyBloc>().add(ChangeTenancyUsernameOrEmailChanged(usernameOrEmail: value)),
           decoration: InputDecoration(
             hintText: lang.get('MB_EnterYourUserNameOrEmail'),
             hintStyle: FlutterFlowTheme.bodyText1.override(
@@ -238,11 +237,11 @@ class LoginPage extends StatelessWidget {
   }
 
   Widget _passwordField() {
-    return BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
+    return BlocBuilder<ChangeTenancyBloc, ChangeTenancyState>(builder: (context, state) {
       return TextFormField(
           obscureText: true,
           validator: (value) => state.isValidPassword ? null : lang.get('InvalidPassword'),
-          onChanged: (value) => context.read<LoginBloc>().add(LoginPasswordChanged(password: value)),
+          onChanged: (value) => context.read<ChangeTenancyBloc>().add(ChangeTenancyPasswordChanged(password: value)),
           decoration: InputDecoration(
             hintText: lang.get('MB_EnterYourPassword'),
             hintStyle: FlutterFlowTheme.bodyText1.override(
@@ -278,18 +277,18 @@ class LoginPage extends StatelessWidget {
     });
   }
 
-  Widget _loginButton() {
-    return BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
+  Widget _changeTenancyButton() {
+    return BlocBuilder<ChangeTenancyBloc, ChangeTenancyState>(builder: (context, state) {
       if (state.formStatus is FormSubmitting) {
         return const CircularProgressIndicator();
       }
       return FFButtonWidget(
           onPressed: () {
             if (_formKey.currentState?.validate() ?? false) {
-              BlocProvider.of<LoginBloc>(context).add(LoginSubmitted());
+              BlocProvider.of<ChangeTenancyBloc>(context).add(ChangeTenancySubmitted());
             }
           },
-          text: lang.get('Login'),
+          text: lang.get('ChangeTenancy'),
           options: FFButtonOptions(
             width: 220,
             height: 50,
@@ -311,7 +310,7 @@ class LoginPage extends StatelessWidget {
   }
 
   Widget _forgotPasswordButton() {
-    return BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
+    return BlocBuilder<ChangeTenancyBloc, ChangeTenancyState>(builder: (context, state) {
       if (state.formStatus is FormSubmitting) {
         return Row();
       }

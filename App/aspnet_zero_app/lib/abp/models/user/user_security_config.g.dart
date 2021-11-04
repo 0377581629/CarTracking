@@ -30,5 +30,5 @@ UserSecurityConfig _$UserSecurityConfigFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$UserSecurityConfigToJson(UserSecurityConfig instance) =>
     <String, dynamic>{
-      'antiForgery': instance.antiForgery,
+      'antiForgery': instance.antiForgery?.toJson(),
     };

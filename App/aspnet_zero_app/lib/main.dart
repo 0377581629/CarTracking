@@ -80,17 +80,17 @@ class _InitializeApp extends State<InitializeApp>
   initInfo() async {
     var dataStorageService = getIt.get<IDataStorageService>();
     var accessTokenManager = getIt.get<IAccessTokenManager>();
-    var applicationContext = getIt.get<IApplicationContext>();
+    var appContext = getIt.get<IApplicationContext>();
     var _userConfigService = UserConfigurationService();
 
     accessTokenManager.authenticateResult =
         await dataStorageService.retrieveAuthenticateResult();
-    applicationContext.load(await dataStorageService.retrieveTenantInfo(),
+    appContext.load(await dataStorageService.retrieveTenantInfo(),
         await dataStorageService.retrieveLoginInfo());
-    if (applicationContext.configuration == null) {
+    if (appContext.configuration == null) {
       try {
         var userConfiguartion = await _userConfigService.getUserConfiguration();
-        applicationContext.configuration = userConfiguartion;
+        appContext.configuration = userConfiguartion;
         // Redirect to Intro pages or homePage
         SharedPreferences prefs = await SharedPreferences.getInstance();
         bool _seen = (prefs.getBool('introPageSeen') ?? false);

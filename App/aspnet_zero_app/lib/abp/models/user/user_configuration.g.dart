@@ -47,15 +47,15 @@ UserConfiguration _$UserConfigurationFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$UserConfigurationToJson(UserConfiguration instance) =>
     <String, dynamic>{
-      'multiTenancy': instance.multiTenancy,
-      'session': instance.session,
-      'localization': instance.localization,
-      'features': instance.features,
-      'auth': instance.auth,
-      'nav': instance.nav,
-      'setting': instance.setting,
-      'clock': instance.clock,
-      'timing': instance.timing,
-      'security': instance.security,
+      'multiTenancy': instance.multiTenancy?.toJson(),
+      'session': instance.session?.toJson(),
+      'localization': instance.localization?.toJson(),
+      'features': instance.features?.toJson(),
+      'auth': instance.auth?.toJson(),
+      'nav': instance.nav?.toJson(),
+      'setting': instance.setting?.toJson(),
+      'clock': instance.clock?.toJson(),
+      'timing': instance.timing?.toJson(),
+      'security': instance.security?.toJson(),
       'custom': instance.custom,
     };

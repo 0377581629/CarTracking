@@ -39,7 +39,8 @@ Map<String, dynamic> _$ErrorInfoToJson(ErrorInfo instance) => <String, dynamic>{
       'code': instance.code,
       'message': instance.message,
       'details': instance.details,
-      'validationErrors': instance.validationErrors,
+      'validationErrors':
+          instance.validationErrors.map((e) => e.toJson()).toList(),
     };
 
 AjaxResponse<T> _$AjaxResponseFromJson<T>(

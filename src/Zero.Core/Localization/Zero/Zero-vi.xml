@@ -1,6 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <localizationDictionary culture="vi">
   <texts>
+    <!--  Mobile  -->
+
+    <text name="MB_EnterYourUserNameOrEmail">Tên đăng nhập hoặc email</text>
+    <text name="MB_EnterYourPassword">Mật khẩu</text>
+    <text name="MB_EnterYourEmail">Nhập Email đăng ký của bạn</text>
+    
+    <!--    -->
+    
     <!--  Payment  -->
     <text name="CheckoutWithPaypal">Thanh toán qua Paypal (USD)</text>
     <text name="CheckoutWithAlePay">Thanh toán qua AlePay (VND)</text>

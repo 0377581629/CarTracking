@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 part 'authenticate_result_model.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class AuthenticateResultModel {
   String? accessToken;
 
