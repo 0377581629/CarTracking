@@ -1,7 +1,9 @@
 import 'package:aspnet_zero_app/abp/enums/tenant_availability_state.dart';
 import 'package:aspnet_zero_app/abp/interfaces/account_service.dart';
 import 'package:aspnet_zero_app/abp/interfaces/application_context.dart';
+import 'package:aspnet_zero_app/abp/interfaces/data_storage_service.dart';
 import 'package:aspnet_zero_app/abp/models/common/ajax_response.dart';
+import 'package:aspnet_zero_app/abp/models/multi_tenancy/tenant_information.dart';
 import 'package:aspnet_zero_app/abp/models/tenancy/is_tenancy_available.dart';
 import 'package:aspnet_zero_app/configuration/abp_config.dart';
 import 'package:aspnet_zero_app/helpers/localization_helper.dart';
@@ -37,10 +39,12 @@ class ChangeTenancyBloc extends Bloc<ChangeTenancyEvent, ChangeTenancyState> {
           case TenantAvailabilityState.available:
             yield state.copyWith(formStatus: SubmissionSuccess(), tenantResult: tenant);
             var appContext = getIt.get<IApplicationContext>();
+            var dataStorage = getIt.get<IDataStorageService>();
             appContext.setAsTenant(state.tenantResult!.tenantId!, state.tenancyName);
             if (!state.tenantResult!.serverRootAddress!.contains('localhost')) {
               AbpConfig.hostUrl = state.tenantResult!.serverRootAddress!;
             }
+            dataStorage.storeTenantInfo(TenantInformation(state.tenantResult!.tenantId!, state.tenancyName));
             break;
           case TenantAvailabilityState.inActive:
             yield state.copyWith(formStatus: SubmissionFailed(Exception(lang.get('TenantIsNotActive'))), tenantResult: tenant);
