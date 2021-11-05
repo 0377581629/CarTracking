@@ -2,11 +2,19 @@
 <localizationDictionary culture="vi">
   <texts>
     <!--  Mobile  -->
-
+    <text name="MB_Login">Đăng nhập</text>
+    <text name="MB_SignUp">Đăng ký</text>
+    <text name="MB_ForgotPassword">Quên mật khẩu</text>
+    
     <text name="MB_EnterYourUserNameOrEmail">Tên đăng nhập hoặc email</text>
     <text name="MB_EnterYourPassword">Mật khẩu</text>
     <text name="MB_EnterYourEmail">Nhập Email đăng ký của bạn</text>
-    
+
+    <text name="MB_ChangeTenancy">Thay đổi đơn vị sử dụng</text>
+    <text name="MB_EnterTenancyName">Nhập tên đơn vị cần chuyển</text>
+    <text name="MB_Submit">Xác nhận</text>
+    <text name="MB_CurrentTenancy">Đơn vị hiện tại</text>
+    <text name="MB_System">Hệ thống</text>
     <!--    -->
     
     <!--  Payment  -->
@@ -68,6 +76,7 @@
     <text name="Registration">Đăng ký</text>
 
     <text name="Skip">Bỏ qua</text>
+    <text name="NotFoundTenancy">Đơn vị {0} không tồn tại</text>
     <!--    -->
     
     <!--  Email Template  -->

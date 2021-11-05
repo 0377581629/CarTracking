@@ -1,0 +1,16 @@
+import 'package:aspnet_zero_app/abp/interfaces/user_configration_service.dart';
+import 'package:aspnet_zero_app/abp/models/common/ajax_response.dart';
+import 'package:aspnet_zero_app/abp/models/user/user_configuration.dart';
+import 'package:aspnet_zero_app/helpers/http_client.dart';
+
+class UserConfigurationService implements IUserConfigurationService {
+  @override
+  Future<UserConfiguration> getUserConfiguration() async {
+    var httpClient = await HttpClient().createClient();
+    var clientResponse = await httpClient.get('AbpUserConfiguration/GetAll');
+    var abpResponse = AjaxResponse<UserConfiguration>.fromJson(
+        clientResponse.data,
+        (data) => UserConfiguration.fromJson(data as Map<String, dynamic>));
+    return abpResponse.result!;
+  }
+}

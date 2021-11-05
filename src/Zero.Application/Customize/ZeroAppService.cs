@@ -10,6 +10,7 @@ using Abp.Domain.Repositories;
 using Abp.Linq.Extensions;
 using Abp.MultiTenancy;
 using Abp.Runtime.Session;
+using Abp.UI;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Zero;
@@ -212,13 +213,6 @@ namespace Zero
                 totalCount,
                 res
             );
-        }
-
-        public async Task<TenantListDto> GetTenancyByName(string tenancyName)
-        {
-            if (string.IsNullOrEmpty(tenancyName)) return null;
-            var tenant = await _tenantRepository.FirstOrDefaultAsync(o => o.TenancyName == tenancyName);
-            return tenant != null ? ObjectMapper.Map<TenantListDto>(tenant) : null;
         }
         
         #endregion

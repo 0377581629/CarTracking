@@ -44,7 +44,6 @@ namespace Zero
 	    
 	    Task<PagedResultDto<GetTenancyForSelectViewDto>> SearchTenancy(GetSelectModalInput input);
 
-	    Task<TenantListDto> GetTenancyByName(string name);
 	    #endregion
 	    
 	    #region Role

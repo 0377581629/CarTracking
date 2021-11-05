@@ -1,29 +1,29 @@
 import 'dart:io';
 
 import 'package:after_layout/after_layout.dart';
-import 'package:aspnet_zero_app/abp/abp_base/interfaces/account_service.dart';
-import 'package:aspnet_zero_app/abp/abp_base/services/account_service.dart';
+import 'package:aspnet_zero_app/abp/interfaces/account_service.dart';
+import 'package:aspnet_zero_app/abp/services/account_service.dart';
 import 'package:aspnet_zero_app/configuration/abp_config.dart';
 import 'package:aspnet_zero_app/error_page/error_page_widget.dart';
 import 'package:aspnet_zero_app/helpers/localization_helper.dart';
-import 'package:aspnet_zero_app/auth/login/login_view.dart';
-import 'package:aspnet_zero_app/onboarding_page/onboarding_page_widget.dart';
+import 'package:aspnet_zero_app/ui/login/login_view.dart';
+import 'package:aspnet_zero_app/ui/onboarding_page/onboarding_page_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'abp/abp_base/interfaces/data_storage_service.dart';
-import 'abp/abp_base/interfaces/session_service.dart';
-import 'abp/abp_base/services/data_storage_service.dart';
-import 'abp/abp_base/services/session_service.dart';
-import 'abp/abp_base/services/user_configuration_service.dart';
-import 'abp/abp_client/access_token_manager.dart';
-import 'abp/abp_client/application_context.dart';
-import 'abp/abp_client/interfaces/access_token_manager.dart';
-import 'abp/abp_client/interfaces/application_context.dart';
-import 'abp/abp_client/interfaces/multi_tenancy_config.dart';
+import 'abp/interfaces/data_storage_service.dart';
+import 'abp/interfaces/session_service.dart';
+import 'abp/services/data_storage_service.dart';
+import 'abp/services/session_service.dart';
+import 'abp/services/user_configuration_service.dart';
+import 'abp/services/access_token_manager.dart';
+import 'abp/services/application_context.dart';
+import 'abp/interfaces/access_token_manager.dart';
+import 'abp/interfaces/application_context.dart';
+import 'abp/interfaces/multi_tenancy_config.dart';
 import 'abp/models/multi_tenancy/multi_tenancy_config.dart';
 import 'flutter_flow/flutter_flow_theme.dart';
 
@@ -39,6 +39,7 @@ void main() async {
   getIt.registerLazySingleton<ISessionAppService>(() => SessionAppService());
 
   getIt.registerFactory<IAccountService>(() => AccountService());
+
   runApp(const MyApp());
 }
 

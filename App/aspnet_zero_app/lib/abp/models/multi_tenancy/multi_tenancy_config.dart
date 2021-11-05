@@ -1,4 +1,4 @@
-import 'package:aspnet_zero_app/abp/abp_client/interfaces/multi_tenancy_config.dart';
+import 'package:aspnet_zero_app/abp/interfaces/multi_tenancy_config.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'multi_tenancy_config.g.dart';
 

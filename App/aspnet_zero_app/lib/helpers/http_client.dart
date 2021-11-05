@@ -1,9 +1,8 @@
 import 'dart:io';
 import 'dart:async';
-import 'package:aspnet_zero_app/abp/abp_base/interfaces/data_storage_service.dart';
-import 'package:aspnet_zero_app/abp/abp_client/interfaces/access_token_manager.dart';
-import 'package:aspnet_zero_app/abp/abp_client/interfaces/application_context.dart';
-import 'package:aspnet_zero_app/abp/models/common/ajax_response.dart';
+import 'package:aspnet_zero_app/abp/interfaces/data_storage_service.dart';
+import 'package:aspnet_zero_app/abp/interfaces/access_token_manager.dart';
+import 'package:aspnet_zero_app/abp/interfaces/application_context.dart';
 import 'package:aspnet_zero_app/configuration/abp_config.dart';
 import "package:dio/dio.dart";
 import 'package:get_it/get_it.dart';
@@ -42,25 +41,25 @@ class HttpClient {
 }
 
 class CustomInterceptor extends Interceptor {
-  IApplicationContext? applicationContext;
+  IApplicationContext? appContext;
   IAccessTokenManager? accessTokenManager;
   IDataStorageService? dataStorageService;
 
   CustomInterceptor() {
     GetIt getIt = GetIt.I;
-    applicationContext = getIt.get<IApplicationContext>();
+    appContext = getIt.get<IApplicationContext>();
     accessTokenManager = getIt.get<IAccessTokenManager>();
     dataStorageService = getIt.get<IDataStorageService>();
   }
 
   @override
   Future onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
-    if (applicationContext!.currentTenant != null) {
-      options.headers[AbpConfig.tenantResolveKey] = applicationContext!.currentTenant!.tenantId;
+    if (appContext!.currentTenant != null) {
+      options.headers[AbpConfig.tenantResolveKey] = appContext!.currentTenant!.tenantId;
     }
 
-    if (applicationContext!.currentLanguage != null) {
-      options.headers[AbpConfig.languageKey] = "c=" + applicationContext!.currentLanguage!.name! + '|uic=' + applicationContext!.currentLanguage!.name!;
+    if (appContext!.currentLanguage != null) {
+      options.headers[AbpConfig.languageKey] = "c=" + appContext!.currentLanguage!.name! + '|uic=' + appContext!.currentLanguage!.name!;
     }
 
     if (accessTokenManager != null && accessTokenManager!.getAccessToken().isNotEmpty) {
