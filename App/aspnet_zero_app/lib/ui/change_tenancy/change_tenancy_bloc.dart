@@ -1,6 +1,6 @@
 import 'package:aspnet_zero_app/abp/enums/tenant_availability_state.dart';
 import 'package:aspnet_zero_app/abp/interfaces/account_service.dart';
-import 'package:aspnet_zero_app/abp/interfaces/application_context.dart';
+import 'package:aspnet_zero_app/abp/manager/interfaces/application_context.dart';
 import 'package:aspnet_zero_app/abp/interfaces/data_storage_service.dart';
 import 'package:aspnet_zero_app/abp/models/common/ajax_response.dart';
 import 'package:aspnet_zero_app/abp/models/multi_tenancy/tenant_information.dart';
@@ -50,7 +50,7 @@ class ChangeTenancyBloc extends Bloc<ChangeTenancyEvent, ChangeTenancyState> {
             yield state.copyWith(formStatus: SubmissionFailed(Exception(lang.get('TenantIsNotActive'))), tenantResult: tenant);
             break;
           case TenantAvailabilityState.notFound:
-            yield state.copyWith(formStatus: SubmissionFailed(Exception(lang.get('ThereIsNoTenantDefinedWithName'))), tenantResult: tenant);
+            yield state.copyWith(formStatus: SubmissionFailed(Exception(lang.get('NotFoundTenancy') + ' : ' + state.tenancyName)), tenantResult: tenant);
             break;
         }
         yield state.copyWith(formStatus: const InitialFormStatus());

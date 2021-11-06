@@ -19,12 +19,10 @@ import 'abp/interfaces/session_service.dart';
 import 'abp/services/data_storage_service.dart';
 import 'abp/services/session_service.dart';
 import 'abp/services/user_configuration_service.dart';
-import 'abp/services/access_token_manager.dart';
-import 'abp/services/application_context.dart';
-import 'abp/interfaces/access_token_manager.dart';
-import 'abp/interfaces/application_context.dart';
-import 'abp/interfaces/multi_tenancy_config.dart';
-import 'abp/models/multi_tenancy/multi_tenancy_config.dart';
+import 'abp/manager/access_token_manager.dart';
+import 'abp/manager/application_context.dart';
+import 'abp/manager/interfaces/access_token_manager.dart';
+import 'abp/manager/interfaces/application_context.dart';
 import 'flutter_flow/flutter_flow_theme.dart';
 
 final lang = LocalizationHelper();
@@ -35,7 +33,6 @@ void main() async {
   getIt.registerLazySingleton<IDataStorageService>(() => DataStorageService());
   getIt.registerLazySingleton<IApplicationContext>(() => ApplicationContext());
   getIt.registerLazySingleton<IAccessTokenManager>(() => AccessTokenManager());
-  getIt.registerLazySingleton<IMultiTenancyConfig>(() => MultiTenancyConfig());
   getIt.registerLazySingleton<ISessionAppService>(() => SessionAppService());
 
   getIt.registerFactory<IAccountService>(() => AccountService());
@@ -79,19 +76,20 @@ class InitializeApp extends StatefulWidget {
 class _InitializeApp extends State<InitializeApp>
     with AfterLayoutMixin<InitializeApp> {
   initInfo() async {
+    var appContext = getIt.get<IApplicationContext>();
     var dataStorageService = getIt.get<IDataStorageService>();
     var accessTokenManager = getIt.get<IAccessTokenManager>();
-    var appContext = getIt.get<IApplicationContext>();
+
     var _userConfigService = UserConfigurationService();
 
-    accessTokenManager.authenticateResult =
-        await dataStorageService.retrieveAuthenticateResult();
-    appContext.load(await dataStorageService.retrieveTenantInfo(),
-        await dataStorageService.retrieveLoginInfo());
+    accessTokenManager.authenticateResult = await dataStorageService.retrieveAuthenticateResult();
+    appContext.load(await dataStorageService.retrieveTenantInfo(), await dataStorageService.retrieveLoginInfo());
+
     if (appContext.configuration == null) {
       try {
-        var userConfiguartion = await _userConfigService.getUserConfiguration();
-        appContext.configuration = userConfiguartion;
+        var userConfig = await _userConfigService.getUserConfiguration();
+        appContext.configuration = userConfig;
+        debugPrint(userConfig.setting!.toJson().toString(),wrapWidth: 1024);
         // Redirect to Intro pages or homePage
         SharedPreferences prefs = await SharedPreferences.getInstance();
         bool _seen = (prefs.getBool('introPageSeen') ?? false);

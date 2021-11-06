@@ -1,10 +1,11 @@
-import 'package:aspnet_zero_app/abp/interfaces/application_context.dart';
+import 'package:aspnet_zero_app/abp/manager/interfaces/application_context.dart';
 import 'package:aspnet_zero_app/abp/models/common/ajax_response.dart';
 import 'package:aspnet_zero_app/configuration/abp_config.dart';
-import 'package:aspnet_zero_app/abp/interfaces/access_token_manager.dart';
+import 'package:aspnet_zero_app/abp/manager/interfaces/access_token_manager.dart';
 import 'package:aspnet_zero_app/abp/models/auth/authenticate_model.dart';
 import 'package:aspnet_zero_app/abp/models/auth/authenticate_result_model.dart';
 import 'package:aspnet_zero_app/abp/models/auth/refresh_token_result.dart';
+import 'package:aspnet_zero_app/helpers/http_client.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 
@@ -65,7 +66,7 @@ class AccessTokenManager implements IAccessTokenManager {
           "userNameOrEmailAddress and password cannot be empty");
     }
 
-    var client = createApiClient();
+    var client = await HttpClient().createSimpleClient();
 
     var clientResponse =
         await client.post(loginUrlSegment, data: authenticateModel);
@@ -114,7 +115,7 @@ class AccessTokenManager implements IAccessTokenManager {
       throw Exception('Refresh token expired');
     }
 
-    var client = createApiClient();
+    var client = await HttpClient().createSimpleClient();
 
     var clientResponse = await client.post(refreshTokenUrlSegment,
         data: {'refreshToken': authenticateResult!.refreshToken!},
@@ -125,29 +126,15 @@ class AccessTokenManager implements IAccessTokenManager {
       throw Exception('Refresh token failed');
     }
 
-    var ajaxReponse = AjaxResponse<RefreshTokenResult>.fromJson(
+    var ajaxRes = AjaxResponse<RefreshTokenResult>.fromJson(
         clientResponse.data,
         (data) => RefreshTokenResult.fromJson(data as Map<String, dynamic>));
 
-    if (!ajaxReponse.success) {
-      throw Exception('Refresh token failed' + ajaxReponse.errorInfo!.message!);
+    if (!ajaxRes.success) {
+      throw Exception('Refresh token failed' + ajaxRes.errorInfo!.message!);
     }
 
-    authenticateResult!.accessToken = ajaxReponse.result!.accessToken;
-    return ajaxReponse.result!.accessToken;
-  }
-
-  Dio createApiClient() {
-    var _dio = Dio();
-    _dio.options.baseUrl = AbpConfig.hostUrl;
-    _dio.options.headers["User-Agent"] = AbpConfig.userAgent;
-    _dio.options.headers["X-Requested-With"] = "XMLHttpRequest";
-    _dio.options.contentType = Headers.jsonContentType;
-    _dio.interceptors.clear();
-    if (applicationContext?.currentTenant != null) {
-      _dio.options.headers[AbpConfig.tenantResolveKey] =
-          applicationContext!.currentTenant!.tenantId;
-    }
-    return _dio;
+    authenticateResult!.accessToken = ajaxRes.result!.accessToken;
+    return ajaxRes.result!.accessToken;
   }
 }

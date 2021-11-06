@@ -15,6 +15,8 @@
     <text name="MB_Submit">Xác nhận</text>
     <text name="MB_CurrentTenancy">Đơn vị hiện tại</text>
     <text name="MB_System">Hệ thống</text>
+
+    <text name="MB_NotFoundTenancy">Không tìm thấy đơn vị</text>
     <!--    -->
     
     <!--  Payment  -->
@@ -76,7 +78,6 @@
     <text name="Registration">Đăng ký</text>
 
     <text name="Skip">Bỏ qua</text>
-    <text name="NotFoundTenancy">Đơn vị {0} không tồn tại</text>
     <!--    -->
     
     <!--  Email Template  -->

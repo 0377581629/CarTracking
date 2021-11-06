@@ -1,4 +1,4 @@
-import 'package:aspnet_zero_app/abp/interfaces/application_context.dart';
+import 'package:aspnet_zero_app/abp/manager/interfaces/application_context.dart';
 import 'package:aspnet_zero_app/configuration/abp_config.dart';
 import 'package:aspnet_zero_app/flutter_flow/flutter_flow_theme.dart';
 import 'package:flutter/material.dart';

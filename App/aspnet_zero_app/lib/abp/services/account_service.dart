@@ -1,8 +1,8 @@
 import 'package:aspnet_zero_app/abp/interfaces/account_service.dart';
 import 'package:aspnet_zero_app/abp/interfaces/data_storage_service.dart';
 import 'package:aspnet_zero_app/abp/interfaces/session_service.dart';
-import 'package:aspnet_zero_app/abp/interfaces/access_token_manager.dart';
-import 'package:aspnet_zero_app/abp/interfaces/application_context.dart';
+import 'package:aspnet_zero_app/abp/manager/interfaces/access_token_manager.dart';
+import 'package:aspnet_zero_app/abp/manager/interfaces/application_context.dart';
 import 'package:aspnet_zero_app/abp/models/auth/authenticate_result_model.dart';
 import 'package:aspnet_zero_app/abp/models/auth/authenticate_model.dart';
 import 'package:aspnet_zero_app/abp/models/auth/forgot_password_model.dart';

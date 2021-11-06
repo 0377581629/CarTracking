@@ -1,4 +1,4 @@
-import 'package:aspnet_zero_app/abp/interfaces/application_context.dart';
+import 'package:aspnet_zero_app/abp/manager/interfaces/application_context.dart';
 import 'package:aspnet_zero_app/abp/models/user/user_configuration.dart';
 import 'package:aspnet_zero_app/abp/models/multi_tenancy/tenant_information.dart';
 import 'package:aspnet_zero_app/abp/models/localization/language_info.dart';

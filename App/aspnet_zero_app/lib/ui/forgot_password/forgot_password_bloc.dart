@@ -24,6 +24,7 @@ class ForgotPasswordBloc extends Bloc<ForgotPasswordEvent, ForgotPasswordState> 
         accountService.forgotPasswordModel = ForgotPasswordModel(emailAddress: state.email);
         await accountService.forgotPassword();
         yield state.copyWith(formStatus: SubmissionSuccess());
+
       } on DioError catch (e) {
         var exceptionMessage = '';
         if (e.response != null && e.response!.data is Map<String, dynamic>) {
@@ -35,7 +36,10 @@ class ForgotPasswordBloc extends Bloc<ForgotPasswordEvent, ForgotPasswordState> 
           exceptionMessage = e.toString();
         }
         yield state.copyWith(formStatus: SubmissionFailed(Exception(exceptionMessage)));
+      } catch (e) {
+        yield state.copyWith(formStatus: SubmissionFailed(e as Exception));
       }
+      yield state.copyWith(formStatus: const InitialFormStatus());
     }
   }
 }

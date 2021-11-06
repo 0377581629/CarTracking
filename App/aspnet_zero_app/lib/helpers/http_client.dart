@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'dart:async';
 import 'package:aspnet_zero_app/abp/interfaces/data_storage_service.dart';
-import 'package:aspnet_zero_app/abp/interfaces/access_token_manager.dart';
-import 'package:aspnet_zero_app/abp/interfaces/application_context.dart';
+import 'package:aspnet_zero_app/abp/manager/interfaces/access_token_manager.dart';
+import 'package:aspnet_zero_app/abp/manager/interfaces/application_context.dart';
 import 'package:aspnet_zero_app/configuration/abp_config.dart';
 import "package:dio/dio.dart";
 import 'package:get_it/get_it.dart';
@@ -21,7 +21,7 @@ class HttpClient {
     _dio.options.baseUrl = AbpConfig.hostUrl;
     _dio.options.headers["User-Agent"] = AbpConfig.userAgent;
     _dio.options.headers["X-Requested-With"] = "XMLHttpRequest";
-    _dio.options.connectTimeout = 3000;
+    _dio.options.connectTimeout = 5000;
     _dio.interceptors.clear();
     _dio.interceptors.add(CustomInterceptor());
 
@@ -33,9 +33,16 @@ class HttpClient {
     _dio.options.baseUrl = AbpConfig.hostUrl;
     _dio.options.headers["User-Agent"] = AbpConfig.userAgent;
     _dio.options.headers["X-Requested-With"] = "XMLHttpRequest";
+
+    if (applicationContext?.currentTenant != null) {
+      _dio.options.headers[AbpConfig.tenantResolveKey] =
+          applicationContext!.currentTenant!.tenantId;
+    }
+
     _dio.options.contentType = Headers.jsonContentType;
-    _dio.options.connectTimeout = 3000;
+    _dio.options.connectTimeout = 5000;
     _dio.interceptors.clear();
+
     return _dio;
   }
 }

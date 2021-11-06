@@ -4,7 +4,6 @@ using Abp.Configuration;
 using Abp.Json;
 using Abp.Net.Mail;
 using Abp.Zero.Configuration;
-using Castle.Core.Internal;
 using Microsoft.Extensions.Configuration;
 using Zero.Authentication;
 using Zero.DashboardCustomization;
@@ -857,11 +856,13 @@ namespace Zero.Configuration
 
         private SettingDefinition[] GetFacebookExternalLoginProviderSettings()
         {
-            string appId = GetFromSettings("Authentication:Facebook:AppId");
-            string appSecret = GetFromSettings("Authentication:Facebook:AppSecret");
-
+            var isEnabled = GetFromSettings("Authentication:Facebook:IsEnabled") == true.ToString().ToLowerInvariant();
+            var appId = GetFromSettings("Authentication:Facebook:AppId");
+            var appSecret = GetFromSettings("Authentication:Facebook:AppSecret");
+            
             var facebookExternalLoginProviderInfo = new FacebookExternalLoginProviderSettings()
             {
+                IsEnabled = isEnabled,
                 AppId = appId,
                 AppSecret = appSecret
             };
@@ -877,7 +878,7 @@ namespace Zero.Configuration
                 ),
                 new SettingDefinition(
                     AppSettings.ExternalLoginProvider.Tenant.Facebook_IsDeactivated,
-                    "false",
+                    (!isEnabled).ToString().ToLowerInvariant(),
                     isVisibleToClients: true,
                     scopes: SettingScopes.Tenant
                 ),
@@ -893,9 +894,10 @@ namespace Zero.Configuration
 
         private SettingDefinition[] GetGoogleExternalLoginProviderSettings()
         {
-            string clientId = GetFromSettings("Authentication:Google:ClientId");
-            string clientSecret = GetFromSettings("Authentication:Google:ClientSecret");
-            string userInfoEndPoint = GetFromSettings("Authentication:Google:UserInfoEndpoint");
+            var isEnabled = GetFromSettings("Authentication:Google:IsEnabled") == true.ToString().ToLowerInvariant();
+            var clientId = GetFromSettings("Authentication:Google:ClientId");
+            var clientSecret = GetFromSettings("Authentication:Google:ClientSecret");
+            var userInfoEndPoint = GetFromSettings("Authentication:Google:UserInfoEndpoint");
 
             var googleExternalLoginProviderInfo = new GoogleExternalLoginProviderSettings()
             {
@@ -915,7 +917,7 @@ namespace Zero.Configuration
                 ),
                 new SettingDefinition(
                     AppSettings.ExternalLoginProvider.Tenant.Google_IsDeactivated,
-                    "false",
+                    (!isEnabled).ToString().ToLowerInvariant(),
                     isVisibleToClients: true,
                     scopes: SettingScopes.Tenant
                 ),
@@ -931,8 +933,9 @@ namespace Zero.Configuration
 
         private SettingDefinition[] GetTwitterExternalLoginProviderSettings()
         {
-            string consumerKey = GetFromSettings("Authentication:Twitter:ConsumerKey");
-            string consumerSecret = GetFromSettings("Authentication:Twitter:ConsumerSecret");
+            var isEnabled = GetFromSettings("Authentication:Twitter:IsEnabled") == true.ToString().ToLowerInvariant();
+            var consumerKey = GetFromSettings("Authentication:Twitter:ConsumerKey");
+            var consumerSecret = GetFromSettings("Authentication:Twitter:ConsumerSecret");
 
             var twitterExternalLoginProviderInfo = new TwitterExternalLoginProviderSettings
             {
@@ -951,7 +954,7 @@ namespace Zero.Configuration
                 ),
                 new SettingDefinition(
                     AppSettings.ExternalLoginProvider.Tenant.Twitter_IsDeactivated,
-                    "false",
+                    (!isEnabled).ToString().ToLowerInvariant(),
                     isVisibleToClients: true,
                     scopes: SettingScopes.Tenant
                 ),
@@ -967,8 +970,9 @@ namespace Zero.Configuration
 
         private SettingDefinition[] GetMicrosoftExternalLoginProviderSettings()
         {
-            string consumerKey = GetFromSettings("Authentication:Microsoft:ConsumerKey");
-            string consumerSecret = GetFromSettings("Authentication:Microsoft:ConsumerSecret");
+            var isEnabled = GetFromSettings("Authentication:Microsoft:IsEnabled") == true.ToString().ToLowerInvariant();
+            var consumerKey = GetFromSettings("Authentication:Microsoft:ConsumerKey");
+            var consumerSecret = GetFromSettings("Authentication:Microsoft:ConsumerSecret");
 
             var microsoftExternalLoginProviderInfo = new MicrosoftExternalLoginProviderSettings()
             {
@@ -988,7 +992,7 @@ namespace Zero.Configuration
                 ),
                 new SettingDefinition(
                     AppSettings.ExternalLoginProvider.Tenant.Microsoft_IsDeactivated,
-                    "false",
+                    (!isEnabled).ToString().ToLowerInvariant(),
                     isVisibleToClients: true,
                     scopes: SettingScopes.Tenant
                 ),
@@ -1004,6 +1008,7 @@ namespace Zero.Configuration
 
         private SettingDefinition[] GetOpenIdConnectExternalLoginProviderSettings()
         {
+            var isEnabled = GetFromSettings("Authentication:OpenId:IsEnabled") == true.ToString().ToLowerInvariant();
             var clientId = GetFromSettings("Authentication:OpenId:ClientId");
             var clientSecret = GetFromSettings("Authentication:OpenId:ClientSecret");
             var authority = GetFromSettings("Authentication:OpenId:Authority");
@@ -1033,7 +1038,7 @@ namespace Zero.Configuration
                 ),
                 new SettingDefinition(
                     AppSettings.ExternalLoginProvider.Tenant.OpenIdConnect_IsDeactivated,
-                    "false",
+                    (!isEnabled).ToString().ToLowerInvariant(),
                     isVisibleToClients: true,
                     scopes: SettingScopes.Tenant
                 ),
@@ -1055,6 +1060,7 @@ namespace Zero.Configuration
 
         private SettingDefinition[] GetWsFederationExternalLoginProviderSettings()
         {
+            var isEnabled = GetFromSettings("Authentication:WsFederation:IsEnabled") == true.ToString().ToLowerInvariant();
             var clientId = GetFromSettings("Authentication:WsFederation:ClientId");
             var wtrealm = GetFromSettings("Authentication:WsFederation:Wtrealm");
             var authority = GetFromSettings("Authentication:WsFederation:Authority");
@@ -1091,7 +1097,7 @@ namespace Zero.Configuration
                 ),
                 new SettingDefinition(
                     AppSettings.ExternalLoginProvider.Tenant.WsFederation_IsDeactivated,
-                    "false",
+                    (!isEnabled).ToString().ToLowerInvariant(),
                     isVisibleToClients: true,
                     scopes: SettingScopes.Tenant
                 ),
