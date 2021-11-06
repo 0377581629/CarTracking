@@ -8,23 +8,16 @@ import "package:dio/dio.dart";
 import 'package:get_it/get_it.dart';
 
 class HttpClient {
-  IApplicationContext? applicationContext;
-
-  final Dio _dio = Dio();
+  IApplicationContext? appContext;
 
   HttpClient() {
     GetIt getIt = GetIt.I;
-    applicationContext = getIt.get<IApplicationContext>();
+    appContext = getIt.get<IApplicationContext>();
   }
 
   Future<Dio> createClient() async {
-    _dio.options.baseUrl = AbpConfig.hostUrl;
-    _dio.options.headers["User-Agent"] = AbpConfig.userAgent;
-    _dio.options.headers["X-Requested-With"] = "XMLHttpRequest";
-    _dio.options.connectTimeout = 5000;
-    _dio.interceptors.clear();
+    var _dio = await createSimpleClient();
     _dio.interceptors.add(CustomInterceptor());
-
     return _dio;
   }
 
@@ -33,14 +26,21 @@ class HttpClient {
     _dio.options.baseUrl = AbpConfig.hostUrl;
     _dio.options.headers["User-Agent"] = AbpConfig.userAgent;
     _dio.options.headers["X-Requested-With"] = "XMLHttpRequest";
+    _dio.options.headers["FromMobile"] = "true";
 
-    if (applicationContext?.currentTenant != null) {
+    if (appContext?.configuration != null &&
+        appContext!.configuration!.multiTenancy != null &&
+        appContext!.configuration!.multiTenancy!.isEnabled! &&
+        appContext?.currentTenant != null &&
+        appContext?.currentTenant!.tenancyName == "Default") {
+      _dio.options.headers[AbpConfig.tenantResolveKey] = null;
+    } else if (appContext?.currentTenant != null) {
       _dio.options.headers[AbpConfig.tenantResolveKey] =
-          applicationContext!.currentTenant!.tenantId;
+          appContext!.currentTenant!.tenantId;
     }
 
     _dio.options.contentType = Headers.jsonContentType;
-    _dio.options.connectTimeout = 5000;
+    _dio.options.connectTimeout = 10000;
     _dio.interceptors.clear();
 
     return _dio;

@@ -7,6 +7,8 @@ import 'package:aspnet_zero_app/abp/models/auth/authenticate_result_model.dart';
 import 'package:aspnet_zero_app/abp/models/auth/authenticate_model.dart';
 import 'package:aspnet_zero_app/abp/models/auth/forgot_password_model.dart';
 import 'package:aspnet_zero_app/abp/models/auth/login_result.dart';
+import 'package:aspnet_zero_app/abp/models/auth/register_model.dart';
+import 'package:aspnet_zero_app/abp/models/auth/register_result.dart';
 import 'package:aspnet_zero_app/abp/models/auth/reset_password_model.dart';
 import 'package:aspnet_zero_app/abp/models/common/ajax_response.dart';
 import 'package:aspnet_zero_app/abp/models/tenancy/is_tenancy_available.dart';
@@ -23,6 +25,7 @@ class AccountService implements IAccountService {
   IAccessTokenManager? accessTokenManager;
   IDataStorageService? dataStorageService;
 
+  static const registerEndpoint = "api/services/app/Account/Register";
   static const forgotPasswordEndpoint = "Account/SendPasswordResetLink";
   static const isTenantAvailableEndpoint = "api/services/app/Account/IsTenantAvailable";
 
@@ -39,6 +42,9 @@ class AccountService implements IAccountService {
 
   @override
   AuthenticateResultModel? authenticateResultModel;
+
+  @override
+  RegisterModel? registerModel;
 
   @override
   ResetPasswordModel? resetPasswordModel;
@@ -98,6 +104,33 @@ class AccountService implements IAccountService {
     } else {
       throw Exception(lang.get('InvalidData'));
     }
+  }
+
+  @override
+  Future<RegisterResult> registerUser() async {
+    var res = RegisterResult();
+    try {
+      var client = await HttpClient().createSimpleClient();
+      var clientRes = await client.post(registerEndpoint, data: registerModel);
+      if (clientRes.statusCode != 200) {
+        throw UnimplementedError('Register failed');
+      }
+      var ajaxRes = AjaxResponse<RegisterResult>.fromJson(clientRes.data, (data) => RegisterResult.fromJson(data as Map<String, dynamic>));
+      if (!ajaxRes.success) {
+        throw UnimplementedError('Register failed' + ajaxRes.errorInfo!.message!);
+      }
+      return ajaxRes.result!;
+    } on DioError catch (e) {
+      res.isSuccess = false;
+      res.exceptionMessage = e.toString();
+      if (e.response != null && e.response!.data is Map<String, dynamic>) {
+        var simpleResponse = SimpleAjaxResponse.fromJson(e.response!.data);
+        if (simpleResponse.errorInfo != null) {
+          res.exceptionMessage = simpleResponse.errorInfo!.message;
+        }
+      }
+    }
+    return res;
   }
 
   @override

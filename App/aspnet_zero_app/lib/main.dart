@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:after_layout/after_layout.dart';
 import 'package:aspnet_zero_app/abp/interfaces/account_service.dart';
+import 'package:aspnet_zero_app/abp/manager/app_settings_manager.dart';
+import 'package:aspnet_zero_app/abp/manager/interfaces/app_settings_manager.dart';
 import 'package:aspnet_zero_app/abp/services/account_service.dart';
 import 'package:aspnet_zero_app/configuration/abp_config.dart';
 import 'package:aspnet_zero_app/error_page/error_page_widget.dart';
@@ -34,6 +36,7 @@ void main() async {
   getIt.registerLazySingleton<IApplicationContext>(() => ApplicationContext());
   getIt.registerLazySingleton<IAccessTokenManager>(() => AccessTokenManager());
   getIt.registerLazySingleton<ISessionAppService>(() => SessionAppService());
+  getIt.registerLazySingleton<IAppSettingsManager>(() => AppSettingsManager());
 
   getIt.registerFactory<IAccountService>(() => AccountService());
 

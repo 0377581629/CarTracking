@@ -17,6 +17,9 @@
     <text name="MB_System">Hệ thống</text>
 
     <text name="MB_NotFoundTenancy">Không tìm thấy đơn vị</text>
+    <text name="MB_ChangeTenancySuccessful">Thay đổi đơn vị thành công</text>
+    <text name="MB_InvalidTenancyName">Tên đơn vị không hợp lệ</text>
+    <text name="MB_PasswordResetMailSentMessage">Liên kết đặt lại mật khẩu được gửi đến địa chỉ email của bạn. Vui lòng kiểm tra email của bạn.</text>
     <!--    -->
     
     <!--  Payment  -->

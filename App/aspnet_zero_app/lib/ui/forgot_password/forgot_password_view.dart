@@ -1,4 +1,5 @@
 import 'package:aspnet_zero_app/abp/interfaces/account_service.dart';
+import 'package:aspnet_zero_app/helpers/ui_element_helper.dart';
 import 'package:aspnet_zero_app/ui/login/login_view.dart';
 import 'package:aspnet_zero_app/flutter_flow/flutter_flow_theme.dart';
 import 'package:aspnet_zero_app/flutter_flow/flutter_flow_widgets.dart';
@@ -37,9 +38,7 @@ class ForgotPasswordPage extends StatelessWidget {
           }
           if (formStatus is SubmissionSuccess) {
             _showSnackbar(context, lang.get("PasswordResetMailSentMessage"));
-            Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) {
-              return LoginPage();
-            }));
+            Navigator.pop(context);
           }
         },
         child: Center(
@@ -54,7 +53,7 @@ class ForgotPasswordPage extends StatelessWidget {
                 Column(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [Padding(padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 20), child: _appLogo())],
+                  children: [Padding(padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 20), child: UIHelper.appLogo())],
                 )
               ],
             ),
@@ -82,15 +81,6 @@ class ForgotPasswordPage extends StatelessWidget {
             )
           ],
         )));
-  }
-
-  Widget _appLogo() {
-    return Image.asset(
-      'assets/images/trueinvest-logo.png',
-      width: 240,
-      height: 70,
-      fit: BoxFit.cover,
-    );
   }
 
   Widget _emailField() {

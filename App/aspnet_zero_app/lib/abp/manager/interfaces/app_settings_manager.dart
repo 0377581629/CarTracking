@@ -1,3 +1,5 @@
 abstract class IAppSettingsManager {
-  Future<bool> AllowSelfRegistration();
+  String? getSetting(String key);
+
+  bool confirmSetting(String key, dynamic value);
 }

@@ -1,6 +1,4 @@
 import 'package:aspnet_zero_app/abp/interfaces/account_service.dart';
-import 'package:aspnet_zero_app/abp/manager/interfaces/application_context.dart';
-import 'package:aspnet_zero_app/configuration/abp_config.dart';
 import 'package:aspnet_zero_app/flutter_flow/flutter_flow_theme.dart';
 import 'package:aspnet_zero_app/flutter_flow/flutter_flow_widgets.dart';
 import 'package:aspnet_zero_app/helpers/form_helper.dart';
@@ -44,6 +42,7 @@ class ChangeTenancyPage extends StatelessWidget {
             }
           } else if (formStatus is SubmissionSuccess) {
             _showSnackbar(context, lang.get('ChangeTenancySuccessful'));
+            Navigator.pop(context);
           }
         },
         child: SingleChildScrollView(

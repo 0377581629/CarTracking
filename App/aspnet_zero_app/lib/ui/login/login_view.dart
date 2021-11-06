@@ -1,4 +1,8 @@
+import 'dart:async';
+
+import 'package:aspnet_zero_app/abp/consts/app_settings.dart';
 import 'package:aspnet_zero_app/abp/interfaces/account_service.dart';
+import 'package:aspnet_zero_app/abp/manager/interfaces/app_settings_manager.dart';
 import 'package:aspnet_zero_app/abp/models/auth/login_result.dart';
 import 'package:aspnet_zero_app/ui/change_tenancy/change_tenancy_view.dart';
 import 'package:aspnet_zero_app/ui/forgot_password/forgot_password_view.dart';
@@ -20,11 +24,22 @@ import 'login_bloc.dart';
 import 'login_state.dart';
 
 final lang = LocalizationHelper();
+final getIt = GetIt.I;
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
+  const LoginPage({Key? key}) : super(key: key);
+
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   final _formKey = FormHelper.getKey('Login');
+  final _appSettingsManager = getIt.get<IAppSettingsManager>();
 
-  LoginPage({Key? key}) : super(key: key);
+  FutureOr onGoBack(dynamic value) {
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -111,65 +126,32 @@ class LoginPage extends StatelessWidget {
                         )))
                   ]),
                   Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 10),
+                    padding: const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 10),
                     child: CurrentTenancy((context) => {
                           Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) {
                             return ChangeTenancyPage();
-                          }))
+                          })).then(onGoBack)
                         }),
                   )
                 ]))));
   }
 
   Widget _signInLoginHeader() {
+    var allowSelfRegistration = _appSettingsManager.confirmSetting(UserManagement.AllowSelfRegistration, true);
+
     return BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
-      return Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Padding(
-              padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Text(
-                    lang.get('Login'),
-                    style: FlutterFlowTheme.subtitle1.override(
-                      fontFamily: FlutterFlowTheme.defaultFontFamily,
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
-                    child: Container(
-                      width: 90,
-                      height: 3,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(2),
-                      ),
-                    ),
-                  )
-                ],
-              )),
-          Padding(
-              padding: const EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  InkWell(
-                    onTap: () async {
-                      await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => RegisterPage(),
-                        ),
-                      );
-                    },
-                    child: Text(
-                      lang.get('SignUp'),
+      if (allowSelfRegistration) {
+        return Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+                padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Text(
+                      lang.get('Login'),
                       style: FlutterFlowTheme.subtitle1.override(
                         fontFamily: FlutterFlowTheme.defaultFontFamily,
                         color: Colors.white,
@@ -177,22 +159,93 @@ class LoginPage extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
-                    child: Container(
-                      width: 90,
-                      height: 3,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF4B39EF),
-                        borderRadius: BorderRadius.circular(2),
+                    Padding(
+                      padding: const EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
+                      child: Container(
+                        width: 90,
+                        height: 3,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(2),
+                        ),
+                      ),
+                    )
+                  ],
+                )),
+            Padding(
+                padding: const EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    InkWell(
+                      onTap: () async {
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => RegisterPage(),
+                          ),
+                        ).then(onGoBack);
+                      },
+                      child: Text(
+                        lang.get('SignUp'),
+                        style: FlutterFlowTheme.subtitle1.override(
+                          fontFamily: FlutterFlowTheme.defaultFontFamily,
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                  )
-                ],
-              ))
-        ],
-      );
+                    Padding(
+                      padding: const EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
+                      child: Container(
+                        width: 90,
+                        height: 3,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF4B39EF),
+                          borderRadius: BorderRadius.circular(2),
+                        ),
+                      ),
+                    )
+                  ],
+                ))
+          ],
+        );
+      } else {
+        return Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+                padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Text(
+                      lang.get('Login'),
+                      style: FlutterFlowTheme.subtitle1.override(
+                        fontFamily: FlutterFlowTheme.defaultFontFamily,
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
+                      child: Container(
+                        width: 90,
+                        height: 3,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(2),
+                        ),
+                      ),
+                    )
+                  ],
+                ))
+          ],
+        );
+      }
     });
   }
 
