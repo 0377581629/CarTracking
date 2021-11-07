@@ -1,5 +1,5 @@
 import 'package:aspnet_zero_app/abp/interfaces/account_service.dart';
-import 'package:aspnet_zero_app/helpers/ui_element_helper.dart';
+import 'package:aspnet_zero_app/helpers/ui_helper.dart';
 import 'package:aspnet_zero_app/ui/login/login_view.dart';
 import 'package:aspnet_zero_app/flutter_flow/flutter_flow_theme.dart';
 import 'package:aspnet_zero_app/flutter_flow/flutter_flow_widgets.dart';
@@ -34,10 +34,10 @@ class ForgotPasswordPage extends StatelessWidget {
         listener: (context, state) {
           final formStatus = state.formStatus;
           if (formStatus is SubmissionFailed) {
-            _showSnackbar(context, formStatus.exception.toString());
+            UIHelper.showSnackbar(context, formStatus.exception.toString(), messType: 'error');
           }
           if (formStatus is SubmissionSuccess) {
-            _showSnackbar(context, lang.get("PasswordResetMailSentMessage"));
+            UIHelper.showSnackbar(context, lang.get("PasswordResetMailSentMessage"), messType: 'success');
             Navigator.pop(context);
           }
         },
@@ -98,14 +98,14 @@ class ForgotPasswordPage extends StatelessWidget {
               fontWeight: FontWeight.normal,
             ),
             enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(
+              borderSide: const BorderSide(
                 color: Color(0x00000000),
                 width: 1,
               ),
               borderRadius: BorderRadius.circular(8),
             ),
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(
+              borderSide: const BorderSide(
                 color: Color(0x00000000),
                 width: 1,
               ),
@@ -154,13 +154,5 @@ class ForgotPasswordPage extends StatelessWidget {
             borderRadius: 8,
           ));
     });
-  }
-
-  void _showSnackbar(BuildContext context, String message) {
-    final snackBar = SnackBar(
-      content: Text(message),
-      duration: const Duration(seconds: 3),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }

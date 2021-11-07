@@ -13,6 +13,7 @@
     <text name="MB_ChangeTenancy">Thay đổi đơn vị sử dụng</text>
     <text name="MB_EnterTenancyName">Nhập tên đơn vị cần chuyển</text>
     <text name="MB_Submit">Xác nhận</text>
+    <text name="MB_Invalid">Không hợp lệ</text>
     <text name="MB_CurrentTenancy">Đơn vị hiện tại</text>
     <text name="MB_System">Hệ thống</text>
 
@@ -20,6 +21,14 @@
     <text name="MB_ChangeTenancySuccessful">Thay đổi đơn vị thành công</text>
     <text name="MB_InvalidTenancyName">Tên đơn vị không hợp lệ</text>
     <text name="MB_PasswordResetMailSentMessage">Liên kết đặt lại mật khẩu được gửi đến địa chỉ email của bạn. Vui lòng kiểm tra email của bạn.</text>
+
+    <text name="MB_EnterYourName">Nhập tên</text>
+    <text name="MB_EnterYourSurname">Nhập họ</text>
+    <text name="MB_EnterYourUserName">Nhập tên đăng ký</text>
+    <text name="MB_ReEnterYourPassword">Nhập lại mật khẩu</text>
+    <text name="MB_RegisterFailed">Đăng ký thất bại</text>
+    <text name="MB_RegisterSuccessful_CanLoginNow">Đăng ký thành công, bạn có thể đăng nhập ngay.</text>
+    <text name="MB_RegisterSuccessful_EmailConfirmationRequiredForLogin">Đăng ký thành công, hãy kiểm tra hòm thư Email đã đăng ký để kích hoạt tài khoản.</text>
     <!--    -->
     
     <!--  Payment  -->

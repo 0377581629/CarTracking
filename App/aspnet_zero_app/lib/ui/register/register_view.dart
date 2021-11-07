@@ -3,7 +3,7 @@ import 'package:aspnet_zero_app/flutter_flow/flutter_flow_theme.dart';
 import 'package:aspnet_zero_app/flutter_flow/flutter_flow_widgets.dart';
 import 'package:aspnet_zero_app/helpers/form_helper.dart';
 import 'package:aspnet_zero_app/helpers/localization_helper.dart';
-import 'package:aspnet_zero_app/helpers/ui_element_helper.dart';
+import 'package:aspnet_zero_app/helpers/ui_helper.dart';
 import 'package:aspnet_zero_app/ui/register/register_bloc.dart';
 import 'package:aspnet_zero_app/ui/register/register_event.dart';
 import 'package:aspnet_zero_app/ui/register/register_state.dart';
@@ -34,10 +34,27 @@ class RegisterPage extends StatelessWidget {
         listener: (context, state) {
           final formStatus = state.formStatus;
           if (formStatus is SubmissionFailed) {
-
-          }
-          if (formStatus is SubmissionSuccess) {
-            _showSnackbar(context, "LoginSuccess");
+            if (state.exceptionMessage!.isNotEmpty) {
+              UIHelper.showSnackbar(context, lang.get('RegisterFailed') + ':' + state.exceptionMessage!, messType: 'error');
+            } else {
+              UIHelper.showSnackbar(context, lang.get('RegisterFailed'), messType: 'error');
+            }
+          } else if (formStatus is SubmissionSuccess) {
+            if (state.registerResult != null) {
+              if (state.registerResult!.canLogin != null && state.registerResult!.canLogin! == true) {
+                UIHelper.showSnackbar(context, lang.get("RegisterSuccessful_CanLoginNow"), messType: 'success');
+                Navigator.pop(context);
+              } else if (state.registerResult!.isEmailConfirmationRequiredForLogin != null && state.registerResult!.isEmailConfirmationRequiredForLogin!) {
+                UIHelper.showSnackbar(context, lang.get("RegisterSuccessful_EmailConfirmationRequiredForLogin"), messType: 'info');
+                Navigator.pop(context);
+              } else if (state.registerResult!.exceptionMessage!.isNotEmpty && state.registerResult!.isSuccess!) {
+                UIHelper.showSnackbar(context, lang.get("RegisterFailed") + ':' + state.registerResult!.exceptionMessage! , messType: 'error');
+              } else if (state.registerResult!.exceptionMessage!.isNotEmpty) {
+                UIHelper.showSnackbar(context, lang.get('RegisterFailed') + ':' + state.registerResult!.exceptionMessage!, messType: 'error');
+              }
+            } else if (state.exceptionMessage!.isNotEmpty) {
+              UIHelper.showSnackbar(context, lang.get('RegisterFailed') + ':' + state.exceptionMessage!, messType: 'error');
+            }
           }
         },
         child: SingleChildScrollView(
@@ -53,7 +70,7 @@ class RegisterPage extends StatelessWidget {
                       Column(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: [Padding(padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 20), child: UIHelper.appLogo()), _signInLoginHeader()],
+                        children: [Padding(padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 20), child: UIHelper.appLogo()), _signInLoginHeader()],
                       )
                     ],
                   ),
@@ -74,14 +91,14 @@ class RegisterPage extends StatelessWidget {
                                   key: _formKey,
                                   child: Center(
                                       child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-                                        Padding(padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 20), child: _nameField()),
-                                        Padding(padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 20), child: _surnameField()),
-                                        Padding(padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 20), child: _userNameField()),
-                                        Padding(padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 20), child: _emailField()),
-                                        Padding(padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 20), child: _passwordField()),
-                                        Padding(padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 20), child: _reInputPasswordField()),
-                                        Padding(padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 20), child: _registerButton())
-                                      ])))))
+                                    Padding(padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 20), child: _nameField()),
+                                    Padding(padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 20), child: _surnameField()),
+                                    Padding(padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 20), child: _userNameField()),
+                                    Padding(padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 20), child: _emailField()),
+                                    Padding(padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 20), child: _passwordField()),
+                                    Padding(padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 20), child: _reInputPasswordField()),
+                                    Padding(padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 20), child: _registerButton())
+                                  ])))))
                     ],
                   )
                 ]))));
@@ -89,20 +106,19 @@ class RegisterPage extends StatelessWidget {
 
   Widget _signInLoginHeader() {
     return BlocBuilder<RegisterBloc, RegisterState>(builder: (context, state) {
-
-        return Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    InkWell(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
+      return Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Padding(
+              padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  InkWell(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
                       child: Text(
                         lang.get('Login'),
                         style: FlutterFlowTheme.subtitle1.override(
@@ -111,51 +127,49 @@ class RegisterPage extends StatelessWidget {
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
-                      )
-                    ),
-                    Padding(
-                      padding: const EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
-                      child: Container(
-                        width: 90,
-                        height: 3,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF4B39EF),
-                          borderRadius: BorderRadius.circular(2),
-                        ),
+                      )),
+                  Padding(
+                    padding: const EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
+                    child: Container(
+                      width: 90,
+                      height: 3,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF4B39EF),
+                        borderRadius: BorderRadius.circular(2),
                       ),
-                    )
-                  ],
-                )),
-            Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Text(
-                      lang.get('SignUp'),
-                      style: FlutterFlowTheme.subtitle1.override(
-                        fontFamily: FlutterFlowTheme.defaultFontFamily,
+                    ),
+                  )
+                ],
+              )),
+          Padding(
+              padding: const EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Text(
+                    lang.get('SignUp'),
+                    style: FlutterFlowTheme.subtitle1.override(
+                      fontFamily: FlutterFlowTheme.defaultFontFamily,
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
+                    child: Container(
+                      width: 90,
+                      height: 3,
+                      decoration: BoxDecoration(
                         color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+                        borderRadius: BorderRadius.circular(2),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
-                      child: Container(
-                        width: 90,
-                        height: 3,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(2),
-                        ),
-                      ),
-                    )
-                  ],
-                ))
-          ],
-        );
-
+                  )
+                ],
+              ))
+        ],
+      );
     });
   }
 
@@ -202,10 +216,10 @@ class RegisterPage extends StatelessWidget {
   Widget _surnameField() {
     return BlocBuilder<RegisterBloc, RegisterState>(builder: (context, state) {
       return TextFormField(
-          validator: (value) => state.isValidSurname ? null : lang.get('InvalidSurname'),
+          validator: (value) => state.isValidSurname ? null : lang.get('Invalid'),
           onChanged: (value) => context.read<RegisterBloc>().add(RegisterSurnameChanged(surname: value)),
           decoration: InputDecoration(
-            hintText: lang.get('MB_EnterYourSurName'),
+            hintText: lang.get('MB_EnterYourSurname'),
             hintStyle: FlutterFlowTheme.bodyText1.override(
               fontFamily: FlutterFlowTheme.defaultFontFamily,
               color: FlutterFlowTheme.primaryColor,
@@ -242,7 +256,7 @@ class RegisterPage extends StatelessWidget {
   Widget _userNameField() {
     return BlocBuilder<RegisterBloc, RegisterState>(builder: (context, state) {
       return TextFormField(
-          validator: (value) => state.isValidUserName ? null : lang.get('InvalidUserName'),
+          validator: (value) => state.isValidUserName ? null : lang.get('Invalid'),
           onChanged: (value) => context.read<RegisterBloc>().add(RegisterUserNameChanged(userName: value)),
           decoration: InputDecoration(
             hintText: lang.get('MB_EnterYourUserName'),
@@ -282,7 +296,7 @@ class RegisterPage extends StatelessWidget {
   Widget _emailField() {
     return BlocBuilder<RegisterBloc, RegisterState>(builder: (context, state) {
       return TextFormField(
-          validator: (value) => state.isValidEmail ? null : lang.get('InvalidEmail'),
+          validator: (value) => state.isValidEmail ? null : lang.get('Invalid'),
           onChanged: (value) => context.read<RegisterBloc>().add(RegisterEmailChanged(email: value)),
           decoration: InputDecoration(
             hintText: lang.get('MB_EnterYourEmail'),
@@ -323,7 +337,7 @@ class RegisterPage extends StatelessWidget {
     return BlocBuilder<RegisterBloc, RegisterState>(builder: (context, state) {
       return TextFormField(
           obscureText: true,
-          validator: (value) => state.isValidPassword ? null : lang.get('InvalidPassword'),
+          validator: (value) => state.isValidPassword ? null : lang.get('Invalid'),
           onChanged: (value) => context.read<RegisterBloc>().add(RegisterPasswordChanged(password: value)),
           decoration: InputDecoration(
             hintText: lang.get('MB_EnterYourPassword'),
@@ -364,7 +378,7 @@ class RegisterPage extends StatelessWidget {
     return BlocBuilder<RegisterBloc, RegisterState>(builder: (context, state) {
       return TextFormField(
           obscureText: true,
-          validator: (value) => state.isValidPassword ? null : lang.get('InvalidPassword'),
+          validator: (value) => state.isValidPassword ? null : lang.get('Invalid'),
           onChanged: (value) => context.read<RegisterBloc>().add(RegisterReInputPasswordChanged(reInputPassword: value)),
           decoration: InputDecoration(
             hintText: lang.get('MB_ReEnterYourPassword'),
@@ -431,13 +445,5 @@ class RegisterPage extends StatelessWidget {
             borderRadius: 8,
           ));
     });
-  }
-
-  void _showSnackbar(BuildContext context, String message) {
-    final snackBar = SnackBar(
-      content: Text(message),
-      duration: const Duration(seconds: 3),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }

@@ -1,5 +1,4 @@
 import 'package:aspnet_zero_app/abp/interfaces/account_service.dart';
-import 'package:aspnet_zero_app/abp/models/auth/authenticate_model.dart';
 import 'package:aspnet_zero_app/abp/models/auth/register_model.dart';
 import 'package:aspnet_zero_app/abp/models/common/ajax_response.dart';
 import 'package:aspnet_zero_app/ui/form_submission_status.dart';

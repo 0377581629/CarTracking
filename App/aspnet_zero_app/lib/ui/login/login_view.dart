@@ -14,7 +14,7 @@ import 'package:aspnet_zero_app/flutter_flow/flutter_flow_theme.dart';
 import 'package:aspnet_zero_app/flutter_flow/flutter_flow_widgets.dart';
 import 'package:aspnet_zero_app/helpers/form_helper.dart';
 import 'package:aspnet_zero_app/helpers/localization_helper.dart';
-import 'package:aspnet_zero_app/helpers/ui_element_helper.dart';
+import 'package:aspnet_zero_app/helpers/ui_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -62,13 +62,13 @@ class _LoginPageState extends State<LoginPage> {
             if (state.loginResult!.result == LoginResult.needToChangePassword) {}
 
             if (state.loginResult!.exceptionMessage!.isNotEmpty) {
-              _showSnackbar(context, state.loginResult!.exceptionMessage!);
+              UIHelper.showSnackbar(context, state.loginResult!.exceptionMessage!, messType: 'error');
             } else {
-              _showSnackbar(context, formStatus.exception.toString());
+              UIHelper.showSnackbar(context, formStatus.exception.toString(), messType: 'error');
             }
           }
           if (formStatus is SubmissionSuccess) {
-            _showSnackbar(context, "LoginSuccess");
+            UIHelper.showSnackbar(context, "LoginSuccess", messType: 'success');
           }
         },
         child: SingleChildScrollView(
@@ -392,13 +392,5 @@ class _LoginPageState extends State<LoginPage> {
             borderRadius: 8,
           ));
     });
-  }
-
-  void _showSnackbar(BuildContext context, String message) {
-    final snackBar = SnackBar(
-      content: Text(message),
-      duration: const Duration(seconds: 3),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }
