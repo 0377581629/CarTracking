@@ -124,6 +124,7 @@ namespace Zero.Authorization.Accounts
             {
                 IsSuccess = true,
                 IsEmailConfirmationRequiredForLogin = isEmailConfirmationRequiredForLogin,
+                IsUserActivated = user.IsActive,
                 CanLogin = user.IsActive && (user.IsEmailConfirmed || !isEmailConfirmationRequiredForLogin)
             };
         }

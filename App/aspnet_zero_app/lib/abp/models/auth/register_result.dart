@@ -7,9 +7,10 @@ class RegisterResult {
   bool? isSuccess;
   bool? isEmailConfirmationRequiredForLogin;
   bool? canLogin;
+  bool? isUserActivated;
   String? exceptionMessage;
 
-  RegisterResult({this.isSuccess, this.isEmailConfirmationRequiredForLogin, this.canLogin, this.exceptionMessage});
+  RegisterResult({this.isSuccess, this.isEmailConfirmationRequiredForLogin, this.canLogin, this.isUserActivated, this.exceptionMessage});
 
   factory RegisterResult.fromJson(Map<String, dynamic> json) => _$RegisterResultFromJson(json);
 

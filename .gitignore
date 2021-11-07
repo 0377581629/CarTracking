@@ -10,7 +10,8 @@ project.lock.json
 .vs/
 .idea/
 build/
-.dart_tool/
+aspnet_zero_app/.dart_tool/
+aspnet_zero_app/build/
 # mstest test results
 TestResults
 

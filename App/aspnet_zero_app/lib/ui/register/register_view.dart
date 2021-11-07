@@ -41,16 +41,23 @@ class RegisterPage extends StatelessWidget {
             }
           } else if (formStatus is SubmissionSuccess) {
             if (state.registerResult != null) {
-              if (state.registerResult!.canLogin != null && state.registerResult!.canLogin! == true) {
-                UIHelper.showSnackbar(context, lang.get("RegisterSuccessful_CanLoginNow"), messType: 'success');
-                Navigator.pop(context);
-              } else if (state.registerResult!.isEmailConfirmationRequiredForLogin != null && state.registerResult!.isEmailConfirmationRequiredForLogin!) {
-                UIHelper.showSnackbar(context, lang.get("RegisterSuccessful_EmailConfirmationRequiredForLogin"), messType: 'info');
-                Navigator.pop(context);
-              } else if (state.registerResult!.exceptionMessage!.isNotEmpty && state.registerResult!.isSuccess!) {
-                UIHelper.showSnackbar(context, lang.get("RegisterFailed") + ':' + state.registerResult!.exceptionMessage! , messType: 'error');
-              } else if (state.registerResult!.exceptionMessage!.isNotEmpty) {
-                UIHelper.showSnackbar(context, lang.get('RegisterFailed') + ':' + state.registerResult!.exceptionMessage!, messType: 'error');
+              if (state.registerResult!.isSuccess??=false){
+                if (state.registerResult!.canLogin??=false) {
+                  UIHelper.showSnackbar(context, lang.get("RegisterSuccessful_CanLoginNow"), messType: 'success');
+                  Navigator.pop(context);
+                } else if (!(state.registerResult!.isUserActivated??=false)) {
+                  UIHelper.showSnackbar(context, lang.get('RegisterSuccessful_WaitAdminActive'), messType: 'info');
+                  Navigator.pop(context);
+                } else if (state.registerResult!.isEmailConfirmationRequiredForLogin??=false) {
+                  UIHelper.showSnackbar(context, lang.get("RegisterSuccessful_EmailConfirmationRequiredForLogin"), messType: 'info');
+                  Navigator.pop(context);
+                }
+              } else {
+                if ((state.registerResult!.exceptionMessage??='').isNotEmpty) {
+                  UIHelper.showSnackbar(context, lang.get("RegisterFailed") + ':' + state.registerResult!.exceptionMessage!, messType: 'error');
+                } else if ((state.registerResult!.exceptionMessage??='').isNotEmpty) {
+                  UIHelper.showSnackbar(context, lang.get('RegisterFailed') + ':' + state.registerResult!.exceptionMessage!, messType: 'error');
+                }
               }
             } else if (state.exceptionMessage!.isNotEmpty) {
               UIHelper.showSnackbar(context, lang.get('RegisterFailed') + ':' + state.exceptionMessage!, messType: 'error');

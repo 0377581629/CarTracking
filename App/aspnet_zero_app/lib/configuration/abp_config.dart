@@ -13,7 +13,7 @@ class AbpConfig {
 
   static const appName = "ZeroBase-App";
 
-  static const languageSource = "Zero";
+  static const languageSource = "AbpZero";
 }
 
 class DataStorageKey {

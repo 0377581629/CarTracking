@@ -29,6 +29,7 @@
     <text name="MB_RegisterFailed">Đăng ký thất bại</text>
     <text name="MB_RegisterSuccessful_CanLoginNow">Đăng ký thành công, bạn có thể đăng nhập ngay.</text>
     <text name="MB_RegisterSuccessful_EmailConfirmationRequiredForLogin">Đăng ký thành công, hãy kiểm tra hòm thư Email đã đăng ký để kích hoạt tài khoản.</text>
+    <text name="MB_RegisterSuccessful_WaitAdminActive">Đăng ký thành công, tài khoản sẽ được phê duyệt bởi quản trị viên trong thời gian sớm nhất.</text>
     <!--    -->
     
     <!--  Payment  -->
@@ -90,6 +91,28 @@
     <text name="Registration">Đăng ký</text>
 
     <text name="Skip">Bỏ qua</text>
+    
+    <!--    -->
+    
+    <!--  Identity Errors  -->
+    
+    <text name="Identity.DuplicateEmail">Email đã được sử dụng</text>
+    <text name="Identity.DuplicateRoleName">Vai trò đã được sử dụng</text>
+    <text name="Identity.DuplicateUserName">Tên đăng nhập đã được sử dụng</text>
+    
+    <text name="Identity.InvalidEmail">Email không hợp lệ</text>
+    
+    <text name="Identity.InvalidRoleName">Vai trò không hợp lệ</text>
+    <text name="Identity.InvalidToken">Token không hợp lệ</text>
+    <text name="Identity.InvalidUserName">Tên đăng nhập không hợp lệ</text>
+
+    <text name="Identity.PasswordMismatch">Mật khẩu không hợp lệ</text>
+    <text name="Identity.PasswordRequireDigit">Mật khẩu cần có ít nhất một số ('0'-'9')</text>
+    <text name="Identity.PasswordRequireLower">Mật khẩu cần ít nhất một ký tự thường ('a'-'z')</text>
+    <text name="Identity.PasswordRequireNonAlphanumeric">Mật khẩu cần ít nhất một ký tự đặc biệt</text>
+    <text name="Identity.PasswordRequireUpper">Mật khẩu cần ít nhất một ký tự in hoa ('A'-'Z')</text>
+    <text name="Identity.PasswordTooShort">Mật khẩu quá ngắn</text>
+    
     <!--    -->
     
     <!--  Email Template  -->

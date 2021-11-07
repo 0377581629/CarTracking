@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Linq;
+using System.Reflection;
 using Abp.Configuration.Startup;
 using Abp.Localization.Dictionaries;
 using Abp.Localization.Dictionaries.Xml;
@@ -10,6 +11,9 @@ namespace Zero.Localization
     {
         public static void Configure(ILocalizationConfiguration localizationConfiguration)
         {
+            var abpZeroLangIndex = localizationConfiguration.Sources.IndexOf(localizationConfiguration.Sources.FirstOrDefault(o=>o.Name == ZeroConsts.LocalizationSourceName));
+            localizationConfiguration.Sources.RemoveAt(abpZeroLangIndex);
+            
             localizationConfiguration.Sources.Add(
                 new DictionaryBasedLocalizationSource(
                     ZeroConsts.LocalizationSourceName,

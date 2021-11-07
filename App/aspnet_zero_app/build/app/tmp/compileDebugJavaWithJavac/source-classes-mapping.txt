@@ -1,4 +1,0 @@
-io/flutter/plugins/GeneratedPluginRegistrant.java
- io.flutter.plugins.GeneratedPluginRegistrant
-com/example/aspnet_zero_app/BuildConfig.java
- com.example.aspnet_zero_app.BuildConfig

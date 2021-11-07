@@ -1,8 +1,12 @@
+import 'package:aspnet_zero_app/abp/manager/interfaces/app_settings_manager.dart';
 import 'package:aspnet_zero_app/abp/models/auth/register_result.dart';
 import 'package:aspnet_zero_app/ui/form_submission_status.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:get_it/get_it.dart';
 
 class RegisterState {
+  final IAppSettingsManager appSettingsManager = GetIt.I.get<IAppSettingsManager>();
+
   final String name;
 
   bool get isValidName => name.length > 3;
@@ -21,11 +25,11 @@ class RegisterState {
 
   final String password;
 
-  bool get isValidPassword => password.length > 3;
+  bool get isValidPassword => password.length >= appSettingsManager.getNumberSetting('Abp.Zero.UserManagement.PasswordComplexity.RequiredLength', 3);
 
   final String reInputPassword;
 
-  bool get isValidReInputPassword => reInputPassword.length > 3 && reInputPassword == password;
+  bool get isValidReInputPassword => reInputPassword == password;
 
   final RegisterResult? registerResult;
 

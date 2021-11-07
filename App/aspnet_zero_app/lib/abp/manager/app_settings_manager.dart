@@ -25,6 +25,18 @@ class AppSettingsManager implements IAppSettingsManager {
   }
 
   @override
+  int getNumberSetting(String key, int nullValue) {
+    if (appContext!.configuration == null ||
+        appContext!.configuration!.setting == null ||
+        !appContext!.configuration!.setting!.values!.containsKey(key)) {
+      return nullValue;
+    }
+    else {
+      return int.tryParse(appContext!.configuration!.setting!.values![key].toString()) ?? nullValue;
+    }
+  }
+
+  @override
   bool confirmSetting(String key, dynamic value) {
     var setting = getSetting(key);
     if (value is bool) {

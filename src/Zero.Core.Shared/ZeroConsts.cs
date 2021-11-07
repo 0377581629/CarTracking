@@ -4,7 +4,7 @@ namespace Zero
 {
     public class ZeroConsts
     {
-        public const string LocalizationSourceName = "Zero";
+        public const string LocalizationSourceName = "AbpZero";
 
         public const string ConnectionStringName = "Default";
 

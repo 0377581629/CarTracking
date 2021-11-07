@@ -92,7 +92,7 @@ class _InitializeApp extends State<InitializeApp>
       try {
         var userConfig = await _userConfigService.getUserConfiguration();
         appContext.configuration = userConfig;
-        debugPrint(userConfig.setting!.toJson().toString(),wrapWidth: 1024);
+
         // Redirect to Intro pages or homePage
         SharedPreferences prefs = await SharedPreferences.getInstance();
         bool _seen = (prefs.getBool('introPageSeen') ?? false);
