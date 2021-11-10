@@ -1,6 +1,56 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <localizationDictionary culture="en">
   <texts>
+
+    <!--  Mobile  -->
+    <text name="MB_Login">Sign In</text>
+    <text name="MB_SignUp">Sign up</text>
+    <text name="MB_ForgotPassword">Forgot password</text>
+
+    <text name="MB_EnterYourUserNameOrEmail">Enter your Username or Email</text>
+    <text name="MB_EnterYourPassword">Enter your password</text>
+    <text name="MB_EnterYourEmail">Enter your Email</text>
+
+    <text name="MB_ChangeTenancy">Change tenancy</text>
+    <text name="MB_EnterTenancyName">Enter tenancy name</text>
+    
+    <text name="MB_CurrentTenancy">Current tenancy</text>
+    <text name="MB_System">System</text>
+
+    <text name="MB_NotFoundTenancy">Tenancy not found</text>
+    
+    <text name="MB_InvalidTenancyName">Invalid tenancy name</text>
+    <text name="MB_PasswordResetMailSentMessage">A password reset link sent to your e-mail address. Please check your emails.</text>
+
+    <text name="MB_EnterYourName">Enter your name</text>
+    <text name="MB_EnterYourSurname">Enter your surname</text>
+    <text name="MB_EnterYourUserName">Enter username</text>
+    <text name="MB_ReEnterYourPassword">Re-enter password</text>
+    
+    <text name="MB_RegisterFailed">Sign up failed</text>
+    
+    <text name="MB_RegisterSuccessful_CanLoginNow">Sign up successful, you can login now.</text>
+    <text name="MB_RegisterSuccessful_EmailConfirmationRequiredForLogin">Sign up successful, please check your email to active your registed account.</text>
+    <text name="MB_RegisterSuccessful_WaitAdminActive">Sign up successful, your account will be active by admin soon.</text>
+
+    <text name="MB_ChangeLanguage">Change language</text>
+    <!--    -->
+
+    <!--  Mobile Common  -->
+
+    <text name="MB_UpdateSuccessful">Update successful</text>
+    <text name="MB_UpdateFailed">Update failed</text>
+
+    <text name="MB_ChangeSuccessful">Change successful</text>
+    <text name="MB_ChangeFailed">Change failed</text>
+
+    <text name="MB_Successful">Sucessful</text>
+    <text name="MB_Failed">Failed</text>
+
+    <text name="MB_Submit">Submit</text>
+    <text name="MB_Invalid">Invalid</text>
+    <!--    -->
+    
     <!--  User Subscription  -->
     <text name="UserSubscriptionEnable">Enable subscription for users</text>
     <text name="Currency">Currency</text>

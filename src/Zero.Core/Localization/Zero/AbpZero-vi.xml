@@ -12,13 +12,12 @@
 
     <text name="MB_ChangeTenancy">Thay đổi đơn vị sử dụng</text>
     <text name="MB_EnterTenancyName">Nhập tên đơn vị cần chuyển</text>
-    <text name="MB_Submit">Xác nhận</text>
-    <text name="MB_Invalid">Không hợp lệ</text>
+    
     <text name="MB_CurrentTenancy">Đơn vị hiện tại</text>
     <text name="MB_System">Hệ thống</text>
 
     <text name="MB_NotFoundTenancy">Không tìm thấy đơn vị</text>
-    <text name="MB_ChangeTenancySuccessful">Thay đổi đơn vị thành công</text>
+    
     <text name="MB_InvalidTenancyName">Tên đơn vị không hợp lệ</text>
     <text name="MB_PasswordResetMailSentMessage">Liên kết đặt lại mật khẩu được gửi đến địa chỉ email của bạn. Vui lòng kiểm tra email của bạn.</text>
 
@@ -30,6 +29,24 @@
     <text name="MB_RegisterSuccessful_CanLoginNow">Đăng ký thành công, bạn có thể đăng nhập ngay.</text>
     <text name="MB_RegisterSuccessful_EmailConfirmationRequiredForLogin">Đăng ký thành công, hãy kiểm tra hòm thư Email đã đăng ký để kích hoạt tài khoản.</text>
     <text name="MB_RegisterSuccessful_WaitAdminActive">Đăng ký thành công, tài khoản sẽ được phê duyệt bởi quản trị viên trong thời gian sớm nhất.</text>
+
+    <text name="MB_ChangeLanguage">Thay đổi ngôn ngữ.</text>
+    
+    <!--    -->
+    
+    <!--  Mobile Common  -->
+    
+    <text name="MB_UpdateSuccessful">Cập nhật thành công.</text>
+    <text name="MB_UpdateFailed">Cập nhật thất bại</text>
+
+    <text name="MB_ChangeSuccessful">Thay đổi thành công.</text>
+    <text name="MB_ChangeFailed">Thay đổi thất bại</text>
+    
+    <text name="MB_Successful">Thành công</text>
+    <text name="MB_Failed">Thất bại</text>
+
+    <text name="MB_Submit">Xác nhận</text>
+    <text name="MB_Invalid">Không hợp lệ</text>
     <!--    -->
     
     <!--  Payment  -->
