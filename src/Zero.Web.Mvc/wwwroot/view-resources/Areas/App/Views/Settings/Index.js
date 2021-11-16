@@ -291,6 +291,7 @@
                 userManagement: userManagement,
                 email: $('#EmailSmtpSettingsForm').serializeFormToObject(),
                 ldap: $('#LdapSettingsForm').serializeFormToObject(),
+                payment: $('#PaymentManagementSettingsForm').serializeFormToObject(),
                 billing: $('#BillingSettingsForm').serializeFormToObject(),
                 otherSettings: $('#OtherSettingsForm').serializeFormToObject(),
                 security: {

@@ -165,6 +165,7 @@
                 userManagement: userManagement,
                 email: $('#EmailSmtpSettingsForm').serializeFormToObject(),
                 chat: $('#ChatSettingsForm').serializeFormToObject(),
+                payment: $('#PaymentManagementSettingsForm').serializeFormToObject(),
                 billing: $('#BillingSettingsForm').serializeFormToObject(),
                 otherSettings: $('#OtherSettingsForm').serializeFormToObject(),
                 security: {

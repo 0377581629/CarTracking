@@ -8,6 +8,8 @@ using Microsoft.Extensions.Configuration;
 using Zero.Authentication;
 using Zero.DashboardCustomization;
 using Newtonsoft.Json;
+using Zero.Abp.Payments;
+using Zero.MultiTenancy.Payments;
 
 namespace Zero.Configuration
 {
@@ -18,9 +20,11 @@ namespace Zero.Configuration
     public class AppSettingProvider : SettingProvider
     {
         private readonly IConfigurationRoot _appConfiguration;
+        private readonly IPaymentGatewayStore _paymentGatewayStore;
 
-        public AppSettingProvider(IAppConfigurationAccessor configurationAccessor)
+        public AppSettingProvider(IAppConfigurationAccessor configurationAccessor, IPaymentGatewayStore paymentGatewayStore)
         {
+            _paymentGatewayStore = paymentGatewayStore;
             _appConfiguration = configurationAccessor.Configuration;
         }
 
@@ -120,7 +124,7 @@ namespace Zero.Configuration
 
         private IEnumerable<SettingDefinition> GetSharedSettings()
         {
-            return new[]
+            var res = new List<SettingDefinition>
             {
                 new SettingDefinition(AppSettings.UserManagement.TwoFactorLogin.IsGoogleAuthenticatorEnabled,
                     GetFromAppSettings(AppSettings.UserManagement.TwoFactorLogin.IsGoogleAuthenticatorEnabled, "false"),
@@ -184,6 +188,66 @@ namespace Zero.Configuration
                     GetFromAppSettings(AppSettings.UserManagement.UseCaptchaOnRegistration, "true"),
                     scopes: SettingScopes.Application | SettingScopes.Tenant, isVisibleToClients: true)
             };
+            
+            var activePaymentGateWays = _paymentGatewayStore.GetActiveGateways();
+            if (activePaymentGateWays != null && activePaymentGateWays.Any())
+            {
+                res.Add(new SettingDefinition(AppSettings.PaymentManagement.AllowTenantUseCustomConfig,
+                    GetFromAppSettings(AppSettings.PaymentManagement.AllowTenantUseCustomConfig, "false"),
+                    scopes: SettingScopes.Application, isVisibleToClients: false));
+                
+                res.Add(new SettingDefinition(AppSettings.PaymentManagement.UseCustomPaymentConfig,
+                    GetFromAppSettings(AppSettings.PaymentManagement.UseCustomPaymentConfig, "false"),
+                    scopes: SettingScopes.Application | SettingScopes.Tenant, isVisibleToClients: false));
+
+                if (activePaymentGateWays.Any(o => o.GatewayType == SubscriptionPaymentGatewayType.Paypal))
+                {
+                    res.Add(new SettingDefinition(AppSettings.PaymentManagement.PayPalIsActive,
+                        GetFromAppSettings(AppSettings.PaymentManagement.PayPalIsActive, "false"),
+                        scopes: SettingScopes.Application | SettingScopes.Tenant, isVisibleToClients: false));
+
+                    res.Add(new SettingDefinition(AppSettings.PaymentManagement.PayPalEnvironment,
+                        GetFromAppSettings(AppSettings.PaymentManagement.PayPalEnvironment, "sandbox"),
+                        scopes: SettingScopes.Application | SettingScopes.Tenant, isVisibleToClients: false));
+
+                    res.Add(new SettingDefinition(AppSettings.PaymentManagement.PayPalClientId,
+                        GetFromAppSettings(AppSettings.PaymentManagement.PayPalClientId, ""),
+                        scopes: SettingScopes.Application | SettingScopes.Tenant, isVisibleToClients: false));
+
+                    res.Add(new SettingDefinition(AppSettings.PaymentManagement.PayPalClientSecret,
+                        GetFromAppSettings(AppSettings.PaymentManagement.PayPalClientSecret, ""),
+                        scopes: SettingScopes.Application | SettingScopes.Tenant, isVisibleToClients: false));
+
+                    res.Add(new SettingDefinition(AppSettings.PaymentManagement.PayPalDemoUsername,
+                        GetFromAppSettings(AppSettings.PaymentManagement.PayPalDemoUsername, ""),
+                        scopes: SettingScopes.Application | SettingScopes.Tenant, isVisibleToClients: false));
+
+                    res.Add(new SettingDefinition(AppSettings.PaymentManagement.PayPalDemoPassword,
+                        GetFromAppSettings(AppSettings.PaymentManagement.PayPalDemoPassword, ""),
+                        scopes: SettingScopes.Application | SettingScopes.Tenant, isVisibleToClients: false));
+                }
+
+                if (activePaymentGateWays.Any(o => o.GatewayType == SubscriptionPaymentGatewayType.AlePay))
+                {
+                    res.Add(new SettingDefinition(AppSettings.PaymentManagement.AlePayIsActive,
+                        GetFromAppSettings(AppSettings.PaymentManagement.AlePayIsActive, "false"),
+                        scopes: SettingScopes.Application | SettingScopes.Tenant, isVisibleToClients: false));
+
+                    res.Add(new SettingDefinition(AppSettings.PaymentManagement.AlePayBaseUrl,
+                        GetFromAppSettings(AppSettings.PaymentManagement.AlePayBaseUrl, ""),
+                        scopes: SettingScopes.Application | SettingScopes.Tenant, isVisibleToClients: false));
+
+                    res.Add(new SettingDefinition(AppSettings.PaymentManagement.AlePayTokenKey,
+                        GetFromAppSettings(AppSettings.PaymentManagement.AlePayTokenKey, ""),
+                        scopes: SettingScopes.Application | SettingScopes.Tenant, isVisibleToClients: false));
+
+                    res.Add(new SettingDefinition(AppSettings.PaymentManagement.AlePayChecksumKey,
+                        GetFromAppSettings(AppSettings.PaymentManagement.AlePayChecksumKey, ""),
+                        scopes: SettingScopes.Application | SettingScopes.Tenant, isVisibleToClients: false));
+                }
+            }
+
+            return res;
         }
 
         private string GetFromAppSettings(string name, string defaultValue = null)

@@ -11,6 +11,7 @@ using Abp.Net.Mail;
 using Abp.Runtime.Security;
 using Abp.Timing;
 using Abp.Zero.Configuration;
+using Zero.Abp.Configuration.Dto;
 using Zero.Authentication;
 using Zero.Authorization;
 using Zero.Configuration.Dto;
@@ -24,6 +25,7 @@ namespace Zero.Configuration.Host
     [AbpAuthorize(AppPermissions.Pages_Administration_Host_Settings)]
     public class HostSettingsAppService : SettingsAppServiceBase, IHostSettingsAppService
     {
+        #region Constructor
         public IExternalLoginOptionsCacheManager ExternalLoginOptionsCacheManager { get; set; }
 
         private readonly EditionManager _editionManager;
@@ -43,7 +45,8 @@ namespace Zero.Configuration.Host
             _timeZoneService = timeZoneService;
             _settingDefinitionManager = settingDefinitionManager;
         }
-
+        #endregion
+        
         #region Get Settings
 
         public async Task<HostSettingsEditDto> GetAllSettings()
@@ -55,6 +58,7 @@ namespace Zero.Configuration.Host
                 UserManagement = await GetUserManagementAsync(),
                 Email = await GetEmailSettingsAsync(),
                 Security = await GetSecuritySettingsAsync(),
+                Payment = await GetPaymentSettingsAsync(),
                 Billing = await GetBillingSettingsAsync(),
                 OtherSettings = await GetOtherSettingsAsync(),
                 ExternalLoginProviderSettings = await GetExternalLoginProviderSettings()
@@ -233,6 +237,27 @@ namespace Zero.Configuration.Host
             };
         }
 
+        private async Task<PaymentManagementSettingsEditDto> GetPaymentSettingsAsync()
+        {
+            return new PaymentManagementSettingsEditDto
+            {
+                AllowTenantUseCustomConfig = await SettingManager.GetSettingValueAsync<bool>(AppSettings.PaymentManagement.AllowTenantUseCustomConfig),
+                UseCustomPaymentConfig = await SettingManager.GetSettingValueAsync<bool>(AppSettings.PaymentManagement.UseCustomPaymentConfig),
+                
+                PayPalIsActive = await SettingManager.GetSettingValueAsync<bool>(AppSettings.PaymentManagement.PayPalIsActive),
+                PayPalEnvironment = await SettingManager.GetSettingValueAsync(AppSettings.PaymentManagement.PayPalEnvironment),
+                PayPalClientId = await SettingManager.GetSettingValueAsync(AppSettings.PaymentManagement.PayPalClientId),
+                PayPalClientSecret = await SettingManager.GetSettingValueAsync(AppSettings.PaymentManagement.PayPalClientSecret),
+                PayPalDemoUsername = await SettingManager.GetSettingValueAsync(AppSettings.PaymentManagement.PayPalDemoUsername),
+                PayPalDemoPassword = await SettingManager.GetSettingValueAsync(AppSettings.PaymentManagement.PayPalDemoPassword),
+                
+                AlePayIsActive = await SettingManager.GetSettingValueAsync<bool>(AppSettings.PaymentManagement.AlePayIsActive),
+                AlePayBaseUrl = await SettingManager.GetSettingValueAsync(AppSettings.PaymentManagement.AlePayBaseUrl),
+                AlePayTokenKey = await SettingManager.GetSettingValueAsync(AppSettings.PaymentManagement.AlePayTokenKey),
+                AlePayChecksumKey = await SettingManager.GetSettingValueAsync(AppSettings.PaymentManagement.AlePayChecksumKey),
+            };
+        }
+        
         private async Task<HostBillingSettingsEditDto> GetBillingSettingsAsync()
         {
             return new HostBillingSettingsEditDto
@@ -364,6 +389,7 @@ namespace Zero.Configuration.Host
             await UpdateUserManagementSettingsAsync(input.UserManagement);
             await UpdateSecuritySettingsAsync(input.Security);
             await UpdateEmailSettingsAsync(input.Email);
+            await UpdatePaymentSettingsAsync(input.Payment);
             await UpdateBillingSettingsAsync(input.Billing);
             await UpdateOtherSettingsAsync(input.OtherSettings);
             await UpdateExternalLoginSettingsAsync(input.ExternalLoginProviderSettings);
@@ -377,6 +403,39 @@ namespace Zero.Configuration.Host
             );
         }
 
+        private async Task UpdatePaymentSettingsAsync(PaymentManagementSettingsEditDto input)
+        {
+            await SettingManager.ChangeSettingForApplicationAsync(AppSettings.PaymentManagement.AllowTenantUseCustomConfig,
+                input.AllowTenantUseCustomConfig.ToString().ToLowerInvariant());
+            
+            await SettingManager.ChangeSettingForApplicationAsync(AppSettings.PaymentManagement.UseCustomPaymentConfig,
+                input.UseCustomPaymentConfig.ToString().ToLowerInvariant());
+            
+            // Paypal
+            await SettingManager.ChangeSettingForApplicationAsync(AppSettings.PaymentManagement.PayPalIsActive,
+                input.PayPalIsActive.ToString().ToLowerInvariant());
+            await SettingManager.ChangeSettingForApplicationAsync(AppSettings.PaymentManagement.PayPalEnvironment,
+                input.PayPalEnvironment);
+            await SettingManager.ChangeSettingForApplicationAsync(AppSettings.PaymentManagement.PayPalClientId,
+                input.PayPalClientId);
+            await SettingManager.ChangeSettingForApplicationAsync(AppSettings.PaymentManagement.PayPalClientSecret,
+                input.PayPalClientSecret);
+            await SettingManager.ChangeSettingForApplicationAsync(AppSettings.PaymentManagement.PayPalDemoUsername,
+                input.PayPalDemoUsername);
+            await SettingManager.ChangeSettingForApplicationAsync(AppSettings.PaymentManagement.PayPalDemoPassword,
+                input.PayPalDemoPassword);
+            
+            // AlePay
+            await SettingManager.ChangeSettingForApplicationAsync(AppSettings.PaymentManagement.AlePayIsActive,
+                input.AlePayIsActive.ToString().ToLowerInvariant());
+            await SettingManager.ChangeSettingForApplicationAsync(AppSettings.PaymentManagement.AlePayBaseUrl,
+                input.AlePayBaseUrl);
+            await SettingManager.ChangeSettingForApplicationAsync(AppSettings.PaymentManagement.AlePayTokenKey,
+                input.AlePayTokenKey);
+            await SettingManager.ChangeSettingForApplicationAsync(AppSettings.PaymentManagement.AlePayChecksumKey,
+                input.AlePayChecksumKey);
+        }
+        
         private async Task UpdateBillingSettingsAsync(HostBillingSettingsEditDto input)
         {
             await SettingManager.ChangeSettingForApplicationAsync(AppSettings.HostManagement.BillingLegalName,

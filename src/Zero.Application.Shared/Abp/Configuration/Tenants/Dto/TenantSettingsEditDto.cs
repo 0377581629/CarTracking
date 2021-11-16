@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using Abp.Runtime.Validation;
 using Abp.Timing;
+using Zero.Abp.Configuration.Dto;
 using Zero.Configuration.Dto;
 using Zero.Configuration.Host.Dto;
 
@@ -21,6 +22,8 @@ namespace Zero.Configuration.Tenants.Dto
         [Required]
         public SecuritySettingsEditDto Security { get; set; }
 
+        public PaymentManagementSettingsEditDto Payment { get; set; }
+        
         public TenantBillingSettingsEditDto Billing { get; set; }
 
         public TenantOtherSettingsEditDto OtherSettings { get; set; }

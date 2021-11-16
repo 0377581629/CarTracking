@@ -60,6 +60,15 @@
                                 @L("EmailSmtp")
                             </a>
                         </li>
+                        @if (Model.ActivePayment && ViewBag.IsMultiTenancyEnabled)
+                        {
+                            <li class="nav-item">
+                                <a href="#SettingsPaymentManagementTab" data-toggle="tab" role="tab" class="nav-link">
+                                    @L("PaymentManagement")
+                                </a>
+                            </li>
+                        }
+                        
                         @if (ViewBag.IsMultiTenancyEnabled)
                         {
                             <li class="nav-item">
@@ -89,6 +98,7 @@
                         @await Html.PartialAsync("Components/UserManagerTab", Model)
                         @await Html.PartialAsync("Components/SecurityTab", Model)
                         @await Html.PartialAsync("Components/EmailTab", Model)
+                        @await Html.PartialAsync("Components/PaymentManagerTab", Model)
                         @await Html.PartialAsync("Components/InvoiceTab", Model)
                         @await Html.PartialAsync("Components/OtherTab", Model)
                         @await Html.PartialAsync("Components/SocialTab", Model)
