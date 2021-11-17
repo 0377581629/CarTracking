@@ -37,65 +37,74 @@ namespace Zero.Abp.Payments
             var gatewaysByConfig = AllActivePaymentGatewayFromConfig();
             if (gatewaysByConfig == null || !gatewaysByConfig.Any())
                 return new List<PaymentGatewayModel>();
-
             if (!_multiTenancyConfig.IsEnabled || !_abpSession.TenantId.HasValue) return gatewaysByConfig;
             
-            var tenantUseCustomConfig = await _settingManager.GetSettingValueForTenantAsync<bool>(AppSettings.PaymentManagement.AllowTenantUseCustomConfig, _abpSession.GetTenantId());
+            var allowTenantUseCustomConfig = await _settingManager.GetSettingValueForTenantAsync<bool>(AppSettings.PaymentManagement.AllowTenantUseCustomConfig, _abpSession.GetTenantId());
             
-            return tenantUseCustomConfig ? gatewaysByConfig : new List<PaymentGatewayModel>();
-            // {
-            //     var useCustomConfig = await _settingManager.GetSettingValueForApplicationAsync<bool>(AppSettings.PaymentManagement.UseCustomPaymentConfig);
-            //     if (!useCustomConfig) return gatewaysByConfig;
-            //     var payPalIsActive = false;
-            //     if (gatewaysByConfig.Any(o => o.GatewayType == SubscriptionPaymentGatewayType.Paypal))
-            //         payPalIsActive = await _settingManager.GetSettingValueForApplicationAsync<bool>(AppSettings.PaymentManagement.PayPalIsActive);
-            //     var alePayIsActive = false;
-            //     if (gatewaysByConfig.Any(o => o.GatewayType == SubscriptionPaymentGatewayType.AlePay))
-            //         alePayIsActive = await _settingManager.GetSettingValueForApplicationAsync<bool>(AppSettings.PaymentManagement.AlePayIsActive);
-            //     return gatewaysByConfig
-            //         .WhereIf(!payPalIsActive, o => o.GatewayType != SubscriptionPaymentGatewayType.Paypal)
-            //         .WhereIf(!alePayIsActive, o => o.GatewayType != SubscriptionPaymentGatewayType.AlePay)
-            //         .ToList();
-            // }
-
-            // var hostUseCustomConfig = await _settingManager.GetSettingValueForApplicationAsync<bool>(AppSettings.PaymentManagement.UseCustomPaymentConfig);
-            // var activePaymentGatewaysInHost = gatewaysByConfig;
-            // if (!_abpSession.TenantId.HasValue) return activePaymentGatewaysInHost;
-            //
-            // if (hostUseCustomConfig)
-            // {
-            //     var payPalIsActiveInHost = false;
-            //     if (gatewaysByConfig.Any(o => o.GatewayType == SubscriptionPaymentGatewayType.Paypal))
-            //         payPalIsActiveInHost = await _settingManager.GetSettingValueForApplicationAsync<bool>(AppSettings.PaymentManagement.PayPalIsActive);
-            //     
-            //     var alePayIsActiveInHost = false;
-            //     if (gatewaysByConfig.Any(o => o.GatewayType == SubscriptionPaymentGatewayType.AlePay))
-            //         alePayIsActiveInHost = await _settingManager.GetSettingValueForApplicationAsync<bool>(AppSettings.PaymentManagement.AlePayIsActive);
-            //     
-            //     activePaymentGatewaysInHost = gatewaysByConfig
-            //         .WhereIf(!payPalIsActiveInHost, o => o.GatewayType != SubscriptionPaymentGatewayType.Paypal)
-            //         .WhereIf(!alePayIsActiveInHost, o => o.GatewayType != SubscriptionPaymentGatewayType.AlePay)
-            //         .ToList();
-            // }
-            //
-            // return activePaymentGatewaysInHost;
-
-            
-            
-            // var payPalIsActiveInTenant = false;
-            // if (gatewaysByConfig.Any(o => o.GatewayType == SubscriptionPaymentGatewayType.AlePay))
-            //     payPalIsActiveInTenant = await _settingManager.GetSettingValueForTenantAsync<bool>(AppSettings.PaymentManagement.PayPalIsActive, _abpSession.GetTenantId());
-            //
-            // var alePayIsActiveInTenant = false ;
-            // if (gatewaysByConfig.Any(o => o.GatewayType == SubscriptionPaymentGatewayType.AlePay))
-            //     alePayIsActiveInTenant = await _settingManager.GetSettingValueForTenantAsync<bool>(AppSettings.PaymentManagement.AlePayIsActive, _abpSession.GetTenantId());
-            //
-            // return gatewaysByConfig
-            //     .WhereIf(!payPalIsActiveInTenant, o => o.GatewayType != SubscriptionPaymentGatewayType.Paypal)
-            //     .WhereIf(!alePayIsActiveInTenant, o => o.GatewayType != SubscriptionPaymentGatewayType.AlePay)
-            //     .ToList();
+            return allowTenantUseCustomConfig ? gatewaysByConfig: new List<PaymentGatewayModel>();
         }
 
+        public async Task<List<PaymentGatewayModel>> GetAllActivePaymentGateways()
+        {
+            var gatewaysByConfig = AllActivePaymentGatewayFromConfig();
+            if (gatewaysByConfig == null || !gatewaysByConfig.Any())
+                return new List<PaymentGatewayModel>();
+            
+            if (!_multiTenancyConfig.IsEnabled)
+            {
+                var useCustomConfig = await _settingManager.GetSettingValueForTenantAsync<bool>(AppSettings.PaymentManagement.UseCustomPaymentConfig, _abpSession.GetTenantId());
+                if (!useCustomConfig) return gatewaysByConfig;
+                var payPalIsActive = false;
+                if (gatewaysByConfig.Any(o => o.GatewayType == SubscriptionPaymentGatewayType.Paypal))
+                    payPalIsActive = await _settingManager.GetSettingValueForTenantAsync<bool>(AppSettings.PaymentManagement.PayPalIsActive, _abpSession.GetTenantId());
+                var alePayIsActive = false;
+                if (gatewaysByConfig.Any(o => o.GatewayType == SubscriptionPaymentGatewayType.AlePay))
+                    alePayIsActive = await _settingManager.GetSettingValueForTenantAsync<bool>(AppSettings.PaymentManagement.AlePayIsActive, _abpSession.GetTenantId());
+                return gatewaysByConfig
+                    .WhereIf(!payPalIsActive, o => o.GatewayType != SubscriptionPaymentGatewayType.Paypal)
+                    .WhereIf(!alePayIsActive, o => o.GatewayType != SubscriptionPaymentGatewayType.AlePay)
+                    .ToList();
+            }
+            
+            var hostUseCustomConfig = await _settingManager.GetSettingValueForApplicationAsync<bool>(AppSettings.PaymentManagement.UseCustomPaymentConfig);
+            var activePaymentGatewaysInHost = gatewaysByConfig;
+
+            if (hostUseCustomConfig)
+            {
+                var payPalIsActiveInHost = false;
+                if (gatewaysByConfig.Any(o => o.GatewayType == SubscriptionPaymentGatewayType.Paypal))
+                    payPalIsActiveInHost = await _settingManager.GetSettingValueForApplicationAsync<bool>(AppSettings.PaymentManagement.PayPalIsActive);
+                
+                var alePayIsActiveInHost = false;
+                if (gatewaysByConfig.Any(o => o.GatewayType == SubscriptionPaymentGatewayType.AlePay))
+                    alePayIsActiveInHost = await _settingManager.GetSettingValueForApplicationAsync<bool>(AppSettings.PaymentManagement.AlePayIsActive);
+                
+                activePaymentGatewaysInHost = gatewaysByConfig
+                    .WhereIf(!payPalIsActiveInHost, o => o.GatewayType != SubscriptionPaymentGatewayType.Paypal)
+                    .WhereIf(!alePayIsActiveInHost, o => o.GatewayType != SubscriptionPaymentGatewayType.AlePay)
+                    .ToList();
+            }
+            
+            if (!_abpSession.TenantId.HasValue) return activePaymentGatewaysInHost;
+            
+            var allowTenantUseCustomConfig = await _settingManager.GetSettingValueForApplicationAsync<bool>(AppSettings.PaymentManagement.AllowTenantUseCustomConfig);
+            var tenantUseCustomConfig = await _settingManager.GetSettingValueForTenantAsync<bool>(AppSettings.PaymentManagement.AllowTenantUseCustomConfig, _abpSession.GetTenantId());
+            if (!allowTenantUseCustomConfig || !tenantUseCustomConfig) return activePaymentGatewaysInHost;
+            
+            var payPalIsActiveInTenant = false;
+            if (gatewaysByConfig.Any(o => o.GatewayType == SubscriptionPaymentGatewayType.AlePay))
+                payPalIsActiveInTenant = await _settingManager.GetSettingValueForTenantAsync<bool>(AppSettings.PaymentManagement.PayPalIsActive, _abpSession.GetTenantId());
+            
+            var alePayIsActiveInTenant = false ;
+            if (gatewaysByConfig.Any(o => o.GatewayType == SubscriptionPaymentGatewayType.AlePay))
+                alePayIsActiveInTenant = await _settingManager.GetSettingValueForTenantAsync<bool>(AppSettings.PaymentManagement.AlePayIsActive, _abpSession.GetTenantId());
+            
+            return gatewaysByConfig
+                .WhereIf(!payPalIsActiveInTenant, o => o.GatewayType != SubscriptionPaymentGatewayType.Paypal)
+                .WhereIf(!alePayIsActiveInTenant, o => o.GatewayType != SubscriptionPaymentGatewayType.AlePay)
+                .ToList();
+        }
+        
         private List<PaymentGatewayModel> AllActivePaymentGatewayFromConfig()
         {
             return _paymentGatewayStore.GetActiveGateways();

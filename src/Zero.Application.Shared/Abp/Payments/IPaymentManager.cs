@@ -10,5 +10,7 @@ namespace Zero.Abp.Payments
         bool PaymentEnable();
 
         Task<List<PaymentGatewayModel>> GetAllPaymentGatewayForSettings();
+        
+        Task<List<PaymentGatewayModel>> GetAllActivePaymentGateways();
     }
 }

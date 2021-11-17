@@ -24,7 +24,7 @@ namespace Zero.Web.Areas.App.Models.Layout
         
         public string GetShownLoginName()
         {
-            var userName = "<span id=\"HeaderCurrentUserName\">" + LoginInformations.User.UserName + "</span>";
+            var userName = "<span id=\"HeaderCurrentUserName\" style=\"overflow-wrap: break-word;\">" + LoginInformations.User.UserName + "</span>";
 
             if (!IsMultiTenancyEnabled)
             {

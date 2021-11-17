@@ -39,6 +39,7 @@ namespace Zero.Web.Controllers
         }
         #endregion
         
+        #region Tenant Subscription
         public async Task<ActionResult> Purchase(long paymentId)
         {
             var payment = await _subscriptionPaymentRepository.GetAsync(paymentId);
@@ -126,8 +127,9 @@ namespace Zero.Web.Controllers
 
             return View(model);
         }
+        #endregion
         
-        
+        #region User Subscription
         [HttpPost]
         [AbpAuthorize]
         [UnitOfWork(IsDisabled = true)]
@@ -136,14 +138,12 @@ namespace Zero.Web.Controllers
             try
             {
                 await _payPalPaymentAppService.ConfirmUserPayment(paymentId, paypalOrderId);
-            
                 var returnUrl = await GetUserSuccessUrlAsync(paymentId);
                 return Redirect(returnUrl);
             }
             catch (Exception exception)
             {
                 Logger.Error(exception.Message, exception);
-
                 var returnUrl = await GetUserErrorUrlAsync(paymentId);
                 return Redirect(returnUrl);
             }
@@ -160,5 +160,6 @@ namespace Zero.Web.Controllers
             var payment = await _userSubscriptionPaymentRepository.GetAsync(paymentId);
             return payment.ErrorUrl + (payment.ErrorUrl.Contains("?") ? "&" : "?") + "paymentId=" + paymentId;
         }
+        #endregion
     }
 }

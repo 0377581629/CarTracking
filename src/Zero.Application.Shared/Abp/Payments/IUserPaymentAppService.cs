@@ -15,7 +15,7 @@ namespace Zero.Abp.Payments
 
         Task<PagedResultDto<UserSubscriptionPaymentListDto>> GetPaymentHistory(GetPaymentHistoryInput input);
 
-        List<PaymentGatewayModel> GetActiveGateways(GetActiveGatewaysInput input);
+        Task<List<PaymentGatewayModel>> GetActiveGateways(GetActiveGatewaysInput input);
 
         Task<UserSubscriptionPaymentDto> GetPaymentAsync(long paymentId);
 

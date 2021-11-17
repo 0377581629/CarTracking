@@ -43,7 +43,7 @@ else
         <div class="symbol-label" style="background-image:url('@Url.Action("GetProfilePicture", "Profile", new { area = string.Empty })?t=@Clock.Now.Ticks.ToString()')"></div>
     </div>
     <div class="d-flex flex-column">
-        <a href="#" class="font-weight-bold font-size-h5 text-dark-75 text-hover-primary">
+        <a href="#" class="font-weight-bold font-size-h5 text-dark-75 text-hover-primary" style="max-width: 150px;">
             @Html.Raw(Model.GetShownLoginName())
         </a>
         <div class="navi mt-2">
