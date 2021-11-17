@@ -126,80 +126,80 @@ namespace Zero.Configuration
         {
             var res = new List<SettingDefinition>
             {
-                new SettingDefinition(AppSettings.UserManagement.TwoFactorLogin.IsGoogleAuthenticatorEnabled,
+                new(AppSettings.UserManagement.TwoFactorLogin.IsGoogleAuthenticatorEnabled,
                     GetFromAppSettings(AppSettings.UserManagement.TwoFactorLogin.IsGoogleAuthenticatorEnabled, "false"),
                     scopes: SettingScopes.Application | SettingScopes.Tenant, isVisibleToClients: true),
-                new SettingDefinition(AppSettings.UserManagement.IsCookieConsentEnabled,
+                new(AppSettings.UserManagement.IsCookieConsentEnabled,
                     GetFromAppSettings(AppSettings.UserManagement.IsCookieConsentEnabled, "false"),
                     scopes: SettingScopes.Application | SettingScopes.Tenant, isVisibleToClients: true),
-                new SettingDefinition(AppSettings.UserManagement.IsQuickThemeSelectEnabled,
+                new(AppSettings.UserManagement.IsQuickThemeSelectEnabled,
                     GetFromAppSettings(AppSettings.UserManagement.IsQuickThemeSelectEnabled, "false"),
                     scopes: SettingScopes.Application | SettingScopes.Tenant, isVisibleToClients: true),
-                new SettingDefinition(AppSettings.UserManagement.UseCaptchaOnLogin,
+                new(AppSettings.UserManagement.UseCaptchaOnLogin,
                     GetFromAppSettings(AppSettings.UserManagement.UseCaptchaOnLogin, "false"),
                     scopes: SettingScopes.Application | SettingScopes.Tenant, isVisibleToClients: true),
-                new SettingDefinition(AppSettings.UserManagement.SessionTimeOut.IsEnabled,
+                new(AppSettings.UserManagement.SessionTimeOut.IsEnabled,
                     GetFromAppSettings(AppSettings.UserManagement.SessionTimeOut.IsEnabled, "false"),
                     isVisibleToClients: true, scopes: SettingScopes.Application | SettingScopes.Tenant),
-                new SettingDefinition(AppSettings.UserManagement.SessionTimeOut.TimeOutSecond,
+                new(AppSettings.UserManagement.SessionTimeOut.TimeOutSecond,
                     GetFromAppSettings(AppSettings.UserManagement.SessionTimeOut.TimeOutSecond, "30"),
                     isVisibleToClients: true, scopes: SettingScopes.Application | SettingScopes.Tenant),
-                new SettingDefinition(AppSettings.UserManagement.SessionTimeOut.ShowTimeOutNotificationSecond,
+                new(AppSettings.UserManagement.SessionTimeOut.ShowTimeOutNotificationSecond,
                     GetFromAppSettings(AppSettings.UserManagement.SessionTimeOut.ShowTimeOutNotificationSecond, "30"),
                     isVisibleToClients: true, scopes: SettingScopes.Application | SettingScopes.Tenant),
-                new SettingDefinition(AppSettings.UserManagement.SessionTimeOut.ShowLockScreenWhenTimedOut,
+                new(AppSettings.UserManagement.SessionTimeOut.ShowLockScreenWhenTimedOut,
                     GetFromAppSettings(AppSettings.UserManagement.SessionTimeOut.ShowLockScreenWhenTimedOut, "false"),
                     isVisibleToClients: true, scopes: SettingScopes.Application | SettingScopes.Tenant),
-                new SettingDefinition(AppSettings.UserManagement.AllowOneConcurrentLoginPerUser,
+                new(AppSettings.UserManagement.AllowOneConcurrentLoginPerUser,
                     GetFromAppSettings(AppSettings.UserManagement.AllowOneConcurrentLoginPerUser, "false"),
                     isVisibleToClients: true, scopes: SettingScopes.Application | SettingScopes.Tenant),
-                new SettingDefinition(AppSettings.UserManagement.AllowUsingGravatarProfilePicture,
+                new(AppSettings.UserManagement.AllowUsingGravatarProfilePicture,
                     GetFromAppSettings(AppSettings.UserManagement.AllowUsingGravatarProfilePicture, "false"),
                     isVisibleToClients: true, scopes: SettingScopes.Application | SettingScopes.Tenant),
-                new SettingDefinition(AppSettings.UserManagement.UseGravatarProfilePicture,
+                new(AppSettings.UserManagement.UseGravatarProfilePicture,
                     GetFromAppSettings(AppSettings.UserManagement.UseGravatarProfilePicture, "false"),
                     isVisibleToClients: true, scopes: SettingScopes.User),
 
                 // User Subscription 
-                new SettingDefinition(AppSettings.UserManagement.SubscriptionUser,
+                new(AppSettings.UserManagement.SubscriptionUser,
                     GetFromAppSettings(AppSettings.UserManagement.SubscriptionUser, "false"),
                     isVisibleToClients: false, scopes: SettingScopes.Application | SettingScopes.Tenant),
-                new SettingDefinition(AppSettings.UserManagement.SubscriptionCurrency,
+                new(AppSettings.UserManagement.SubscriptionCurrency,
                     GetFromAppSettings(AppSettings.UserManagement.SubscriptionCurrency, "VND"),
                     isVisibleToClients: false, scopes: SettingScopes.Application | SettingScopes.Tenant),
-                new SettingDefinition(AppSettings.UserManagement.SubscriptionTrialDays,
+                new(AppSettings.UserManagement.SubscriptionTrialDays,
                     GetFromAppSettings(AppSettings.UserManagement.SubscriptionTrialDays, "7"),
                     isVisibleToClients: false, scopes: SettingScopes.Application | SettingScopes.Tenant),
-                new SettingDefinition(AppSettings.UserManagement.SubscriptionMonthlyPrice,
+                new(AppSettings.UserManagement.SubscriptionMonthlyPrice,
                     GetFromAppSettings(AppSettings.UserManagement.SubscriptionMonthlyPrice, "30000"),
                     isVisibleToClients: false, scopes: SettingScopes.Application | SettingScopes.Tenant),
-                new SettingDefinition(AppSettings.UserManagement.SubscriptionYearlyPrice,
+                new(AppSettings.UserManagement.SubscriptionYearlyPrice,
                     GetFromAppSettings(AppSettings.UserManagement.SubscriptionYearlyPrice, "50000"),
                     isVisibleToClients: false, scopes: SettingScopes.Application | SettingScopes.Tenant),
 
                 // User Self Registration
-                new SettingDefinition(AppSettings.UserManagement.AllowSelfRegistration,
+                new(AppSettings.UserManagement.AllowSelfRegistration,
                     GetFromAppSettings(AppSettings.UserManagement.AllowSelfRegistration, "true"),
                     scopes: SettingScopes.Application | SettingScopes.Tenant, isVisibleToClients: true),
-                new SettingDefinition(AppSettings.UserManagement.IsNewRegisteredUserActiveByDefault,
+                new(AppSettings.UserManagement.IsNewRegisteredUserActiveByDefault,
                     GetFromAppSettings(AppSettings.UserManagement.IsNewRegisteredUserActiveByDefault, "false"),
                     scopes: SettingScopes.Application | SettingScopes.Tenant),
-                new SettingDefinition(AppSettings.UserManagement.UseCaptchaOnRegistration,
+                new(AppSettings.UserManagement.UseCaptchaOnRegistration,
                     GetFromAppSettings(AppSettings.UserManagement.UseCaptchaOnRegistration, "true"),
                     scopes: SettingScopes.Application | SettingScopes.Tenant, isVisibleToClients: true)
             };
             
+            res.Add(new SettingDefinition(AppSettings.PaymentManagement.AllowTenantUseCustomConfig,
+                GetFromAppSettings(AppSettings.PaymentManagement.AllowTenantUseCustomConfig, "false"),
+                scopes: SettingScopes.Application, isVisibleToClients: false));
+                
+            res.Add(new SettingDefinition(AppSettings.PaymentManagement.UseCustomPaymentConfig,
+                GetFromAppSettings(AppSettings.PaymentManagement.UseCustomPaymentConfig, "false"),
+                scopes: SettingScopes.Application | SettingScopes.Tenant, isVisibleToClients: false));
+            
             var activePaymentGateWays = _paymentGatewayStore.GetActiveGateways();
             if (activePaymentGateWays != null && activePaymentGateWays.Any())
             {
-                res.Add(new SettingDefinition(AppSettings.PaymentManagement.AllowTenantUseCustomConfig,
-                    GetFromAppSettings(AppSettings.PaymentManagement.AllowTenantUseCustomConfig, "false"),
-                    scopes: SettingScopes.Application, isVisibleToClients: false));
-                
-                res.Add(new SettingDefinition(AppSettings.PaymentManagement.UseCustomPaymentConfig,
-                    GetFromAppSettings(AppSettings.PaymentManagement.UseCustomPaymentConfig, "false"),
-                    scopes: SettingScopes.Application | SettingScopes.Tenant, isVisibleToClients: false));
-
                 if (activePaymentGateWays.Any(o => o.GatewayType == SubscriptionPaymentGatewayType.Paypal))
                 {
                     res.Add(new SettingDefinition(AppSettings.PaymentManagement.PayPalIsActive,
@@ -620,17 +620,17 @@ namespace Zero.Configuration
             //It is the default dashboard view which your user will see if they don't do any customization.
             return new List<Dashboard>
             {
-                new Dashboard
+                new()
                 {
                     DashboardName = ZeroDashboardCustomizationConsts.DashboardNames.DefaultTenantDashboard,
                     Pages = new List<Page>
                     {
-                        new Page
+                        new()
                         {
                             Name = ZeroDashboardCustomizationConsts.DefaultPageName,
                             Widgets = new List<Widget>
                             {
-                                new Widget
+                                new()
                                 {
                                     WidgetId = ZeroDashboardCustomizationConsts.Widgets.Tenant
                                         .GeneralStats, // General Stats
@@ -639,7 +639,7 @@ namespace Zero.Configuration
                                     PositionX = 0,
                                     PositionY = 19
                                 },
-                                new Widget
+                                new()
                                 {
                                     WidgetId = ZeroDashboardCustomizationConsts.Widgets.Tenant
                                         .ProfitShare, // Profit Share
@@ -648,7 +648,7 @@ namespace Zero.Configuration
                                     PositionX = 0,
                                     PositionY = 28
                                 },
-                                new Widget
+                                new()
                                 {
                                     WidgetId =
                                         ZeroDashboardCustomizationConsts.Widgets.Tenant
@@ -658,7 +658,7 @@ namespace Zero.Configuration
                                     PositionX = 6,
                                     PositionY = 28
                                 },
-                                new Widget
+                                new()
                                 {
                                     WidgetId = ZeroDashboardCustomizationConsts.Widgets.Tenant
                                         .RegionalStats, // Regional Stats
@@ -667,7 +667,7 @@ namespace Zero.Configuration
                                     PositionX = 6,
                                     PositionY = 5
                                 },
-                                new Widget
+                                new()
                                 {
                                     WidgetId = ZeroDashboardCustomizationConsts.Widgets.Tenant
                                         .DailySales, // Daily Sales
@@ -676,7 +676,7 @@ namespace Zero.Configuration
                                     PositionX = 6,
                                     PositionY = 19
                                 },
-                                new Widget
+                                new()
                                 {
                                     WidgetId = ZeroDashboardCustomizationConsts.Widgets.Tenant
                                         .TopStats, // Top Stats
@@ -685,7 +685,7 @@ namespace Zero.Configuration
                                     PositionX = 0,
                                     PositionY = 0
                                 },
-                                new Widget
+                                new()
                                 {
                                     WidgetId = ZeroDashboardCustomizationConsts.Widgets.Tenant
                                         .SalesSummary, // Sales Summary
@@ -698,17 +698,17 @@ namespace Zero.Configuration
                         }
                     }
                 },
-                new Dashboard
+                new()
                 {
                     DashboardName = ZeroDashboardCustomizationConsts.DashboardNames.DefaultHostDashboard,
                     Pages = new List<Page>
                     {
-                        new Page
+                        new()
                         {
                             Name = ZeroDashboardCustomizationConsts.DefaultPageName,
                             Widgets = new List<Widget>
                             {
-                                new Widget
+                                new()
                                 {
                                     WidgetId = ZeroDashboardCustomizationConsts.Widgets.Host
                                         .TopStats, // Top Stats
@@ -717,7 +717,7 @@ namespace Zero.Configuration
                                     PositionX = 0,
                                     PositionY = 0
                                 },
-                                new Widget
+                                new()
                                 {
                                     WidgetId =
                                         ZeroDashboardCustomizationConsts.Widgets.Host
@@ -727,7 +727,7 @@ namespace Zero.Configuration
                                     PositionX = 0,
                                     PositionY = 6
                                 },
-                                new Widget
+                                new()
                                 {
                                     WidgetId = ZeroDashboardCustomizationConsts.Widgets.Host
                                         .RecentTenants, // Recent tenants
@@ -736,7 +736,7 @@ namespace Zero.Configuration
                                     PositionX = 7,
                                     PositionY = 17
                                 },
-                                new Widget
+                                new()
                                 {
                                     WidgetId = ZeroDashboardCustomizationConsts.Widgets.Host
                                         .SubscriptionExpiringTenants, // Subscription expiring tenants
@@ -745,7 +745,7 @@ namespace Zero.Configuration
                                     PositionX = 0,
                                     PositionY = 17
                                 },
-                                new Widget
+                                new()
                                 {
                                     WidgetId = ZeroDashboardCustomizationConsts.Widgets.Host
                                         .EditionStatistics, // Edition statistics
@@ -766,17 +766,17 @@ namespace Zero.Configuration
             //It is the default dashboard view which your user will see if they don't do any customization.
             return new List<Dashboard>
             {
-                new Dashboard
+                new()
                 {
                     DashboardName = ZeroDashboardCustomizationConsts.DashboardNames.DefaultTenantDashboard,
                     Pages = new List<Page>
                     {
-                        new Page
+                        new()
                         {
                             Name = ZeroDashboardCustomizationConsts.DefaultPageName,
                             Widgets = new List<Widget>
                             {
-                                new Widget
+                                new()
                                 {
                                     WidgetId = ZeroDashboardCustomizationConsts.Widgets.Tenant
                                         .TopStats, // Top Stats
@@ -785,7 +785,7 @@ namespace Zero.Configuration
                                     PositionX = 0,
                                     PositionY = 0
                                 },
-                                new Widget
+                                new()
                                 {
                                     WidgetId = ZeroDashboardCustomizationConsts.Widgets.Tenant
                                         .SalesSummary, // Sales Summary
@@ -794,7 +794,7 @@ namespace Zero.Configuration
                                     PositionX = 0,
                                     PositionY = 4
                                 },
-                                new Widget
+                                new()
                                 {
                                     WidgetId = ZeroDashboardCustomizationConsts.Widgets.Tenant
                                         .RegionalStats, // Regional Stats
@@ -803,7 +803,7 @@ namespace Zero.Configuration
                                     PositionX = 6,
                                     PositionY = 4
                                 },
-                                new Widget
+                                new()
                                 {
                                     WidgetId = ZeroDashboardCustomizationConsts.Widgets.Tenant
                                         .GeneralStats, // General Stats
@@ -812,7 +812,7 @@ namespace Zero.Configuration
                                     PositionX = 0,
                                     PositionY = 16
                                 },
-                                new Widget
+                                new()
                                 {
                                     WidgetId = ZeroDashboardCustomizationConsts.Widgets.Tenant
                                         .DailySales, // Daily Sales
@@ -821,7 +821,7 @@ namespace Zero.Configuration
                                     PositionX = 6,
                                     PositionY = 16
                                 },
-                                new Widget
+                                new()
                                 {
                                     WidgetId = ZeroDashboardCustomizationConsts.Widgets.Tenant
                                         .ProfitShare, // Profit Share
@@ -830,7 +830,7 @@ namespace Zero.Configuration
                                     PositionX = 0,
                                     PositionY = 24
                                 },
-                                new Widget
+                                new()
                                 {
                                     WidgetId =
                                         ZeroDashboardCustomizationConsts.Widgets.Tenant
@@ -844,17 +844,17 @@ namespace Zero.Configuration
                         }
                     }
                 },
-                new Dashboard
+                new()
                 {
                     DashboardName = ZeroDashboardCustomizationConsts.DashboardNames.DefaultHostDashboard,
                     Pages = new List<Page>
                     {
-                        new Page
+                        new()
                         {
                             Name = ZeroDashboardCustomizationConsts.DefaultPageName,
                             Widgets = new List<Widget>
                             {
-                                new Widget
+                                new()
                                 {
                                     WidgetId = ZeroDashboardCustomizationConsts.Widgets.Host
                                         .TopStats, // Top Stats
@@ -863,7 +863,7 @@ namespace Zero.Configuration
                                     PositionX = 0,
                                     PositionY = 0
                                 },
-                                new Widget
+                                new()
                                 {
                                     WidgetId =
                                         ZeroDashboardCustomizationConsts.Widgets.Host
@@ -873,7 +873,7 @@ namespace Zero.Configuration
                                     PositionX = 0,
                                     PositionY = 4
                                 },
-                                new Widget
+                                new()
                                 {
                                     WidgetId =
                                         ZeroDashboardCustomizationConsts.Widgets.Host
@@ -883,7 +883,7 @@ namespace Zero.Configuration
                                     PositionX = 7,
                                     PositionY = 12
                                 },
-                                new Widget
+                                new()
                                 {
                                     WidgetId = ZeroDashboardCustomizationConsts.Widgets.Host
                                         .SubscriptionExpiringTenants, // Subscription expiring tenants
@@ -892,7 +892,7 @@ namespace Zero.Configuration
                                     PositionX = 0,
                                     PositionY = 12
                                 },
-                                new Widget
+                                new()
                                 {
                                     WidgetId = ZeroDashboardCustomizationConsts.Widgets.Host
                                         .EditionStatistics, // Edition statistics

@@ -132,6 +132,13 @@
     
     <!--    -->
     
+    <!--  Payment Management Settings  -->
+    <text name="PaymentManagement">Cổng thanh toán</text>
+    <text name="AllowTenantUseCustomConfig">Cho phép các đơn vị dùng cấu hình riêng</text>
+    <text name="UseCustomPaymentConfig">Sử dụng cấu hình riêng</text>
+    <text name="UseCustomPaymentConfig_Hint">Hệ thống sử dụng cấu hình chung toàn hệ thống nếu cấu hình riêng không được kích hoạt</text>
+    <!--    -->
+    
     <!--  Email Template  -->
     <text name="EmailTemplateType">Loại Email mẫu</text>
     <text name="EmailTemplate">Email mẫu</text>
@@ -161,6 +168,8 @@
     <text name="SelectAPermission">Chọn quyền tham chiếu</text>
 
     <text name="DynamicEntityProperties">Cấu hình thuộc tính cho đối tượng</text>
+    <text name="EntityDynamicPropertyValue">Thiết lập giá trị cho thuộc tính động của đối tượng</text>
+    <text name="DynamicPropertyValue">Thiết lập giá trị cho thuộc tính động</text>
 
     <text name="EntityFullName">Tên đối tượng</text>
     
@@ -357,6 +366,7 @@
     <text name="TenantsHeaderInfo">Quản lý đơn vị sử dụng.</text>
     <text name="CreateNewTenant">Tạo đơn vị sử dụng mới</text>
     <text name="TenancyCodeName">Mã đơn vị sử dụng</text>
+    <text name="MoveTenantsToAnotherEdition">Chuyển phiên bản</text>
     <text name="TenantName">Tên đơn vị sử dụng</text>
     <text name="TenantDeleteWarningMessage">Đơn vị sử dụng {0} sẽ bị xóa.</text>
     <text name="AdminEmailAddress">email quản trị</text>
