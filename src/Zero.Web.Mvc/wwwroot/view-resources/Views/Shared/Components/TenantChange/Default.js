@@ -58,10 +58,12 @@
     
     $('body').on('change', '#TenantPicker', function(){
         let tenancyName = $(this).val();
-
-        if (!tenancyName) {
+        console.log(tenancyName);
+        if (!tenancyName || tenancyName.length === 0) {
             abp.multiTenancy.setTenantIdCookie(null);
-            location.reload();
+            console.log(abp.multiTenancy.tenantIdCookieName);
+            console.log('abc');
+            //location.reload();
             return;
         }
 
@@ -72,7 +74,7 @@
             switch (result.state) {
                 case 1: //Available
                     abp.multiTenancy.setTenantIdCookie(result.tenantId);
-                    location.reload();
+                    //location.reload();
                     return;
                 case 2: //InActive
                     abp.message.warn(app.localize('TenantIsNotActive', tenancyName));

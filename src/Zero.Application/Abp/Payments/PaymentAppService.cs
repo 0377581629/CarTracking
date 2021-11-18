@@ -27,21 +27,21 @@ namespace Zero.Abp.Payments
     {
         private readonly ISubscriptionPaymentRepository _subscriptionPaymentRepository;
         private readonly EditionManager _editionManager;
-        private readonly IPaymentGatewayStore _paymentGatewayStore;
+        private readonly IPaymentManager _paymentManager;
         private readonly TenantManager _tenantManager;
         private readonly ICurrencyRateAppService _currencyRateAppService;
         private readonly IAlePayPaymentAppService _alePayPaymentAppService;
         public PaymentAppService(
             ISubscriptionPaymentRepository subscriptionPaymentRepository,
             EditionManager editionManager,
-            IPaymentGatewayStore paymentGatewayStore,
+            IPaymentManager paymentManager,
             TenantManager tenantManager,
             ICurrencyRateAppService currencyRateAppService, 
             IAlePayPaymentAppService alePayPaymentAppService)
         {
             _subscriptionPaymentRepository = subscriptionPaymentRepository;
             _editionManager = editionManager;
-            _paymentGatewayStore = paymentGatewayStore;
+            _paymentManager = paymentManager;
             _tenantManager = tenantManager;
             _currencyRateAppService = currencyRateAppService;
             _alePayPaymentAppService = alePayPaymentAppService;
@@ -156,9 +156,9 @@ namespace Zero.Abp.Payments
             return new PagedResultDto<SubscriptionPaymentListDto>(paymentsCount, ObjectMapper.Map<List<SubscriptionPaymentListDto>>(payments));
         }
 
-        public List<PaymentGatewayModel> GetActiveGateways(GetActiveGatewaysInput input)
+        public async Task<List<PaymentGatewayModel>> GetActiveGateways(GetActiveGatewaysInput input)
         {
-            return _paymentGatewayStore.GetActiveGateways()
+            return (await _paymentManager.GetAllActivePaymentGatewaysInHost())
                 .WhereIf(input.RecurringPaymentsEnabled.HasValue, gateway => gateway.SupportsRecurringPayments == input.RecurringPaymentsEnabled.Value)
                 .ToList();
         }

@@ -47,6 +47,9 @@ namespace Zero.Web.Startup
                 return;
             }
 
+            var multiTenancyConfig = IocManager.Resolve<IMultiTenancyConfig>();
+            multiTenancyConfig.TenantIdResolveKey = "abp.tenantid";
+            
             using (var scope = IocManager.CreateScope())
             {
                 if (!scope.Resolve<DatabaseCheckHelper>().Exist(_appConfiguration["ConnectionStrings:Default"]))
