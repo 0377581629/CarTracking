@@ -23,6 +23,7 @@ namespace Zero.Web.Controllers
         protected void SetTenantIdCookie(int? tenantId)
         {
             var multiTenancyConfig = HttpContext.RequestServices.GetRequiredService<IMultiTenancyConfig>();
+
             Response.Cookies.Append(
                 multiTenancyConfig.TenantIdResolveKey,
                 tenantId?.ToString() ?? string.Empty,

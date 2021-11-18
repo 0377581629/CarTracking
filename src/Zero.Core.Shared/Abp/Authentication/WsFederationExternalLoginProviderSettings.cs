@@ -5,6 +5,7 @@ namespace Zero.Authentication
 {
     public class WsFederationExternalLoginProviderSettings
     {
+        public bool IsEnabled { get; set; }
         public string ClientId { get; set; }
         
         public string Tenant { get; set; }

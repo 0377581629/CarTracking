@@ -122,6 +122,7 @@
 @WebResourceManager.RenderScripts()
 
 @await RenderSectionAsync("Scripts", false)
+
 <script>
     app.supportsTenancyNameInUrl = @(WebUrlService.SupportsTenancyNameInUrl.ToString().ToLower());
 
@@ -129,8 +130,14 @@
         if (window.CurrentPage) {
             CurrentPage.init();
         }
+        abp.multiTenancy.tenantIdCookieName = 'abp.tenantid';
+        $('.kt-select2').select2({
+            width: '100%',
+            dropdownAutoWidth: true
+        });
+        
     });
-    abp.multiTenancy.tenantIdCookieName = 'abp.tenantId';
+    
 </script>
 </body>
 </html>

@@ -9,18 +9,16 @@ using Abp.Authorization.Users;
 using Abp.Domain.Repositories;
 using Abp.Linq.Extensions;
 using Abp.MultiTenancy;
-using Abp.Runtime.Session;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Zero;
-using Zero.Authorization.Users;
+using Zero.Customize.Interfaces;
 using Zero.Dto;
 using Zero.Editions;
 using Zero.Editions.Dto;
 using Zero.MultiTenancy;
 using Zero.MultiTenancy.Dto;
 
-namespace Zero
+namespace Zero.Customize
 {
     [AbpAuthorize]
     public class ZeroAppService : ZeroAppServiceBase, IZeroAppService
@@ -213,7 +211,7 @@ namespace Zero
                 res
             );
         }
-
+        
         #endregion
 
         #region Role

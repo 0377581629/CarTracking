@@ -1,17 +1,19 @@
 class AbpConfig {
-  static const hostUrl = "https://10.0.2.2:44302/";
+  static String hostUrl = "https://10.0.2.2:44302/";
+
   static const userAgent = "AbpApiClient";
 
-  static const tenantResolveKey = "Abp.TenantId";
+  static const fixedMultiTenant = false;
 
-  static const loginUrlSegment = "api/TokenAuth/Authenticate";
-  static const refreshTokenUrlSegment = "api/TokenAuth/RefreshToken";
+  static const tenantName = '';
+
+  static const tenantResolveKey = "Abp.TenantId";
 
   static const languageKey = ".AspNetCore.Culture";
 
   static const appName = "ZeroBase-App";
 
-  static const languageSource = "Zero";
+  static const languageSource = "AbpZero";
 }
 
 class DataStorageKey {

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Zero.Abp.Configuration.Dto;
 using Zero.Configuration.Dto;
 using Zero.Configuration.Tenants.Dto;
 
@@ -20,6 +21,8 @@ namespace Zero.Configuration.Host.Dto
 
         [Required]
         public SecuritySettingsEditDto Security { get; set; }
+        
+        public PaymentManagementSettingsEditDto Payment { get; set; }
 
         public HostBillingSettingsEditDto Billing { get; set; }
 

@@ -159,12 +159,14 @@
                 showTimeOutNotificationSecond: $("#Setting_ShowTimeOutNotificationSecond").val(),
                 showLockScreenWhenTimedOut: $('#Setting_ShowLockScreenWhenTimedOut').is(':checked')
             };
+            abp.ui.setBusy();
             _hostSettingsService.updateAllSettings({
                 general: $('#GeneralSettingsForm').serializeFormToObject(),
                 tenantManagement: $('#TenantManagementSettingsForm').serializeFormToObject(),
                 userManagement: userManagement,
                 email: $('#EmailSmtpSettingsForm').serializeFormToObject(),
                 chat: $('#ChatSettingsForm').serializeFormToObject(),
+                payment: $('#PaymentManagementSettingsForm').serializeFormToObject(),
                 billing: $('#BillingSettingsForm').serializeFormToObject(),
                 otherSettings: $('#OtherSettingsForm').serializeFormToObject(),
                 security: {
@@ -231,6 +233,8 @@
                     });
                 }
                 _initialEmailSettings = $('#EmailSmtpSettingsForm').serializeFormToObject();
+            }).always(function(){
+                abp.ui.clearBusy();
             });
         });
 

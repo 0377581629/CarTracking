@@ -4,6 +4,8 @@ namespace Zero.Authentication
 {
     public class FacebookExternalLoginProviderSettings
     {
+        public bool IsEnabled { get; set; }
+        
         public string AppId { get; set; }
         public string AppSecret { get; set; }
         

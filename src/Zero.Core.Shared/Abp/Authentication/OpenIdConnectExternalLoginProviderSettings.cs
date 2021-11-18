@@ -6,6 +6,7 @@ namespace Zero.Authentication
 {
     public class OpenIdConnectExternalLoginProviderSettings
     {
+        public bool IsEnabled { get; set; }
         public string ClientId { get; set; }
         public string ClientSecret { get; set; }
         public string Authority { get; set; }

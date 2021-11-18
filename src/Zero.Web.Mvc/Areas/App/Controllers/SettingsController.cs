@@ -5,6 +5,7 @@ using Abp.Configuration.Startup;
 using Abp.Runtime.Session;
 using Abp.Timing;
 using Microsoft.AspNetCore.Mvc;
+using Zero.Abp.Payments;
 using Zero.Authorization;
 using Zero.Authorization.Users;
 using Zero.Configuration;
@@ -27,14 +28,15 @@ namespace Zero.Web.Areas.App.Controllers
         private readonly ITenantSettingsAppService _tenantSettingsAppService;
         private readonly IMultiTenancyConfig _multiTenancyConfig;
         private readonly ITimingAppService _timingAppService;
-
+        private readonly IPaymentManager _paymentManager;
         public SettingsController(
             ITenantSettingsAppService tenantSettingsAppService,
             IMultiTenancyConfig multiTenancyConfig,
             ITimingAppService timingAppService, 
             UserManager userManager, 
             TenantManager tenantManager,
-            IAppConfigurationAccessor configurationAccessor)
+            IAppConfigurationAccessor configurationAccessor, 
+            IPaymentManager paymentManager)
         {
             _tenantSettingsAppService = tenantSettingsAppService;
             _multiTenancyConfig = multiTenancyConfig;
@@ -42,6 +44,7 @@ namespace Zero.Web.Areas.App.Controllers
             _userManager = userManager;
             _tenantManager = tenantManager;
             _configurationAccessor = configurationAccessor;
+            _paymentManager = paymentManager;
         }
 
         public async Task<ActionResult> Index()
@@ -67,7 +70,8 @@ namespace Zero.Web.Areas.App.Controllers
             var model = new SettingsViewModel
             {
                 Settings = output,
-                TimezoneItems = timezoneItems
+                TimezoneItems = timezoneItems,
+                ActivePaymentGateways = await _paymentManager.GetAllPaymentGatewayForSettings()
             };
 
             AddEnabledSocialLogins(model);

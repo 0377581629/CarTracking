@@ -100,6 +100,7 @@ namespace Zero.Web.Startup
                     options.OperationFilter<SwaggerOperationIdFilter>();
                     options.OperationFilter<SwaggerOperationFilter>();
                     options.CustomDefaultSchemaIdSelector();
+                    options.CustomSchemaIds(type => type.ToString());
                 }).AddSwaggerGenNewtonsoftSupport();
             }
 

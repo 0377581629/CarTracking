@@ -27,56 +27,65 @@ namespace Zero.Abp.Payments
     public class UserPaymentAppService : ZeroAppServiceBase, IUserPaymentAppService
     {
         private readonly IUserSubscriptionPaymentRepository _userSubscriptionPaymentRepository;
-        
-        private readonly IPaymentGatewayStore _paymentGatewayStore;
+
+        private readonly IPaymentManager _paymentManager;
         private readonly IRepository<User, long> _userRepository;
         private readonly UserManager _userManager;
         private readonly ISettingManager _settingManager;
 
         private readonly ICurrencyRateAppService _currencyRateAppService;
         private readonly IAlePayPaymentAppService _alePayPaymentAppService;
-        
+
         public UserPaymentAppService(
             IUserSubscriptionPaymentRepository userSubscriptionPaymentRepository,
-            IPaymentGatewayStore paymentGatewayStore,
-            UserManager userManager, 
-            IRepository<User, long> userRepository, 
+            IPaymentManager paymentManager,
+            UserManager userManager,
+            IRepository<User, long> userRepository,
             ISettingManager settingManager,
-            ICurrencyRateAppService currencyRateAppService, 
+            ICurrencyRateAppService currencyRateAppService,
             IAlePayPaymentAppService alePayPaymentAppService)
         {
             _userSubscriptionPaymentRepository = userSubscriptionPaymentRepository;
-            _paymentGatewayStore = paymentGatewayStore;
+            _paymentManager = paymentManager;
             _userManager = userManager;
             _userRepository = userRepository;
             _settingManager = settingManager;
             _currencyRateAppService = currencyRateAppService;
             _alePayPaymentAppService = alePayPaymentAppService;
         }
-        
+
         public async Task<long> CreatePayment(CreateUserPaymentDto input)
         {
             if (!AbpSession.UserId.HasValue)
             {
-                throw new ApplicationException("A user subscription payment only can be created for a user. UserId is not set in the IAbpSession!");
+                throw new ApplicationException(
+                    "A user subscription payment only can be created for a user. UserId is not set in the IAbpSession!");
             }
 
-            decimal amount=0;
+            decimal amount = 0;
             double monthlyPrice = 0;
             double yearlyPrice = 0;
             string currency = ZeroConsts.Currency;
-            
+
             var user = await _userManager.GetUserAsync(AbpSession.ToUserIdentifier());
 
             if (AbpSession.TenantId.HasValue)
             {
-                monthlyPrice = await _settingManager.GetSettingValueForTenantAsync<double>(AppSettings.UserManagement.SubscriptionMonthlyPrice, AbpSession.GetTenantId());
-                yearlyPrice = await _settingManager.GetSettingValueForTenantAsync<double>(AppSettings.UserManagement.SubscriptionYearlyPrice, AbpSession.GetTenantId());
+                monthlyPrice =
+                    await _settingManager.GetSettingValueForTenantAsync<double>(
+                        AppSettings.UserManagement.SubscriptionMonthlyPrice, AbpSession.GetTenantId());
+                yearlyPrice =
+                    await _settingManager.GetSettingValueForTenantAsync<double>(
+                        AppSettings.UserManagement.SubscriptionYearlyPrice, AbpSession.GetTenantId());
             }
             else
             {
-                monthlyPrice = await _settingManager.GetSettingValueAsync<double>(AppSettings.UserManagement.SubscriptionMonthlyPrice);
-                yearlyPrice = await _settingManager.GetSettingValueAsync<double>(AppSettings.UserManagement.SubscriptionYearlyPrice);
+                monthlyPrice =
+                    await _settingManager.GetSettingValueAsync<double>(AppSettings.UserManagement
+                        .SubscriptionMonthlyPrice);
+                yearlyPrice =
+                    await _settingManager.GetSettingValueAsync<double>(AppSettings.UserManagement
+                        .SubscriptionYearlyPrice);
             }
 
             amount = input.PaymentPeriodType switch
@@ -88,9 +97,10 @@ namespace Zero.Abp.Payments
 
             if (amount == 0)
                 throw new UserFriendlyException(L("Invalid Amount To Create Payment"));
-            
+
             // Convert to USD if gateway is Paypal or Stripe
-            if (input.SubscriptionPaymentGatewayType == SubscriptionPaymentGatewayType.Paypal || input.SubscriptionPaymentGatewayType == SubscriptionPaymentGatewayType.Stripe)
+            if (input.SubscriptionPaymentGatewayType == SubscriptionPaymentGatewayType.Paypal ||
+                input.SubscriptionPaymentGatewayType == SubscriptionPaymentGatewayType.Stripe)
             {
                 currency = "USD";
                 var latestRate = await _currencyRateAppService.GetLatestRate();
@@ -98,20 +108,20 @@ namespace Zero.Abp.Payments
                     throw new UserFriendlyException(L("Not found currency rating data"));
                 amount = amount / Convert.ToDecimal(latestRate.Value);
             }
-            
+
             var payment = new UserSubscriptionPayment
             {
                 UserId = AbpSession.GetUserId(),
-                
+
                 Description = GetPaymentDescription(input.PaymentPeriodType, user.EmailAddress, user.TenantId),
                 PaymentPeriodType = input.PaymentPeriodType,
-                
+
                 Gateway = input.SubscriptionPaymentGatewayType,
                 Amount = amount,
                 Currency = currency,
-                
-                DayCount = input.PaymentPeriodType.HasValue ? (int)input.PaymentPeriodType.Value : 0,
-                
+
+                DayCount = input.PaymentPeriodType.HasValue ? (int) input.PaymentPeriodType.Value : 0,
+
                 SuccessUrl = input.SuccessUrl,
                 ErrorUrl = input.ErrorUrl
             };
@@ -122,14 +132,15 @@ namespace Zero.Abp.Payments
         public async Task CancelPayment(CancelUserPaymentDto input)
         {
             var payment = await _userSubscriptionPaymentRepository.GetByGatewayAndPaymentIdAsync(
-                    input.Gateway,
-                    input.PaymentId
-                );
+                input.Gateway,
+                input.PaymentId
+            );
 
             payment.SetAsCancelled();
         }
 
-        public async Task<PagedResultDto<UserSubscriptionPaymentListDto>> GetPaymentHistory(GetPaymentHistoryInput input)
+        public async Task<PagedResultDto<UserSubscriptionPaymentListDto>> GetPaymentHistory(
+            GetPaymentHistoryInput input)
         {
             var query = _userSubscriptionPaymentRepository.GetAll()
                 .Include(sp => sp.User)
@@ -139,19 +150,23 @@ namespace Zero.Abp.Payments
             var payments = await query.OrderBy(input.Sorting).PageBy(input).ToListAsync();
             var paymentsCount = query.Count();
 
-            return new PagedResultDto<UserSubscriptionPaymentListDto>(paymentsCount, ObjectMapper.Map<List<UserSubscriptionPaymentListDto>>(payments));
+            return new PagedResultDto<UserSubscriptionPaymentListDto>(paymentsCount,
+                ObjectMapper.Map<List<UserSubscriptionPaymentListDto>>(payments));
         }
 
-        public List<PaymentGatewayModel> GetActiveGateways(GetActiveGatewaysInput input)
+        public async Task<List<PaymentGatewayModel>> GetActiveGateways(GetActiveGatewaysInput input)
         {
-            return _paymentGatewayStore.GetActiveGateways()
-                .WhereIf(input.RecurringPaymentsEnabled.HasValue, gateway => gateway.SupportsRecurringPayments == input.RecurringPaymentsEnabled.Value)
+            return (await _paymentManager.GetAllActivePaymentGateways())
+                .WhereIf(input.RecurringPaymentsEnabled.HasValue,
+                    gateway => input.RecurringPaymentsEnabled != null &&
+                               gateway.SupportsRecurringPayments == input.RecurringPaymentsEnabled.Value)
                 .ToList();
         }
 
         public async Task<UserSubscriptionPaymentDto> GetPaymentAsync(long paymentId)
         {
-            return ObjectMapper.Map<UserSubscriptionPaymentDto>(await _userSubscriptionPaymentRepository.GetAsync(paymentId));
+            return ObjectMapper.Map<UserSubscriptionPaymentDto>(
+                await _userSubscriptionPaymentRepository.GetAsync(paymentId));
         }
 
         public async Task<UserSubscriptionPaymentDto> GetLastCompletedPayment()
@@ -167,7 +182,7 @@ namespace Zero.Abp.Payments
         public async Task ExtendSucceed(long paymentId)
         {
             var payment = await _userSubscriptionPaymentRepository.GetAsync(paymentId);
-            
+
             if (payment.Gateway == SubscriptionPaymentGatewayType.AlePay)
             {
                 var transactionInfo = await _alePayPaymentAppService.GetUserTransactionInfo(payment.Id);
@@ -180,7 +195,7 @@ namespace Zero.Abp.Payments
                     throw new UserFriendlyException("Your payment is not completed !");
                 }
             }
-            
+
             if (payment.Status != SubscriptionPaymentStatus.Paid)
             {
                 throw new ApplicationException("Your payment is not completed !");
@@ -207,23 +222,26 @@ namespace Zero.Abp.Payments
             var payment = await _userSubscriptionPaymentRepository.GetAsync(paymentId);
             payment.SetAsCancelled();
         }
+
         private string GetPaymentDescription(PaymentPeriodType? paymentPeriodType, string userEmail, int? tenantId)
         {
             var description = L("UserSubscription_Payment_Description", userEmail);
 
             if (tenantId.HasValue)
                 description += " Tenant " + tenantId;
-            
-            return !paymentPeriodType.HasValue ? description : $"{description} {(int)paymentPeriodType} {L("Days").ToLower()}";
+
+            return !paymentPeriodType.HasValue
+                ? description
+                : $"{description} {(int) paymentPeriodType} {L("Days").ToLower()}";
         }
-        
+
         [AbpAuthorize(AppPermissions.Pages_Administration_Tenant_SubscriptionManagement)]
         public async Task<bool> HasAnyPayment()
         {
             return await _userSubscriptionPaymentRepository.GetLastCompletedPaymentOrDefaultAsync(
-                       userId: AbpSession.GetUserId(),
-                       gateway: null,
-                       isRecurring: null) != default;
+                userId: AbpSession.GetUserId(),
+                gateway: null,
+                isRecurring: null) != default;
         }
     }
 }

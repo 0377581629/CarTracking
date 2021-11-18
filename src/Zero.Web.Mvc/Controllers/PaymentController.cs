@@ -14,7 +14,6 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Zero.Abp.Payments;
-using Zero.Abp.Payments.AlePay;
 using Zero.Abp.Payments.Dto;
 using Zero.Authorization;
 using Zero.Authorization.Roles;
@@ -69,7 +68,7 @@ namespace Zero.Web.Controllers
             var model = new BuyEditionViewModel
             {
                 Edition = edition,
-                PaymentGateways = _paymentAppService.GetActiveGateways(new GetActiveGatewaysInput())
+                PaymentGateways = await _paymentAppService.GetActiveGateways(new GetActiveGatewaysInput())
             };
 
             if (editionPaymentType.HasValue)
@@ -166,7 +165,7 @@ namespace Zero.Web.Controllers
             }
             else
             {
-                model.PaymentGateways = _paymentAppService.GetActiveGateways(new GetActiveGatewaysInput());
+                model.PaymentGateways = await _paymentAppService.GetActiveGateways(new GetActiveGatewaysInput());
             }
 
             return View("Upgrade", model);
@@ -179,7 +178,7 @@ namespace Zero.Web.Controllers
             var model = new ExtendEditionViewModel
             {
                 Edition = edition,
-                PaymentGateways = _paymentAppService.GetActiveGateways(new GetActiveGatewaysInput())
+                PaymentGateways = await _paymentAppService.GetActiveGateways(new GetActiveGatewaysInput())
             };
 
             return View("Extend", model);

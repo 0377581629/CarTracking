@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 using Abp.Authorization;
 using Abp.Collections.Extensions;
@@ -13,11 +14,14 @@ using Abp.Runtime.Session;
 using Abp.Timing;
 using Abp.Zero.Configuration;
 using Abp.Zero.Ldap.Configuration;
+using Zero.Abp.Configuration.Dto;
+using Zero.Abp.Payments;
 using Zero.Authentication;
 using Zero.Authorization;
 using Zero.Configuration.Dto;
 using Zero.Configuration.Host.Dto;
 using Zero.Configuration.Tenants.Dto;
+using Zero.MultiTenancy.Payments;
 using Zero.Security;
 using Zero.Storage;
 using Zero.Timing;
@@ -27,12 +31,15 @@ namespace Zero.Configuration.Tenants
     [AbpAuthorize(AppPermissions.Pages_Administration_Tenant_Settings)]
     public class TenantSettingsAppService : SettingsAppServiceBase, ITenantSettingsAppService
     {
+        #region Constructor
+
         public IExternalLoginOptionsCacheManager ExternalLoginOptionsCacheManager { get; set; }
 
         private readonly IMultiTenancyConfig _multiTenancyConfig;
         private readonly ITimeZoneService _timeZoneService;
         private readonly IBinaryObjectManager _binaryObjectManager;
         private readonly IAbpZeroLdapModuleConfig _ldapModuleConfig;
+        private readonly IPaymentManager _paymentManager;
 
         public TenantSettingsAppService(
             IAbpZeroLdapModuleConfig ldapModuleConfig,
@@ -40,8 +47,8 @@ namespace Zero.Configuration.Tenants
             ITimeZoneService timeZoneService,
             IEmailSender emailSender,
             IBinaryObjectManager binaryObjectManager,
-            IAppConfigurationAccessor configurationAccessor
-        ) : base(emailSender, configurationAccessor)
+            IAppConfigurationAccessor configurationAccessor,
+            IPaymentManager paymentManager) : base(emailSender, configurationAccessor)
         {
             ExternalLoginOptionsCacheManager = NullExternalLoginOptionsCacheManager.Instance;
 
@@ -49,7 +56,10 @@ namespace Zero.Configuration.Tenants
             _ldapModuleConfig = ldapModuleConfig;
             _timeZoneService = timeZoneService;
             _binaryObjectManager = binaryObjectManager;
+            _paymentManager = paymentManager;
         }
+
+        #endregion
 
         #region Get Settings
 
@@ -59,6 +69,7 @@ namespace Zero.Configuration.Tenants
             {
                 UserManagement = await GetUserManagementSettingsAsync(),
                 Security = await GetSecuritySettingsAsync(),
+                Payment = await GetPaymentSettingsAsync(),
                 Billing = await GetBillingSettingsAsync(),
                 OtherSettings = await GetOtherSettingsAsync(),
                 Email = await GetEmailSettingsAsync(),
@@ -210,6 +221,51 @@ namespace Zero.Configuration.Tenants
             };
         }
 
+        private async Task<PaymentManagementSettingsEditDto> GetPaymentSettingsAsync()
+        {
+            var res = new PaymentManagementSettingsEditDto
+            {
+                UseCustomPaymentConfig = false,
+
+                PayPalIsActive = false,
+                PayPalEnvironment = "",
+                PayPalClientId = "",
+                PayPalClientSecret = "",
+                PayPalDemoUsername = "",
+                PayPalDemoPassword = "",
+
+                AlePayIsActive = false,
+                AlePayBaseUrl = "",
+                AlePayTokenKey = "",
+                AlePayChecksumKey = "",
+            };
+
+            if (_paymentManager.PaymentEnable())
+            {
+                var activeGateways = await _paymentManager.GetAllPaymentGatewayForSettings();
+                res.UseCustomPaymentConfig = await SettingManager.GetSettingValueForTenantAsync<bool>(AppSettings.PaymentManagement.UseCustomPaymentConfig, AbpSession.GetTenantId());
+                if (activeGateways.Any(o => o.GatewayType == SubscriptionPaymentGatewayType.Paypal))
+                {
+                    res.PayPalIsActive = await SettingManager.GetSettingValueForTenantAsync<bool>(AppSettings.PaymentManagement.PayPalIsActive, AbpSession.GetTenantId());
+                    res.PayPalEnvironment = await SettingManager.GetSettingValueForTenantAsync(AppSettings.PaymentManagement.PayPalEnvironment, AbpSession.GetTenantId());
+                    res.PayPalClientId = await SettingManager.GetSettingValueForTenantAsync(AppSettings.PaymentManagement.PayPalClientId, AbpSession.GetTenantId());
+                    res.PayPalClientSecret = await SettingManager.GetSettingValueForTenantAsync(AppSettings.PaymentManagement.PayPalClientSecret, AbpSession.GetTenantId());
+                    res.PayPalDemoUsername = await SettingManager.GetSettingValueForTenantAsync(AppSettings.PaymentManagement.PayPalDemoUsername, AbpSession.GetTenantId());
+                    res.PayPalDemoPassword = await SettingManager.GetSettingValueForTenantAsync(AppSettings.PaymentManagement.PayPalDemoPassword, AbpSession.GetTenantId());
+                }
+
+                if (activeGateways.Any(o => o.GatewayType == SubscriptionPaymentGatewayType.AlePay))
+                {
+                    res.AlePayIsActive = await SettingManager.GetSettingValueForTenantAsync<bool>(AppSettings.PaymentManagement.AlePayIsActive, AbpSession.GetTenantId());
+                    res.AlePayBaseUrl = await SettingManager.GetSettingValueForTenantAsync(AppSettings.PaymentManagement.AlePayBaseUrl, AbpSession.GetTenantId());
+                    res.AlePayTokenKey = await SettingManager.GetSettingValueForTenantAsync(AppSettings.PaymentManagement.AlePayTokenKey, AbpSession.GetTenantId());
+                    res.AlePayChecksumKey = await SettingManager.GetSettingValueForTenantAsync(AppSettings.PaymentManagement.AlePayChecksumKey, AbpSession.GetTenantId());
+                }
+            }
+
+            return res;
+        }
+
         private async Task<TenantBillingSettingsEditDto> GetBillingSettingsAsync()
         {
             return new TenantBillingSettingsEditDto()
@@ -334,6 +390,7 @@ namespace Zero.Configuration.Tenants
         {
             await UpdateUserManagementSettingsAsync(input.UserManagement);
             await UpdateSecuritySettingsAsync(input.Security);
+            await UpdatePaymentSettingsAsync(input.Payment);
             await UpdateBillingSettingsAsync(input.Billing);
             await UpdateEmailSettingsAsync(input.Email);
             await UpdateExternalLoginSettingsAsync(input.ExternalLoginProviderSettings);
@@ -372,6 +429,81 @@ namespace Zero.Configuration.Tenants
                 AppSettings.UserManagement.IsQuickThemeSelectEnabled,
                 input.IsQuickThemeSelectEnabled.ToString().ToLowerInvariant()
             );
+        }
+
+        private async Task UpdatePaymentSettingsAsync(PaymentManagementSettingsEditDto input)
+        {
+            if (_paymentManager.PaymentEnable())
+            {
+                await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), AppSettings.PaymentManagement.UseCustomPaymentConfig,
+                    input.UseCustomPaymentConfig.ToString().ToLowerInvariant());
+                var activeGateways = await _paymentManager.GetAllPaymentGatewayForSettings();
+                if (activeGateways.Any(o => o.GatewayType == SubscriptionPaymentGatewayType.Paypal))
+                {
+                    // Paypal
+                    await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), AppSettings.PaymentManagement.PayPalIsActive,
+                        input.PayPalIsActive.ToString().ToLowerInvariant());
+                    await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), AppSettings.PaymentManagement.PayPalEnvironment,
+                        input.PayPalEnvironment);
+                    await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), AppSettings.PaymentManagement.PayPalClientId,
+                        input.PayPalClientId);
+                    await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), AppSettings.PaymentManagement.PayPalClientSecret,
+                        input.PayPalClientSecret);
+                    await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), AppSettings.PaymentManagement.PayPalDemoUsername,
+                        input.PayPalDemoUsername);
+                    await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), AppSettings.PaymentManagement.PayPalDemoPassword,
+                        input.PayPalDemoPassword);
+                }
+                else
+                {
+                    // Paypal
+                    await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), AppSettings.PaymentManagement.PayPalIsActive, "false");
+                    await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), AppSettings.PaymentManagement.PayPalEnvironment, "");
+                    await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), AppSettings.PaymentManagement.PayPalClientId, "");
+                    await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), AppSettings.PaymentManagement.PayPalClientSecret, "");
+                    await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), AppSettings.PaymentManagement.PayPalDemoUsername, "");
+                    await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), AppSettings.PaymentManagement.PayPalDemoPassword, "");
+                }
+
+                if (activeGateways.Any(o => o.GatewayType == SubscriptionPaymentGatewayType.AlePay))
+                {
+                    // AlePay
+                    await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), AppSettings.PaymentManagement.AlePayIsActive,
+                        input.AlePayIsActive.ToString().ToLowerInvariant());
+                    await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), AppSettings.PaymentManagement.AlePayBaseUrl,
+                        input.AlePayBaseUrl);
+                    await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), AppSettings.PaymentManagement.AlePayTokenKey,
+                        input.AlePayTokenKey);
+                    await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), AppSettings.PaymentManagement.AlePayChecksumKey,
+                        input.AlePayChecksumKey);
+                }
+                else
+                {
+                    // AlePay
+                    await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), AppSettings.PaymentManagement.AlePayIsActive, "false");
+                    await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), AppSettings.PaymentManagement.AlePayBaseUrl, "");
+                    await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), AppSettings.PaymentManagement.AlePayTokenKey, "");
+                    await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), AppSettings.PaymentManagement.AlePayChecksumKey, "");
+                }
+            }
+            else
+            {
+                await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), AppSettings.PaymentManagement.UseCustomPaymentConfig, "false");
+
+                // Paypal
+                await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), AppSettings.PaymentManagement.PayPalIsActive, "false");
+                await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), AppSettings.PaymentManagement.PayPalEnvironment, "");
+                await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), AppSettings.PaymentManagement.PayPalClientId, "");
+                await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), AppSettings.PaymentManagement.PayPalClientSecret, "");
+                await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), AppSettings.PaymentManagement.PayPalDemoUsername, "");
+                await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), AppSettings.PaymentManagement.PayPalDemoPassword, "");
+
+                // AlePay
+                await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), AppSettings.PaymentManagement.AlePayIsActive, "false");
+                await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), AppSettings.PaymentManagement.AlePayBaseUrl, "");
+                await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), AppSettings.PaymentManagement.AlePayTokenKey, "");
+                await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), AppSettings.PaymentManagement.AlePayChecksumKey, "");
+            }
         }
 
         private async Task UpdateBillingSettingsAsync(TenantBillingSettingsEditDto input)

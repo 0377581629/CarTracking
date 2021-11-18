@@ -16,7 +16,7 @@
         @Html.Hidden("rememberMe", @Model.RememberMe)
 
         <div class="form-group">
-            @Html.DropDownListFor(model => model.SelectedProvider, Model.Providers, new {@class = "form-control form-control-solid h-auto py-7 px-6 rounded-lg font-size-h6", size = 1})
+            @Html.DropDownListFor(model => model.SelectedProvider, Model.Providers, new {@class = "form-control h-auto py-7 px-6", size = 1})
         </div>
 
         <div class="pb-lg-0 pb-5">

@@ -7,7 +7,7 @@ using Zero.Dto;
 using Zero.Editions.Dto;
 using Zero.MultiTenancy.Dto;
 
-namespace Zero
+namespace Zero.Customize.Interfaces
 {
     public interface IZeroAppService : IApplicationService 
     {
@@ -43,6 +43,7 @@ namespace Zero
 	    Task<List<SelectListItem>> GetChildTenantsDropDown(int? targetTenant = default, int? currentSelect = default);
 	    
 	    Task<PagedResultDto<GetTenancyForSelectViewDto>> SearchTenancy(GetSelectModalInput input);
+
 	    #endregion
 	    
 	    #region Role

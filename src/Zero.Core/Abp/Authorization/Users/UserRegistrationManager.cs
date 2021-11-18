@@ -1,15 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Abp.Authorization.Users;
+using Abp.Collections.Extensions;
 using Abp.Configuration;
 using Abp.IdentityFramework;
 using Abp.Linq;
+using Abp.Localization;
+using Abp.Localization.Sources;
 using Abp.Notifications;
 using Abp.Runtime.Session;
+using Abp.Text;
 using Abp.Timing;
 using Abp.UI;
+using Abp.Zero;
 using Microsoft.AspNetCore.Identity;
 using Zero.Authorization.Roles;
 using Zero.Configuration;
@@ -97,7 +103,7 @@ namespace Zero.Authorization.Users
             CheckErrors(await _userManager.CreateAsync(user, plainPassword));
             await CurrentUnitOfWork.SaveChangesAsync();
 
-            if (!user.IsEmailConfirmed)
+            if (!user.IsEmailConfirmed && !Debugger.IsAttached)
             {
                 user.SetNewEmailConfirmationCode();
                 await _userEmailer.SendEmailActivationLinkAsync(user, emailActivationLink);
@@ -111,25 +117,12 @@ namespace Zero.Authorization.Users
             return user;
         }
 
-        private void CheckForTenant()
-        {
-            if (!AbpSession.TenantId.HasValue)
-            {
-                throw new InvalidOperationException("Can not register host users!");
-            }
-        }
-
         private void CheckSelfRegistrationIsEnabled()
         {
             if (!SettingManager.GetSettingValue<bool>(AppSettings.UserManagement.AllowSelfRegistration))
             {
                 throw new UserFriendlyException(L("SelfUserRegistrationIsDisabledMessage_Detail"));
             }
-        }
-
-        private bool UseCaptchaOnRegistration()
-        {
-            return SettingManager.GetSettingValue<bool>(AppSettings.UserManagement.UseCaptchaOnRegistration);
         }
 
         private bool UseSubscriptionUser()

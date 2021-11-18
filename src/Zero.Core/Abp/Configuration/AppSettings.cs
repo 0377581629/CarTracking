@@ -104,6 +104,25 @@
             public const string SubscriptionYearlyPrice = "App.UserManagement.SubscriptionYearlyPrice";
         }
 
+        public static class PaymentManagement
+        {
+            public const string AllowTenantUseCustomConfig = "App.PaymentManagement.AllowTenantUseCustomConfig";
+            
+            public const string UseCustomPaymentConfig = "App.PaymentManagement.UseCustomPaymentConfig";
+
+            public const string PayPalIsActive = "Abp.PaymentManagement.PayPal.IsActive";
+            public const string PayPalEnvironment = "Abp.PaymentManagement.PayPal.Environment";
+            public const string PayPalClientId = "Abp.PaymentManagement.PayPal.ClientId";
+            public const string PayPalClientSecret = "Abp.PaymentManagement.PayPal.ClientSecret";
+            public const string PayPalDemoUsername = "Abp.PaymentManagement.PayPal.DemoUsername";
+            public const string PayPalDemoPassword = "Abp.PaymentManagement.PayPal.DemoPassword";
+            
+            public const string AlePayIsActive = "Abp.PaymentManagement.AlePay.IsActive";
+            public const string AlePayBaseUrl = "Abp.PaymentManagement.AlePay.BaseUrl";
+            public const string AlePayTokenKey = "Abp.PaymentManagement.AlePay.TokenKey";
+            public const string AlePayChecksumKey = "Abp.PaymentManagement.AlePay.ChecksumKey";
+        }
+        
         public static class Email
         {
             public const string UseHostDefaultEmailSettings = "App.Email.UseHostDefaultEmailSettings";

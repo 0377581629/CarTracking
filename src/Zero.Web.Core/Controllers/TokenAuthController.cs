@@ -23,6 +23,7 @@ using Abp.Timing;
 using Abp.UI;
 using Abp.Zero.Configuration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -77,7 +78,7 @@ namespace Zero.Web.Controllers
         private readonly AbpUserClaimsPrincipalFactory<User, Role> _claimsPrincipalFactory;
         public IRecaptchaValidator RecaptchaValidator { get; set; }
         private readonly IUserDelegationManager _userDelegationManager;
-
+        private readonly IHttpContextAccessor _httpContextAccessor; 
         public TokenAuthController(
             LogInManager logInManager,
             ITenantCache tenantCache,
@@ -100,7 +101,8 @@ namespace Zero.Web.Controllers
             ISettingManager settingManager,
             IJwtSecurityStampHandler securityStampHandler,
             AbpUserClaimsPrincipalFactory<User, Role> claimsPrincipalFactory,
-            IUserDelegationManager userDelegationManager)
+            IUserDelegationManager userDelegationManager,
+            IHttpContextAccessor httpContextAccessor)
         {
             _logInManager = logInManager;
             _tenantCache = tenantCache;
@@ -125,17 +127,24 @@ namespace Zero.Web.Controllers
             _claimsPrincipalFactory = claimsPrincipalFactory;
             RecaptchaValidator = NullRecaptchaValidator.Instance;
             _userDelegationManager = userDelegationManager;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         [HttpPost]
         public async Task<AuthenticateResultModel> Authenticate([FromBody] AuthenticateModel model)
         {
-            var request = HttpContext.Request;
+            if (_httpContextAccessor.HttpContext != null)
+            {
+                var requestHeaders = _httpContextAccessor.HttpContext.Request.Headers;
+                if (requestHeaders.ContainsKey("FromMobile") && requestHeaders["FromMobile"] == "true")
+                    goto PassThroughCaptcha;
+            }
+            
             if (UseCaptchaOnLogin())
             {
                 await ValidateReCaptcha(model.CaptchaResponse);
             }
-
+            PassThroughCaptcha:
             var loginResult = await GetLoginResultAsync(
                 model.UserNameOrEmailAddress,
                 model.Password,

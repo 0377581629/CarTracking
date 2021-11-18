@@ -8,17 +8,16 @@ using Abp.Runtime.Security;
 using Abp.Runtime.Session;
 using Abp.UI;
 using Abp.Zero.Configuration;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Zero.Authorization.Accounts.Dto;
 using Zero.Authorization.Impersonation;
 using Zero.Authorization.Users;
 using Zero.Configuration;
-using Zero.Debugging;
 using Zero.MultiTenancy;
 using Zero.Security.Recaptcha;
 using Zero.Url;
 using Zero.Authorization.Delegation;
-using Abp.Domain.Repositories;
 
 
 namespace Zero.Authorization.Accounts
@@ -36,7 +35,7 @@ namespace Zero.Authorization.Accounts
         private readonly IPasswordHasher<User> _passwordHasher;
         private readonly IWebUrlService _webUrlService;
         private readonly IUserDelegationManager _userDelegationManager;
-
+        private readonly IHttpContextAccessor _httpContextAccessor; 
         public AccountAppService(
             IUserEmailer userEmailer,
             UserRegistrationManager userRegistrationManager,
@@ -44,7 +43,8 @@ namespace Zero.Authorization.Accounts
             IUserLinkManager userLinkManager,
             IPasswordHasher<User> passwordHasher,
             IWebUrlService webUrlService, 
-            IUserDelegationManager userDelegationManager)
+            IUserDelegationManager userDelegationManager,
+            IHttpContextAccessor httpContextAccessor)
         {
             _userEmailer = userEmailer;
             _userRegistrationManager = userRegistrationManager;
@@ -56,6 +56,7 @@ namespace Zero.Authorization.Accounts
             AppUrlService = NullAppUrlService.Instance;
             RecaptchaValidator = NullRecaptchaValidator.Instance;
             _userDelegationManager = userDelegationManager;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<IsTenantAvailableOutput> IsTenantAvailable(IsTenantAvailableInput input)
@@ -95,11 +96,18 @@ namespace Zero.Authorization.Accounts
 
         public async Task<RegisterOutput> Register(RegisterInput input)
         {
+            if (_httpContextAccessor.HttpContext != null)
+            {
+                var requestHeaders = _httpContextAccessor.HttpContext.Request.Headers;
+                if (requestHeaders.ContainsKey("FromMobile") && requestHeaders["FromMobile"] == "true")
+                    goto PassThroughCaptcha;
+            }
+            
             if (UseCaptchaOnRegistration())
             {
                 await RecaptchaValidator.ValidateAsync(input.CaptchaResponse);
             }
-
+            PassThroughCaptcha:
             var user = await _userRegistrationManager.RegisterAsync(
                 input.Name,
                 input.Surname,
@@ -114,6 +122,9 @@ namespace Zero.Authorization.Accounts
 
             return new RegisterOutput
             {
+                IsSuccess = true,
+                IsEmailConfirmationRequiredForLogin = isEmailConfirmationRequiredForLogin,
+                IsUserActivated = user.IsActive,
                 CanLogin = user.IsActive && (user.IsEmailConfirmed || !isEmailConfirmationRequiredForLogin)
             };
         }

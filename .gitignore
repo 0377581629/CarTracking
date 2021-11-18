@@ -1,4 +1,4 @@
-﻿# Build Folders (you can keep bin if you'd like, to store dlls and pdbs)
+# Build Folders (you can keep bin if you'd like, to store dlls and pdbs)
 [Bb]in/
 [Oo]bj/
 
@@ -9,7 +9,9 @@ Logs/
 project.lock.json
 .vs/
 .idea/
-
+build/
+aspnet_zero_app/.dart_tool/
+aspnet_zero_app/build/
 # mstest test results
 TestResults
 
@@ -136,3 +138,4 @@ src/Zero.Web.Public/wwwroot/view-resources/Views/_Bundles
 src/Zero.Web.Public/wwwroot/view-resources/**/*.min.*
 src/Zero.Web.Public/wwwroot/Common/**/*.min.*
 src/Zero.Web.Public/node_modules
+src/Zero.Web.Mvc/wwwroot/css/kendo.extend.min.css

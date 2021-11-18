@@ -1,0 +1,94 @@
+﻿@using Zero.MultiTenancy.Payments
+@model Zero.Web.Areas.App.Models.Settings.SettingsViewModel
+
+<div class="tab-pane" id="SettingsPaymentManagementTab">
+    <form id="PaymentManagementSettingsForm">
+
+        <div class="form-group">
+            <label for="SettingPayment_UseCustomPaymentConfig" class="checkbox checkbox-outline">
+                <input id="SettingPayment_UseCustomPaymentConfig" type="checkbox" name="useCustomPaymentConfig" value="true" @(Model.Settings.Payment.UseCustomPaymentConfig ? "checked=\"checked\"" : "")>
+                <span></span>
+                @L("UseCustomPaymentConfig")
+            </label>
+            <span class="form-text text-muted">@L("UseCustomPaymentConfig_Hint")</span>
+        </div>
+        @if (Model.ActivePayment && Model.ActivePaymentGateways.Any(o => o.GatewayType == SubscriptionPaymentGatewayType.Paypal))
+        {
+            <h5>PayPal</h5>
+            <div class="checkbox-list">
+                <div class="form-group">
+                    <label for="SettingPayment_PayPalIsActive" class="checkbox checkbox-outline">
+                        <input id="SettingPayment_PayPalIsActive" type="checkbox" name="payPalIsActive" value="true" @(Model.Settings.Payment.PayPalIsActive ? "checked=\"checked\"" : "")>
+                        <span></span>
+                        @L("Active")
+                    </label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4">
+                    <div class="form-group">
+                        <label>Environment</label>
+                        <input id="SettingPayment_PayPalEnvironment" type="text" name="payPalEnvironment" class="form-control" value="@Model.Settings.Payment.PayPalEnvironment">
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label>Client Id</label>
+                        <input id="SettingPayment_PayPalClientId" type="text" name="payPalClientId" class="form-control" value="@Model.Settings.Payment.PayPalClientId">
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label>Client Secret</label>
+                        <input id="SettingPayment_PayPalClientSecret" type="text" name="payPalClientSecret" class="form-control" value="@Model.Settings.Payment.PayPalClientSecret">
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label>Demo User Name</label>
+                        <input id="SettingPayment_PayPalDemoUsername" type="text" name="payPalDemoUsername" class="form-control" value="@Model.Settings.Payment.PayPalDemoUsername">
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label>Demo User Password</label>
+                        <input id="SettingPayment_PayPalDemoPassword" type="text" name="payPalDemoPassword" class="form-control" value="@Model.Settings.Payment.PayPalDemoPassword">
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.ActivePayment && Model.ActivePaymentGateways.Any(o => o.GatewayType == SubscriptionPaymentGatewayType.AlePay))
+        {
+            <h5>AlePay</h5>
+            <div class="checkbox-list">
+                <div class="form-group">
+                    <label for="SettingPayment_AlePayIsActive" class="checkbox checkbox-outline">
+                        <input id="SettingPayment_AlePayIsActive" type="checkbox" name="alePayIsActive" value="true" @(Model.Settings.Payment.AlePayIsActive ? "checked=\"checked\"" : "")>
+                        <span></span>
+                        @L("Active")
+                    </label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4">
+                    <div class="form-group">
+                        <label>Base Url</label>
+                        <input id="SettingPayment_AlePayBaseUrl" type="text" name="alePayBaseUrl" class="form-control" value="@Model.Settings.Payment.AlePayBaseUrl">
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label>Token Key</label>
+                        <input id="SettingPayment_AlePayTokenKey" type="text" name="alePayTokenKey" class="form-control" value="@Model.Settings.Payment.AlePayTokenKey">
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label>Checksum Key</label>
+                        <input id="SettingPayment_AlePayChecksumKey" type="text" name="alePayChecksumKey" class="form-control" value="@Model.Settings.Payment.AlePayChecksumKey">
+                    </div>
+                </div>
+            </div>
+        }
+    </form>
+</div>

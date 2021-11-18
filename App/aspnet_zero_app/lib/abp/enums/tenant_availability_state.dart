@@ -1,0 +1,1 @@
+enum TenantAvailabilityState { unknown, available, inActive, notFound }
