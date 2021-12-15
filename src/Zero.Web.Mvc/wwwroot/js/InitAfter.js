@@ -322,7 +322,7 @@ function slugify(text) {
                         format: 'L'
                     });
 
-                    if ($(this).attr('init-value') !== undefined) {
+                    if ($(this).attr('init-value') !== undefined && $(this).attr('init-value').length > 0) {
                         let initDate = moment($(this).attr('init-value'),'DD/MM/YYYY').format('L');
                         $(this).val(initDate);
                     }
@@ -333,7 +333,7 @@ function slugify(text) {
                         locale: abp.localization.currentLanguage.name,
                         format: 'L LT'
                     });
-                    if ($(this).attr('init-value') !== undefined) {
+                    if ($(this).attr('init-value') !== undefined && $(this).attr('init-value').length > 0) {
                         let initDate = moment($(this).attr('init-value'),'DD/MM/YYYY hh:mm').format('L LT');
                         $(this).val(initDate);
                     }

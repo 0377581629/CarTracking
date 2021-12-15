@@ -194,75 +194,7 @@
 
             var _initControl = function() {
 
-                _$modal.find('.date-picker').each(function () {
-                    $(this).datetimepicker({
-                        locale: abp.localization.currentLanguage.name,
-                        format: 'L'
-                    });
-
-                    if ($(this).attr('init-value') !== undefined) {
-                        let initDate = moment($(this).attr('init-value'),'DD/MM/YYYY').format('L');
-                        $(this).val(initDate);
-                    }
-                });
-
-                _$modal.find('.datetime-picker').each(function(){
-                    $(this).datetimepicker({
-                        locale: abp.localization.currentLanguage.name,
-                        format: 'L LT'
-                    });
-                    if ($(this).attr('init-value') !== undefined) {
-                        let initDate = moment($(this).attr('init-value'),'DD/MM/YYYY hh:mm').format('L LT');
-                        $(this).val(initDate);
-                    }
-
-                });
-
-                _$modal.find('.month-picker').datetimepicker({
-                    locale: abp.localization.currentLanguage.name,
-                    format: 'MM/YYYY'
-                });
-
-                _$modal.find('.kt-select2').select2({
-                    dropdownParent: _$modal,
-                    width: '100%',
-                    dropdownAutoWidth: true,
-                });
-
-                _$modal.find('.kt-select2-non-search').select2({
-                    dropdownParent: _$modal,
-                    width: '100%',
-                    dropdownAutoWidth: true,
-                    minimumResultsForSearch: -1
-                });
-
-                _$modal.find('.touchSpin').TouchSpin({
-                    verticalbuttons: true,
-                    verticalupclass: 'btn-secondary',
-                    verticaldownclass: 'btn-secondary'
-                });
-
-                _$modal.find('.formRepeater').repeater({
-                    show: function () {
-                        $(this).slideDown();
-                    },
-                    hide: function (deleteElement) {
-                        if(confirm('Are you sure you want to delete this element?')) {
-                            $(this).slideUp(deleteElement);
-                        }
-                    },
-                    isFirstItemUndeletable: true
-                });
-
-                _$modal.find('.number').number(true, 0, whatDecimalSeparator(),whatThousandSeparator());
-                _$modal.find('.number1').number(true, 1, whatDecimalSeparator(),whatThousandSeparator());
-                _$modal.find('.number2').number(true, 2, whatDecimalSeparator(),whatThousandSeparator());
-                _$modal.find('.number3').number(true, 3, whatDecimalSeparator(),whatThousandSeparator());
-                _$modal.find('.numberOther').number(true, 0, '', '');
-
-                _$modal.find(".mScrollBar").mCustomScrollbar({
-                    theme: "minimal-dark"
-                });
+                baseHelper.RefreshUI(_$modal);
 
                 let _language = _$modal.find("#Entity_Language");
 

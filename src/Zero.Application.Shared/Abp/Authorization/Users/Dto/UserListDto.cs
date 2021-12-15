@@ -27,5 +27,9 @@ namespace Zero.Authorization.Users.Dto
         public bool IsActive { get; set; }
 
         public DateTime CreationTime { get; set; }
+        
+        public DateTime? SubscriptionEndDateUtc { get; set; }
+        
+        public bool IsInTrialPeriod { get; set; }
     }
 }

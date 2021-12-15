@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using Abp.Auditing;
 using Abp.Authorization.Users;
 using Abp.Domain.Entities;
@@ -46,5 +47,8 @@ namespace Zero.Authorization.Users.Dto
 
         public virtual bool IsLockoutEnabled { get; set; }
 
+        public DateTime? SubscriptionEndDateUtc { get; set; }
+        
+        public bool IsInTrialPeriod { get; set; }
     }
 }

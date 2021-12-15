@@ -50,13 +50,35 @@
     <text name="MB_Submit">Submit</text>
     <text name="MB_Invalid">Invalid</text>
     <!--    -->
-    
+
     <!--  User Subscription  -->
-    <text name="UserSubscriptionEnable">Enable subscription for users</text>
+    <text name="UserSubscription">User subscription</text>
+    <text name="UserSubscriptionInformation">User subscription info</text>
+
+    <text name="UserSubscriptionEnable">User subscription enable</text>
     <text name="Currency">Currency</text>
     <text name="TrialDays">Trial days</text>
-    <text name="Yearly">Yearly</text>
+    <text name="Yearly">Annual</text>
+
+    <text name="UserTrialSubscriptionNotification">You're in trial subscription, {0} to buy.</text>
+    <text name="UserSubscriptionExpireNotification">Your account will end after {0} days.</text>
+    <text name="UserTrialExpireNotification">Your account will end after {0} days.</text>
+
+    <text name="UserExtentSubscription_Description">Extent subscription {0}.</text>
+
+    <text name="UserSubscriptionManagement">User subscription manager</text>
+    <text name="UserSubscriptionManagement_Description">Extent and view payment history</text>
+
+    <text name="UserSubscription_Payment_Description">Extent user subscription {0}</text>
+
+    <text name="UserSubscriptionExpiringSoon_Title">User subscription notification</text>
+    <text name="UserSubscriptionExpiringSoon_SubTitle">Your subscription ended.</text>
+    <text name="UserSubscriptionExpiringSoon_Email_Subject">Your subscription ended</text>
+    <text name="UserSubscriptionExpiringSoon_Email_Body">Your subscription ended at {0}.</text>
+
+    <text name="UserIsExpiredSubscription">Your subscription ended.</text>
     <!--    -->
+    
     <text name="SystemSettings">System settings</text>
     <text name="TenantSettings">Tenant settings</text>
     
