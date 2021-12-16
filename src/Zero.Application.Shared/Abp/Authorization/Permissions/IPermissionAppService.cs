@@ -11,7 +11,5 @@ namespace Zero.Authorization.Permissions
         ListResultDto<FlatPermissionWithLevelDto> GetAllPermissions(bool tenantSide = false);
         
         Task<List<string>> GetAllPermissionsByEdition(int editionId);
-        
-        Task<List<string>> GetAllPermissionsByCurrentTenant();
     }
 }

@@ -18,7 +18,7 @@ namespace Zero.Abp.Payments
         {
             var gateways = _iocResolver.ResolveAll<IPaymentGatewayConfiguration>();
 
-            return gateways.Where(gateway => gateway.IsActive).Select(gateway => new PaymentGatewayModel
+            return gateways.Where(gateway => gateway.IsActiveByConfig).Select(gateway => new PaymentGatewayModel
             {
                 GatewayType = gateway.GatewayType,
                 SupportsRecurringPayments = gateway.SupportsRecurringPayments

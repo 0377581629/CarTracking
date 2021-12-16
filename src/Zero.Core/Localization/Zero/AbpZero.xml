@@ -51,6 +51,26 @@
     <text name="MB_Invalid">Invalid</text>
     <!--    -->
 
+    <!--  Payment Management Settings  -->
+    <text name="PaymentManagement">Payment gateways</text>
+    <text name="AllowTenantUseCustomConfig">Allow tenant use custom config</text>
+    <text name="UseCustomPaymentConfig">Use custom config</text>
+    <text name="UseCustomPaymentConfig_Hint">System use default config if custom config disabled</text>
+    <!--    -->
+
+    <!--  Email Template  -->
+    <text name="EmailTemplateType">Email type</text>
+    <text name="EmailTemplate">Email template</text>
+    <text name="EmailTemplates">Email template</text>
+    <text name="EmailTemplatesHeaderInfo">Email template list</text>
+    <text name="AutoCreateForNewTenant">Auto create for new tenant</text>
+
+    <text name="EmailTemplateType_Default">Default</text>
+    <text name="EmailTemplateType_UserActiveEmail">Account active</text>
+    <text name="EmailTemplateType_UserResetPassword">Reset password</text>
+    <text name="EmailTemplateType_SecurityCode">Security code</text>
+    <!--    -->
+    
     <!--  User Subscription  -->
     <text name="UserSubscription">User subscription</text>
     <text name="UserSubscriptionInformation">User subscription info</text>
@@ -78,6 +98,22 @@
 
     <text name="UserIsExpiredSubscription">Your subscription ended.</text>
     <!--    -->
+
+    <!--  Dashboard Widget  -->
+    <text name="DashboardWidget">Dashboard widget</text>
+    <text name="DashboardWidgets">Dashboard widget</text>
+    <text name="DashboardWidgetsHeaderInfo">Dashboard widget list</text>
+    <text name="DashboardWidgetWarning">Notice: This function used only for system developer, wrong config make system down</text>
+    <text name="IsDefault">Default</text>
+    <text name="SelectDashboardWidget">Select widget</text>
+    <!--    -->
+
+    <!--  Dashboard Widget  -->
+    <text name="CurrencyRate">Currency rate</text>
+    <text name="CurrencyRates">Currency rate</text>
+    <text name="CurrencyRatesHeaderInfo">Currency rate</text>
+    <text name="CurrencyRateWarning">Notice: Currency rate will be for all payment</text>
+    <!--    -->
     
     <text name="SystemSettings">System settings</text>
     <text name="TenantSettings">Tenant settings</text>
@@ -101,6 +137,7 @@
     <text name="ForgotPassword">Forgot password?</text>
     <text name="DontYouHaveAnAccount">Don't you have an account?</text>
     <text name="CreateAnAccount">Create account</text>
+    <text name="Create">Add</text>
     <text name="Pages">Pages</text>
     <text name="RoleName">Role name</text>
     <text name="EditRole">Edit role</text>
@@ -594,6 +631,7 @@
     <text name="DashboardSampleStatisticsHelpText">Progress</text>
     <text name="NewTenants">New tenants</text>
     <text name="NewSubscriptionAmount">New subscription amount</text>
+    <text name="TenantSubscription">Tenant subscription manager</text>
     <text name="Income">Income</text>
     <text name="IncomeStatistics">Income statistics</text>
     <text name="ChangeDateRange">Change date range</text>

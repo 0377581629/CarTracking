@@ -35,7 +35,6 @@ namespace Zero.Web.Controllers
             _payPalPaymentAppService = payPalPaymentAppService;
             _userSubscriptionPaymentRepository = userSubscriptionPaymentRepository;
             _currencyRateRepository = currencyRateRepository;
-            _payPalConfiguration = payPalConfiguration;
         }
         #endregion
         

@@ -100,6 +100,7 @@
 
         #region Abp Customize
         public const string Dashboard = "Pages.Dashboard";
+        
         public const string DashboardWidget = "Pages.DashboardWidget";
         public const string DashboardWidget_Create = "Pages.DashboardWidget.Create";
         public const string DashboardWidget_Edit = "Pages.DashboardWidget.Edit";
@@ -110,6 +111,11 @@
         public const string Pages_EmailTemplates_Edit = "Pages.EmailTemplates.Edit";
         public const string Pages_EmailTemplates_Delete = "Pages.EmailTemplates.Delete";
 
+        public const string CurrencyRate = "Pages.CurrencyRate";
+        public const string CurrencyRate_Create = "Pages.CurrencyRate.Create";
+        public const string CurrencyRate_Edit = "Pages.CurrencyRate.Edit";
+        public const string CurrencyRate_Delete = "Pages.CurrencyRate.Delete";
+        
         #endregion
     }
 }

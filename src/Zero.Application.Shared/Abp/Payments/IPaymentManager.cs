@@ -12,7 +12,5 @@ namespace Zero.Abp.Payments
         Task<List<PaymentGatewayModel>> GetAllPaymentGatewayForSettings();
         
         Task<List<PaymentGatewayModel>> GetAllActivePaymentGateways();
-
-        Task<List<PaymentGatewayModel>> GetAllActivePaymentGatewaysInHost();
     }
 }

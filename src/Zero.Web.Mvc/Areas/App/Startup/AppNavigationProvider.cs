@@ -43,6 +43,14 @@ namespace Zero.Web.Areas.App.Startup
                         )
                     )
                     .AddItem(new MenuItemDefinition(
+                            AppPageNames.Host.CurrencyRate,
+                            L("CurrencyRates"),
+                            url: "App/CurrencyRate",
+                            icon: "la la-money",
+                            permissionDependency: new SimplePermissionDependency(AppPermissions.CurrencyRate)
+                        )
+                    )
+                    .AddItem(new MenuItemDefinition(
                             AppPageNames.Host.Tenants,
                             L("Tenants"),
                             url: "App/Tenants",

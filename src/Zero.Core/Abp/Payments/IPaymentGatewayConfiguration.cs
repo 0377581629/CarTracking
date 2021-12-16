@@ -5,6 +5,8 @@ namespace Zero.Abp.Payments
 {
     public interface IPaymentGatewayConfiguration: ITransientDependency
     {
+        bool IsActiveByConfig { get; }
+        
         bool IsActive { get; }
 
         bool SupportsRecurringPayments { get; }

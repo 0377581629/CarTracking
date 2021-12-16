@@ -28,6 +28,8 @@
             public const string Settings = "Administration.Settings.Host";
             
             public const string DashboardWidget = "DashboardWidget";
+            public const string CurrencyRate = "CurrencyRate";
+            
             public const string HangfireDashboard = "HangfireDashboard";
         }
 

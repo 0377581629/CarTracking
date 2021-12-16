@@ -99,7 +99,7 @@
                 user.subscriptionEndDateUtc = null;
             } else {
                 user.isInTrialPeriod = _isInTrialPeriod.prop('checked');
-                user.subscriptionEndDateUtc = _subscriptionEndDate.data('DateTimePicker').date().format("YYYY-MM-DDTHH:mm:ss") + 'Z';
+                user.subscriptionEndDateUtc = _subscriptionEndDate.data('DateTimePicker').viewDate().format('L');
             }
             
             _modalManager.setBusy(true);

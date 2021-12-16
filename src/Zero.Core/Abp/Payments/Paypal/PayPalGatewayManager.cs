@@ -19,21 +19,12 @@ namespace Zero.Abp.Payments.Paypal
 
         private PayPalEnvironment GetEnvironment(PayPalPaymentGatewayConfiguration configuration)
         {
-            switch (configuration.Environment)
+            return configuration.Environment switch
             {
-                case "sandbox":
-                    {
-                        return new SandboxEnvironment(configuration.ClientId, configuration.ClientSecret);
-                    }
-                case "live":
-                    {
-                        return new LiveEnvironment(configuration.ClientId, configuration.ClientSecret);
-                    }
-                default:
-                    {
-                        throw new ApplicationException("Unknown PayPal environment");
-                    }
-            }
+                "sandbox" => new SandboxEnvironment(configuration.ClientId, configuration.ClientSecret),
+                "live" => new LiveEnvironment(configuration.ClientId, configuration.ClientSecret),
+                _ => new SandboxEnvironment(configuration.ClientId, configuration.ClientSecret)
+            };
         }
 
         public async Task<string> CaptureOrderAsync(PayPalCaptureOrderRequestInput input)

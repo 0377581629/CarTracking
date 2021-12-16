@@ -50,6 +50,7 @@
     <!--    -->
     
     <!--  Payment  -->
+    
     <text name="CheckoutWithPaypal">Thanh toán qua Paypal (USD)</text>
     <text name="CheckoutWithAlePay">Thanh toán qua AlePay (VND)</text>
     <text name="ExternalPaymentId">Mã thanh toán</text>
@@ -301,6 +302,13 @@
     <text name="WidgetDeleteWarningMessage">Không thể hoàn tác sau khi xoá.</text>
     <text name="SelectDashboardWidget">Khung số liệu</text>
     <text name="NoWidgetAvailableMessage">Không có khung số liệu nào khả dụng</text>
+    <!--    -->
+
+    <!--  Dashboard Widget  -->
+    <text name="CurrencyRate">Tỷ giá</text>
+    <text name="CurrencyRates">Tỷ giá</text>
+    <text name="CurrencyRatesHeaderInfo">Số liệu tỷ giá</text>
+    <text name="CurrencyRateWarning">Lưu ý: Số liệu tỷ giá được sử dụng khi thực hiện giao dịch thanh toán</text>
     <!--    -->
     
     <text name="HomePage">Trang chủ</text>

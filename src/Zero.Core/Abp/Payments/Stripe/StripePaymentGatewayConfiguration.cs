@@ -22,6 +22,8 @@ namespace Zero.Abp.Payments.Stripe
 
         public bool IsActive => _appConfiguration["Payment:Stripe:IsActive"].To<bool>();
 
+        public bool IsActiveByConfig => _appConfiguration["Payment:Stripe:IsActive"].To<bool>();
+        
         public bool SupportsRecurringPayments => true;
 
         public List<string> PaymentMethodTypes => _appConfiguration.GetSection("Payment:Stripe:PaymentMethodTypes").Get<List<string>>();
