@@ -227,7 +227,7 @@ namespace Zero.Customize.KendoUI
         {
             public string Header { get; set; }
             public string HeaderCode { get; set; }
-            public int DataType { get; set; } = (int) ZEROEnums.DataType.Default;
+            public int DataType { get; set; } = (int) ZeroEnums.DataType.Default;
 
             public int FractionalLetterCount { get; set; }
 

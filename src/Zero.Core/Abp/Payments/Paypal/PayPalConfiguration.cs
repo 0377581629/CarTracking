@@ -26,22 +26,22 @@ namespace Zero.Abp.Payments.Paypal
         public bool IsActive { get; }
 
         public bool IsActiveByConfig { get; }
-        
+
         public bool SupportsRecurringPayments => false;
 
         public PayPalPaymentGatewayConfiguration(IMultiTenancyConfig multiTenancyConfig, IAppConfigurationAccessor configurationAccessor, ISettingManager settingManager, IAbpSession abpSession)
         {
-            IsActiveByConfig = configurationAccessor.Configuration["Payment:PayPal:IsActive"].To<bool>();
-            Environment = configurationAccessor.Configuration["Payment:PayPal:Environment"];
-            ClientId = configurationAccessor.Configuration["Payment:PayPal:ClientId"];
-            ClientSecret = configurationAccessor.Configuration["Payment:PayPal:ClientSecret"];
-            DemoUsername = configurationAccessor.Configuration["Payment:PayPal:DemoUsername"];
-            DemoPassword = configurationAccessor.Configuration["Payment:PayPal:DemoPassword"];
-
-            #region Custom Config
-
             try
             {
+                IsActiveByConfig = configurationAccessor.Configuration["Payment:PayPal:IsActive"].To<bool>();
+                Environment = configurationAccessor.Configuration["Payment:PayPal:Environment"];
+                ClientId = configurationAccessor.Configuration["Payment:PayPal:ClientId"];
+                ClientSecret = configurationAccessor.Configuration["Payment:PayPal:ClientSecret"];
+                DemoUsername = configurationAccessor.Configuration["Payment:PayPal:DemoUsername"];
+                DemoPassword = configurationAccessor.Configuration["Payment:PayPal:DemoPassword"];
+
+                #region Custom Config
+
                 if (multiTenancyConfig.IsEnabled && abpSession.MultiTenancySide == MultiTenancySides.Tenant)
                 {
                     var useCustomConfig = settingManager.GetSettingValueForTenant(AppSettings.PaymentManagement.UseCustomPaymentConfig, abpSession.GetTenantId(), true) == "true";
@@ -66,13 +66,13 @@ namespace Zero.Abp.Payments.Paypal
                     DemoUsername = settingManager.GetSettingValueForApplication(AppSettings.PaymentManagement.PayPalDemoUsername, true);
                     DemoPassword = settingManager.GetSettingValueForApplication(AppSettings.PaymentManagement.PayPalDemoPassword, true);
                 }
+
+                #endregion
             }
             catch (Exception)
             {
                 // ignored
             }
-
-            #endregion
         }
     }
 }

@@ -113,7 +113,7 @@ namespace Zero.MultiTenancy
             return SubscriptionEndDateUtc == null;
         }
         
-        #region Extent base
+        #region Extent Base
 
         public int? ParentId { get; set; }
         public string Code { get; set; }
@@ -128,6 +128,8 @@ namespace Zero.MultiTenancy
 
         public string WebFavicon { get; set; }
 
+        public string Domain { get; set; }
+        
         #endregion
         
         #region Extent UI

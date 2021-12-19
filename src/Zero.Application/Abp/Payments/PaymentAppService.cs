@@ -159,7 +159,7 @@ namespace Zero.Abp.Payments
         public async Task<List<PaymentGatewayModel>> GetActiveGateways(GetActiveGatewaysInput input)
         {
             return (await _paymentManager.GetAllActivePaymentGateways())
-                .WhereIf(input.RecurringPaymentsEnabled.HasValue, gateway => gateway.SupportsRecurringPayments == input.RecurringPaymentsEnabled.Value)
+                .WhereIf(input.RecurringPaymentsEnabled.HasValue, gateway => gateway.SupportsRecurringPayments == input.RecurringPaymentsEnabled)
                 .ToList();
         }
 

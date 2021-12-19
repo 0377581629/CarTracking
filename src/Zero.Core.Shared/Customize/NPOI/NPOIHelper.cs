@@ -6,12 +6,12 @@ namespace Zero.Customize.NPOI
     public static class NPOIHelper
     {
          public static ICellStyle CellStyle(ISheet sheet, 
-             ZEROEnums.DataType dataType = ZEROEnums.DataType.Default, 
+             ZeroEnums.DataType dataType = ZeroEnums.DataType.Default, 
              bool isBold = false, bool isItalic = false, bool isUnderline = false,
              string fontName = "Times New Roman", int fontHeight = 12,
              bool border = false,
-             ZEROEnums.ReportTextHAlign hAlign = ZEROEnums.ReportTextHAlign.Center,
-             ZEROEnums.ReportTextVAlign vAlign = ZEROEnums.ReportTextVAlign.Middle)
+             ZeroEnums.ReportTextHAlign hAlign = ZeroEnums.ReportTextHAlign.Center,
+             ZeroEnums.ReportTextVAlign vAlign = ZeroEnums.ReportTextVAlign.Middle)
         {
             // Style font
             var defaultFont = (XSSFFont) sheet.Workbook.CreateFont();
@@ -29,21 +29,21 @@ namespace Zero.Customize.NPOI
             cellStyle.BorderRight = border ? BorderStyle.Thin : BorderStyle.None;
             cellStyle.BorderTop = border ? BorderStyle.Thin : BorderStyle.None;
             
-            if (hAlign == ZEROEnums.ReportTextHAlign.Left)
+            if (hAlign == ZeroEnums.ReportTextHAlign.Left)
                 cellStyle.Alignment = HorizontalAlignment.Left;
-            else if (hAlign == ZEROEnums.ReportTextHAlign.Right)
+            else if (hAlign == ZeroEnums.ReportTextHAlign.Right)
                 cellStyle.Alignment = HorizontalAlignment.Right;
             else
                 cellStyle.Alignment = HorizontalAlignment.Center;
             
-            if (vAlign == ZEROEnums.ReportTextVAlign.Top)
+            if (vAlign == ZeroEnums.ReportTextVAlign.Top)
                 cellStyle.VerticalAlignment = VerticalAlignment.Top;
-            else if (vAlign == ZEROEnums.ReportTextVAlign.Bottom)
+            else if (vAlign == ZeroEnums.ReportTextVAlign.Bottom)
                 cellStyle.VerticalAlignment = VerticalAlignment.Bottom;
             else 
                 cellStyle.VerticalAlignment = VerticalAlignment.Center;
             
-            if (dataType == ZEROEnums.DataType.Decimal)
+            if (dataType == ZeroEnums.DataType.Decimal)
                 cellStyle.DataFormat = sheet.Workbook.CreateDataFormat().GetFormat("#,##0;-#,##0");
             
             cellStyle.SetFont(defaultFont);

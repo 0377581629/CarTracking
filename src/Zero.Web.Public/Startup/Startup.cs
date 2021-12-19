@@ -35,6 +35,8 @@ namespace Zero.Web.Public.Startup
 
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            LoadGlobalConfig();
+            
             //MVC
             services.AddControllersWithViews(options =>
             {
@@ -139,6 +141,62 @@ namespace Zero.Web.Public.Startup
                         });
                     });
             });
+        }
+        
+        private void LoadGlobalConfig()
+        {
+            #region System
+
+            ZeroConsts.MultiTenancyEnabled = bool.Parse(_appConfiguration["GlobalConfig:AllowMultiTenancy"]);
+            SystemConfig.DisableMailService = bool.Parse(_appConfiguration["GlobalConfig:DisableMailService"]);
+            SystemConfig.LogIndex = _appConfiguration["GlobalConfig:LogIndex"];
+            if (!string.IsNullOrEmpty(_appConfiguration["GlobalConfig:DefaultPassword"]))
+                SystemConfig.DefaultPassword = _appConfiguration["GlobalConfig:DefaultPassword"];
+
+            #endregion
+
+            #region Layout
+
+            GlobalConfig.AppName = _appConfiguration["GlobalConfig:AppName"];
+            GlobalConfig.AppFooter = _appConfiguration["GlobalConfig:AppFooter"];
+            GlobalConfig.AppDescription = _appConfiguration["GlobalConfig:AppDescription"];
+            GlobalConfig.AppKeyword = _appConfiguration["GlobalConfig:AppKeyword"];
+            GlobalConfig.AppAuthor = _appConfiguration["GlobalConfig:AppAuthor"];
+
+            GlobalConfig.AppFaviconName = _appConfiguration["GlobalConfig:AppFaviconName"];
+            GlobalConfig.AppDefaultLogo = _appConfiguration["GlobalConfig:AppDefaultLogo"];
+
+            #endregion
+
+            #region Account Layout
+
+            GlobalConfig.AppLoginTitle = _appConfiguration["LoginPage:AppLoginTitle"];
+            GlobalConfig.AppLoginSubtitle = _appConfiguration["LoginPage:AppLoginSubtitle"];
+
+            GlobalConfig.AppDefaultLogoLogin = _appConfiguration["LoginPage:AppDefaultLogoLogin"];
+            GlobalConfig.AppDefaultBackgroundLogin = _appConfiguration["LoginPage:AppDefaultBackgroundLogin"];
+            GlobalConfig.AppDefaultBackgroundLoginColor = _appConfiguration["LoginPage:AppDefaultBackgroundLoginColor"];
+            GlobalConfig.AppDefaultBackgroundSize = _appConfiguration["LoginPage:AppDefaultBackgroundSize"];
+
+            #endregion
+
+            #region Menu Logo
+
+            GlobalConfig.UseMenuLogo = bool.Parse(_appConfiguration["AppMenuLogo:IsActive"]);
+            GlobalConfig.AppDefaultMenuLogo = _appConfiguration["AppMenuLogo:Url"];
+
+            #endregion
+
+            #region Upload , Import
+
+            GlobalConfig.AppPhysPath = _hostingEnvironment.WebRootPath;
+            GlobalConfig.UploadPath = _appConfiguration["GlobalConfig:UploadPath"];
+            GlobalConfig.MaxUploadFileSize = Convert.ToUInt32(_appConfiguration["GlobalConfig:MaxUploadFileSize"]);
+            GlobalConfig.ImportTemplatePath = _appConfiguration["GlobalConfig:ImportTemplatePath"];
+            if (!string.IsNullOrEmpty(_appConfiguration["GlobalConfig:ImportSampleFolders"]))
+                GlobalConfig.ImportSampleFolders = _appConfiguration["GlobalConfig:ImportSampleFolders"];
+
+            #endregion
         }
     }
 }

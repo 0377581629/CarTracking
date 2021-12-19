@@ -304,7 +304,7 @@
     <text name="NoWidgetAvailableMessage">Không có khung số liệu nào khả dụng</text>
     <!--    -->
 
-    <!--  Dashboard Widget  -->
+    <!--  Currency Rate  -->
     <text name="CurrencyRate">Tỷ giá</text>
     <text name="CurrencyRates">Tỷ giá</text>
     <text name="CurrencyRatesHeaderInfo">Số liệu tỷ giá</text>
@@ -323,6 +323,8 @@
     <text name="UserIsNotActiveAndCanNotLogin">Người dùng {0} không hoạt động và không thể đăng nhập.</text>
     <text name="PleaseEnterLoginInformation">Vui lòng nhập thông tin đăng nhập</text>
     <text name="TenancyName">Tên đơn vị sử dụng</text>
+    <text name="TenancyDomainWarning">Đơn vị có "Tên miền" riêng bắt buộc dùng chung CSDL với Hệ thống</text>
+    <text name="Domain">Tên miền</text>
     <text name="UserNameOrEmail">Tên người dùng hoặc email</text>
     <text name="Password">Mật khẩu</text>
     <text name="RememberMe">Lưu thông tin</text>
@@ -632,7 +634,7 @@
     <text name="None">Không</text>
     <text name="YouCanBackToYourAccount">Bạn có thể quay lại tài khoản của mình tại đây.</text>
     <text name="CascadeImpersonationErrorMessage">Không thể làm cho mạo danh thác. Đây là một thông tin đăng nhập mạo danh!</text>
-    <text name="FromTenantToHostImpersonationErrorMessage">Không thể mạo danh người dùng Host từ người dùng đơn vị sử dụng!</text>
+    <text name="FromTenantToHostImpersonationErrorMessage">Không thể mạo danh người dùng Hệ thống từ người dùng đơn vị sử dụng!</text>
     <text name="DifferentTenantImpersonationErrorMessage">Không thể mạo danh người dùng của đơn vị sử dụng khác nhau!</text>
     <text name="ImpersonationTokenErrorMessage">Mã thông báo mạo danh không hợp lệ hoặc đã hết hạn!</text>
     <text name="NotImpersonatedLoginErrorMessage">Đây không phải là thông tin đăng nhập mạo danh!</text>
@@ -689,7 +691,7 @@
     <text name="NewTenant">Đơn vị sử dụng mới</text>
     <text name="ResizedProfilePicture_Warn_SizeLimit">Kích thước hình ảnh được chỉnh lại kích thước phải nhỏ hơn {0} KB. Vui lòng đổi kích thước xuống và thử lại.</text>
     <text name="RegisterFormUserNameInvalidMessage">Vui lòng không nhập địa chỉ email cho tên người dùng.</text>
-    <text name="UseHostDatabase">Sử dụng chung cơ sở dữ liệu với Host</text>
+    <text name="UseHostDatabase">Sử dụng chung cơ sở dữ liệu với Hệ thống</text>
     <text name="DatabaseConnectionString">Chuỗi kết nối cơ sở dữ liệu</text>
     <text name="TenantDatabaseConnectionStringChangeWarningMessage">Lưu ý: Trước khi thay đổi chuỗi kết nối cơ sở dữ liệu cho một đối tượng thuê, bạn nên di chuyển cơ sở dữ liệu đơn vị sử dụng đến vị trí mới. Thay đổi chuỗi kết nối không di chuyển cơ sở dữ liệu đơn vị sử dụng.</text>
     <text name="Timezone">Múi giờ</text>
@@ -741,10 +743,10 @@
     <text name="Demo_SampleChatMessage">Xin chào, Đây là tin nhắn thử nghiệm. Vui lòng đăng nhập bằng tài khoản của tôi trong một trình duyệt khác và kiểm tra chức năng trò chuyện hoạt động như thế nào.</text>
     <text name="TenantToTenantChatFeatureIsNotEnabledForSender">Trò chuyện với đơn vị sử dụng khác không được bật cho bạn.</text>
     <text name="TenantToTenantChatFeatureIsNotEnabledForReceiver">Trò chuyện với đơn vị sử dụng khác không được bật cho đơn vị sử dụng.</text>
-    <text name="TenantToHostChatFeatureIsNotEnabledForSender">Trò chuyện với Host không được bật cho bạn.</text>
-    <text name="TenantToHostChatFeatureIsNotEnabledForReceiver">Trò chuyện với Host không được bật cho đơn vị sử dụng.</text>
+    <text name="TenantToHostChatFeatureIsNotEnabledForSender">Trò chuyện với Hệ thống không được bật cho bạn.</text>
+    <text name="TenantToHostChatFeatureIsNotEnabledForReceiver">Trò chuyện với Hệ thống không được bật cho đơn vị sử dụng.</text>
     <text name="TenantToTenantChatFeature">Trò chuyện với đơn vị sử dụng khác</text>
-    <text name="TenantToHostChatFeature">Trò chuyện với Host</text>
+    <text name="TenantToHostChatFeature">Trò chuyện với Hệ thống</text>
     <text name="FilterByPermission">Lọc theo quyền</text>
     <text name="FilterByRole">Lọc theo vai trò</text>
     <text name="FilterOrAddUser">Lọc / Thêm người dùng</text>
@@ -790,7 +792,7 @@
     <text name="IsLockoutEnabled_Hint">Người dùng bị khóa trong một thời gian sau một số lần đăng nhập thất bại nhất định.</text>
     <text name="TenantRegistrationLoginInfo">Nhấn vào đây để đăng nhập</text>
     <text name="CouldNotValidateExternalUser">Không thể xác thực đăng nhập người dùng bên ngoài</text>
-    <text name="LeaveEmptyToSwitchToHost">Để trống để chuyển sang Host</text>
+    <text name="LeaveEmptyToSwitchToHost">Để trống để chuyển sang Hệ thống</text>
     <text name="PleaseWaitToConfirmYourEmailMessage">Vui lòng chờ trong khi xác nhận địa chỉ email của bạn ...</text>
     <text name="ChatIsConnecting">Trò chuyện đang kết nối ...</text>
     <text name="Note_RefreshPageForPermissionChanges">Nếu bạn đang thay đổi quyền của riêng bạn, bạn có thể cần phải làm mới trang (F5) để có hiệu lực của các thay đổi quyền trên màn hình của riêng bạn!</text>

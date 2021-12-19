@@ -1,39 +1,27 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Text;
 using Abp.AspNetCore;
 using Abp.AspNetCore.Configuration;
 using Abp.AspNetCore.SignalR;
-using Abp.AspNetZeroCore.Licensing;
 using Abp.AspNetZeroCore.Web;
 using Abp.Configuration.Startup;
-using Abp.Dependency;
 using Abp.Hangfire;
-using Abp.Hangfire.Configuration;
-using Abp.IO;
 using Abp.Modules;
 using Abp.Reflection.Extensions;
 using Abp.Runtime.Caching.Redis;
-using Abp.Timing;
 using Abp.Zero.Configuration;
-using Castle.Core.Internal;
 using DPS.Reporting.Application;
-using Hangfire;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Zero.Authentication.TwoFactor;
-using Zero.Chat;
 using Zero.Configuration;
-using Zero.Customize.BackgroundJobs;
+using Zero.Customize.MultiTenancy;
 using Zero.EntityFrameworkCore;
 using Zero.Startup;
 using Zero.Web.Authentication.JwtBearer;
-using Zero.Web.Authentication.TwoFactor;
-using Zero.Web.Chat.SignalR;
 using Zero.Web.Configuration;
-using Zero.Web.DashboardCustomization;
 
 namespace Zero.Web
 {
@@ -94,6 +82,8 @@ namespace Zero.Web
 
             Configuration.ReplaceService<IAppConfigurationWriter, AppConfigurationWriter>();
 
+            Configuration.MultiTenancy.Resolvers.Insert(0, typeof(CustomDomainTenantResolver));
+
             //Uncomment this line to use Hangfire instead of default background job manager (remember also to uncomment related lines in Startup.cs file(s)).
             //Configuration.BackgroundJobs.UseHangfire();
 
@@ -134,15 +124,7 @@ namespace Zero.Web
             IocManager.Resolve<ApplicationPartManager>()
                 .AddApplicationPartsIfNotAddedBefore(typeof(ZeroWebCoreModule).Assembly);
             
-            var currencyRateBackgroundJobService = IocManager.Resolve<ICurrencyRateBackgroundJob>();
-            RecurringJob.RemoveIfExists("SyncCurrencyRates");
-            RecurringJob.AddOrUpdate("SyncCurrencyRates",() => currencyRateBackgroundJobService.UpdateRates(), Cron.Daily);
             
-            var userSubscriptionBackgroundJobService = IocManager.Resolve<IUserSubscriptionBackgroundJob>();
-            RecurringJob.RemoveIfExists("UserSubscription_ExpirationCheck");
-            RecurringJob.AddOrUpdate("UserSubscription_ExpirationCheck",() => userSubscriptionBackgroundJobService.UserSubscriptionExpirationCheck(), Cron.Daily);
-            RecurringJob.RemoveIfExists("UserSubscription_ExpireEmailNotifier");
-            RecurringJob.AddOrUpdate("UserSubscription_ExpireEmailNotifier",() => userSubscriptionBackgroundJobService.UserSubscriptionExpireEmailNotifier(), Cron.Daily);
         }
 
         private void SetAppFolders()

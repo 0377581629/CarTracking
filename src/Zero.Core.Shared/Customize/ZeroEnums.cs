@@ -2,7 +2,7 @@
 
 namespace Zero
 {
-    public class ZEROEnums
+    public class ZeroEnums
     {
         public enum EmailTemplateType
         {

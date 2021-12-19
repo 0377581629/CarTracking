@@ -49,6 +49,12 @@
             </select>
         </div>
 
+        <div class="form-group">
+            <label>@L("Domain")</label>
+            <input id="Domain" type="text" name="domain" class="form-control" value="@Model.Tenant.Domain">
+            <span class="text-danger text-italic">@L("TenancyDomainWarning")</span>
+        </div>
+        
         <div class="checkbox-list subscription-component mb-5px">
             <label class="checkbox checkbox-outline">
                 <input id="CreateTenant_IsUnlimited" type="checkbox" name="IsUnlimited" value="true" @(!Model.Tenant.SubscriptionEndDateUtc.HasValue ? "checked=\"checked\"" : "")/>

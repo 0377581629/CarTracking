@@ -22,17 +22,17 @@ namespace Zero
     {
         public static bool AllowEditDetailStatus(int status)
         {
-            return status == 0 || status == (int) ZEROEnums.DefaultStatus.Draft || status == (int) ZEROEnums.DefaultStatus.Return;
+            return status == 0 || status == (int) ZeroEnums.DefaultStatus.Draft || status == (int) ZeroEnums.DefaultStatus.Return;
         }
         public static string StatusContent(int status, ILocalizationSource lang)
         {
-            var obj = (ZEROEnums.DefaultStatus) status;
+            var obj = (ZeroEnums.DefaultStatus) status;
             return lang.GetString(obj.GetStringValue());
         }
         
         public static List<SelectListItem> ListStatus(int currentStatus, ILocalizationSource lang)
         {
-            return (from status in (ZEROEnums.DefaultStatus[]) Enum.GetValues(typeof(ZEROEnums.DefaultStatus)) select new SelectListItem(lang.GetString(status.GetStringValue()), ((int) status).ToString(), currentStatus == (int) status)).ToList();
+            return (from status in (ZeroEnums.DefaultStatus[]) Enum.GetValues(typeof(ZeroEnums.DefaultStatus)) select new SelectListItem(lang.GetString(status.GetStringValue()), ((int) status).ToString(), currentStatus == (int) status)).ToList();
         }
     }
     
@@ -40,27 +40,27 @@ namespace Zero
     {
         public static string AgeRange(int ageRange, ILocalizationSource lang)
         {
-            var obj = (ZEROEnums.DefaultAgeRange) ageRange;
+            var obj = (ZeroEnums.DefaultAgeRange) ageRange;
             return lang.GetString(obj.GetStringValue());
         }
 
         public static void AgeRangeToYearRange(int ageRange, out int startYear, out int endYear)
         {
-            switch ((ZEROEnums.DefaultAgeRange)ageRange)
+            switch ((ZeroEnums.DefaultAgeRange)ageRange)
             {
-                case ZEROEnums.DefaultAgeRange.Small:
+                case ZeroEnums.DefaultAgeRange.Small:
                     startYear = DateTime.Today.Year - 19;
                     endYear = DateTime.Today.Year;
                     break;
-                case ZEROEnums.DefaultAgeRange.Young:
+                case ZeroEnums.DefaultAgeRange.Young:
                     startYear = DateTime.Today.Year - 25;
                     endYear = DateTime.Today.Year - 18;
                     break;
-                case ZEROEnums.DefaultAgeRange.Middle:
+                case ZeroEnums.DefaultAgeRange.Middle:
                     startYear = DateTime.Today.Year - 45;
                     endYear = DateTime.Today.Year - 26;
                     break;
-                case ZEROEnums.DefaultAgeRange.Old:
+                case ZeroEnums.DefaultAgeRange.Old:
                     startYear = 1900;
                     endYear = DateTime.Today.Year - 46;
                     break;
@@ -73,7 +73,7 @@ namespace Zero
         
         public static List<SelectListItem> ListAgeRange(int? current, ILocalizationSource lang)
         {
-            return (from ageRange in (ZEROEnums.DefaultAgeRange[]) Enum.GetValues(typeof(ZEROEnums.DefaultAgeRange)) select new SelectListItem(lang.GetString(ageRange.GetStringValue()), ((int) ageRange).ToString(), current == (int) ageRange)).ToList();
+            return (from ageRange in (ZeroEnums.DefaultAgeRange[]) Enum.GetValues(typeof(ZeroEnums.DefaultAgeRange)) select new SelectListItem(lang.GetString(ageRange.GetStringValue()), ((int) ageRange).ToString(), current == (int) ageRange)).ToList();
         }
         
         public static void QuarterRange(int quarter, int year, ref DateTime startDate, ref DateTime endDate)
@@ -342,7 +342,7 @@ namespace Zero
 
     public static class FileHelper
     {
-        public static string UploadPath(IAbpSession abpSession, ZEROEnums.FileType type)
+        public static string UploadPath(IAbpSession abpSession, ZeroEnums.FileType type)
         {
             var userPath = "";
             if (abpSession.TenantId.HasValue)
@@ -357,26 +357,26 @@ namespace Zero
         }
 
         public static bool CheckPermissionPath(IAbpSession abpSession,
-            ZEROEnums.FileType type, string checkPath)
+            ZeroEnums.FileType type, string checkPath)
         {
             if (string.IsNullOrEmpty(checkPath)) return false;
             var path = UploadPath(abpSession, type);
             return checkPath.IndexOf(path, StringComparison.Ordinal) == 0;
         }
 
-        private static string TypePath(ZEROEnums.FileType type)
+        private static string TypePath(ZeroEnums.FileType type)
         {
             switch (type)
             {
-                case ZEROEnums.FileType.Image:
+                case ZeroEnums.FileType.Image:
                     return "Image";
-                case ZEROEnums.FileType.Audio:
+                case ZeroEnums.FileType.Audio:
                     return "Audio";
-                case ZEROEnums.FileType.Video:
+                case ZeroEnums.FileType.Video:
                     return "Video";
-                case ZEROEnums.FileType.Office:
+                case ZeroEnums.FileType.Office:
                     return "Office";
-                case ZEROEnums.FileType.Compress:
+                case ZeroEnums.FileType.Compress:
                     return "Compress";
                 default:
                     return "Others";
@@ -387,7 +387,7 @@ namespace Zero
 
         private static Dictionary<string, string> _mimeTypes;
 
-        public static bool Validate(Stream fs, string fileName, ZEROEnums.FileTypeByApp target)
+        public static bool Validate(Stream fs, string fileName, ZeroEnums.FileTypeByApp target)
         {
             if (_knownTypes == null || _mimeTypes == null)
                 InitializeMimeTypeLists();
@@ -400,31 +400,31 @@ namespace Zero
             {
                 switch (target)
                 {
-                    case ZEROEnums.FileTypeByApp.Word:
+                    case ZeroEnums.FileTypeByApp.Word:
                         if (contentType == "application/msword" &&
                             (fileMimeType == "application/x-zip-compressed" ||
                              fileMimeType == "application/octet-stream"))
                             return true;
                         break;
-                    case ZEROEnums.FileTypeByApp.Excel:
+                    case ZeroEnums.FileTypeByApp.Excel:
                         if (contentType == "application/excel" &&
                             (fileMimeType == "application/x-zip-compressed" ||
                              fileMimeType == "application/octet-stream"))
                             return true;
                         break;
-                    case ZEROEnums.FileTypeByApp.PowerPoint:
+                    case ZeroEnums.FileTypeByApp.PowerPoint:
                         if (contentType == "application/vnd.openxmlformats-officedocument.presentationml.presentation" && fileMimeType == "application/octet-stream")
                             return true;
                         break;
-                    case ZEROEnums.FileTypeByApp.Pdf:
+                    case ZeroEnums.FileTypeByApp.Pdf:
                         if (contentType == "application/pdf" && fileMimeType == "application/pdf")
                             return true;
                         break;
-                    case ZEROEnums.FileTypeByApp.RTF:
+                    case ZeroEnums.FileTypeByApp.RTF:
                         if (contentType == "text/richtext" && fileMimeType == "text/richtext")
                             return true;
                         break;
-                    case ZEROEnums.FileTypeByApp.TXT:
+                    case ZeroEnums.FileTypeByApp.TXT:
                         if (contentType == "text/plain" && fileMimeType == "application/octet-stream")
                             return true;
                         break;
@@ -435,31 +435,31 @@ namespace Zero
 
         public static bool AbleConvertToPdf(Stream fs, string fileName)
         {
-            var lstTarget = new List<ZEROEnums.FileTypeByApp>()
+            var lstTarget = new List<ZeroEnums.FileTypeByApp>()
             {
-                ZEROEnums.FileTypeByApp.Word,
-                ZEROEnums.FileTypeByApp.Pdf,
-                ZEROEnums.FileTypeByApp.RTF,
-                ZEROEnums.FileTypeByApp.TXT
+                ZeroEnums.FileTypeByApp.Word,
+                ZeroEnums.FileTypeByApp.Pdf,
+                ZeroEnums.FileTypeByApp.RTF,
+                ZeroEnums.FileTypeByApp.TXT
             };
             return Validate(fs, fileName, lstTarget);
         }
 
         public static bool AbleConvertToPdf(string physPath)
         {
-            var lstTarget = new List<ZEROEnums.FileTypeByApp>()
+            var lstTarget = new List<ZeroEnums.FileTypeByApp>()
             {
-                ZEROEnums.FileTypeByApp.Word,
-                ZEROEnums.FileTypeByApp.Pdf,
-                ZEROEnums.FileTypeByApp.RTF,
-                ZEROEnums.FileTypeByApp.TXT
+                ZeroEnums.FileTypeByApp.Word,
+                ZeroEnums.FileTypeByApp.Pdf,
+                ZeroEnums.FileTypeByApp.RTF,
+                ZeroEnums.FileTypeByApp.TXT
             };
             var fileName = Path.GetFileName(physPath);
             using var fs = new FileStream(physPath, FileMode.Open);
             return Validate(fs, fileName, lstTarget);
         }
         
-        private static bool Validate(Stream fs, string fileName, List<ZEROEnums.FileTypeByApp> lstTarget)
+        private static bool Validate(Stream fs, string fileName, List<ZeroEnums.FileTypeByApp> lstTarget)
         {
             if (lstTarget == null || !lstTarget.Any())
                 return false;
@@ -476,31 +476,31 @@ namespace Zero
             {
                 switch (target)
                 {
-                    case ZEROEnums.FileTypeByApp.Word:
+                    case ZeroEnums.FileTypeByApp.Word:
                         if (contentType == "application/msword" &&
                             (fileMimeType == "application/x-zip-compressed" ||
                              fileMimeType == "application/octet-stream"))
                             return true;
                         break;
-                    case ZEROEnums.FileTypeByApp.Excel:
+                    case ZeroEnums.FileTypeByApp.Excel:
                         if (contentType == "application/excel" &&
                             (fileMimeType == "application/x-zip-compressed" ||
                              fileMimeType == "application/octet-stream"))
                             return true;
                         break;
-                    case ZEROEnums.FileTypeByApp.PowerPoint:
+                    case ZeroEnums.FileTypeByApp.PowerPoint:
                         if (contentType == "application/vnd.openxmlformats-officedocument.presentationml.presentation" && fileMimeType == "application/octet-stream")
                             return true;
                         break;
-                    case ZEROEnums.FileTypeByApp.Pdf:
+                    case ZeroEnums.FileTypeByApp.Pdf:
                         if (contentType == "application/pdf" && fileMimeType == "application/pdf")
                             return true;
                         break;
-                    case ZEROEnums.FileTypeByApp.RTF:
+                    case ZeroEnums.FileTypeByApp.RTF:
                         if (contentType == "text/richtext" && fileMimeType == "text/richtext")
                             return true;
                         break;
-                    case ZEROEnums.FileTypeByApp.TXT:
+                    case ZeroEnums.FileTypeByApp.TXT:
                         if (contentType == "text/plain" && fileMimeType == "application/octet-stream")
                             return true;
                         break;
@@ -1053,13 +1053,13 @@ namespace Zero
     {
         public static string EmailTemplateType(int emailTemplateType, ILocalizationSource lang)
         {
-            var type = (ZEROEnums.EmailTemplateType) emailTemplateType;
+            var type = (ZeroEnums.EmailTemplateType) emailTemplateType;
             return lang.GetString(type.GetStringValue());
         }
 
         public static List<SelectListItem> ListEmailTemplateType(int currentType, ILocalizationSource lang)
         {
-            return (from emailTemplateType in (ZEROEnums.EmailTemplateType[]) Enum.GetValues(typeof(ZEROEnums.EmailTemplateType))
+            return (from emailTemplateType in (ZeroEnums.EmailTemplateType[]) Enum.GetValues(typeof(ZeroEnums.EmailTemplateType))
                 select new SelectListItem(lang.GetString(emailTemplateType.GetStringValue()), ((int) emailTemplateType).ToString(), currentType == (int) emailTemplateType)).ToList();
         }
     }

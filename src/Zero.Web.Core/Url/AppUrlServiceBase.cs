@@ -36,7 +36,7 @@ namespace Zero.Web.Url
 
             if (tenancyName != null)
             {
-                activationLink = activationLink + "&tenantId={tenantId}";
+                activationLink += "&tenantId={tenantId}";
             }
 
             return activationLink;
@@ -48,7 +48,7 @@ namespace Zero.Web.Url
 
             if (tenancyName != null)
             {
-                resetLink = resetLink + "&tenantId={tenantId}";
+                resetLink += "&tenantId={tenantId}";
             }
 
             return resetLink;

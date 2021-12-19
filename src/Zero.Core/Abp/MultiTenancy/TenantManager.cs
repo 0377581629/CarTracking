@@ -360,6 +360,7 @@ namespace Zero.MultiTenancy
             bool sendActivationEmail,
             DateTime? subscriptionEndDate,
             bool isInTrialPeriod,
+            string domain,
             string emailActivationLink)
         {
             int newTenantId;
@@ -372,6 +373,11 @@ namespace Zero.MultiTenancy
             
             using (var uow = _unitOfWorkManager.Begin(TransactionScopeOption.RequiresNew))
             {
+                // Not allow tenant use custom database when it has a domain
+                
+                if (domain.IsNullOrWhiteSpace())
+                    connectionString = null;
+                
                 //Create tenant
                 var tenant = new Tenant(tenancyName, name)
                 {
@@ -379,7 +385,8 @@ namespace Zero.MultiTenancy
                     EditionId = editionId,
                     SubscriptionEndDateUtc = subscriptionEndDate?.ToUniversalTime(),
                     IsInTrialPeriod = isInTrialPeriod,
-                    ConnectionString = connectionString.IsNullOrWhiteSpace() ? null : SimpleStringCipher.Instance.Encrypt(connectionString)
+                    ConnectionString = connectionString.IsNullOrWhiteSpace() ? null : SimpleStringCipher.Instance.Encrypt(connectionString),
+                    Domain = domain
                 };
 
                 if (parentId > 0)

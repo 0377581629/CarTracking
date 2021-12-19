@@ -28,7 +28,7 @@ namespace Zero.Net.Emailing
             _defaultTemplates = new ConcurrentDictionary<string, string>();
         }
 
-        public string GetDefaultTemplate(int? tenantId, ZEROEnums.EmailTemplateType? emailTemplateType = null)
+        public string GetDefaultTemplate(int? tenantId, ZeroEnums.EmailTemplateType? emailTemplateType = null)
         {
             var res = "";
             var tenancyKey = tenantId.HasValue ? tenantId.Value.ToString() : "host";

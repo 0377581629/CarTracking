@@ -108,7 +108,7 @@
     <text name="SelectDashboardWidget">Select widget</text>
     <!--    -->
 
-    <!--  Dashboard Widget  -->
+    <!--  Currency Rate  -->
     <text name="CurrencyRate">Currency rate</text>
     <text name="CurrencyRates">Currency rate</text>
     <text name="CurrencyRatesHeaderInfo">Currency rate</text>
@@ -130,6 +130,8 @@
     <text name="UserIsNotActiveAndCanNotLogin">User {0} is not active and can not log in.</text>
     <text name="PleaseEnterLoginInformation">Please enter login information</text>
     <text name="TenancyName">Tenancy name</text>
+    <text name="TenancyDomainWarning">All Tenancy use custom "Domain" will use Host's database</text>
+    <text name="Domain">Domain</text>
     <text name="UserNameOrEmail">User name or email</text>
     <text name="Password">Password</text>
     <text name="RememberMe">Remember me</text>

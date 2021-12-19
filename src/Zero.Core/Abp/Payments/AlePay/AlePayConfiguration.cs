@@ -4,7 +4,6 @@ using Abp.Configuration.Startup;
 using Abp.Extensions;
 using Abp.MultiTenancy;
 using Abp.Runtime.Session;
-using Microsoft.Extensions.Configuration;
 using Zero.Configuration;
 using Zero.MultiTenancy.Payments;
 
@@ -27,15 +26,15 @@ namespace Zero.Abp.Payments.AlePay
 
         public AlePayPaymentGatewayConfiguration(IMultiTenancyConfig multiTenancyConfig, IAppConfigurationAccessor configurationAccessor, ISettingManager settingManager, IAbpSession abpSession)
         {
-            IsActiveByConfig = configurationAccessor.Configuration["Payment:AlePay:IsActive"].To<bool>();
-            BaseUrl = configurationAccessor.Configuration["Payment:AlePay:BaseUrl"];
-            TokenKey = configurationAccessor.Configuration["Payment:AlePay:TokenKey"];
-            ChecksumKey = configurationAccessor.Configuration["Payment:AlePay:ChecksumKey"];
-
-            #region Custom Config
-
             try
             {
+                IsActiveByConfig = configurationAccessor.Configuration["Payment:AlePay:IsActive"].To<bool>();
+                BaseUrl = configurationAccessor.Configuration["Payment:AlePay:BaseUrl"];
+                TokenKey = configurationAccessor.Configuration["Payment:AlePay:TokenKey"];
+                ChecksumKey = configurationAccessor.Configuration["Payment:AlePay:ChecksumKey"];
+
+                #region Custom Config
+
                 if (multiTenancyConfig.IsEnabled && abpSession.MultiTenancySide == MultiTenancySides.Tenant)
                 {
                     var useCustomConfig = settingManager.GetSettingValueForTenant(AppSettings.PaymentManagement.UseCustomPaymentConfig, abpSession.GetTenantId(), true) == "true";
@@ -56,13 +55,13 @@ namespace Zero.Abp.Payments.AlePay
                     TokenKey = settingManager.GetSettingValueForApplication(AppSettings.PaymentManagement.AlePayTokenKey, true);
                     ChecksumKey = settingManager.GetSettingValueForApplication(AppSettings.PaymentManagement.AlePayChecksumKey, true);
                 }
+
+                #endregion
             }
             catch (Exception)
             {
                 // ignored
             }
-
-            #endregion
         }
     }
 }

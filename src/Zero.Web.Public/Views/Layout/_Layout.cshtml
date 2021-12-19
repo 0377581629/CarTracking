@@ -4,6 +4,7 @@
 @using Zero.Timing
 @using Zero.Web.Public.Views.Shared.Components.Header
 @using CultureHelper = Zero.Localization.CultureHelper
+@using System.Globalization
 @inject AppTimes AppTimes
 @inject IAbpAntiForgeryManager AbpAntiForgeryManager
 @{
@@ -75,6 +76,12 @@
 
     <!-- Dynamic scripts of ABP system (They are created on runtime and can not be bundled) -->
     <script src="~/AbpScripts/GetScripts?_v=@AppTimes.StartupTime.Ticks" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        abp.localization.currentCulture = $.extend({}, abp.localization.currentCulture, { displayNameEnglish: '@CultureInfo.CurrentUICulture.EnglishName' });
+        moment.locale('@(GetMomentLocale())'); //Localizing moment.js
+        abp.multiTenancy.tenantIdCookieName = 'abp.tenantid';
+    </script>
 
     <script src="~/view-resources/Views/_Bundles/frontend-metronic.min.js" asp-append-version="true"></script>
 

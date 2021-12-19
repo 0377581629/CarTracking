@@ -183,7 +183,7 @@ namespace Zero.Web.Controllers
             returnUrl = NormalizeReturnUrl(returnUrl);
             if (!string.IsNullOrWhiteSpace(returnUrlHash))
             {
-                returnUrl = returnUrl + returnUrlHash;
+                returnUrl += returnUrlHash;
             }
 
             if (UseCaptchaOnLogin())

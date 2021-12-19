@@ -46,6 +46,12 @@
         </div>
 
         <div class="form-group">
+            <label>@L("Domain")</label>
+            <input id="Domain" type="text" name="domain" class="form-control">
+            <span class="text-danger text-italic">@L("TenancyDomainWarning")</span>
+        </div>
+        
+        <div class="form-group">
             <label for="AdminEmailAddress">@L("AdminEmailAddress")</label>
             <input id="AdminEmailAddress" type="email" name="AdminEmailAddress" class="form-control" required maxlength="@AbpUserBase.MaxEmailAddressLength">
         </div>

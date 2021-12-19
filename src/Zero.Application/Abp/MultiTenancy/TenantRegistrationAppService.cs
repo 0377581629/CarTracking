@@ -111,6 +111,7 @@ namespace Zero.MultiTenancy
                     sendActivationEmail: true,
                     subscriptionEndDate,
                     isInTrialPeriod,
+                    null,
                     AppUrlService.CreateEmailActivationUrlFormat(input.TenancyName)
                 );
 
