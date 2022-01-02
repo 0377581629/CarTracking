@@ -13,7 +13,7 @@ namespace Zero
     {
         protected ZeroServiceBase()
         {
-            LocalizationSourceName = ZeroConsts.LocalizationSourceName;
+            LocalizationSourceName = ZeroConst.LocalizationSourceName;
         }
     }
 }

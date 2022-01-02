@@ -204,7 +204,7 @@ namespace Zero.Authorization.Users.Importing
                 await _appNotifier.SendMessageAsync(
                     args.User,
                     new LocalizableString("AllUsersSuccessfullyImportedFromExcel",
-                        ZeroConsts.LocalizationSourceName),
+                        ZeroConst.LocalizationSourceName),
                     null,
                     NotificationSeverity.Success);
             }
@@ -219,7 +219,7 @@ namespace Zero.Authorization.Users.Importing
                     args.User,
                     new LocalizableString(
                         "FileCantBeConvertedToUserList",
-                        ZeroConsts.LocalizationSourceName
+                        ZeroConst.LocalizationSourceName
                     ),
                     null,
                     NotificationSeverity.Warn);

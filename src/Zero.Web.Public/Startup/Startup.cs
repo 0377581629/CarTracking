@@ -147,7 +147,7 @@ namespace Zero.Web.Public.Startup
         {
             #region System
 
-            ZeroConsts.MultiTenancyEnabled = bool.Parse(_appConfiguration["GlobalConfig:AllowMultiTenancy"]);
+            ZeroConst.MultiTenancyEnabled = bool.Parse(_appConfiguration["GlobalConfig:AllowMultiTenancy"]);
             SystemConfig.DisableMailService = bool.Parse(_appConfiguration["GlobalConfig:DisableMailService"]);
             SystemConfig.LogIndex = _appConfiguration["GlobalConfig:LogIndex"];
             if (!string.IsNullOrEmpty(_appConfiguration["GlobalConfig:DefaultPassword"]))

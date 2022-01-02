@@ -1,5 +1,6 @@
 ﻿@using Zero.Web.Public.Views.Shared.Components.Header
 @using Zero.Web.Navigation
+@using Abp.Runtime.Security
 @model HeaderViewModel
 @{
     var orderedMenuItems = Model.Menu.Items.OrderByCustom().ToList();
@@ -46,7 +47,7 @@
                     @if (Model.LoginInformations?.User == null && Model.IsMultiTenancyEnabled && Model.TenantRegistrationEnabled && Model.IsInHostView)
                     {
                         <li>
-                            <a href="@(string.Format("{0}{1}", Model.AdminWebSiteRootAddress,"?redirect=TenantRegistration&forceNewRegistration=true"))">@L("NewTenant")</a>
+                            <a href="@($"{Model.AdminWebSiteRootAddress}?redirect=TenantRegistration&forceNewRegistration=true")">@L("NewTenant")</a>
                         </li>
                     }
                     <li>
@@ -63,7 +64,14 @@
                         }
                         else
                         {
-                            <a href="@(string.Format("{0}{1}?ss={2}&returnUrl={3}", Model.AdminWebSiteRootAddress, "account/login", "true", Model.WebSiteRootAddress + "Account/Login"))">@L("LogIn")</a> <!-- TODO: get url from setting or Request. -->
+                            if (AbpSession.TenantId.HasValue)
+                            {
+                                <a href="@($"{Model.AdminWebSiteRootAddress}account/login?ss=true&tenancy={SimpleStringCipher.Instance.Encrypt(AbpSession.TenantId.ToString())}&returnUrl={Model.WebSiteRootAddress + "Account/Login"}")">@L("LogIn")</a>
+                            }
+                            else
+                            {
+                                <a href="@($"{Model.AdminWebSiteRootAddress}account/login?ss=true&returnUrl={Model.WebSiteRootAddress + "Account/Login"}")">@L("LogIn")</a>
+                            }
                         }
                     </li>
                 </ul>

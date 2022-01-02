@@ -74,7 +74,7 @@
                 <div class="header-wrapper rounded-top-xl d-flex flex-grow-1 align-items-center">
                     <div class="@(await GetContainerClass()) d-flex align-items-center justify-content-end justify-content-lg-between flex-wrap">
                         @await Component.InvokeAsync(typeof(AppMenuViewComponent), new {currentPageName = ViewBag.CurrentPageName, isLeftMenuUsed = false})
-                        @if (ZeroConsts.MultiTenancyEnabled)
+                        @if (ZeroConst.MultiTenancyEnabled)
                         {
                             <div class="d-flex align-items-center py-3 py-lg-2">
                                 <div class="d-none d-lg-flex subscription-warning d-print-none">
@@ -85,7 +85,7 @@
                     </div>
                 </div>
             </div>
-            @if (ZeroConsts.MultiTenancyEnabled)
+            @if (ZeroConst.MultiTenancyEnabled)
             {
                 <div class="d-lg-none p-3 mobile-subscription-warning d-print-none">
                     @await Component.InvokeAsync(typeof(AppSubscriptionBarViewComponent))

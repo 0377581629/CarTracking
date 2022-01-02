@@ -53,10 +53,11 @@ namespace Zero.Web.Url
             var httpContext = _httpContextAccessor.HttpContext;
             if (httpContext == null) return ReplaceTenancyNameInUrl(WebSiteRootAddressFormat, tenancyName);
             
+            var scheme = httpContext.Request.Scheme;
             var hostName = httpContext.Request.Host.Host.RemovePreFix("http://", "https://").RemovePostFix("/");
             var tenantByDomain = _customTenantCache.GetOrNullByDomain(hostName);
             
-            return tenantByDomain != null ? httpContext.Request.GetDisplayUrl().Replace(hostName, tenantByDomain.Domain) : ReplaceTenancyNameInUrl(WebSiteRootAddressFormat, tenancyName);
+            return tenantByDomain != null ? $"{scheme}://{hostName}/" : ReplaceTenancyNameInUrl(WebSiteRootAddressFormat, tenancyName);
         }
 
         public string GetServerRootAddress(string tenancyName = null)

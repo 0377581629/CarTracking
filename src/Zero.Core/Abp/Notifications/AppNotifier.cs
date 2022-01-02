@@ -33,7 +33,7 @@ namespace Zero.Notifications
             var notificationData = new LocalizableMessageNotificationData(
                 new LocalizableString(
                     "NewUserRegisteredNotificationMessage",
-                    ZeroConsts.LocalizationSourceName
+                    ZeroConst.LocalizationSourceName
                 )
             );
 
@@ -49,7 +49,7 @@ namespace Zero.Notifications
             var notificationData = new LocalizableMessageNotificationData(
                 new LocalizableString(
                     "NewTenantRegisteredNotificationMessage",
-                    ZeroConsts.LocalizationSourceName
+                    ZeroConst.LocalizationSourceName
                 )
             );
 
@@ -62,7 +62,7 @@ namespace Zero.Notifications
             var notificationData = new LocalizableMessageNotificationData(
                 new LocalizableString(
                     "GdprDataPreparedNotificationMessage",
-                    ZeroConsts.LocalizationSourceName
+                    ZeroConst.LocalizationSourceName
                 )
             );
 
@@ -114,7 +114,7 @@ namespace Zero.Notifications
             return SendNotificationAsync(AppNotificationNames.TenantsMovedToEdition, user,
                 new LocalizableString(
                     "TenantsMovedToEditionNotificationMessage",
-                    ZeroConsts.LocalizationSourceName
+                    ZeroConst.LocalizationSourceName
                 ),
                 new Dictionary<string, object>
                 {
@@ -134,7 +134,7 @@ namespace Zero.Notifications
             return SendNotificationAsync(AppNotificationNames.DownloadInvalidImportUsers, user, 
                 new LocalizableString(
                     "ClickToSeeInvalidUsers",
-                    ZeroConsts.LocalizationSourceName
+                    ZeroConst.LocalizationSourceName
                 ), 
                 new Dictionary<string, object>
                 {

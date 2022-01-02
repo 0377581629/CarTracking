@@ -74,7 +74,7 @@ namespace Zero.Features
 
         private static ILocalizableString L(string name)
         {
-            return new LocalizableString(name, ZeroConsts.LocalizationSourceName);
+            return new LocalizableString(name, ZeroConst.LocalizationSourceName);
         }
     }
 }

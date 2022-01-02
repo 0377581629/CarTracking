@@ -37,7 +37,7 @@ namespace Zero.Web.Controllers
         public ActionResult Index()
         {
             var appSettings = _installAppService.GetAppSettingsJson();
-            var connectionString = _appConfiguration[$"ConnectionStrings:{ZeroConsts.ConnectionStringName}"];
+            var connectionString = _appConfiguration[$"ConnectionStrings:{ZeroConst.ConnectionStringName}"];
 
             if (_databaseCheckHelper.Exist(connectionString))
             {

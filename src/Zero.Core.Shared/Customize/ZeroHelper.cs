@@ -1171,12 +1171,12 @@ namespace Zero
                     }
                     catch (Exception)
                     {
-                        return cell.NumericCellValue.ToString(ZeroConsts.NumberFormatInfo);
+                        return cell.NumericCellValue.ToString(ZeroConst.NumberFormatInfo);
                     }
                 case CellType.Numeric:
                     data = DateUtil.IsCellDateFormatted(cell)
-                        ? cell.DateCellValue.ToString(ZeroConsts.DateFormat)
-                        : cell.NumericCellValue.ToString(ZeroConsts.NumberFormatInfo);
+                        ? cell.DateCellValue.ToString(ZeroConst.DateFormat)
+                        : cell.NumericCellValue.ToString(ZeroConst.NumberFormatInfo);
                     break;
                 case CellType.String:
                     data = cell.StringCellValue;

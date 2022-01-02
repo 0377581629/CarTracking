@@ -120,7 +120,7 @@ namespace Zero.MultiTenancy
 
             if (isInTrialPeriod && !subscriptionEndDate.HasValue)
             {
-                throw new UserFriendlyException(LocalizationManager.GetString(ZeroConsts.LocalizationSourceName, "TrialWithoutEndDateErrorMessage"));
+                throw new UserFriendlyException(LocalizationManager.GetString(ZeroConst.LocalizationSourceName, "TrialWithoutEndDateErrorMessage"));
             }
 
             using (var uow = _unitOfWorkManager.Begin(TransactionScopeOption.RequiresNew))
@@ -240,7 +240,7 @@ namespace Zero.MultiTenancy
                 return;
             }
 
-            var error = LocalizationManager.GetSource(ZeroConsts.LocalizationSourceName).GetString("FreeEditionsCannotHaveTrialVersions");
+            var error = LocalizationManager.GetSource(ZeroConst.LocalizationSourceName).GetString("FreeEditionsCannotHaveTrialVersions");
             throw new UserFriendlyException(error);
         }
 
@@ -341,7 +341,7 @@ namespace Zero.MultiTenancy
         {
             if (tenant.IsInTrialPeriod && !tenant.SubscriptionEndDateUtc.HasValue)
             {
-                throw new UserFriendlyException(LocalizationManager.GetString(ZeroConsts.LocalizationSourceName, "TrialWithoutEndDateErrorMessage"));
+                throw new UserFriendlyException(LocalizationManager.GetString(ZeroConst.LocalizationSourceName, "TrialWithoutEndDateErrorMessage"));
             }
 
             return base.UpdateAsync(tenant);
@@ -369,7 +369,7 @@ namespace Zero.MultiTenancy
             await CheckEditionAsync(editionId, isInTrialPeriod);
 
             if (isInTrialPeriod && !subscriptionEndDate.HasValue)
-                throw new UserFriendlyException(LocalizationManager.GetString(ZeroConsts.LocalizationSourceName, "TrialWithoutEndDateErrorMessage"));
+                throw new UserFriendlyException(LocalizationManager.GetString(ZeroConst.LocalizationSourceName, "TrialWithoutEndDateErrorMessage"));
             
             using (var uow = _unitOfWorkManager.Begin(TransactionScopeOption.RequiresNew))
             {

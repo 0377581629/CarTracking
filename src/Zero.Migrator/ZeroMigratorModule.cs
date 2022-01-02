@@ -28,7 +28,7 @@ namespace Zero.Migrator
         public override void PreInitialize()
         {
             Configuration.DefaultNameOrConnectionString = _appConfiguration.GetConnectionString(
-                ZeroConsts.ConnectionStringName
+                ZeroConst.ConnectionStringName
                 );
             Configuration.Modules.AspNetZero().LicenseCode = _appConfiguration["AbpZeroLicenseCode"];
 

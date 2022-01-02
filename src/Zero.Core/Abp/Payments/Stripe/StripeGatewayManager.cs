@@ -343,7 +343,7 @@ namespace Zero.Abp.Payments.Stripe
 
         public string GetPlanId(string editionName, PaymentPeriodType paymentPeriodType)
         {
-            return editionName + "_" + paymentPeriodType + "_" + ZeroConsts.Currency;
+            return editionName + "_" + paymentPeriodType + "_" + ZeroConst.Currency;
         }
 
         public long ConvertToStripePrice(decimal amount)
@@ -377,7 +377,7 @@ namespace Zero.Abp.Payments.Stripe
                 Amount = ConvertToStripePrice(amount),
                 Interval = interval,
                 Product = productId,
-                Currency = ZeroConsts.Currency
+                Currency = ZeroConst.Currency
             });
 
             return new StripeIdResponse

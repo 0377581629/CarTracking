@@ -70,7 +70,7 @@
                     <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
                     </div>
                     <div class="topbar">
-                        @if (ZeroConsts.MultiTenancyEnabled)
+                        @if (ZeroConst.MultiTenancyEnabled)
                         {
                             <div class="d-none d-lg-flex topbar-item subscription-warning d-print-none">
                                 @await Component.InvokeAsync(typeof(AppSubscriptionBarViewComponent))
@@ -87,7 +87,7 @@
                 </div>
 
             </div>
-            @if (ZeroConsts.MultiTenancyEnabled)
+            @if (ZeroConst.MultiTenancyEnabled)
             {
                 <div class="d-lg-none p-3 mobile-subscription-warning d-print-none">
                     @await Component.InvokeAsync(typeof(AppSubscriptionBarViewComponent))

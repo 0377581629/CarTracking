@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <PackageId>DPS.Cms.Application.Shared</PackageId>
+        <LangVersion>9</LangVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\src\Zero.Application.Shared\Zero.Application.Shared.csproj" />
+      <ProjectReference Include="..\DPS.Cms.Core.Shared\DPS.Cms.Core.Shared.csproj" />
+      <ProjectReference Include="..\DPS.Cms.Core\DPS.Cms.Core.csproj" />
+    </ItemGroup>
+
+</Project>

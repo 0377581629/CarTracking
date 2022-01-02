@@ -22,7 +22,7 @@ namespace Zero
 
         protected ZeroAppServiceBase()
         {
-            LocalizationSourceName = ZeroConsts.LocalizationSourceName;
+            LocalizationSourceName = ZeroConst.LocalizationSourceName;
         }
 
         protected virtual async Task<User> GetCurrentUserAsync()

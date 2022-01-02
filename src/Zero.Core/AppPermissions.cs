@@ -118,4 +118,59 @@
         
         #endregion
     }
+    
+    public static class CmsPermissions
+    {
+        public static string Settings = "Cms.Settings";
+        
+        public const string ImageBlockGroup = "Cms.ImageBlockGroup";
+        public const string ImageBlockGroup_Create = "Cms.ImageBlockGroup.Create";
+        public const string ImageBlockGroup_Edit = "Cms.ImageBlockGroup.Edit";
+        public const string ImageBlockGroup_Delete = "Cms.ImageBlockGroup.Delete";
+        
+        public const string ImageBlock = "Cms.ImageBlock";
+        public const string ImageBlock_Create = "Cms.ImageBlock.Create";
+        public const string ImageBlock_Edit = "Cms.ImageBlock.Edit";
+        public const string ImageBlock_Delete = "Cms.ImageBlock.Delete";
+        
+        public const string Page = "Cms.Page";
+        public const string Page_Create = "Cms.Page.Create";
+        public const string Page_Edit = "Cms.Page.Edit";
+        public const string Page_Delete = "Cms.Page.Delete";
+        
+        public const string PageLayout = "Cms.PageLayout";
+        public const string PageLayout_Create = "Cms.PageLayout.Create";
+        public const string PageLayout_Edit = "Cms.PageLayout.Edit";
+        public const string PageLayout_Delete = "Cms.PageLayout.Delete";
+        
+        public const string PageTheme = "Cms.PageTheme";
+        public const string PageTheme_Create = "Cms.PageTheme.Create";
+        public const string PageTheme_Edit = "Cms.PageTheme.Edit";
+        public const string PageTheme_Delete = "Cms.PageTheme.Delete";
+        
+        public const string Widget = "Cms.Widget";
+        public const string Widget_Create = "Cms.Widget.Create";
+        public const string Widget_Edit = "Cms.Widget.Edit";
+        public const string Widget_Delete = "Cms.Widget.Delete";
+        
+        public const string Supporter = "Cms.Supporter";
+        public const string Supporter_Create = "Cms.Supporter.Create";
+        public const string Supporter_Edit = "Cms.Supporter.Edit";
+        public const string Supporter_Delete = "Cms.Supporter.Delete";
+        
+        public const string Tags = "Cms.Tags";
+        public const string Tags_Create = "Cms.Tags.Create";
+        public const string Tags_Edit = "Cms.Tags.Edit";
+        public const string Tags_Delete = "Cms.Tags.Delete";
+        
+        public const string MenuGroup = "Cms.MenuGroup";
+        public const string MenuGroup_Create = "Cms.MenuGroup.Create";
+        public const string MenuGroup_Edit = "Cms.MenuGroup.Edit";
+        public const string MenuGroup_Delete = "Cms.MenuGroup.Delete";
+        
+        public const string Menu = "Cms.Menu";
+        public const string Menu_Create = "Cms.Menu.Create";
+        public const string Menu_Edit = "Cms.Menu.Edit";
+        public const string Menu_Delete = "Cms.Menu.Delete";
+    }
 }

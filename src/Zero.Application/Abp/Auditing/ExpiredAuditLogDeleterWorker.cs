@@ -40,7 +40,7 @@ namespace Zero.Auditing
             _auditLogRepository = auditLogRepository;
             _tenantRepository = tenantRepository;
 
-            LocalizationSourceName = ZeroConsts.LocalizationSourceName;
+            LocalizationSourceName = ZeroConst.LocalizationSourceName;
 
             Timer.Period = CheckPeriodAsMilliseconds;
             Timer.RunOnStart = true;

@@ -16,7 +16,7 @@ namespace Zero.Authorization.Users.Importing
 
         public UserListExcelDataReader(ILocalizationManager localizationManager)
         {
-            _localizationSource = localizationManager.GetSource(ZeroConsts.LocalizationSourceName);
+            _localizationSource = localizationManager.GetSource(ZeroConst.LocalizationSourceName);
         }
 
         public List<ImportUserDto> GetUsersFromExcel(byte[] fileBytes)

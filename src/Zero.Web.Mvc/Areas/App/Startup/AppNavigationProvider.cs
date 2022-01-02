@@ -149,7 +149,7 @@ namespace Zero.Web.Areas.App.Startup
                     )
                 );
 
-            if (ZeroConsts.MultiTenancyEnabled)
+            if (ZeroConst.MultiTenancyEnabled)
                 menu.AddItem(new MenuItemDefinition(
                         AppPageNames.Tenant.SubscriptionManagement,
                         L("Subscription"),
@@ -172,7 +172,7 @@ namespace Zero.Web.Areas.App.Startup
 
         private static ILocalizableString L(string name)
         {
-            return new LocalizableString(name, ZeroConsts.LocalizationSourceName);
+            return new LocalizableString(name, ZeroConst.LocalizationSourceName);
         }
     }
 }

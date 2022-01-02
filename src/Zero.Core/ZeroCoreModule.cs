@@ -84,7 +84,7 @@ namespace Zero
             Configuration.Webhooks.IsAutomaticSubscriptionDeactivationEnabled = false;
 
             //Enable this line to create a multi-tenant application.
-            Configuration.MultiTenancy.IsEnabled = ZeroConsts.MultiTenancyEnabled;
+            Configuration.MultiTenancy.IsEnabled = ZeroConst.MultiTenancyEnabled;
 
             //Enable LDAP authentication 
             //Configuration.Modules.ZeroLdap().Enable(typeof(AppLdapAuthenticationSource));

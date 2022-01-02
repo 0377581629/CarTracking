@@ -186,7 +186,7 @@ namespace Zero.Abp.Payments
                     {
                         Amount = (long) _stripeGatewayManager.ConvertToStripePrice(payment.Amount),
                         Name = StripeGatewayManager.ProductName,
-                        Currency = ZeroConsts.Currency,
+                        Currency = ZeroConst.Currency,
                         Description = payment.Description,
                         Quantity = 1
                     }

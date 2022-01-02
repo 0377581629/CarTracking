@@ -108,7 +108,7 @@ namespace Zero.Authorization
 
             administration.CreateChildPermission(AppPermissions.Pages_Administration_Tenant_Settings, L("TenantSettings"));
             
-            if (ZeroConsts.MultiTenancyEnabled)
+            if (ZeroConst.MultiTenancyEnabled)
                 administration.CreateChildPermission(AppPermissions.Pages_Administration_Tenant_SubscriptionManagement, L("TenantSubscription"));
 
             //HOST-SPECIFIC PERMISSIONS
@@ -133,7 +133,7 @@ namespace Zero.Authorization
 
         private static ILocalizableString L(string name)
         {
-            return new LocalizableString(name, ZeroConsts.LocalizationSourceName);
+            return new LocalizableString(name, ZeroConst.LocalizationSourceName);
         }
     }
 }

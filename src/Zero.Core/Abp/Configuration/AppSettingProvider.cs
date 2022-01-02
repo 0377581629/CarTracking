@@ -59,7 +59,7 @@ namespace Zero.Configuration
 
         private void ChangeEmailSettingScopes(SettingDefinitionProviderContext context)
         {
-            if (!ZeroConsts.AllowTenantsToChangeEmailSettings)
+            if (!ZeroConst.AllowTenantsToChangeEmailSettings)
             {
                 context.Manager.GetSettingDefinition(EmailSettingNames.Smtp.Host).Scopes = SettingScopes.Application;
                 context.Manager.GetSettingDefinition(EmailSettingNames.Smtp.Port).Scopes = SettingScopes.Application;
@@ -118,7 +118,7 @@ namespace Zero.Configuration
                     GetFromAppSettings(AppSettings.TenantManagement.BillingTaxVatNo, ""), scopes: SettingScopes.Tenant),
                 new SettingDefinition(AppSettings.Email.UseHostDefaultEmailSettings,
                     GetFromAppSettings(AppSettings.Email.UseHostDefaultEmailSettings,
-                        ZeroConsts.MultiTenancyEnabled ? "true" : "false"), scopes: SettingScopes.Tenant)
+                        ZeroConst.MultiTenancyEnabled ? "true" : "false"), scopes: SettingScopes.Tenant)
             };
         }
 

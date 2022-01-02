@@ -12,7 +12,7 @@ namespace Zero.Web.Controllers
     {
         protected ZeroControllerBase()
         {
-            LocalizationSourceName = ZeroConsts.LocalizationSourceName;
+            LocalizationSourceName = ZeroConst.LocalizationSourceName;
         }
 
         protected void CheckErrors(IdentityResult identityResult)

@@ -17,6 +17,7 @@ using Abp.Extensions;
 using Abp.MultiTenancy;
 using Abp.Net.Mail;
 using Abp.Notifications;
+using Abp.Runtime.Security;
 using Abp.Runtime.Session;
 using Abp.Timing;
 using Abp.UI;
@@ -139,10 +140,25 @@ namespace Zero.Web.Controllers
         
         #region Login / Logout
 
-        public async Task<ActionResult> Login(string userNameOrEmailAddress = "", string returnUrl = "", string successMessage = "", string ss = "")
+        public async Task<ActionResult> Login(string userNameOrEmailAddress = "", string returnUrl = "", string successMessage = "", string ss = "", string tenancy = "")
         {
             returnUrl = NormalizeReturnUrl(returnUrl);
-
+            if (!tenancy.IsNullOrEmpty())
+            {
+                try
+                {
+                    if (int.TryParse(SimpleStringCipher.Instance.Decrypt(tenancy), out var tenantId))
+                    {
+                        SetTenantIdCookie(tenantId);
+                        AbpSession.Use(tenantId, AbpSession.UserId);
+                    }
+                }
+                catch (Exception)
+                {
+                    // ignored
+                }
+            }
+            
             // Rollback to system if current tenant is not active
             if (AbpSession.TenantId.HasValue)
             {
@@ -966,20 +982,17 @@ namespace Zero.Web.Controllers
 
         private string NormalizeReturnUrl(string returnUrl, Func<string> defaultValueBuilder = null)
         {
-            if (defaultValueBuilder == null)
-            {
-                defaultValueBuilder = GetAppHomeUrl;
-            }
+            defaultValueBuilder ??= GetAppHomeUrl;
 
             if (returnUrl.IsNullOrEmpty())
             {
                 return defaultValueBuilder();
             }
 
-            if (AbpSession.UserId.HasValue)
-            {
-                return defaultValueBuilder();
-            }
+            // if (AbpSession.UserId.HasValue)
+            // {
+            //     return defaultValueBuilder();
+            // }
             
             if (Url.IsLocalUrl(returnUrl) || _webUrlService.GetRedirectAllowedExternalWebSites().Any(returnUrl.Contains))
             {

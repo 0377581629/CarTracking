@@ -44,9 +44,9 @@ namespace Zero.Sessions
                     Version = AppVersionHelper.Version,
                     ReleaseDate = AppVersionHelper.ReleaseDate,
                     Features = new Dictionary<string, bool>(),
-                    Currency = ZeroConsts.Currency,
-                    CurrencySign = ZeroConsts.CurrencySign,
-                    AllowTenantsToChangeEmailSettings = ZeroConsts.AllowTenantsToChangeEmailSettings,
+                    Currency = ZeroConst.Currency,
+                    CurrencySign = ZeroConst.CurrencySign,
+                    AllowTenantsToChangeEmailSettings = ZeroConst.AllowTenantsToChangeEmailSettings,
                     UserDelegationIsEnabled = _userDelegationConfiguration.IsEnabled,
                     TwoFactorCodeExpireSeconds = TwoFactorCodeCacheItem.DefaultSlidingExpireTime.TotalSeconds
                 }

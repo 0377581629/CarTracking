@@ -20,7 +20,7 @@ namespace Zero.Web.Public.Views
         
         protected ZeroRazorPage()
         {
-            LocalizationSourceName = ZeroConsts.LocalizationSourceName;
+            LocalizationSourceName = ZeroConst.LocalizationSourceName;
         }
         
         public string GetMomentLocale()

@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <AssemblyName>DPS.Cms.Application</AssemblyName>
+        <RootNamespace>DPS.Cms.Application</RootNamespace>
+        <LangVersion>9</LangVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\src\Zero.Application\Zero.Application.csproj" />
+      <ProjectReference Include="..\..\..\src\Zero.Core\Zero.Core.csproj" />
+      <ProjectReference Include="..\DPS.Cms.Application.Shared\DPS.Cms.Application.Shared.csproj" />
+      <ProjectReference Include="..\DPS.Cms.Core\DPS.Cms.Core.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Abp" Version="6.3.0" />
+      <PackageReference Include="Z.EntityFramework.Extensions.EFCore" Version="5.1.19" />
+    </ItemGroup>
+
+</Project>

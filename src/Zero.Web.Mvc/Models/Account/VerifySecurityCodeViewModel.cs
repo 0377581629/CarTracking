@@ -9,12 +9,12 @@ namespace Zero.Web.Models.Account
         public string Provider { get; set; }
 
         [Required]
-        [AbpDisplayName(ZeroConsts.LocalizationSourceName, "Code")]
+        [AbpDisplayName(ZeroConst.LocalizationSourceName, "Code")]
         public string Code { get; set; }
 
         public string ReturnUrl { get; set; }
 
-        [AbpDisplayName(ZeroConsts.LocalizationSourceName, "RememberThisBrowser")]
+        [AbpDisplayName(ZeroConst.LocalizationSourceName, "RememberThisBrowser")]
         public bool RememberBrowser { get; set; }
 
         public bool RememberMe { get; set; }

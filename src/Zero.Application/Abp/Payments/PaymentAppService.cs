@@ -93,7 +93,7 @@ namespace Zero.Abp.Payments
 
             decimal amount;
             string targetEditionName;
-            string currency = ZeroConsts.Currency;
+            string currency = ZeroConst.Currency;
             
             using (UnitOfWorkManager.Current.SetTenantId(null))
             {

@@ -190,7 +190,7 @@ namespace Zero.MultiTenancy
             }
 
             return numbers
-                .Select(number => number.ToString(new string('0', ZeroConsts.CodeUnitLength)))
+                .Select(number => number.ToString(new string('0', ZeroConst.CodeUnitLength)))
                 .JoinAsString(".");
         }
 

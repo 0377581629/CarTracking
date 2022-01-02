@@ -12,6 +12,7 @@ using Zero.Identity;
 using Zero.MultiTenancy;
 using Zero.Url;
 using Zero.Web.Controllers;
+using Zero.Web.Session;
 
 namespace Zero.Web.Public.Controllers
 {
@@ -21,17 +22,20 @@ namespace Zero.Web.Public.Controllers
         private readonly SignInManager _signInManager;
         private readonly IWebUrlService _webUrlService;
         private readonly TenantManager _tenantManager;
+        private readonly IPerRequestSessionCache _sessionCache;
 
         public AccountController(
             UserManager userManager,
             SignInManager signInManager,
             IWebUrlService webUrlService,
-            TenantManager tenantManager)
+            TenantManager tenantManager, 
+            IPerRequestSessionCache sessionCache)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _webUrlService = webUrlService;
             _tenantManager = tenantManager;
+            _sessionCache = sessionCache;
         }
 
         public async Task<ActionResult> Login(string accessToken, string userId, string tenantId = "", string returnUrl = "")

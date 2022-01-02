@@ -50,7 +50,7 @@ namespace Zero.Web
         {
             //Set default connection string
             Configuration.DefaultNameOrConnectionString = _appConfiguration.GetConnectionString(
-                ZeroConsts.ConnectionStringName
+                ZeroConst.ConnectionStringName
             );
 
             //Use database for language management

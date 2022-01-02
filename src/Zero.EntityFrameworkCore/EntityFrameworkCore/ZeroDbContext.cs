@@ -1,5 +1,10 @@
 ﻿using Abp.IdentityServer4vNext;
 using Abp.Zero.EntityFrameworkCore;
+using DPS.Cms.Core.Advertisement;
+using DPS.Cms.Core.Menu;
+using DPS.Cms.Core.Page;
+using DPS.Cms.Core.Post;
+using DPS.Cms.Core.Widget;
 using Microsoft.EntityFrameworkCore;
 using Zero.Abp.Authorization.Accounting;
 using Zero.Abp.Payments;
@@ -20,8 +25,7 @@ namespace Zero.EntityFrameworkCore
 {
     public class ZeroDbContext : AbpZeroDbContext<Tenant, Role, User, ZeroDbContext>, IAbpPersistedGrantDbContext
     {
-        /* Define an IDbSet for each entity of the application */
-
+        #region Zero
         public virtual DbSet<BinaryObject> BinaryObjects { get; set; }
 
         public virtual DbSet<Friendship> Friendships { get; set; }
@@ -41,6 +45,38 @@ namespace Zero.EntityFrameworkCore
         public virtual DbSet<UserDelegation> UserDelegations { get; set; }
 
         public virtual DbSet<UserSubscriptionPayment> UserSubscriptionPayments { get; set; }
+        #endregion
+        
+        #region Cms
+        public virtual DbSet<ImageBlockGroup> ImageBlockGroups { get; set; }
+        public virtual DbSet<ImageBlock> ImageBlocks { get; set; }
+        
+        public virtual DbSet<PageTheme> PageThemes { get; set; }
+        public virtual DbSet<PageLayout> PageLayouts { get; set; }
+        public virtual DbSet<PageLayoutBlock> PageLayoutBlocks { get; set; }
+        
+        public virtual DbSet<Page> Pages { get; set; }
+        public virtual DbSet<PageWidget> PageWidgets { get; set; }
+        public virtual DbSet<PageWidgetDetail> PageWidgetDetails { get; set; }
+        
+        public virtual DbSet<Widget> Widgets { get; set; }
+        
+        public virtual DbSet<MenuGroup> MenuGroups { get; set; }
+        
+        public virtual DbSet<Menu> Menus { get; set; }
+        
+        public virtual DbSet<WidgetPageTheme> WidgetPageThemes { get; set; }
+        
+        public virtual DbSet<Category> Categories { get; set; }
+        
+        public virtual DbSet<Post> Posts { get; set; }
+        
+        public virtual DbSet<PostCategoryDetail> PostCategoryDetails { get; set; }
+        
+        public virtual DbSet<PostTagDetail> PostTagDetails { get; set; }
+        
+        public virtual DbSet<Tags> Tags { get; set; }
+        #endregion
         
         #region Abp Customize
 

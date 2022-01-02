@@ -2,7 +2,7 @@
 
 namespace Zero
 {
-    public class ZeroConsts
+    public class ZeroConst
     {
         public const string LocalizationSourceName = "AbpZero";
 
