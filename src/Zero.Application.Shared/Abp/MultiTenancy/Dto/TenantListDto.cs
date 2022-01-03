@@ -41,6 +41,8 @@ namespace Zero.MultiTenancy.Dto
         public Guid? MenuLogoId { get; set; }
 
         public Guid? LoginBackgroundId { get; set; }
+        
+        public string Domain { get; set; }
         #endregion
     }
 }

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Abp.Authorization.Users;
 using Abp.Configuration;
 using Abp.Dependency;
 using Abp.Domain.Repositories;
@@ -419,28 +417,28 @@ namespace Zero.Authorization.Users
 
         private async Task CheckMailSettingsEmptyOrNull()
         {
-            #if DEBUG
-                return;
-            #endif
-            if (
-                (await _settingManager.GetSettingValueAsync(EmailSettingNames.DefaultFromAddress)).IsNullOrEmpty() ||
-                (await _settingManager.GetSettingValueAsync(EmailSettingNames.Smtp.Host)).IsNullOrEmpty()
-            )
+            if (!SystemConfig.DisableMailService)
             {
-                throw new UserFriendlyException(L("SMTPSettingsNotProvidedWarningText"));
-            }
+                if (
+                    (await _settingManager.GetSettingValueAsync(EmailSettingNames.DefaultFromAddress)).IsNullOrEmpty() ||
+                    (await _settingManager.GetSettingValueAsync(EmailSettingNames.Smtp.Host)).IsNullOrEmpty()
+                )
+                {
+                    throw new UserFriendlyException(L("SMTPSettingsNotProvidedWarningText"));
+                }
             
-            if ((await _settingManager.GetSettingValueAsync<bool>(EmailSettingNames.Smtp.UseDefaultCredentials)))
-            {
-                return;
-            }
+                if (await _settingManager.GetSettingValueAsync<bool>(EmailSettingNames.Smtp.UseDefaultCredentials))
+                {
+                    return;
+                }
             
-            if (
-                (await _settingManager.GetSettingValueAsync(EmailSettingNames.Smtp.UserName)).IsNullOrEmpty() ||
-                (await _settingManager.GetSettingValueAsync(EmailSettingNames.Smtp.Password)).IsNullOrEmpty()
-            )
-            {
-                throw new UserFriendlyException(L("SMTPSettingsNotProvidedWarningText"));
+                if (
+                    (await _settingManager.GetSettingValueAsync(EmailSettingNames.Smtp.UserName)).IsNullOrEmpty() ||
+                    (await _settingManager.GetSettingValueAsync(EmailSettingNames.Smtp.Password)).IsNullOrEmpty()
+                )
+                {
+                    throw new UserFriendlyException(L("SMTPSettingsNotProvidedWarningText"));
+                }
             }
         }
     }

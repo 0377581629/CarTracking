@@ -25,13 +25,16 @@ namespace alepay
 
         private RestClient restClient;
         
+        private string BaseUrl { get; set; }
+        
         private string TokenKey { get; set; }
         
         private string ChecksumKey { get; set; }
 
         
-        public AlePayAPIClient(string tokenKey, string checksumKey)
+        public AlePayAPIClient(string baseUrl, string tokenKey, string checksumKey)
         {
+            BaseUrl = baseUrl;
             TokenKey = tokenKey;
             ChecksumKey = checksumKey;
         }
@@ -116,7 +119,7 @@ namespace alepay
         #region Private, helper methods, classes
         private RestClient GetRestClient()
         {
-            return restClient ?? (restClient = new RestClient(AlePayDefs.APIBaseUrl));
+            return restClient ?? (restClient = new RestClient(BaseUrl));
         }
 
         private async Task<T> HandleCommonAPI<T>(string requestPath,

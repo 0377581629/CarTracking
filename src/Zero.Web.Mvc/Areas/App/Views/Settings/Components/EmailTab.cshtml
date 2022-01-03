@@ -5,7 +5,7 @@
 @using Zero.Web.Areas.App.Startup
 @model SettingsViewModel
 
-@if (!ViewBag.IsMultiTenancyEnabled || ZeroConsts.AllowTenantsToChangeEmailSettings)
+@if (!ViewBag.IsMultiTenancyEnabled || ZeroConst.AllowTenantsToChangeEmailSettings)
 {
     <div class="tab-pane" id="SettingsEmailSmtpTab">
         <form id="EmailSmtpSettingsForm">

@@ -1,0 +1,46 @@
+﻿@using Zero.Web.Areas.App.Models.Common.Modals
+@model Zero.Web.Areas.App.Models.CurrencyRate.CreateOrEditCurrencyRateModalViewModel
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(Model.IsEditMode ? (L("Edit")) : L("Create")))
+
+<div class="modal-body">
+    <div id="CurrencyRateInformationsTab">
+        <form name="CurrencyRateInformationsForm" role="form" novalidate class="form-validation">
+
+            @if (Model.IsEditMode)
+            {
+                <input type="hidden" name="id" value="@Model.CurrencyRate.Id"/>
+            }
+            <input type="hidden" name="language" id="CurrencyRate_Language" value=""/>
+
+            <div class="row">
+                <div class="col-4">
+                    <div class="form-group">
+                        <label>
+                            Source <span class="text-danger">*</span>
+                        </label>
+                        <input class="form-control" id="CurrencyRate_SourceCurrency" value="@Model.CurrencyRate.SourceCurrency" required type="text" name="sourceCurrency"/>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label>
+                            Target <span class="text-danger">*</span>
+                        </label>
+                        <input class="form-control" id="CurrencyRate_TargetCurrency" value="@Model.CurrencyRate.TargetCurrency" required type="text" name="targetCurrency"/>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label>
+                            Rate <span class="text-danger">*</span>
+                        </label>
+                        <input class="form-control number" id="CurrencyRate_Rate" value="@Model.CurrencyRate.Rate" required type="text" name="rate"/>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalFooterWithSaveAndCancel.cshtml")

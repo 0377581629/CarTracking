@@ -58,25 +58,25 @@
                             {
                                 if (edition.DailyPrice.HasValue && edition.DailyPrice.Value > 0)
                                 {
-                                    <text><span>@ZeroConsts.CurrencySign</span> @edition.DailyPrice?.ToString("N2") / @L("Daily") </text>
+                                    <text><span>@ZeroConst.CurrencySign</span> @edition.DailyPrice?.ToString("N2") / @L("Daily") </text>
                                     <br/>
                                 }
 
                                 if (edition.WeeklyPrice.HasValue && edition.WeeklyPrice.Value > 0)
                                 {
-                                    <text><span>@ZeroConsts.CurrencySign</span> @edition.WeeklyPrice?.ToString("N2") / @L("Weekly") </text>
+                                    <text><span>@ZeroConst.CurrencySign</span> @edition.WeeklyPrice?.ToString("N2") / @L("Weekly") </text>
                                     <br/>
                                 }
 
                                 if (edition.MonthlyPrice.HasValue && edition.MonthlyPrice.Value > 0)
                                 {
-                                    <text><span>@ZeroConsts.CurrencySign</span> @edition.MonthlyPrice?.ToString("N2") / @L("Monthly") </text>
+                                    <text><span>@ZeroConst.CurrencySign</span> @edition.MonthlyPrice?.ToString("N2") / @L("Monthly") </text>
                                     <br/>
                                 }
 
                                 if (edition.AnnualPrice.HasValue && edition.AnnualPrice.Value > 0)
                                 {
-                                    <text><span>@ZeroConsts.CurrencySign</span> @edition.AnnualPrice?.ToString("N2") / @L("Annual")</text>
+                                    <text><span>@ZeroConst.CurrencySign</span> @edition.AnnualPrice?.ToString("N2") / @L("Annual")</text>
                                 }
                             }
                         </h4>

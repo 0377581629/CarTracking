@@ -1,0 +1,56 @@
+﻿@using Zero.Web.Areas.Cms.Models.PageLayout
+@model CreateOrEditPageLayoutModalViewModel
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(Model.IsEditMode ? (L("Edit")) : L("Create")))
+
+<div class="modal-body">
+    <div id="PageLayoutInformationsTab">
+        <form name="PageLayoutInformationsForm" role="form" novalidate class="form-validation">
+            @if (Model.IsEditMode)
+            {
+                <input type="hidden" name="id" value="@Model.PageLayout.Id"/>
+            }
+            <input type="hidden" name="code" value="@Model.PageLayout.Code"/>
+            <div id="GeneralInfo" class="tab-pane active">
+                <div class="row">
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label>
+                                @L("PageTheme")
+                            </label>
+                            <select id="PageLayout_PageThemeId" name="pageThemeId" class="form-control">
+                                @if (Model.IsEditMode)
+                                {
+                                    <option value="@Model.PageLayout.PageThemeId" selected>@Model.PageLayout.PageThemeName</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label>
+                                @L("Name") <span class="text-danger">*</span>
+                            </label>
+                            <input class="form-control" id="PageLayout_Name" value="@Model.PageLayout.Name" type="text" name="name" required maxlength="@ZeroConst.MaxNameLength" minlength="@ZeroConst.MinNameLength"/>
+                        </div>
+                    </div>
+
+                    <div class="col-3">
+                        <div class="form-group text-center mb-0">
+                            <label>@L("IsActive")</label>
+                            <div class="form-control no-border">
+                                <label class="checkbox checkbox-outline checkbox-primary inline-block">
+                                    <input type="checkbox" id="PageLayout_IsActive" name="isActive" value="true" @Html.Raw(!Model.PageLayout.IsActive ? "" : "checked=\"checked\"")>
+                                    <span></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalFooterWithSaveAndCancel.cshtml")

@@ -49,7 +49,95 @@
     <text name="MB_Invalid">Không hợp lệ</text>
     <!--    -->
     
+    <!--  Cms  -->
+    <text name="ImageBlockGroup">Nhóm quảng cáo</text>
+    <text name="ImageBlockGroups">Nhóm quảng cáo</text>
+    <text name="ImageBlockGroupsHeaderInfo">Danh sách nhóm quảng cáo</text>
+
+    <text name="ImageBlock">Quảng cáo</text>
+    <text name="ImageBlocks">Quảng cáo</text>
+    <text name="ImageBlocksHeaderInfo">Danh sách quảng cáo</text>
+    <text name="TargetUrl">Đường dẫn đích</text>
+
+    <text name="PageTheme">Chủ đề giao diện</text>
+    <text name="PageThemes">Chủ đề giao diện</text>
+    <text name="PageThemesHeaderInfo">Danh sách chủ đề giao diện</text>
+
+    <text name="PageLayout">Khung giao diện</text>
+    <text name="PageLayouts">Khung giao diện</text>
+    <text name="PageLayoutsHeaderInfo">Danh sách khung giao diện</text>
+
+    <text name="Page">Trang</text>
+    <text name="PagesHeaderInfo">Danh sách trang</text>
+    <text name="ConfigUI">Cấu hình giao diện</text>
+    <text name="ConfigLayout">Cấu hình khung hiển thị</text>
+    <text name="IsHomePage">Trang chủ</text>
+    <text name="IsDetailPage">Trang chi tiết</text>
+    <text name="IsListingPage">Trang danh sách</text>
+    <text name="Publish">Công khai</text>
+    
+    <text name="Widget">Khung nội dung</text>
+    <text name="Widgets">Khung nội dung</text>
+    <text name="WidgetsHeaderInfo">Danh sách khung nội dung</text>
+    <text name="WidgetContentType">Nội dung hiển thị</text>
+    <text name="WidgetContentCount">Số lượng lựa chọn</text>
+    <text name="WidgetContentType_FixedContent">Nội dung cứng</text>
+    <text name="WidgetContentType_Service">Dịch vụ</text>
+    <text name="WidgetContentType_ServiceType">Loại dịch vụ</text>
+    <text name="WidgetContentType_ServiceCategory">Danh mục dịch vụ</text>
+    <text name="WidgetContentType_ServiceArticle">Nhóm dịch vụ</text>
+    <text name="WidgetContentType_ReviewPost">Bài review</text>
+    <text name="WidgetContentType_ImageBlock">Hình ảnh quảng cáo</text>
+    <text name="WidgetContentType_CustomContent">Tùy chỉnh</text>
+    <text name="WidgetContentType_ServicePropertyGroup">Nhóm thuộc tính dịch vụ</text>
+    <text name="CustomContent">Nội dung tùy chỉnh</text>
+
+    <text name="ControllerName">Controller</text>
+    <text name="ActionName">Action</text>
+    <text name="JsBundleUrl">Đường dẫn file JS</text>
+    <text name="CssBundleUrl">Đường dẫn file CSS</text>
+
+    <text name="JsPlain">JS Script - Tại Section</text>
+    <text name="CssPlain">CSS Script - Tại Section</text>
+
+    <text name="AsyncLoad">Tải từng phần</text>
+
+    <text name="JsScript">JS Script - Load sau ajax call</text>
+    <text name="CssScript">CSS Script - Load sau ajax call</text>
+    
+    <text name="Tags">Tag</text>
+    <text name="TagsHeaderInfo">Danh sách Tag</text>
+
+    <text name="MenuGroups">Nhóm menu</text>
+    <text name="MenuGroup">Nhóm menu</text>
+    <text name="MenuGroupsHeaderInfo">Danh mục nhóm menu</text>
+
+    <text name="Menus">Menu</text>
+    <text name="Menu">Menu</text>
+    <text name="MenusHeaderInfo">Danh mục menu</text>
+    <!--    -->
+    
+    <!--  Cms - Common  -->
+    <text name="SEO">SEO</text>
+
+    <text name="TitleDefault">Title mặc định</text>
+    <text name="DescriptionDefault">Mô tả mặc định</text>
+    <text name="KeywordDefault">Từ khóa mặc định</text>
+    <text name="AuthorDefault">Tác giả mặc định</text>
+
+    <text name="Keyword">Từ khóa</text>
+    <text name="Author">Tác giả</text>
+    <text name="About">Giới thiệu</text>
+    <text name="Slug">Địa chỉ rút gọn</text>
+    <!--    -->
+
+    <!--  File manager  -->
+    <text name="FileSelect">Chọn file</text>
+    <text name="AllowedFileTypes">Định dạng hỗ trợ</text>
+    <text name="AllowFileExtension">Định dạng file cho phép</text>
+    
     <!--  Payment  -->
+    
     <text name="CheckoutWithPaypal">Thanh toán qua Paypal (USD)</text>
     <text name="CheckoutWithAlePay">Thanh toán qua AlePay (VND)</text>
     <text name="ExternalPaymentId">Mã thanh toán</text>
@@ -103,12 +191,18 @@
 
     <text name="SelectAll">Tất cả</text>
     <text name="NoneSelect">Không lựa chọn</text>
+    <text name="PleaseSelect">Vui lòng lựa chọn</text>
+    
     <text name="MissingData">Chưa khai báo</text>
     <text name="Login">Đăng nhập</text>
     <text name="Registration">Đăng ký</text>
 
+    <text name="Avatar">Ảnh đại diện</text>
+    <text name="ChangeAvatarSuccessful">Thay ảnh đại diện thành công</text>
+    <text name="GeneralInfo">Thông tin chung</text>
+    <text name="SubTitle">Tiêu đề phụ</text>
+    <text name="Update">Cập nhật</text>
     <text name="Skip">Bỏ qua</text>
-    
     <!--    -->
     
     <!--  Identity Errors  -->
@@ -302,6 +396,13 @@
     <text name="SelectDashboardWidget">Khung số liệu</text>
     <text name="NoWidgetAvailableMessage">Không có khung số liệu nào khả dụng</text>
     <!--    -->
+
+    <!--  Currency Rate  -->
+    <text name="CurrencyRate">Tỷ giá</text>
+    <text name="CurrencyRates">Tỷ giá</text>
+    <text name="CurrencyRatesHeaderInfo">Số liệu tỷ giá</text>
+    <text name="CurrencyRateWarning">Lưu ý: Số liệu tỷ giá được sử dụng khi thực hiện giao dịch thanh toán</text>
+    <!--    -->
     
     <text name="HomePage">Trang chủ</text>
     <text name="AboutUs">Về chúng tôi</text>
@@ -315,6 +416,8 @@
     <text name="UserIsNotActiveAndCanNotLogin">Người dùng {0} không hoạt động và không thể đăng nhập.</text>
     <text name="PleaseEnterLoginInformation">Vui lòng nhập thông tin đăng nhập</text>
     <text name="TenancyName">Tên đơn vị sử dụng</text>
+    <text name="TenancyDomainWarning">Đơn vị có "Tên miền" riêng bắt buộc dùng chung CSDL với Hệ thống</text>
+    <text name="Domain">Tên miền</text>
     <text name="UserNameOrEmail">Tên người dùng hoặc email</text>
     <text name="Password">Mật khẩu</text>
     <text name="RememberMe">Lưu thông tin</text>
@@ -624,7 +727,7 @@
     <text name="None">Không</text>
     <text name="YouCanBackToYourAccount">Bạn có thể quay lại tài khoản của mình tại đây.</text>
     <text name="CascadeImpersonationErrorMessage">Không thể làm cho mạo danh thác. Đây là một thông tin đăng nhập mạo danh!</text>
-    <text name="FromTenantToHostImpersonationErrorMessage">Không thể mạo danh người dùng Host từ người dùng đơn vị sử dụng!</text>
+    <text name="FromTenantToHostImpersonationErrorMessage">Không thể mạo danh người dùng Hệ thống từ người dùng đơn vị sử dụng!</text>
     <text name="DifferentTenantImpersonationErrorMessage">Không thể mạo danh người dùng của đơn vị sử dụng khác nhau!</text>
     <text name="ImpersonationTokenErrorMessage">Mã thông báo mạo danh không hợp lệ hoặc đã hết hạn!</text>
     <text name="NotImpersonatedLoginErrorMessage">Đây không phải là thông tin đăng nhập mạo danh!</text>
@@ -681,7 +784,7 @@
     <text name="NewTenant">Đơn vị sử dụng mới</text>
     <text name="ResizedProfilePicture_Warn_SizeLimit">Kích thước hình ảnh được chỉnh lại kích thước phải nhỏ hơn {0} KB. Vui lòng đổi kích thước xuống và thử lại.</text>
     <text name="RegisterFormUserNameInvalidMessage">Vui lòng không nhập địa chỉ email cho tên người dùng.</text>
-    <text name="UseHostDatabase">Sử dụng chung cơ sở dữ liệu với Host</text>
+    <text name="UseHostDatabase">Sử dụng chung cơ sở dữ liệu với Hệ thống</text>
     <text name="DatabaseConnectionString">Chuỗi kết nối cơ sở dữ liệu</text>
     <text name="TenantDatabaseConnectionStringChangeWarningMessage">Lưu ý: Trước khi thay đổi chuỗi kết nối cơ sở dữ liệu cho một đối tượng thuê, bạn nên di chuyển cơ sở dữ liệu đơn vị sử dụng đến vị trí mới. Thay đổi chuỗi kết nối không di chuyển cơ sở dữ liệu đơn vị sử dụng.</text>
     <text name="Timezone">Múi giờ</text>
@@ -733,10 +836,10 @@
     <text name="Demo_SampleChatMessage">Xin chào, Đây là tin nhắn thử nghiệm. Vui lòng đăng nhập bằng tài khoản của tôi trong một trình duyệt khác và kiểm tra chức năng trò chuyện hoạt động như thế nào.</text>
     <text name="TenantToTenantChatFeatureIsNotEnabledForSender">Trò chuyện với đơn vị sử dụng khác không được bật cho bạn.</text>
     <text name="TenantToTenantChatFeatureIsNotEnabledForReceiver">Trò chuyện với đơn vị sử dụng khác không được bật cho đơn vị sử dụng.</text>
-    <text name="TenantToHostChatFeatureIsNotEnabledForSender">Trò chuyện với Host không được bật cho bạn.</text>
-    <text name="TenantToHostChatFeatureIsNotEnabledForReceiver">Trò chuyện với Host không được bật cho đơn vị sử dụng.</text>
+    <text name="TenantToHostChatFeatureIsNotEnabledForSender">Trò chuyện với Hệ thống không được bật cho bạn.</text>
+    <text name="TenantToHostChatFeatureIsNotEnabledForReceiver">Trò chuyện với Hệ thống không được bật cho đơn vị sử dụng.</text>
     <text name="TenantToTenantChatFeature">Trò chuyện với đơn vị sử dụng khác</text>
-    <text name="TenantToHostChatFeature">Trò chuyện với Host</text>
+    <text name="TenantToHostChatFeature">Trò chuyện với Hệ thống</text>
     <text name="FilterByPermission">Lọc theo quyền</text>
     <text name="FilterByRole">Lọc theo vai trò</text>
     <text name="FilterOrAddUser">Lọc / Thêm người dùng</text>
@@ -782,7 +885,7 @@
     <text name="IsLockoutEnabled_Hint">Người dùng bị khóa trong một thời gian sau một số lần đăng nhập thất bại nhất định.</text>
     <text name="TenantRegistrationLoginInfo">Nhấn vào đây để đăng nhập</text>
     <text name="CouldNotValidateExternalUser">Không thể xác thực đăng nhập người dùng bên ngoài</text>
-    <text name="LeaveEmptyToSwitchToHost">Để trống để chuyển sang Host</text>
+    <text name="LeaveEmptyToSwitchToHost">Để trống để chuyển sang Hệ thống</text>
     <text name="PleaseWaitToConfirmYourEmailMessage">Vui lòng chờ trong khi xác nhận địa chỉ email của bạn ...</text>
     <text name="ChatIsConnecting">Trò chuyện đang kết nối ...</text>
     <text name="Note_RefreshPageForPermissionChanges">Nếu bạn đang thay đổi quyền của riêng bạn, bạn có thể cần phải làm mới trang (F5) để có hiệu lực của các thay đổi quyền trên màn hình của riêng bạn!</text>

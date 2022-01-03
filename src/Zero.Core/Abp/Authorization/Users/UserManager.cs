@@ -200,7 +200,7 @@ namespace Zero.Authorization.Users
 
         private new string L(string name)
         {
-            return _localizationManager.GetString(ZeroConsts.LocalizationSourceName, name);
+            return _localizationManager.GetString(ZeroConst.LocalizationSourceName, name);
         }
     }
 }

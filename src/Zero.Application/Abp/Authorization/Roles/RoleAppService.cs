@@ -70,10 +70,12 @@ namespace Zero.Authorization.Roles
         [AbpAuthorize(AppPermissions.Pages_Administration_Roles_Create, AppPermissions.Pages_Administration_Roles_Edit)]
         public async Task<GetRoleForEditOutput> GetRoleForEdit(NullableIdDto input)
         {
-            var permissions = PermissionManager.GetAllPermissions();
-            var permissionsByEdition = await _permissionAppService.GetAllPermissionsByCurrentTenant();
-            permissions = permissions.Where(o => permissionsByEdition.Contains(o.Name)).ToList();
+            // var permissions = PermissionManager.GetAllPermissions();
+            // var permissionsByEdition = await _permissionAppService.GetAllPermissionsByCurrentTenant();
+            // permissions = permissions.Where(o => permissionsByEdition.Contains(o.Name)).ToList();
 
+            var permissions = _permissionAppService.GetAllPermissions().Items;
+            
             var grantedPermissions = Array.Empty<Permission>();
             RoleEditDto roleEditDto;
 

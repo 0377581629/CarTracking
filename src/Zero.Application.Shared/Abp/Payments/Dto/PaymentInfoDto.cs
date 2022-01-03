@@ -10,7 +10,7 @@ namespace Zero.Abp.Payments.Dto
 
         public bool IsLessThanMinimumUpgradePaymentAmount()
         {
-            return AdditionalPrice < ZeroConsts.MinimumUpgradePaymentAmount;
+            return AdditionalPrice < ZeroConst.MinimumUpgradePaymentAmount;
         }
     }
 }

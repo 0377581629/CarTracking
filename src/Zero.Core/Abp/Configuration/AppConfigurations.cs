@@ -27,7 +27,8 @@ namespace Zero.Configuration
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(path)
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile("appsettings.custom.json", optional: true, reloadOnChange: true);
 
             if (!environmentName.IsNullOrWhiteSpace())
             {

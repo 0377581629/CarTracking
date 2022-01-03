@@ -8,7 +8,7 @@ namespace Zero
 
         protected ZeroDomainServiceBase()
         {
-            LocalizationSourceName = ZeroConsts.LocalizationSourceName;
+            LocalizationSourceName = ZeroConst.LocalizationSourceName;
         }
     }
 }

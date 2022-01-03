@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Abp.Application.Services.Dto;
 using Abp.Authorization;
+using Abp.Configuration.Startup;
 using Abp.Domain.Repositories;
 using Abp.MultiTenancy;
 using Microsoft.EntityFrameworkCore;
@@ -16,11 +17,12 @@ namespace Zero.Authorization.Permissions
     {
         private readonly IRepository<EditionPermission> _editionPermissionRepository;
         private readonly IRepository<Tenant> _tenantRepository;
-
-        public PermissionAppService(IRepository<EditionPermission> editionPermissionRepository, IRepository<Tenant> tenantRepository)
+        private readonly IMultiTenancyConfig _multiTenancyConfig;
+        public PermissionAppService(IRepository<EditionPermission> editionPermissionRepository, IRepository<Tenant> tenantRepository, IMultiTenancyConfig multiTenancyConfig)
         {
             _editionPermissionRepository = editionPermissionRepository;
             _tenantRepository = tenantRepository;
+            _multiTenancyConfig = multiTenancyConfig;
         }
 
         public ListResultDto<FlatPermissionWithLevelDto> GetAllPermissions(bool tenantSide = false)
@@ -29,7 +31,7 @@ namespace Zero.Authorization.Permissions
             if (tenantSide)
                 permissions = permissions.Where(o => o.MultiTenancySides != MultiTenancySides.Host).ToList();
 
-            if (AbpSession.MultiTenancySide == MultiTenancySides.Tenant)
+            if (_multiTenancyConfig.IsEnabled && AbpSession.MultiTenancySide == MultiTenancySides.Tenant)
             {
                 var tenant = _tenantRepository.FirstOrDefault(o => o.Id == AbpSession.TenantId.Value);
                 if (tenant != null)

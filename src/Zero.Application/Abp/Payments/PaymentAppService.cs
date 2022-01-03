@@ -93,7 +93,7 @@ namespace Zero.Abp.Payments
 
             decimal amount;
             string targetEditionName;
-            string currency = ZeroConsts.Currency;
+            string currency = ZeroConst.Currency;
             
             using (UnitOfWorkManager.Current.SetTenantId(null))
             {
@@ -158,8 +158,8 @@ namespace Zero.Abp.Payments
 
         public async Task<List<PaymentGatewayModel>> GetActiveGateways(GetActiveGatewaysInput input)
         {
-            return (await _paymentManager.GetAllActivePaymentGatewaysInHost())
-                .WhereIf(input.RecurringPaymentsEnabled.HasValue, gateway => gateway.SupportsRecurringPayments == input.RecurringPaymentsEnabled.Value)
+            return (await _paymentManager.GetAllActivePaymentGateways())
+                .WhereIf(input.RecurringPaymentsEnabled.HasValue, gateway => gateway.SupportsRecurringPayments == input.RecurringPaymentsEnabled)
                 .ToList();
         }
 

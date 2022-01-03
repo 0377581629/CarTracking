@@ -65,7 +65,7 @@ namespace Zero.Abp.Payments
             decimal amount = 0;
             double monthlyPrice = 0;
             double yearlyPrice = 0;
-            string currency = ZeroConsts.Currency;
+            string currency = ZeroConst.Currency;
 
             var user = await _userManager.GetUserAsync(AbpSession.ToUserIdentifier());
 

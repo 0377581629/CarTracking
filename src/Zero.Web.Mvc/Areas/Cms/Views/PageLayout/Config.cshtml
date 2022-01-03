@@ -1,0 +1,111 @@
+﻿@using Zero.Web.Areas.Cms.Models.PageLayout
+@model PageLayoutConfigViewModel
+@{
+    ViewBag.CurrentPageName = AppPageNames.Cms.PageLayout;
+}
+
+@section Scripts
+{
+    <script abp-src="@ZeroConst.ScriptPathCms/PageLayout/Config.js" asp-append-version="true"></script>
+}
+
+@section Styles {
+    <style>
+        .border-dashed {
+            border:  1px dashed silver;
+        }
+        
+        .blockSortable {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .unsortable {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .blockSortable>li {
+            position:  relative;
+        }
+        
+        .blockSortable>li.placeholder:before {
+            position: absolute;
+            content: "";
+            width: 0;
+            height: 0;
+            margin-top: -5px;
+            left: -5px;
+            top: -4px;
+            border: 5px solid transparent;
+            border-left-color: red;
+            border-right: none;
+        }
+        
+        .blockSortable .pageBlockDetail {
+            margin-bottom: 10px;
+        }
+        
+        .blockSortable .pageBlockDetail:last-child {
+            margin-bottom: 0px;
+        }
+        
+        .blockDraggable {
+            cursor: pointer;
+        }
+        
+        #mainContentSortable {
+            border-radius: 0.42rem;
+        }
+    </style>
+}
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <abp-page-subheader title="@($"{L("Pages")} : {Model.PageLayoutConfig.Name}")" description="@L("ConfigLayout")">
+        <button id="BackToListingPageButton" class="btn btn-secondary">
+            <i class="fa fa-list"></i> @L("BackToListingPage")
+        </button>
+        <button id="SaveButton" class="btn btn-primary blue">
+            <i class="fa fa-save"></i> @L("Update")
+        </button>
+    </abp-page-subheader>
+
+    <div class="@(await GetContainerClass())">
+        <div class="card card-custom gutter-b">
+            <div class="card-body p-10">
+                <input type="hidden" id="PageLayout_Id" value="@Model.PageLayoutConfig.Id"/>
+                <div class="row">
+                    <div class="col-10 px-0">
+                        <div class="row mx-0" id="PageBlockWrapper">
+                            <div id="mainContentWrapper" class="col-12">
+                                <small class="text-right">Site frame</small>
+                                <ul id="mainContentSortable" class="min-h-50px p-10 blockSortable blockDroppable border-dashed" initSortable="false" initDroppable="false">
+                                    @if (Model.PageLayoutConfig.Blocks != null && Model.PageLayoutConfig.Blocks.Any())
+                                    {
+                                        foreach (var bl in Model.PageLayoutConfig.Blocks)
+                                        {
+                                            @await Html.PartialAsync("Components/Config/BlockConfigDetail", bl)
+                                        }
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-2 pl-0">
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li class="nav-item">
+                                <a href="#LayoutInfo" class="nav-link active" id="BlockConfigNavLink" data-toggle="tab" role="tab">
+                                    @L("Layout")
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="tab-content pt-20" style="border-left: 1px solid #E4E6EF;">
+                            <div class="tab-pane active" id="LayoutInfo" role="tabpanel">
+                                @await Html.PartialAsync("Components/_ConfigUI_Layout", Model)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

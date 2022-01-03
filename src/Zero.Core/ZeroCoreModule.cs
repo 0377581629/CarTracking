@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Reflection;
-using System.Threading;
 using System.Threading.Tasks;
 using Abp;
 using Abp.AspNetZeroCore;
@@ -17,27 +16,21 @@ using Abp.Domain.Uow;
 using Abp.Events.Bus;
 using Abp.Events.Bus.Exceptions;
 using Abp.Json;
-using Abp.Localization.Dictionaries.Xml;
-using Abp.Localization.Sources;
 using Abp.MailKit;
 using Abp.Net.Mail.Smtp;
-using Abp.Threading;
 using Abp.Threading.BackgroundWorkers;
 using Abp.Threading.Timers;
 using Abp.Zero;
 using Abp.Zero.Configuration;
 using Abp.Zero.Ldap;
-using Abp.Zero.Ldap.Configuration;
 using Castle.MicroKernel.Registration;
 using MailKit.Security;
 using Zero.Authorization.Delegation;
-using Zero.Authorization.Ldap;
 using Zero.Authorization.Roles;
 using Zero.Authorization.Users;
 using Zero.Chat;
 using Zero.Configuration;
 using Zero.DashboardCustomization.Definitions;
-using Zero.Debugging;
 using Zero.DynamicEntityProperties;
 using Zero.Features;
 using Zero.Friendships;
@@ -48,6 +41,7 @@ using Zero.Net.Emailing;
 using Zero.Notifications;
 using Zero.WebHooks;
 using Newtonsoft.Json;
+using Zero.Customize.Cache;
 
 namespace Zero
 {
@@ -90,7 +84,7 @@ namespace Zero
             Configuration.Webhooks.IsAutomaticSubscriptionDeactivationEnabled = false;
 
             //Enable this line to create a multi-tenant application.
-            Configuration.MultiTenancy.IsEnabled = ZeroConsts.MultiTenancyEnabled;
+            Configuration.MultiTenancy.IsEnabled = ZeroConst.MultiTenancyEnabled;
 
             //Enable LDAP authentication 
             //Configuration.Modules.ZeroLdap().Enable(typeof(AppLdapAuthenticationSource));
@@ -118,19 +112,24 @@ namespace Zero
             {
                 Configuration.IocManager.IocContainer.Register(
                     Component.For<IEmailSenderConfiguration, ISmtpEmailSenderConfiguration>()
-                             .ImplementedBy<ZeroSmtpEmailSenderConfiguration>()
-                             .LifestyleTransient()
+                        .ImplementedBy<ZeroSmtpEmailSenderConfiguration>()
+                        .LifestyleTransient()
                 );
             });
 
-            Configuration.Caching.Configure(FriendCacheItem.CacheName, cache =>
-            {
-                cache.DefaultSlidingExpireTime = TimeSpan.FromMinutes(30);
-            });
+            Configuration.Caching.Configure(FriendCacheItem.CacheName, cache => { cache.DefaultSlidingExpireTime = TimeSpan.FromMinutes(30); });
+
+            Configuration.Caching.Configure(CustomTenantCacheItem.CacheName, cache => { cache.DefaultSlidingExpireTime = TimeSpan.FromMinutes(30); });
+
+            Configuration.Caching.Configure(CustomTenantCacheItem.ByNameCacheName, cache => { cache.DefaultSlidingExpireTime = TimeSpan.FromMinutes(30); });
+
+            Configuration.Caching.Configure(CustomTenantCacheItem.ByDomainCacheName, cache => { cache.DefaultSlidingExpireTime = TimeSpan.FromMinutes(30); });
 
             IocManager.Register<DashboardConfiguration>();
+
+            Configuration.ReplaceService<IBackgroundJobManager, MyBackgroundJobManager>();
+
             
-            Configuration.ReplaceService<IBackgroundJobManager, MyBackgroundJobManager>(DependencyLifeStyle.Singleton);
             
             Configuration.MultiTenancy.TenantIdResolveKey = "abp.tenantid";
         }
@@ -138,6 +137,8 @@ namespace Zero
         public override void Initialize()
         {
             IocManager.RegisterAssemblyByConvention(typeof(ZeroCoreModule).GetAssembly());
+
+            RegisterCustomTenantCache();
         }
 
         public override void PostInitialize()
@@ -148,8 +149,21 @@ namespace Zero
             IocManager.Resolve<ChatUserStateWatcher>().Initialize();
             IocManager.Resolve<AppTimes>().StartupTime = Clock.Now;
         }
+        
+        private void RegisterCustomTenantCache()
+        {
+            if (IocManager.IsRegistered<ICustomTenantCache>())
+            {
+                return;
+            }
+
+            using var entityTypes = IocManager.ResolveAsDisposable<IAbpZeroEntityTypes>();
+            var implType = typeof (CustomTenantCache<>).MakeGenericType(entityTypes.Object.Tenant);
+
+            IocManager.Register(typeof (ICustomTenantCache), implType, DependencyLifeStyle.Transient);
+        }
     }
-    
+
     /// <summary>
     /// Default implementation of <see cref="IBackgroundJobManager"/>.
     /// </summary>
@@ -186,11 +200,6 @@ namespace Zero
             EventBus = NullEventBus.Instance;
 
             Timer.Period = JobPollPeriod;
-        }
-
-        public override void Start()
-        {
-            base.Start();
         }
 
         [UnitOfWork]
@@ -304,12 +313,12 @@ namespace Zero
 
                         if (jobExecuteMethod.Name == nameof(IAsyncBackgroundJob<object>.ExecuteAsync))
                         {
-                            Task result = (Task)jobExecuteMethod.Invoke(job.Object, new[] {argsObj});
-                            await result;
+                            var result = (Task)jobExecuteMethod.Invoke(job.Object, new[] { argsObj });
+                            if (result != null) await result;
                         }
                         else
                         {
-                            jobExecuteMethod.Invoke(job.Object, new[] {argsObj});
+                            jobExecuteMethod.Invoke(job.Object, new[] { argsObj });
                         }
 
                         await _store.DeleteAsync(jobInfo);

@@ -111,7 +111,7 @@ namespace Zero.Install
 
         private bool CheckDatabaseInternal()
         {
-            var connectionString = _appConfiguration[$"ConnectionStrings:{ZeroConsts.ConnectionStringName}"];
+            var connectionString = _appConfiguration[$"ConnectionStrings:{ZeroConst.ConnectionStringName}"];
 
             if (string.IsNullOrEmpty(connectionString))
             {
@@ -123,7 +123,7 @@ namespace Zero.Install
 
         private void SetConnectionString(string constring)
         {
-            EditAppSettingsjson($"ConnectionStrings:{ZeroConsts.ConnectionStringName}", constring);
+            EditAppSettingsjson($"ConnectionStrings:{ZeroConst.ConnectionStringName}", constring);
         }
 
         private async Task SetAdminPassword(string adminPassword)

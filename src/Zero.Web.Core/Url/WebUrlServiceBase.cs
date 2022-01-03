@@ -1,8 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Abp.Domain.Repositories;
 using Abp.Extensions;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.Extensions.Configuration;
 using Zero.Configuration;
+using Zero.Customize.Cache;
+using Zero.MultiTenancy;
 
 namespace Zero.Web.Url
 {
@@ -29,14 +34,30 @@ namespace Zero.Web.Url
 
         readonly IConfigurationRoot _appConfiguration;
 
-        public WebUrlServiceBase(IAppConfigurationAccessor configurationAccessor)
+        readonly ICustomTenantCache _customTenantCache;
+        
+        readonly IHttpContextAccessor _httpContextAccessor;
+        
+        readonly IRepository<Tenant> _tenantRepository;
+        
+        public WebUrlServiceBase(IAppConfigurationAccessor configurationAccessor, ICustomTenantCache customTenantCache, IHttpContextAccessor httpContextAccessor, IRepository<Tenant> tenantRepository)
         {
+            _customTenantCache = customTenantCache;
+            _httpContextAccessor = httpContextAccessor;
+            _tenantRepository = tenantRepository;
             _appConfiguration = configurationAccessor.Configuration;
         }
 
         public string GetSiteRootAddress(string tenancyName = null)
         {
-            return ReplaceTenancyNameInUrl(WebSiteRootAddressFormat, tenancyName);
+            var httpContext = _httpContextAccessor.HttpContext;
+            if (httpContext == null) return ReplaceTenancyNameInUrl(WebSiteRootAddressFormat, tenancyName);
+            
+            var scheme = httpContext.Request.Scheme;
+            var hostName = httpContext.Request.Host.Host.RemovePreFix("http://", "https://").RemovePostFix("/");
+            var tenantByDomain = _customTenantCache.GetOrNullByDomain(hostName);
+            
+            return tenantByDomain != null ? $"{scheme}://{hostName}/" : ReplaceTenancyNameInUrl(WebSiteRootAddressFormat, tenancyName);
         }
 
         public string GetServerRootAddress(string tenancyName = null)
@@ -47,7 +68,13 @@ namespace Zero.Web.Url
         public List<string> GetRedirectAllowedExternalWebSites()
         {
             var values = _appConfiguration["App:RedirectAllowedExternalWebSites"];
-            return values?.Split(',').ToList() ?? new List<string>();
+            var tenantDomains = _tenantRepository.GetAll().Where(o => o.IsActive && !o.IsDeleted && o.Domain != null && o.Domain.Length > 0).Select(o=>o.Domain).Distinct().ToList();
+            var res = values?.Split(',').ToList() ?? new List<string>();
+            if (tenantDomains.Any())
+            {
+                res.AddRange(tenantDomains);
+            }
+            return res;
         }
 
         private string ReplaceTenancyNameInUrl(string siteRootFormat, string tenancyName)

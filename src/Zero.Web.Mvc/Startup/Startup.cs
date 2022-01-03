@@ -287,7 +287,7 @@ namespace Zero.Web.Startup
         {
             #region System
 
-            ZeroConsts.MultiTenancyEnabled = bool.Parse(_appConfiguration["GlobalConfig:AllowMultiTenancy"]);
+            ZeroConst.MultiTenancyEnabled = bool.Parse(_appConfiguration["GlobalConfig:AllowMultiTenancy"]);
             SystemConfig.DisableMailService = bool.Parse(_appConfiguration["GlobalConfig:DisableMailService"]);
             SystemConfig.LogIndex = _appConfiguration["GlobalConfig:LogIndex"];
             if (!string.IsNullOrEmpty(_appConfiguration["GlobalConfig:DefaultPassword"]))
@@ -324,7 +324,8 @@ namespace Zero.Web.Startup
 
             GlobalConfig.UseMenuLogo = bool.Parse(_appConfiguration["AppMenuLogo:IsActive"]);
             GlobalConfig.AppDefaultMenuLogo = _appConfiguration["AppMenuLogo:Url"];
-
+            if (!string.IsNullOrEmpty(_appConfiguration["GlobalConfig:DefaultImage"]))
+                GlobalConfig.DefaultImageUrl = _appConfiguration["GlobalConfig:DefaultImage"];
             #endregion
 
             #region Upload , Import

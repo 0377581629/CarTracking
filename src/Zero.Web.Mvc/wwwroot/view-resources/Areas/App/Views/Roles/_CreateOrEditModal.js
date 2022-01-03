@@ -16,11 +16,11 @@
 
             _permissionsTree = new PermissionsTree();
             _permissionsTree.init($modal.find('.permission-tree'), null, DashboardWidgetChange);
-
-
+            
             _$roleInformationForm = _modalManager.getModal().find('form[name=RoleInformationsForm]');
             _$roleInformationForm.validate({ ignore: "" });
         };
+        
         function DashboardWidgetChange(selectedPermissions) {
             if (selectedPermissions && jQuery.inArray( "Pages.Dashboard", selectedPermissions ) > -1) {
                 dashboardWidgetGroup.removeClass('hidden');

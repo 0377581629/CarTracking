@@ -8,6 +8,11 @@
         var _passwordComplexityHelper = new app.PasswordComplexityHelper();
         var _organizationTree;
 
+        let _modal;
+        let _isUnlimited;
+        let _isInTrialPeriod;
+        let _subscriptionEndDate;
+        
         function _findAssignedRoleNames() {
             var assignedRoleNames = [];
 
@@ -24,7 +29,7 @@
 
         this.init = function (modalManager) {
             _modalManager = modalManager;
-
+            _modal = _modalManager.getModal();
             _organizationTree = new OrganizationTree();
             _organizationTree.init(_modalManager.getModal().find('.organization-tree'),{
                 cascadeSelectEnabled: false
@@ -59,6 +64,22 @@
                 });
 
             _modalManager.getModal().find('[data-toggle=tooltip]').tooltip();
+
+            _isUnlimited = _modal.find('#User_IsUnlimited');
+            _isInTrialPeriod = _modal.find('#User_IsInTrialPeriod');
+            _subscriptionEndDate = _modal.find('#User_SubscriptionEndDateUtc');
+
+            if (_isUnlimited) {
+                _isUnlimited.on('change', function(){
+                    if ($(this).prop('checked')) {
+                        _modal.find('.subscriptionGroup').addClass('hidden');
+                    } else {
+                        _modal.find('.subscriptionGroup').removeClass('hidden');
+                    }
+                })
+            }
+
+            _modalManager.initControl();
         };
 
         this.save = function () {
@@ -73,6 +94,14 @@
                 user.Password = null;
             }
 
+            if (_isUnlimited.prop('checked')) {
+                user.isInTrialPeriod = false;
+                user.subscriptionEndDateUtc = null;
+            } else {
+                user.isInTrialPeriod = _isInTrialPeriod.prop('checked');
+                user.subscriptionEndDateUtc = _subscriptionEndDate.data('DateTimePicker').viewDate().format('L');
+            }
+            
             _modalManager.setBusy(true);
             _userService.createOrUpdateUser({
                 user: user,

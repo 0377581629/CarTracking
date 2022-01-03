@@ -22,7 +22,7 @@ namespace Zero.Migrations.Seed.Host
             int? tenantId = null;
 
             // ReSharper disable once ConditionIsAlwaysTrueOrFalse
-            if (!ZeroConsts.MultiTenancyEnabled)
+            if (!ZeroConst.MultiTenancyEnabled)
 #pragma warning disable 162
             {
                 tenantId = MultiTenancyConsts.DefaultTenantId;

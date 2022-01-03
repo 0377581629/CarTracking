@@ -1,0 +1,173 @@
+﻿
+@using DPS.Cms.Core.Shared
+@model Zero.Web.Areas.Cms.Models.Page.CreateOrEditPageModalViewModel
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(Model.IsEditMode ? (L("Edit")) : L("Create")))
+
+<div class="modal-body">
+    <div id="PageInformationsTab">
+        <form name="PageInformationsForm" role="form" novalidate class="form-validation">
+            @if (Model.IsEditMode)
+            {
+                <input type="hidden" name="id" value="@Model.Page.Id"/>
+            }
+            <input type="hidden" name="code" value="@Model.Page.Code"/>
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#GeneralInfo" data-toggle="tab" role="tab">@L("GeneralInfo")</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#SEOInfo" data-toggle="tab" role="tab">@L("SEO")</a>
+                </li>
+            </ul>
+            <div class="tab-content m-5">
+                <div id="GeneralInfo" class="tab-pane active">
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label>@L("PageLayout")</label>
+                                <select id="Page_PageLayoutId" name="pageLayoutId" class="form-control requiredSelect2">
+                                    @if (Model.IsEditMode)
+                                    {
+                                        <option value="@Model.Page.PageLayoutId" selected>@Model.Page.PageLayoutName</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-8">
+                            <div class="form-group">
+                                <label>
+                                    @L("Title") <span class="text-danger">*</span>
+                                </label>
+                                <input class="form-control make-slug" id="Page_Name" value="@Model.Page.Name" type="text" name="name" required maxlength="@ZeroConst.MaxNameLength" minlength="@ZeroConst.MinNameLength"/>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label>@L("Slug")</label>
+                                <input class="form-control slug-input" data-target="Page_Name" id="Page_Slug" type="text" name="slug" value="@Model.Page.Slug"/>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label>@L("About")</label>
+                                <input class="form-control" id="Page_About" type="text" name="about" value="@Model.Page.About"/>
+                            </div>
+                        </div>
+
+                        <div class="col-4">
+                            <div class="form-group text-center mb-0">
+                                <label>@L("IsHomePage")</label>
+                                <div class="form-control no-border">
+                                    <label class="checkbox checkbox-outline checkbox-primary inline-block">
+                                        <input type="checkbox" id="Page_IsHomePage" name="isHomePage" value="true" @Html.Raw(!Model.Page.IsHomePage ? "" : "checked=\"checked\"")>
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group text-center mb-0">
+                                <label>@L("Publish")</label>
+                                <div class="form-control no-border">
+                                    <label class="checkbox checkbox-outline checkbox-primary inline-block">
+                                        <input type="checkbox" id="Page_Publish" name="publish" value="true" @Html.Raw(!Model.Page.Publish ? "" : "checked=\"checked\"")>
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group text-center mb-0">
+                                <label>@L("IsActive")</label>
+                                <div class="form-control no-border">
+                                    <label class="checkbox checkbox-outline checkbox-primary inline-block">
+                                        <input type="checkbox" id="Page_IsActive" name="isActive" value="true" @Html.Raw(!Model.Page.IsActive ? "" : "checked=\"checked\"")>
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="SEOInfo" class="tab-pane">
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="form-group text-center mb-0">
+                                <label>@L("TitleDefault")</label>
+                                <div class="form-control no-border">
+                                    <label class="checkbox checkbox-outline checkbox-primary inline-block">
+                                        <input type="checkbox" id="Page_TitleDefault" name="titleDefault" value="true" @Html.Raw(!Model.Page.TitleDefault ? "" : "checked=\"checked\"")>
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-8">
+                            <div class="form-group">
+                                <label>@L("Title")</label>
+                                <input class="form-control" id="Page_Title" value="@Model.Page.Title" type="text" name="title"/>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group text-center mb-0">
+                                <label>@L("DescriptionDefault")</label>
+                                <div class="form-control no-border">
+                                    <label class="checkbox checkbox-outline checkbox-primary inline-block">
+                                        <input type="checkbox" id="Page_DescriptionDefault" name="descriptionDefault" value="true" @Html.Raw(!Model.Page.DescriptionDefault ? "" : "checked=\"checked\"")>
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-8">
+                            <div class="form-group">
+                                <label>@L("Description")</label>
+                                <input class="form-control" id="Page_Description" value="@Model.Page.Description" type="text" name="description"/>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group text-center mb-0">
+                                <label>@L("KeywordDefault")</label>
+                                <div class="form-control no-border">
+                                    <label class="checkbox checkbox-outline checkbox-primary inline-block">
+                                        <input type="checkbox" id="Page_KeywordDefault" name="keywordDefault" value="true" @Html.Raw(!Model.Page.KeywordDefault ? "" : "checked=\"checked\"")>
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-8">
+                            <div class="form-group">
+                                <label>@L("Keyword")</label>
+                                <input class="form-control" id="Page_Keyword" value="@Model.Page.Keyword" type="text" name="keyword"/>
+                            </div>
+                        </div>
+
+                        <div class="col-4">
+                            <div class="form-group text-center mb-0">
+                                <label>@L("AuthorDefault")</label>
+                                <div class="form-control no-border">
+                                    <label class="checkbox checkbox-outline checkbox-primary inline-block">
+                                        <input type="checkbox" id="Page_AuthorDefault" name="authorDefault" value="true" @Html.Raw(!Model.Page.AuthorDefault ? "" : "checked=\"checked\"")>
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-8">
+                            <div class="form-group">
+                                <label>@L("Author")</label>
+                                <input class="form-control" id="Page_Author" value="@Model.Page.Author" type="text" name="author"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalFooterWithSaveAndCancel.cshtml")

@@ -63,7 +63,7 @@ namespace Zero.Web.Areas.App.Controllers
             //Normalize arguments
             if (sourceName.IsNullOrEmpty())
             {
-                sourceName = ZeroConsts.LocalizationSourceName;
+                sourceName = ZeroConst.LocalizationSourceName;
             }
 
             if (baseLanguageName.IsNullOrEmpty())

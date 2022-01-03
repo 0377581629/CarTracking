@@ -102,4 +102,18 @@
     <Folder Include="Areas\Reporting\Views" />
   </ItemGroup>
 
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\view-resources\Areas\Isa\Contract\Index.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\view-resources\Areas\Isa\Contract\_CreateOrEditModal.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\view-resources\Areas\Isa\Customer\Index.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\view-resources\Areas\Isa\Customer\_CreateOrEditModal.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\view-resources\Areas\Isa\WorkFlowFrame\Index.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\view-resources\Areas\Isa\WorkFlowFrame\_CreateOrEditModal.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\view-resources\Areas\Isa\WorkingFile\Index.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\view-resources\Areas\Isa\WorkingFile\_ConfigDynamicPropertyModal.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\view-resources\Areas\Isa\WorkingFile\_CreateOrEditModal.min.js" />
+    <_ContentIncludedByDefault Remove="Areas\Cms\Views\Supporter\Index.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\Cms\Views\Supporter\_CreateOrEditModal.cshtml" />
+  </ItemGroup>
+
 </Project>

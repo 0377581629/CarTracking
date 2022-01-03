@@ -30,6 +30,7 @@ using Zero.Chat;
 using Zero.Chat.Dto;
 using Zero.Customize;
 using Zero.Customize.Dashboard;
+using Zero.Customize.Dto.CurrencyRate;
 using Zero.Customize.Dto.Dashboard;
 using Zero.Customize.Dto.Dashboard.DashboardWidget;
 using Zero.Customize.Dto.EmailTemplate;
@@ -62,6 +63,12 @@ namespace Zero
             
             configuration.CreateMap<EditionDashboardWidgetDto, EditionDashboardWidget>().ReverseMap();
             configuration.CreateMap<RoleDashboardWidgetDto, RoleDashboardWidget>().ReverseMap();
+            
+            // Currency Rate
+            configuration.CreateMap<CreateOrEditCurrencyRateDto, CurrencyRate>().ReverseMap();
+            configuration.CreateMap<CurrencyRateDto, CurrencyRate>().ReverseMap();
+            configuration.CreateMap<CurrencyRateDto, CreateOrEditCurrencyRateDto>().ReverseMap();
+            
             // Email Template
             configuration.CreateMap<CreateOrEditEmailTemplateDto, EmailTemplate>().ReverseMap();
             configuration.CreateMap<EmailTemplateDto, EmailTemplate>().ReverseMap();

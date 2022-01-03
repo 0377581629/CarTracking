@@ -11,12 +11,12 @@ namespace Zero.Localization
     {
         public static void Configure(ILocalizationConfiguration localizationConfiguration)
         {
-            var abpZeroLangIndex = localizationConfiguration.Sources.IndexOf(localizationConfiguration.Sources.FirstOrDefault(o=>o.Name == ZeroConsts.LocalizationSourceName));
+            var abpZeroLangIndex = localizationConfiguration.Sources.IndexOf(localizationConfiguration.Sources.FirstOrDefault(o=>o.Name == ZeroConst.LocalizationSourceName));
             localizationConfiguration.Sources.RemoveAt(abpZeroLangIndex);
             
             localizationConfiguration.Sources.Add(
                 new DictionaryBasedLocalizationSource(
-                    ZeroConsts.LocalizationSourceName,
+                    ZeroConst.LocalizationSourceName,
                     new XmlEmbeddedFileLocalizationDictionaryProvider(
                         typeof(ZeroLocalizationConfigurer).GetAssembly(),
                         "Zero.Localization.Zero"

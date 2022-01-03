@@ -1,0 +1,148 @@
+﻿@using DPS.Cms.Application.Shared.Dto.Page
+@using DPS.Cms.Application.Shared.Dto.PageLayout
+@using Microsoft.AspNetCore.Mvc.Rendering
+@using Zero
+@using Zero.Web.Areas.Cms.Models.Page
+@model Zero.Web.Areas.Cms.Models.Page.PageBlockWidgetViewModel
+@{
+    var pageBlockRowId = StringHelper.Identity();
+    var currentBlock = Model.Block;
+    if (currentBlock.Id.HasValue)
+        pageBlockRowId = currentBlock.UniqueId;
+}
+<li class="pageBlockDetail border-dashed"
+    detailId="@currentBlock.Id"
+    blockColumnCount="@currentBlock.ColumnCount"
+    blockUniqueId="@pageBlockRowId"
+    parentBlockUniqueId="@(!string.IsNullOrEmpty(currentBlock.ParentBlockUniqueId) ? currentBlock.ParentBlockUniqueId : "")"
+    parentColumnUniqueId="@(!string.IsNullOrEmpty(currentBlock.ParentColumnUniqueId) ? currentBlock.ParentColumnUniqueId : "")">
+<div class="card card-custom border-0 w-p100" style="background: transparent; box-shadow: none">
+    <div class="card-header min-h-25px px-2 " style="border-bottom: 1px dashed silver;">
+        <div class="card-title m-0">
+            <h3 class="card-label blockLabel font-size-12" blockUniqueId="@pageBlockRowId">
+                @(!string.IsNullOrEmpty(currentBlock.Name)?currentBlock.Name:L("PageBlock"))
+            </h3>
+        </div>
+    </div>
+</div>
+@if (currentBlock.ColumnCount == 1)
+{
+    var blockColumnUniqueId = StringHelper.Identity();
+    if (!string.IsNullOrEmpty(currentBlock.Col1UniqueId))
+        blockColumnUniqueId = currentBlock.Col1UniqueId;
+    <ul class="min-h-75px m-5px @(currentBlock.SubBlocks != null && currentBlock.SubBlocks.Any()?"unsortable":"widgetSortable widgetDroppable border-dashed")" style="padding: 2px;" initSortable="false" initDroppable="false" blockUniqueId="@pageBlockRowId" columnUniqueId="@blockColumnUniqueId">
+        @if (currentBlock.SubBlocks != null && currentBlock.SubBlocks.Any())
+        {
+            var subBlocks = currentBlock.SubBlocks.Where(o => o.ParentColumnUniqueId == blockColumnUniqueId).ToList();
+            if (subBlocks.Any())
+            {
+                foreach (var subBlock in  subBlocks)
+                {
+                    @await Html.PartialAsync("Components/Config/BlockConfigDetail", new PageBlockWidgetViewModel(subBlock, Model.Widgets))
+                }
+            }
+        }
+        else
+        {
+            if (Model.Widgets != null && Model.Widgets.Any())
+            {
+                var widgetsByCol = Model.Widgets.Where(o => o.PageBlockColumnId == currentBlock.Col1UniqueId).ToList();
+                if (widgetsByCol.Any())
+                {
+                    foreach (var wg in widgetsByCol)
+                    {
+                        @await Html.PartialAsync("Components/Config/WidgetConfigDetail", wg)
+                    }
+                }
+            }
+        }
+    </ul>
+}
+else if (currentBlock.ColumnCount > 1)
+{
+    <ul class="unsortable row" style="padding: 2px;" initSortable="false" blockUniqueId="@pageBlockRowId">
+        @for (var i = 0; i < currentBlock.ColumnCount; i++)
+        {
+            var blockColumnUniqueId = StringHelper.Identity();
+            var subBlocks = new List<PageLayoutBlockDto>();
+            var columnClass = (12 / (currentBlock.ColumnCount <= 0 ? 1 : currentBlock.ColumnCount)).ToString();
+            switch (i)
+            {
+                case 0:
+                {
+                    if (!string.IsNullOrEmpty(currentBlock.Col1UniqueId))
+                    {
+                        blockColumnUniqueId = currentBlock.Col1UniqueId;
+                    }
+                    if (currentBlock.SubBlocks != null && currentBlock.SubBlocks.Any())
+                    {
+                        subBlocks = currentBlock.SubBlocks.Where(o => !string.IsNullOrEmpty(o.ParentColumnUniqueId) && o.ParentColumnUniqueId == currentBlock.Col1UniqueId).ToList();
+                    }
+                    break;
+                }
+                case 1:
+                {
+                    if (!string.IsNullOrEmpty(currentBlock.Col2UniqueId))
+                    {
+                        blockColumnUniqueId = currentBlock.Col2UniqueId;
+                    }
+                    if (currentBlock.SubBlocks != null && currentBlock.SubBlocks.Any())
+                    {
+                        subBlocks = currentBlock.SubBlocks.Where(o => !string.IsNullOrEmpty(o.ParentColumnUniqueId) && o.ParentColumnUniqueId == currentBlock.Col2UniqueId).ToList();
+                    }
+                    break;
+                }
+                case 2:
+                {
+                    if (!string.IsNullOrEmpty(currentBlock.Col3UniqueId))
+                    {
+                        blockColumnUniqueId = currentBlock.Col3UniqueId;
+                    }
+                    if (currentBlock.SubBlocks != null && currentBlock.SubBlocks.Any())
+                    {
+                        subBlocks = currentBlock.SubBlocks.Where(o => !string.IsNullOrEmpty(o.ParentColumnUniqueId) && o.ParentColumnUniqueId == currentBlock.Col3UniqueId).ToList();
+                    }
+                    break;
+                }
+                case 3:
+                {
+                    if (!string.IsNullOrEmpty(currentBlock.Col4UniqueId))
+                    {
+                        blockColumnUniqueId = currentBlock.Col4UniqueId;
+                    }
+                    if (currentBlock.SubBlocks != null && currentBlock.SubBlocks.Any())
+                    {
+                        subBlocks = currentBlock.SubBlocks.Where(o => !string.IsNullOrEmpty(o.ParentColumnUniqueId) && o.ParentColumnUniqueId == currentBlock.Col4UniqueId).ToList();
+                    }
+                    break;
+                }
+            }
+            <li class="col-@columnClass px-0 unsortable">
+                <ul class="min-h-50px m-5px @(subBlocks.Any()?"unsortable":"widgetSortable widgetDroppable border-dashed") " style="padding: 2px;" id="blockDroppable_@blockColumnUniqueId" initSortable="false" initDroppable="false" blockUniqueId="@pageBlockRowId" columnUniqueId="@blockColumnUniqueId" colOrder="@(i + 1)">
+                    @if (subBlocks.Any())
+                    {
+                        foreach (var subBlock in  subBlocks)
+                        {
+                            @await Html.PartialAsync("Components/Config/BlockConfigDetail", new PageBlockWidgetViewModel(subBlock, Model.Widgets))
+                        }
+                    }
+                    else
+                    {
+                        if (Model.Widgets != null && Model.Widgets.Any())
+                        {
+                            var widgetsByCol = Model.Widgets.Where(o => o.PageBlockColumnId == blockColumnUniqueId).ToList();
+                            if (widgetsByCol.Any())
+                            {
+                                foreach (var wg in widgetsByCol)
+                                {
+                                    @await Html.PartialAsync("Components/Config/WidgetConfigDetail", wg)
+                                }
+                            }
+                        }
+                    } 
+                </ul>
+            </li>
+        }
+    </ul>
+}
+</li>

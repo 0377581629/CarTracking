@@ -45,7 +45,7 @@
 
     <form id="alePayCheckoutForm" method="post" asp-action="ConfirmPayment" asp-controller="AlePay" class="register-form" style="max-width: 500px">
         <input type="hidden" name="paymentId" value="@Model.PaymentId"/>
-        <input type="hidden" name="amount" value="@(Math.Round(Model.Amount).ToString(ZeroConsts.NumberFormatInfo))"/>
+        <input type="hidden" name="amount" value="@(Math.Round(Model.Amount).ToString(ZeroConst.NumberFormatInfo))"/>
         <input type="hidden" name="currency" value="@Model.Currency"/>
 
         <div class="row">

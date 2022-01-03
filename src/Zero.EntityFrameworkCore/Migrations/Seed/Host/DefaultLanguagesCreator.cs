@@ -14,7 +14,7 @@ namespace Zero.Migrations.Seed.Host
 
         private static List<ApplicationLanguage> GetInitialLanguages()
         {
-            var tenantId = ZeroConsts.MultiTenancyEnabled ? null : (int?)1;
+            var tenantId = ZeroConst.MultiTenancyEnabled ? null : (int?)1;
             return new List<ApplicationLanguage>
             {
                 new ApplicationLanguage(tenantId, "en", "English", "famfamfam-flags us"),

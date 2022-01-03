@@ -12,7 +12,7 @@ namespace Zero.Web.Common
 
         public static List<string> ReCaptchaIgnoreWhiteList = new List<string>
         {
-            ZeroConsts.AbpApiClientUserAgent
+            ZeroConst.AbpApiClientUserAgent
         };
 
         public static class GraphQL

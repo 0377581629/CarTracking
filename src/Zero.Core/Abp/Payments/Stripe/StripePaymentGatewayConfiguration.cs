@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Abp.Extensions;
 using Microsoft.Extensions.Configuration;
 using Zero.Configuration;
@@ -8,27 +9,40 @@ namespace Zero.Abp.Payments.Stripe
 {
     public class StripePaymentGatewayConfiguration : IPaymentGatewayConfiguration
     {
-        private readonly IConfigurationRoot _appConfiguration;
-
         public SubscriptionPaymentGatewayType GatewayType => SubscriptionPaymentGatewayType.Stripe;
 
-        public string BaseUrl => _appConfiguration["Payment:Stripe:BaseUrl"].EnsureEndsWith('/');
+        public string BaseUrl { get; }
 
-        public string PublishableKey => _appConfiguration["Payment:Stripe:PublishableKey"];
+        public string PublishableKey { get; }
 
-        public string SecretKey => _appConfiguration["Payment:Stripe:SecretKey"];
+        public string SecretKey { get; }
 
-        public string WebhookSecret => _appConfiguration["Payment:Stripe:WebhookSecret"];
+        public string WebhookSecret { get; }
 
-        public bool IsActive => _appConfiguration["Payment:Stripe:IsActive"].To<bool>();
+        public bool IsActive { get; }
 
+        public bool IsActiveByConfig { get; }
+        
         public bool SupportsRecurringPayments => true;
 
-        public List<string> PaymentMethodTypes => _appConfiguration.GetSection("Payment:Stripe:PaymentMethodTypes").Get<List<string>>();
+        public List<string> PaymentMethodTypes { get; }
 
         public StripePaymentGatewayConfiguration(IAppConfigurationAccessor configurationAccessor)
         {
-            _appConfiguration = configurationAccessor.Configuration;
+            try
+            {
+                BaseUrl = configurationAccessor.Configuration["Payment:Stripe:BaseUrl"].EnsureEndsWith('/');
+                PublishableKey = configurationAccessor.Configuration["Payment:Stripe:PublishableKey"];
+                SecretKey = configurationAccessor.Configuration["Payment:Stripe:SecretKey"];
+                WebhookSecret = configurationAccessor.Configuration["Payment:Stripe:WebhookSecret"];
+                IsActive = configurationAccessor.Configuration["Payment:Stripe:IsActive"].To<bool>();
+                IsActiveByConfig = configurationAccessor.Configuration["Payment:Stripe:IsActive"].To<bool>();
+                PaymentMethodTypes = configurationAccessor.Configuration.GetSection("Payment:Stripe:PaymentMethodTypes").Get<List<string>>();
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
         }
     }
 }

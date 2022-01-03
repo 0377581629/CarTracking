@@ -4,10 +4,12 @@ using Abp.Dependency;
 using Abp.Modules;
 using Abp.Reflection.Extensions;
 using Abp.Threading.BackgroundWorkers;
+using Hangfire;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Zero.Auditing;
 using Zero.Configuration;
+using Zero.Customize.BackgroundJobs;
 using Zero.EntityFrameworkCore;
 using Zero.MultiTenancy;
 using Zero.Web.Areas.App.Startup;
@@ -66,6 +68,16 @@ namespace Zero.Web.Startup
             {
                 workManager.Add(IocManager.Resolve<ExpiredAuditLogDeleterWorker>());
             }
+            
+            var currencyRateBackgroundJobService = IocManager.Resolve<ICurrencyRateBackgroundJob>();
+            RecurringJob.RemoveIfExists("SyncCurrencyRates");
+            RecurringJob.AddOrUpdate("SyncCurrencyRates",() => currencyRateBackgroundJobService.UpdateRates(), Cron.Daily);
+            
+            var userSubscriptionBackgroundJobService = IocManager.Resolve<IUserSubscriptionBackgroundJob>();
+            RecurringJob.RemoveIfExists("UserSubscription_ExpirationCheck");
+            RecurringJob.AddOrUpdate("UserSubscription_ExpirationCheck",() => userSubscriptionBackgroundJobService.UserSubscriptionExpirationCheck(), Cron.Daily);
+            RecurringJob.RemoveIfExists("UserSubscription_ExpireEmailNotifier");
+            RecurringJob.AddOrUpdate("UserSubscription_ExpireEmailNotifier",() => userSubscriptionBackgroundJobService.UserSubscriptionExpireEmailNotifier(), Cron.Daily);
         }
     }
 }

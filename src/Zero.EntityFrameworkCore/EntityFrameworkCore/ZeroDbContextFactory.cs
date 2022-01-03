@@ -24,7 +24,7 @@ namespace Zero.EntityFrameworkCore
                 addUserSecrets: true
             );
 
-            ZeroDbContextConfigurer.Configure(builder, configuration.GetConnectionString(ZeroConsts.ConnectionStringName));
+            ZeroDbContextConfigurer.Configure(builder, configuration.GetConnectionString(ZeroConst.ConnectionStringName));
 
             return new ZeroDbContext(builder.Options);
         }

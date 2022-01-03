@@ -1,0 +1,252 @@
+﻿@using DPS.Cms.Application.Shared.Dto.PageLayout
+@model PageLayoutBlockDto
+@{
+    var pageBlockRowId = StringHelper.Identity();
+    if (Model.Id.HasValue)
+        pageBlockRowId = Model.UniqueId;
+}
+<li class="pageBlockDetail border-dashed"
+    detailId="@Model.Id"
+    blockColumnCount="@Model.ColumnCount"
+    blockUniqueId="@pageBlockRowId"
+    parentBlockUniqueId="@(!string.IsNullOrEmpty(Model.ParentBlockUniqueId) ? Model.ParentBlockUniqueId : "")"
+    parentColumnUniqueId="@(!string.IsNullOrEmpty(Model.ParentColumnUniqueId) ? Model.ParentColumnUniqueId : "")">
+<div class="card card-custom border-0 w-p100" style="background: transparent; box-shadow: none">
+    <div class="card-header min-h-25px px-2 " style="border-bottom: 1px dashed silver;">
+        @if (string.IsNullOrEmpty(Model.ParentColumnUniqueId))
+        {
+            <div class="card-toolbar m-2px">
+                <button type="button" class="btn btn-xs btn-icon btn-outline-dark sortableHandle">
+                    <i class="la la-arrows-alt"></i>
+                </button>
+            </div>   
+        }
+        <div class="card-title">
+            <h3 class="card-label blockLabel font-size-14" blockUniqueId="@pageBlockRowId">
+                @(!string.IsNullOrEmpty(Model.Name) ? Model.Name : L("PageBlock"))
+            </h3>
+        </div>
+        <div class="card-toolbar">
+            <button type="button" class="btn btn-xs btn-icon btn-outline-info btnConfigBlock" blockUniqueId="@pageBlockRowId">
+                <i class="la la-cog"></i>
+            </button>
+            <button type="button" class="btn btn-xs btn-icon btn-outline-danger btnDeleteBlock" blockUniqueId="@pageBlockRowId">
+                <i class="la la-trash"></i>
+            </button>
+        </div>
+    </div>
+    @if (Model.ColumnCount == 1)
+    {
+        <div class="card-body p-10 blockConfigGroup hidden" blockUniqueId="@pageBlockRowId">
+            
+            <div class="col-12 px-0">
+                <div class="form-group mb-5px">
+                    <label>Name</label>
+                    <input type="text" class="form-control form-control-sm blockName" value="@Model.Name" blockUniqueId="@pageBlockRowId"/>
+                </div>
+            </div>
+            <div class="col-12 px-0">
+                <div class="form-group mb-5px">
+                    <label>Col Id</label>
+                    <input type="text" class="form-control form-control-sm col1Id" value="@Model.Col1Id" blockUniqueId="@pageBlockRowId"/>
+                </div>
+            </div>
+            <div class="col-12 px-0">
+                <div class="form-group mb-0">
+                    <label>Col class</label>
+                    <input type="text" class="form-control form-control-sm col1Class" value="@Model.Col1Class" blockUniqueId="@pageBlockRowId"/>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="card-body p-10 blockConfigGroup hidden" blockUniqueId="@pageBlockRowId">
+            <div class="col-9 px-0">
+                <div class="form-group mb-5px">
+                    <label>Name</label>
+                    <input type="text" class="form-control form-control-sm blockName" value="@Model.Name" blockUniqueId="@pageBlockRowId"/>
+                </div>
+            </div>
+             <div class="col-3">
+                <div class="form-group text-center mb-0">
+                    <label>@L("WrapInRow")</label>
+                    <div class="form-control no-border">
+                        <label class="checkbox checkbox-outline checkbox-primary inline-block">
+                            <input type="checkbox" class="wrapInRow" blockUniqueId="@pageBlockRowId" value="true" @Html.Raw(!Model.WrapInRow ? "" : "checked=\"checked\"")>
+                            <span></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+@if (Model.ColumnCount == 1)
+{
+    var blockColumnUniqueId = StringHelper.Identity();
+    if (!string.IsNullOrEmpty(Model.Col1UniqueId))
+        blockColumnUniqueId = Model.Col1UniqueId;
+    <input type="hidden" class="col1UniqueId" value="@blockColumnUniqueId" blockUniqueId="@pageBlockRowId"/>
+    <ul class="min-h-75px p-10 m-10 unsortable blockDroppable border-dashed" initSortable="false" initDroppable="false" blockUniqueId="@pageBlockRowId" columnUniqueId="@blockColumnUniqueId">
+        @if (Model.SubBlocks != null && Model.SubBlocks.Any())
+        {
+            var subBlocks = Model.SubBlocks.Where(o => o.ParentColumnUniqueId == blockColumnUniqueId).ToList();
+            if (subBlocks.Any())
+            {
+                foreach (var subBlock in  subBlocks)
+                {
+                    @await Html.PartialAsync("Components/Config/BlockConfigDetail", subBlock)
+                }
+            }
+        }
+    </ul>
+}
+else if (Model.ColumnCount > 1)
+{
+    <ul class="p-0 unsortable row" style="overflow: hidden" initSortable="false" blockUniqueId="@pageBlockRowId">
+        @for (var i = 0; i < Model.ColumnCount; i++)
+        {
+            var blockColumnUniqueId = StringHelper.Identity();
+            var subBlocks = new List<PageLayoutBlockDto>();
+            var columnClass = (12 / (Model.ColumnCount <= 0 ? 1 : Model.ColumnCount)).ToString();
+            switch (i)
+            {
+                case 0:
+                {
+                    if (!string.IsNullOrEmpty(Model.Col1UniqueId))
+                    {
+                        blockColumnUniqueId = Model.Col1UniqueId;
+                    }
+                    
+                    if (Model.SubBlocks != null && Model.SubBlocks.Any())
+                    {
+                        subBlocks = Model.SubBlocks.Where(o => !string.IsNullOrEmpty(o.ParentColumnUniqueId) && o.ParentColumnUniqueId == Model.Col1UniqueId).ToList();
+                    }
+                    break;
+                }
+                case 1:
+                {
+                    if (!string.IsNullOrEmpty(Model.Col2UniqueId))
+                    {
+                        blockColumnUniqueId = Model.Col2UniqueId;
+                    }
+                    
+                    if (Model.SubBlocks != null && Model.SubBlocks.Any())
+                    {
+                        subBlocks = Model.SubBlocks.Where(o => !string.IsNullOrEmpty(o.ParentColumnUniqueId) && o.ParentColumnUniqueId == Model.Col2UniqueId).ToList();
+                    }
+                    break;
+                }
+                case 2:
+                {
+                    if (!string.IsNullOrEmpty(Model.Col3UniqueId))
+                    {
+                        blockColumnUniqueId = Model.Col3UniqueId;
+                    }
+                    
+                    if (Model.SubBlocks != null && Model.SubBlocks.Any())
+                    {
+                        subBlocks = Model.SubBlocks.Where(o => !string.IsNullOrEmpty(o.ParentColumnUniqueId) && o.ParentColumnUniqueId == Model.Col3UniqueId).ToList();
+                    }
+                    break;
+                }
+                case 3:
+                {
+                    if (!string.IsNullOrEmpty(Model.Col4UniqueId))
+                    {
+                        blockColumnUniqueId = Model.Col4UniqueId;
+                    }
+                    
+                    if (Model.SubBlocks != null && Model.SubBlocks.Any())
+                    {
+                        subBlocks = Model.SubBlocks.Where(o => !string.IsNullOrEmpty(o.ParentColumnUniqueId) && o.ParentColumnUniqueId == Model.Col4UniqueId).ToList();
+                    }
+                    break;
+                }
+            }
+            <li class="col-@columnClass px-0 unsortable">
+                <div class="card-body p-10 blockConfigGroup hidden" blockUniqueId="@pageBlockRowId">
+                    <input type="hidden" class="col@(i+1)UniqueId" value="@blockColumnUniqueId" blockUniqueId="@pageBlockRowId"/>
+                    @switch (i)
+                    {
+                        case 0:
+                        {
+                            <div class="col-12 px-0">
+                                <div class="form-group mb-5px">
+                                    <label>Col Id</label>
+                                    <input type="text" class="form-control form-control-sm col1Id" value="@Model.Col1Id" blockUniqueId="@pageBlockRowId"/>
+                                </div>
+                            </div>
+                            <div class="col-12 px-0">
+                                <div class="form-group mb-0">
+                                    <label>Col class</label>
+                                    <input type="text" class="form-control form-control-sm col1Class" value="@Model.Col1Class" blockUniqueId="@pageBlockRowId"/>
+                                </div>
+                            </div>
+                            break;
+                        }
+                        case 1:
+                        {
+                            <div class="col-12 px-0">
+                                <div class="form-group mb-5px">
+                                    <label>Col Id</label>
+                                    <input type="text" class="form-control form-control-sm col2Id" value="@Model.Col2Id" blockUniqueId="@pageBlockRowId"/>
+                                </div>
+                            </div>
+                            <div class="col-12 px-0">
+                                <div class="form-group mb-0">
+                                    <label>Col class</label>
+                                    <input type="text" class="form-control form-control-sm col2Class" value="@Model.Col2Class" blockUniqueId="@pageBlockRowId"/>
+                                </div>
+                            </div>
+                            break;
+                        }
+                        case 2:
+                        {
+                            <div class="col-12 px-0">
+                                <div class="form-group mb-5px">
+                                    <label>Col Id</label>
+                                    <input type="text" class="form-control form-control-sm col3Id" value="@Model.Col3Id" blockUniqueId="@pageBlockRowId"/>
+                                </div>
+                            </div>
+                            <div class="col-12 px-0">
+                                <div class="form-group mb-0">
+                                    <label>Col class</label>
+                                    <input type="text" class="form-control form-control-sm col3Class" value="@Model.Col3Class" blockUniqueId="@pageBlockRowId"/>
+                                </div>
+                            </div>
+                            break;
+                        }
+                        case 3:
+                        {
+                            <div class="col-12 px-0">
+                                <div class="form-group mb-5px">
+                                    <label>Col Id</label>
+                                    <input type="text" class="form-control form-control-sm col4Id" value="@Model.Col4Id" blockUniqueId="@pageBlockRowId"/>
+                                </div>
+                            </div>
+                            <div class="col-12 px-0">
+                                <div class="form-group mb-0">
+                                    <label>Col class</label>
+                                    <input type="text" class="form-control form-control-sm col4Class" value="@Model.Col4Class" blockUniqueId="@pageBlockRowId"/>
+                                </div>
+                            </div>
+                            break;
+                        }
+                    }
+                </div>
+                <ul class="min-h-50px p-10 m-10 unsortable blockDroppable border-dashed" id="blockDroppable_@blockColumnUniqueId" initSortable="false" initDroppable="false" blockUniqueId="@pageBlockRowId" columnUniqueId="@blockColumnUniqueId" colOrder="@(i + 1)">
+                    @if (subBlocks.Any())
+                    {
+                        foreach (var subBlock in  subBlocks)
+                        {
+                            @await Html.PartialAsync("Components/Config/BlockConfigDetail", subBlock)
+                        }
+                    }
+                </ul>
+            </li>
+        }
+    </ul>
+}
+</li>

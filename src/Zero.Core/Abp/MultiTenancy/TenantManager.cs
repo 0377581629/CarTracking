@@ -120,7 +120,7 @@ namespace Zero.MultiTenancy
 
             if (isInTrialPeriod && !subscriptionEndDate.HasValue)
             {
-                throw new UserFriendlyException(LocalizationManager.GetString(ZeroConsts.LocalizationSourceName, "TrialWithoutEndDateErrorMessage"));
+                throw new UserFriendlyException(LocalizationManager.GetString(ZeroConst.LocalizationSourceName, "TrialWithoutEndDateErrorMessage"));
             }
 
             using (var uow = _unitOfWorkManager.Begin(TransactionScopeOption.RequiresNew))
@@ -240,7 +240,7 @@ namespace Zero.MultiTenancy
                 return;
             }
 
-            var error = LocalizationManager.GetSource(ZeroConsts.LocalizationSourceName).GetString("FreeEditionsCannotHaveTrialVersions");
+            var error = LocalizationManager.GetSource(ZeroConst.LocalizationSourceName).GetString("FreeEditionsCannotHaveTrialVersions");
             throw new UserFriendlyException(error);
         }
 
@@ -341,7 +341,7 @@ namespace Zero.MultiTenancy
         {
             if (tenant.IsInTrialPeriod && !tenant.SubscriptionEndDateUtc.HasValue)
             {
-                throw new UserFriendlyException(LocalizationManager.GetString(ZeroConsts.LocalizationSourceName, "TrialWithoutEndDateErrorMessage"));
+                throw new UserFriendlyException(LocalizationManager.GetString(ZeroConst.LocalizationSourceName, "TrialWithoutEndDateErrorMessage"));
             }
 
             return base.UpdateAsync(tenant);
@@ -360,6 +360,7 @@ namespace Zero.MultiTenancy
             bool sendActivationEmail,
             DateTime? subscriptionEndDate,
             bool isInTrialPeriod,
+            string domain,
             string emailActivationLink)
         {
             int newTenantId;
@@ -368,10 +369,15 @@ namespace Zero.MultiTenancy
             await CheckEditionAsync(editionId, isInTrialPeriod);
 
             if (isInTrialPeriod && !subscriptionEndDate.HasValue)
-                throw new UserFriendlyException(LocalizationManager.GetString(ZeroConsts.LocalizationSourceName, "TrialWithoutEndDateErrorMessage"));
+                throw new UserFriendlyException(LocalizationManager.GetString(ZeroConst.LocalizationSourceName, "TrialWithoutEndDateErrorMessage"));
             
             using (var uow = _unitOfWorkManager.Begin(TransactionScopeOption.RequiresNew))
             {
+                // Not allow tenant use custom database when it has a domain
+                
+                if (domain.IsNullOrWhiteSpace())
+                    connectionString = null;
+                
                 //Create tenant
                 var tenant = new Tenant(tenancyName, name)
                 {
@@ -379,7 +385,8 @@ namespace Zero.MultiTenancy
                     EditionId = editionId,
                     SubscriptionEndDateUtc = subscriptionEndDate?.ToUniversalTime(),
                     IsInTrialPeriod = isInTrialPeriod,
-                    ConnectionString = connectionString.IsNullOrWhiteSpace() ? null : SimpleStringCipher.Instance.Encrypt(connectionString)
+                    ConnectionString = connectionString.IsNullOrWhiteSpace() ? null : SimpleStringCipher.Instance.Encrypt(connectionString),
+                    Domain = domain
                 };
 
                 if (parentId > 0)

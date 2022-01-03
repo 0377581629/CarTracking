@@ -124,7 +124,7 @@ namespace Zero.Customize.KendoUI
                         {
                             var numberFormat = "";
                             var fullNumberFormat = "";
-                            var isNumberCol = field.DataType == (int) ZEROEnums.DataType.Number;
+                            var isNumberCol = field.DataType == (int) ZeroEnums.DataType.Number;
                             if (isNumberCol)
                             {
                                 if (field.FractionalLetterCount > 0)

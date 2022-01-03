@@ -1,0 +1,44 @@
+﻿@model Zero.Web.Areas.Cms.Models.ImageBlockGroup.CreateOrEditImageBlockGroupModalViewModel
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(Model.IsEditMode ? (L("Edit")) : L("Create")))
+
+<div class="modal-body">
+    <div id="ImageBlockGroupInformationsTab">
+        <form name="ImageBlockGroupInformationsForm" role="form" novalidate class="form-validation">
+            @if (Model.IsEditMode)
+            {
+                <input type="hidden" name="id" value="@Model.ImageBlockGroup.Id"/>
+            }
+            <input type="hidden" name="code" value="@Model.ImageBlockGroup.Code"/>
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label>
+                            @L("Name") <span class="text-danger">*</span>
+                        </label>
+                        <input class="form-control" id="ImageBlockGroup_Name" value="@Model.ImageBlockGroup.Name" type="text" name="name" required maxlength="@ZeroConst.MaxNameLength" minlength="@ZeroConst.MinNameLength"/>
+                    </div>
+                </div>
+                <div class="col-9">
+                    <div class="form-group">
+                        <label for="ImageBlockGroup_Note">@L("Note")</label>
+                        <input class="form-control" id="ImageBlockGroup_Note" type="text" name="note" value="@Model.ImageBlockGroup.Note"/>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="form-group text-center mb-0">
+                        <label>@L("IsActive")</label>
+                        <div class="form-control no-border">
+                            <label class="checkbox checkbox-outline checkbox-primary inline-block">
+                                <input type="checkbox" id="ImageBlockGroup_IsActive" name="isActive" value="true" @Html.Raw(!Model.ImageBlockGroup.IsActive ? "" : "checked=\"checked\"")>
+                                <span></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalFooterWithSaveAndCancel.cshtml")

@@ -43,5 +43,7 @@ namespace Zero.MultiTenancy.Dto
         public DateTime? SubscriptionEndDateUtc { get; set; }
 
         public bool IsInTrialPeriod { get; set; }
+        
+        public string Domain { get; set; }
     }
 }

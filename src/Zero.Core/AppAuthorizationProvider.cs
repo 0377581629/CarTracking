@@ -31,17 +31,74 @@ namespace Zero.Authorization
             var pages = context.GetPermissionOrNull(AppPermissions.Pages) ?? context.CreatePermission(AppPermissions.Pages, L("Pages"));
             pages.CreateChildPermission(AppPermissions.Dashboard, L("Dashboard"));
 
+            #region Cms Settings
+            
+            var cmsSettings = pages.CreateChildPermission(CmsPermissions.Settings, L("CMS"));
+            
+            var imageBlockGroup = cmsSettings.CreateChildPermission(CmsPermissions.ImageBlockGroup, L("Cms_AdvertisementGroups"));
+            imageBlockGroup.CreateChildPermission(CmsPermissions.ImageBlockGroup_Create, L("Create"));
+            imageBlockGroup.CreateChildPermission(CmsPermissions.ImageBlockGroup_Edit, L("Edit"));
+            imageBlockGroup.CreateChildPermission(CmsPermissions.ImageBlockGroup_Delete, L("Delete"));
+            
+            var imageBlock = cmsSettings.CreateChildPermission(CmsPermissions.ImageBlock, L("Cms_Advertisements"));
+            imageBlock.CreateChildPermission(CmsPermissions.ImageBlock_Create, L("Create"));
+            imageBlock.CreateChildPermission(CmsPermissions.ImageBlock_Edit, L("Edit"));
+            imageBlock.CreateChildPermission(CmsPermissions.ImageBlock_Delete, L("Delete"));
+            
+            var pageTheme = cmsSettings.CreateChildPermission(CmsPermissions.PageTheme, L("PageThemes"), multiTenancySides: _isMultiTenancyEnabled ? MultiTenancySides.Host : MultiTenancySides.Tenant);
+            pageTheme.CreateChildPermission(CmsPermissions.PageTheme_Create, L("Create"), multiTenancySides: _isMultiTenancyEnabled ? MultiTenancySides.Host : MultiTenancySides.Tenant);
+            pageTheme.CreateChildPermission(CmsPermissions.PageTheme_Edit, L("Edit"), multiTenancySides: _isMultiTenancyEnabled ? MultiTenancySides.Host : MultiTenancySides.Tenant);
+            pageTheme.CreateChildPermission(CmsPermissions.PageTheme_Delete, L("Delete"), multiTenancySides: _isMultiTenancyEnabled ? MultiTenancySides.Host : MultiTenancySides.Tenant);
+            
+            var pageLayout = cmsSettings.CreateChildPermission(CmsPermissions.PageLayout, L("PageLayouts"));
+            pageLayout.CreateChildPermission(CmsPermissions.PageLayout_Create, L("Create"));
+            pageLayout.CreateChildPermission(CmsPermissions.PageLayout_Edit, L("Edit"));
+            pageLayout.CreateChildPermission(CmsPermissions.PageLayout_Delete, L("Delete"));
+            
+            var page = cmsSettings.CreateChildPermission(CmsPermissions.Page, L("Pages"));
+            page.CreateChildPermission(CmsPermissions.Page_Create, L("Create"));
+            page.CreateChildPermission(CmsPermissions.Page_Edit, L("Edit"));
+            page.CreateChildPermission(CmsPermissions.Page_Delete, L("Delete"));
+            
+            var widget = cmsSettings.CreateChildPermission(CmsPermissions.Widget, L("Widgets"));
+            widget.CreateChildPermission(CmsPermissions.Widget_Create, L("Create"));
+            widget.CreateChildPermission(CmsPermissions.Widget_Edit, L("Edit"));
+            widget.CreateChildPermission(CmsPermissions.Widget_Delete, L("Delete"));
+            
+            var tags = cmsSettings.CreateChildPermission(CmsPermissions.Tags, L("Tags"));
+            tags.CreateChildPermission(CmsPermissions.Tags_Create, L("Create"));
+            tags.CreateChildPermission(CmsPermissions.Tags_Edit, L("Edit"));
+            tags.CreateChildPermission(CmsPermissions.Tags_Delete, L("Delete"));
+            
+            var menuGroup = cmsSettings.CreateChildPermission(CmsPermissions.MenuGroup, L("MenuGroup"));
+            menuGroup.CreateChildPermission(CmsPermissions.MenuGroup_Create, L("Create"));
+            menuGroup.CreateChildPermission(CmsPermissions.MenuGroup_Edit, L("Edit"));
+            menuGroup.CreateChildPermission(CmsPermissions.MenuGroup_Delete, L("Delete"));
+            
+            var menu = cmsSettings.CreateChildPermission(CmsPermissions.Menu, L("Menu"));
+            menu.CreateChildPermission(CmsPermissions.Menu_Create, L("Create"));
+            menu.CreateChildPermission(CmsPermissions.Menu_Edit, L("Edit"));
+            menu.CreateChildPermission(CmsPermissions.Menu_Delete, L("Delete"));
+            
+            #endregion
+            
+            #region Administration
             var administration = pages.CreateChildPermission(AppPermissions.Pages_Administration, L("Administration"));
 
-            var dashboardWidgets = administration.CreateChildPermission(AppPermissions.DashboardWidget, L("DashboardWidget"), multiTenancySides: MultiTenancySides.Host);
-            dashboardWidgets.CreateChildPermission(AppPermissions.DashboardWidget_Create, L("Create"), multiTenancySides: MultiTenancySides.Host);
-            dashboardWidgets.CreateChildPermission(AppPermissions.DashboardWidget_Edit, L("Edit"), multiTenancySides: MultiTenancySides.Host);
-            dashboardWidgets.CreateChildPermission(AppPermissions.DashboardWidget_Delete, L("Delete"), multiTenancySides: MultiTenancySides.Host);
+            var dashboardWidgets = administration.CreateChildPermission(AppPermissions.DashboardWidget, L("DashboardWidget"), multiTenancySides: _isMultiTenancyEnabled ? MultiTenancySides.Host : MultiTenancySides.Tenant);
+            dashboardWidgets.CreateChildPermission(AppPermissions.DashboardWidget_Create, L("Create"), multiTenancySides: _isMultiTenancyEnabled ? MultiTenancySides.Host : MultiTenancySides.Tenant);
+            dashboardWidgets.CreateChildPermission(AppPermissions.DashboardWidget_Edit, L("Edit"), multiTenancySides: _isMultiTenancyEnabled ? MultiTenancySides.Host : MultiTenancySides.Tenant);
+            dashboardWidgets.CreateChildPermission(AppPermissions.DashboardWidget_Delete, L("Delete"), multiTenancySides: _isMultiTenancyEnabled ? MultiTenancySides.Host : MultiTenancySides.Tenant);
             
             var emailTemplates = administration.CreateChildPermission(AppPermissions.Pages_EmailTemplates, L("EmailTemplates"));
             emailTemplates.CreateChildPermission(AppPermissions.Pages_EmailTemplates_Create, L("Create"));
             emailTemplates.CreateChildPermission(AppPermissions.Pages_EmailTemplates_Edit, L("Edit"));
             emailTemplates.CreateChildPermission(AppPermissions.Pages_EmailTemplates_Delete, L("Delete"));
+            
+            var currencyRates = administration.CreateChildPermission(AppPermissions.CurrencyRate, L("CurrencyRate"), multiTenancySides: _isMultiTenancyEnabled ? MultiTenancySides.Host : MultiTenancySides.Tenant);
+            currencyRates.CreateChildPermission(AppPermissions.CurrencyRate_Create, L("Create"), multiTenancySides: _isMultiTenancyEnabled ? MultiTenancySides.Host : MultiTenancySides.Tenant);
+            currencyRates.CreateChildPermission(AppPermissions.CurrencyRate_Edit, L("Edit"), multiTenancySides: _isMultiTenancyEnabled ? MultiTenancySides.Host : MultiTenancySides.Tenant);
+            currencyRates.CreateChildPermission(AppPermissions.CurrencyRate_Delete, L("Delete"), multiTenancySides: _isMultiTenancyEnabled ? MultiTenancySides.Host : MultiTenancySides.Tenant);
             
             var roles = administration.CreateChildPermission(AppPermissions.Pages_Administration_Roles, L("Roles"));
             roles.CreateChildPermission(AppPermissions.Pages_Administration_Roles_Create, L("CreatingNewRole"));
@@ -103,7 +160,7 @@ namespace Zero.Authorization
 
             administration.CreateChildPermission(AppPermissions.Pages_Administration_Tenant_Settings, L("TenantSettings"));
             
-            if (ZeroConsts.MultiTenancyEnabled)
+            if (ZeroConst.MultiTenancyEnabled)
                 administration.CreateChildPermission(AppPermissions.Pages_Administration_Tenant_SubscriptionManagement, L("TenantSubscription"));
 
             //HOST-SPECIFIC PERMISSIONS
@@ -124,11 +181,12 @@ namespace Zero.Authorization
             administration.CreateChildPermission(AppPermissions.Pages_Administration_Host_Settings, L("SystemSettings"), multiTenancySides: MultiTenancySides.Host);
             administration.CreateChildPermission(AppPermissions.Pages_Administration_Host_Maintenance, L("Maintenance"), multiTenancySides: _isMultiTenancyEnabled ? MultiTenancySides.Host : MultiTenancySides.Tenant);
             administration.CreateChildPermission(AppPermissions.Pages_Administration_HangfireDashboard, L("HangfireDashboard"), multiTenancySides: _isMultiTenancyEnabled ? MultiTenancySides.Host : MultiTenancySides.Tenant);
+            #endregion
         }
 
         private static ILocalizableString L(string name)
         {
-            return new LocalizableString(name, ZeroConsts.LocalizationSourceName);
+            return new LocalizableString(name, ZeroConst.LocalizationSourceName);
         }
     }
 }

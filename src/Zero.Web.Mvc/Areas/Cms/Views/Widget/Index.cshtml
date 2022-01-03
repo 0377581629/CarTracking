@@ -1,0 +1,89 @@
+﻿@model Zero.Web.Areas.Cms.Models.Widget.WidgetViewModel
+@{
+    ViewBag.CurrentPageName = AppPageNames.Cms.Widget;
+}
+
+@section Styles {
+    <link rel="stylesheet" href="/3rds/codemirror-5.62.0/lib/codemirror.css"/>
+    <link rel="stylesheet" href="/3rds/codemirror-5.62.0/addon/scroll/simplescrollbars.css"/>
+    <style>
+        .CodeMirror {
+            border: 1px solid #d1d1d1;
+            border-radius: 0.675rem;
+        }
+        .CodeMirror-sizer {
+            margin-left: min(31px, 5%) !important;
+        }
+        .CodeMirror-linenumbers {
+            min-width: 29px !important;
+        }
+    </style>
+}
+
+@section Scripts
+{
+    <script abp-src="@ZeroConst.ScriptPathCms/Widget/Index.js" asp-append-version="true"></script>
+    <script src="/3rds/codemirror-5.62.0/lib/codemirror.js"></script>
+    <script src="/3rds/codemirror-5.62.0/mode/javascript/javascript.js"></script>
+    <script src="/3rds/codemirror-5.62.0/mode/css/css.js"></script>
+    <script src="/3rds/codemirror-5.62.0/addon/scroll/simplescrollbars.js"></script>
+    <script src="/3rds/codemirror-5.62.0/addon/display/autorefresh.js"></script>
+}
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <abp-page-subheader title="@L("Widgets")" description="@L("WidgetsHeaderInfo")">
+        @if (IsGranted(CmsPermissions.Widget_Create))
+        {
+            <button id="CreateNewButton" class="btn btn-primary blue">
+                <i class="fa fa-plus"></i> @L("Create")
+            </button>
+        }
+    </abp-page-subheader>
+
+    <div class="@(await GetContainerClass())">
+        <div class="card card-custom gutter-b">
+            <div class="card-body">
+                <div class="form">
+                    <div id="WidgetsFormFilter">
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label>@L("PageTheme")</label>
+                                    <select id="PageThemeIdSelector" class="form-control"></select>
+                                </div>
+                            </div>
+                            <div class="col-8">
+                                <div class="form-group">
+                                    <label>@L("Search")</label>
+                                    <div class="input-group">
+                                        <input id="WidgetsTableFilter" class="form-control" type="text" value="@ViewBag.FilterText" placeholder="@L("SearchWithThreeDot")" aria-describedby="basic-addon2">
+                                        <span class="input-group-btn">
+                                            <button type="button" name="RefreshButton" class="btn btn-primary">
+                                                <i class="fa fa-search"></i>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="align-items-center">
+                    <table id="WidgetsTable" class="display table table-striped table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th class="text-center">@L("Actions")</th>
+                            <th class="text-center">@L("Name")</th>
+                            <th class="text-center">@L("ActionName")</th>
+                            <th class="text-center">@L("WidgetContentType")</th>
+                            <th class="text-center">@L("WidgetContentCount")</th>
+                            <th class="text-center">@L("About")</th>
+                            <th class="text-center">@L("IsActive")</th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

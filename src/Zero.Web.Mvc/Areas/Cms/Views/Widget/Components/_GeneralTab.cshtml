@@ -1,0 +1,94 @@
+﻿@using DPS.Cms.Core.Shared
+@model Zero.Web.Areas.Cms.Models.Widget.CreateOrEditWidgetModalViewModel
+<div id="WidgetInformationsTab">
+    <form name="WidgetInformationsForm" role="form" novalidate class="form-validation">
+        @if (Model.IsEditMode)
+        {
+            <input type="hidden" name="id" value="@Model.Widget.Id"/>
+        }
+        <input type="hidden" name="code" value="@Model.Widget.Code"/>
+        <div class="row">
+            <div class="col-9">
+                <div class="form-group">
+                    <label>
+                        @L("Name") <span class="text-danger">*</span>
+                    </label>
+                    <input class="form-control" id="Widget_Name" value="@Model.Widget.Name" type="text" name="name" required maxlength="@ZeroConst.MaxNameLength" minlength="@ZeroConst.MinNameLength"/>
+                </div>
+            </div>
+
+            
+
+            <div class="col-3">
+                <div class="form-group text-center mb-0">
+                    <label>@L("IsActive")</label>
+                    <div class="form-control no-border">
+                        <label class="checkbox checkbox-outline checkbox-primary inline-block">
+                            <input type="checkbox" id="Widget_IsActive" name="isActive" value="true" @Html.Raw(!Model.Widget.IsActive ? "" : "checked=\"checked\"")>
+                            <span></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-3">
+                <div class="form-group">
+                    <label>@L("WidgetContentType")</label>
+                    @Html.DropDownList("ContentType", CmsHelper.ListWidgetContentType(Model.Widget.ContentType, LocalizationManager.GetSource(ZeroConst.LocalizationSourceName)), new { @class = "form-control kt-select2-non-search" })
+                </div>
+            </div>
+
+            <div class="col-3">
+                <div class="form-group">
+                    <label>@L("WidgetContentCount")</label>
+                    <input class="form-control number" id="Widget_ContentCount" type="text" name="contentCount" value="@Model.Widget.ContentCount" @(Model.Widget.ContentType != (int)CmsEnums.WidgetContentType.FixedContent ? "" : "readonly")/>
+                </div>
+            </div>
+
+            <div class="col-6">
+                <div class="form-group">
+                    <label>
+                        @L("ActionName") <span class="text-danger">*</span>
+                    </label>
+                    <input class="form-control" id="Widget_Action" type="text" name="actionName" value="@Model.Widget.ActionName" required maxlength="@ZeroConst.MaxNameLength" minlength="@ZeroConst.MinNameLength"/>
+                </div>
+            </div>
+
+            <div class="col-6">
+                <div class="form-group">
+                    <label>@L("JsBundleUrl")</label>
+                    <input class="form-control" id="Widget_JsBundleUrl" type="text" name="jsBundleUrl" value="@Model.Widget.JsBundleUrl"/>
+                </div>
+            </div>
+
+            <div class="col-6">
+                <div class="form-group">
+                    <label>@L("CssBundleUrl")</label>
+                    <input class="form-control" id="Widget_CssBundleUrl" type="text" name="cssBundleUrl" value="@Model.Widget.CssBundleUrl"/>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="form-group">
+                    <label>@L("JsPlain")</label>
+                    <textarea class="form-control" id="Widget_JsPlain" type="text" name="jsPlain" rows="5">@Model.Widget.JsPlain</textarea>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="form-group">
+                    <label>@L("CssPlain")</label>
+                    <textarea class="form-control" id="Widget_CssPlain" type="text" name="cssPlain" rows="5">@Model.Widget.CssPlain</textarea>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="form-group">
+                    <label for="Widget_About">@L("About")</label>
+                    <input class="form-control" id="Widget_About" type="text" name="about" value="@Model.Widget.About"/>
+                </div>
+            </div>
+            
+        </div>
+    </form>
+</div>

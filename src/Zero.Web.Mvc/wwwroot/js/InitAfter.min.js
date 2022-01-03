@@ -322,7 +322,7 @@ function slugify(text) {
                         format: 'L'
                     });
 
-                    if ($(this).attr('init-value') !== undefined) {
+                    if ($(this).attr('init-value') !== undefined && $(this).attr('init-value').length > 0) {
                         let initDate = moment($(this).attr('init-value'),'DD/MM/YYYY').format('L');
                         $(this).val(initDate);
                     }
@@ -333,7 +333,7 @@ function slugify(text) {
                         locale: abp.localization.currentLanguage.name,
                         format: 'L LT'
                     });
-                    if ($(this).attr('init-value') !== undefined) {
+                    if ($(this).attr('init-value') !== undefined && $(this).attr('init-value').length > 0) {
                         let initDate = moment($(this).attr('init-value'),'DD/MM/YYYY hh:mm').format('L LT');
                         $(this).val(initDate);
                     }
@@ -371,6 +371,51 @@ function slugify(text) {
             }
             return '';
         };
+
+        baseHelper.SimpleSelector = function (element, placeHolder, serviceUrl, showWithCode = false) {
+            if (serviceUrl !== undefined && serviceUrl[0] === '/')
+                serviceUrl = serviceUrl.substring(1, serviceUrl.length);
+            element.select2({
+                dropdownParent: element.parent(),
+                placeholder: placeHolder,
+                allowClear: true,
+                width: '100%',
+                language: baseHelper.Select2Language(),
+                ajax: {
+                    url: abp.appPath + "api/services/app/" + serviceUrl,
+                    dataType: 'json',
+                    delay: 50,
+                    data: function (params) {
+                        return {
+                            filter: params.term,
+                            skipCount: ((params.page || 1) - 1) * 10
+                        };
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 1;
+
+                        let res = $.map(data.result.items, function (item) {
+                            return {
+                                text: showWithCode ? item.code + ' - ' + item.name : item.name,
+                                id: item.id
+                            }
+                        });
+
+                        return {
+                            results: res,
+                            pagination: {
+                                more: (params.page * 10) < data.result.totalCount
+                            }
+                        };
+                    },
+                    cache: true
+                }
+            });
+        }
+
+        baseHelper.SimpleRequiredSelector = function (element, placeHolder, serviceUrl, showWithCode = false) {
+            return baseHelper.SimpleSelector(element, placeHolder, serviceUrl, showWithCode);
+        }
         
         baseHelper.SelectSingleFile = function(allow, selectFileButton, cancelFileButton, fileName, fileUrl, imgHolder, wrapper, customClassAfterChange) {
             
@@ -470,6 +515,31 @@ function slugify(text) {
             return $span[0].outerHTML;
         }
 
+        baseHelper.ShowWidgetContentType = function (type) {
+            switch (type) {
+                case 1:
+                    return app.localize('WidgetContentType_FixedContent');
+                case 2:
+                    return app.localize('WidgetContentType_Service');
+                case 3:
+                    return app.localize('WidgetContentType_ServiceType');
+                case 4:
+                    return app.localize('WidgetContentType_ServiceCategory');
+                case 5:
+                    return app.localize('WidgetContentType_ServiceArticle');
+                case 6:
+                    return app.localize('WidgetContentType_ReviewPost');
+                case 7:
+                    return app.localize('WidgetContentType_ImageBlock');
+                case 8:
+                    return app.localize('WidgetContentType_CustomContent');
+                case 9:
+                    return app.localize('WidgetContentType_ServicePropertyGroup');
+                case 12:
+                    return app.localize('WidgetContentType_MenuGroup');
+            }
+        }
+        
         baseHelper.CanEdit = function(havePermission, currentStatus, allowedStatus, allowEdit) {
             if (allowEdit !== null && allowEdit !== undefined && allowEdit === false)
                 return false;

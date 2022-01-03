@@ -523,7 +523,7 @@ namespace Zero.Configuration.Tenants
 
         private async Task UpdateEmailSettingsAsync(TenantEmailSettingsEditDto input)
         {
-            if (_multiTenancyConfig.IsEnabled && !ZeroConsts.AllowTenantsToChangeEmailSettings)
+            if (_multiTenancyConfig.IsEnabled && !ZeroConst.AllowTenantsToChangeEmailSettings)
             {
                 return;
             }

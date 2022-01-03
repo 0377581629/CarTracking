@@ -6,7 +6,7 @@ namespace Zero.Web.Views
     {
         protected ZeroViewComponent()
         {
-            LocalizationSourceName = ZeroConsts.LocalizationSourceName;
+            LocalizationSourceName = ZeroConst.LocalizationSourceName;
         }
     }
 }

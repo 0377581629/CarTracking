@@ -1,0 +1,141 @@
+﻿@using DPS.Cms.Core.Shared
+@using Zero
+@using Zero.Web.Areas.App.Startup
+@using Zero.Web.Areas.Cms.Models.Page
+@model Zero.Web.Areas.Cms.Models.Page.PageConfigUIViewModel
+@{
+    ViewBag.CurrentPageName = AppPageNames.Cms.Page;
+}
+
+@section Scripts
+{
+    <script abp-src="@ZeroConst.ScriptPathCms/Page/Config.js" asp-append-version="true"></script>
+}
+
+@section Styles {
+    <style>
+        .border-dashed {
+            border:  1px dashed silver;
+        }
+        
+        .widgetSortable {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .unsortable {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .widgetSortable>li {
+            position:  relative;
+        }
+        
+        .widgetSortable>li.placeholder:before {
+            position: absolute;
+            content: "";
+            width: 0;
+            height: 0;
+            margin-top: -5px;
+            left: -5px;
+            top: -4px;
+            border: 5px solid transparent;
+            border-left-color: red;
+            border-right: none;
+        }
+        
+        .widgetSortable .pageBlockDetail {
+            margin-bottom: 10px;
+        }
+        .widgetSortable .pageWidgetDetail {
+            margin-bottom: 5px;
+        }
+        
+        .widgetSortable .pageBlockDetail:last-child {
+            margin-bottom: 0px;
+        }
+        .widgetSortable .pageWidgetDetail:last-child {
+            margin-bottom: 0px;
+        }
+        .widgetDraggable {
+            cursor: pointer;
+        }
+        
+        #mainContentSortable {
+            border-radius: 0.42rem;
+        }
+        #mainContentSortable>li {
+            margin-bottom:  10px;
+        }
+        #mainContentSortable>li:last-child {
+            margin-bottom:  0;
+        }
+        .pageWidgetDetail .pageWidgetDetailConfig {
+            margin-bottom: 5px;
+        }
+        
+        .pageWidgetDetail .pageWidgetDetailConfig:last-child {
+            margin-bottom: 0;
+        }
+        
+        .pageWidgetDetailConfig .form-group:last-child {
+            margin-bottom: 0;
+        }
+        
+        .m-2px {
+            margin:  2px !important;
+        }
+    </style>
+}
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <abp-page-subheader title="@($"{L("Pages")} : {Model.PageConfig.Name}")" description="@L("ConfigUI")">
+        <button id="BackToListingPageButton" class="btn btn-secondary">
+            <i class="fa fa-list"></i> @L("BackToListingPage")
+        </button>
+        <button id="SaveButton" class="btn btn-primary blue">
+            <i class="fa fa-save"></i> @L("Update")
+        </button>
+    </abp-page-subheader>
+
+    <div class="@(await GetContainerClass())">
+        <div class="card card-custom gutter-b">
+            <div class="card-body p-10">
+                <div class="row">
+                    <input type="hidden" id="PageId" value="@Model.PageConfig.Id"/>
+                    <div class="col-10 px-0">
+                        <div class="row mx-0" id="PageWidgetWrapper">
+                            <div id="mainContentWrapper" class="col-12">
+                                <small class="text-right">Main content</small>
+                                <ul id="mainContentSortable" class="min-h-50px p-0 unsortable widgetDroppable" initSortable="false" initDroppable="false">
+                                    @if (Model.PageConfig.Blocks != null && Model.PageConfig.Blocks.Any())
+                                    {
+                                        foreach (var bl in Model.PageConfig.Blocks)
+                                        {
+                                            @await Html.PartialAsync("Components/Config/BlockConfigDetail", new PageBlockWidgetViewModel(bl, Model.PageConfig.Widgets))
+                                        }
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-2 pl-0">
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li class="nav-item">
+                                <a href="#WidgetList" class="nav-link active" id="WidgetConfigNavLink" data-toggle="tab" role="tab">
+                                    @L("Widgets")
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="tab-content pt-20" style="border-left: 1px solid #E4E6EF;">
+                            <div class="tab-pane active" id="WidgetList" role="tabpanel">
+                                @await Html.PartialAsync("Components/_ConfigUI_Widgets", Model)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

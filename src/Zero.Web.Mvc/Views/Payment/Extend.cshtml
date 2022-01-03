@@ -48,7 +48,7 @@
                            data-payment-period-type-amount="@(Model.Edition.DailyPrice.Value.ToString("0.00", CultureInfo.InvariantCulture))"
                            value="@PaymentPeriodType.Daily" />
                     <span></span>
-                    @L("DailyPrice"): @Model.Edition.DailyPrice.Value.ToString("N0") @ZeroConsts.Currency
+                    @L("DailyPrice"): @Model.Edition.DailyPrice.Value.ToString("N0") @ZeroConst.Currency
                 </label>
             }
             @if (Model.Edition.WeeklyPrice.HasValue && Model.Edition.WeeklyPrice.Value > 0)
@@ -59,7 +59,7 @@
                            data-payment-period-type-amount="@(Model.Edition.WeeklyPrice.Value.ToString("0.00", CultureInfo.InvariantCulture))"
                            value="@PaymentPeriodType.Weekly" />
                     <span></span>
-                    @L("WeeklyPrice"): @Model.Edition.WeeklyPrice.Value.ToString("N0") @ZeroConsts.Currency
+                    @L("WeeklyPrice"): @Model.Edition.WeeklyPrice.Value.ToString("N0") @ZeroConst.Currency
                 </label>
             }
             @if (Model.Edition.MonthlyPrice.HasValue && Model.Edition.MonthlyPrice.Value > 0)
@@ -70,7 +70,7 @@
                            data-payment-period-type-amount="@(Model.Edition.MonthlyPrice.Value.ToString("0.00", CultureInfo.InvariantCulture))"
                            value="@PaymentPeriodType.Monthly"/>
                     <span></span>
-                    @L("MonthlyPrice"): @Model.Edition.MonthlyPrice.Value.ToString("N0") @ZeroConsts.Currency
+                    @L("MonthlyPrice"): @Model.Edition.MonthlyPrice.Value.ToString("N0") @ZeroConst.Currency
                 </label>
             }
 
@@ -82,7 +82,7 @@
                            data-payment-period-type-amount="@(Model.Edition.AnnualPrice.Value.ToString("0.00", CultureInfo.InvariantCulture))"
                            value="@PaymentPeriodType.Annual"/>
                     <span></span>
-                    @L("AnnualPrice"): @Model.Edition.AnnualPrice.Value.ToString("N0") @ZeroConsts.Currency
+                    @L("AnnualPrice"): @Model.Edition.AnnualPrice.Value.ToString("N0") @ZeroConst.Currency
                 </label>
             }
         </div>

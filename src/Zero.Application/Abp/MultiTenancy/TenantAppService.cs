@@ -84,6 +84,7 @@ namespace Zero.MultiTenancy
                 input.SendActivationEmail,
                 input.SubscriptionEndDateUtc?.ToUniversalTime(),
                 input.IsInTrialPeriod,
+                input.Domain,
                 AppUrlService.CreateEmailActivationUrlFormat(input.TenancyName)
             );
         }
