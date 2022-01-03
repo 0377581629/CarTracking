@@ -16,6 +16,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\customize\Cms\DPS.Cms.Application\DPS.Cms.Application.csproj" />
     <ProjectReference Include="..\Zero.Application\Zero.Application.csproj" />
     <ProjectReference Include="..\Zero.EntityFrameworkCore\Zero.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\Zero.GraphQL\Zero.GraphQL.csproj" />

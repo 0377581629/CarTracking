@@ -1,0 +1,56 @@
+﻿@model Zero.Web.Areas.Cms.Models.PageTheme.PageThemeViewModel
+@{
+    ViewBag.CurrentPageName = AppPageNames.Cms.PageTheme;
+}
+@section Scripts
+{
+    <script abp-src="@ZeroConst.ScriptPathCms/PageTheme/Index.js" asp-append-version="true"></script>
+}
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <abp-page-subheader title="@L("PageThemes")" description="@L("PageThemesHeaderInfo")">
+        @if (IsGranted(CmsPermissions.PageTheme_Create))
+        {
+            <button id="CreateNewButton" class="btn btn-primary blue">
+                <i class="fa fa-plus"></i> @L("Create")
+            </button>
+        }
+    </abp-page-subheader>
+
+    <div class="@(await GetContainerClass())">
+        <div class="card card-custom gutter-b">
+            <div class="card-body">
+                <div class="form">
+                    <div id="PageThemesFormFilter">
+                        <div class="row mb-15">
+                            <div class="col-12">
+                                <div class="input-group">
+                                    <input id="PageThemesTableFilter" class="form-control" type="text" value="@ViewBag.FilterText" placeholder="@L("SearchWithThreeDot")" aria-describedby="basic-addon2">
+                                    <span class="input-group-btn">
+                                        <button type="button" name="RefreshButton" class="btn btn-primary">
+                                            <i class="fa fa-search"></i>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="align-items-center">
+                    <table id="PageThemesTable" class="display table table-striped table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th class="text-center">@L("Actions")</th>
+                            <th class="text-center">@L("Code")</th>
+                            <th class="text-center">@L("Name")</th>
+                            <th class="text-center">@L("Note")</th>
+                            <th class="text-center">@L("IsActive")</th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

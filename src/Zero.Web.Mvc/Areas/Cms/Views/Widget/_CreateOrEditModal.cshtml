@@ -1,0 +1,29 @@
+﻿
+@model Zero.Web.Areas.Cms.Models.Widget.CreateOrEditWidgetModalViewModel
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(Model.IsEditMode ? (L("Edit")) : L("Create")))
+
+<div class="modal-body">
+    <div id="WidgetInformationsTab">
+        <ul class="nav nav-tabs" role="tablist" id="TabHeaderWrapper">
+            <li class="nav-item">
+                <a href="#GeneralInfo" class="nav-link active" data-toggle="tab" role="tab">
+                    @L("GeneralInfo")
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#PageThemeTab" data-toggle="tab" role="tab">@L("PageTheme")</a>
+            </li>
+        </ul>
+        <div class="tab-content pt-20" id="TabContentWrapper">
+            <div class="tab-pane active" id="GeneralInfo" role="tabpanel">
+                @await Html.PartialAsync("Components/_GeneralTab", Model)
+            </div>
+            <div class="tab-pane" id="PageThemeTab" role="tabpanel">
+                @await Html.PartialAsync("Components/_PageThemeTab", Model)
+            </div>
+        </div>
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalFooterWithSaveAndCancel.cshtml")

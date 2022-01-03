@@ -62578,3 +62578,16 @@ body {
 @media (max-width: 991.98px) {
   .subheader-enabled.subheader-transparent .content {
     padding-top: 0; } }
+
+@media (max-width: 991.98px) {
+    .wrapper {
+        border-radius: 0;
+    }
+}
+
+@media (min-width: 992px) {
+    #kt_wrapper {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+}

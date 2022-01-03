@@ -8343,6 +8343,7 @@ table.dataTable {
 .dataTables_wrapper .dataTable {
   margin-bottom: 10px !important;
   margin-top: 0 !important;
+  overflow: hidden;
 }
 .no-border {
   border: none !important;

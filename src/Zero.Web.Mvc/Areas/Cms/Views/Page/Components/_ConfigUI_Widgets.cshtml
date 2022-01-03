@@ -1,0 +1,20 @@
+﻿@using DPS.Cms.Core.Shared
+@model Zero.Web.Areas.Cms.Models.Page.PageConfigUIViewModel
+
+@if (Model.AvailableWidgets != null && Model.AvailableWidgets.Any())
+{
+    foreach (var widget in Model.AvailableWidgets)
+    {
+        <div class="col-12">
+            <div class="card card-custom card-border mb-10 widgetDraggable" id="widgetDraggable_@widget.Id" widgetId="@widget.Id">
+                <div class="card-header border-bottom-0 min-h-25px px-5px">
+                    <div class="card-title mx-0">
+                        <h3 class="card-label font-size-14 m-0">
+                            @widget.Name <small class="font-size-10">@(CmsHelper.WidgetContentType(widget.ContentType, LocalizationManager.GetSource(ZeroConst.LocalizationSourceName)))</small>
+                        </h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}

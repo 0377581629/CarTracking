@@ -49,6 +49,93 @@
     <text name="MB_Invalid">Không hợp lệ</text>
     <!--    -->
     
+    <!--  Cms  -->
+    <text name="ImageBlockGroup">Nhóm quảng cáo</text>
+    <text name="ImageBlockGroups">Nhóm quảng cáo</text>
+    <text name="ImageBlockGroupsHeaderInfo">Danh sách nhóm quảng cáo</text>
+
+    <text name="ImageBlock">Quảng cáo</text>
+    <text name="ImageBlocks">Quảng cáo</text>
+    <text name="ImageBlocksHeaderInfo">Danh sách quảng cáo</text>
+    <text name="TargetUrl">Đường dẫn đích</text>
+
+    <text name="PageTheme">Chủ đề giao diện</text>
+    <text name="PageThemes">Chủ đề giao diện</text>
+    <text name="PageThemesHeaderInfo">Danh sách chủ đề giao diện</text>
+
+    <text name="PageLayout">Khung giao diện</text>
+    <text name="PageLayouts">Khung giao diện</text>
+    <text name="PageLayoutsHeaderInfo">Danh sách khung giao diện</text>
+
+    <text name="Page">Trang</text>
+    <text name="PagesHeaderInfo">Danh sách trang</text>
+    <text name="ConfigUI">Cấu hình giao diện</text>
+    <text name="ConfigLayout">Cấu hình khung hiển thị</text>
+    <text name="IsHomePage">Trang chủ</text>
+    <text name="IsDetailPage">Trang chi tiết</text>
+    <text name="IsListingPage">Trang danh sách</text>
+    <text name="Publish">Công khai</text>
+    
+    <text name="Widget">Khung nội dung</text>
+    <text name="Widgets">Khung nội dung</text>
+    <text name="WidgetsHeaderInfo">Danh sách khung nội dung</text>
+    <text name="WidgetContentType">Nội dung hiển thị</text>
+    <text name="WidgetContentCount">Số lượng lựa chọn</text>
+    <text name="WidgetContentType_FixedContent">Nội dung cứng</text>
+    <text name="WidgetContentType_Service">Dịch vụ</text>
+    <text name="WidgetContentType_ServiceType">Loại dịch vụ</text>
+    <text name="WidgetContentType_ServiceCategory">Danh mục dịch vụ</text>
+    <text name="WidgetContentType_ServiceArticle">Nhóm dịch vụ</text>
+    <text name="WidgetContentType_ReviewPost">Bài review</text>
+    <text name="WidgetContentType_ImageBlock">Hình ảnh quảng cáo</text>
+    <text name="WidgetContentType_CustomContent">Tùy chỉnh</text>
+    <text name="WidgetContentType_ServicePropertyGroup">Nhóm thuộc tính dịch vụ</text>
+    <text name="CustomContent">Nội dung tùy chỉnh</text>
+
+    <text name="ControllerName">Controller</text>
+    <text name="ActionName">Action</text>
+    <text name="JsBundleUrl">Đường dẫn file JS</text>
+    <text name="CssBundleUrl">Đường dẫn file CSS</text>
+
+    <text name="JsPlain">JS Script - Tại Section</text>
+    <text name="CssPlain">CSS Script - Tại Section</text>
+
+    <text name="AsyncLoad">Tải từng phần</text>
+
+    <text name="JsScript">JS Script - Load sau ajax call</text>
+    <text name="CssScript">CSS Script - Load sau ajax call</text>
+    
+    <text name="Tags">Tag</text>
+    <text name="TagsHeaderInfo">Danh sách Tag</text>
+
+    <text name="MenuGroups">Nhóm menu</text>
+    <text name="MenuGroup">Nhóm menu</text>
+    <text name="MenuGroupsHeaderInfo">Danh mục nhóm menu</text>
+
+    <text name="Menus">Menu</text>
+    <text name="Menu">Menu</text>
+    <text name="MenusHeaderInfo">Danh mục menu</text>
+    <!--    -->
+    
+    <!--  Cms - Common  -->
+    <text name="SEO">SEO</text>
+
+    <text name="TitleDefault">Title mặc định</text>
+    <text name="DescriptionDefault">Mô tả mặc định</text>
+    <text name="KeywordDefault">Từ khóa mặc định</text>
+    <text name="AuthorDefault">Tác giả mặc định</text>
+
+    <text name="Keyword">Từ khóa</text>
+    <text name="Author">Tác giả</text>
+    <text name="About">Giới thiệu</text>
+    <text name="Slug">Địa chỉ rút gọn</text>
+    <!--    -->
+
+    <!--  File manager  -->
+    <text name="FileSelect">Chọn file</text>
+    <text name="AllowedFileTypes">Định dạng hỗ trợ</text>
+    <text name="AllowFileExtension">Định dạng file cho phép</text>
+    
     <!--  Payment  -->
     
     <text name="CheckoutWithPaypal">Thanh toán qua Paypal (USD)</text>
@@ -104,12 +191,18 @@
 
     <text name="SelectAll">Tất cả</text>
     <text name="NoneSelect">Không lựa chọn</text>
+    <text name="PleaseSelect">Vui lòng lựa chọn</text>
+    
     <text name="MissingData">Chưa khai báo</text>
     <text name="Login">Đăng nhập</text>
     <text name="Registration">Đăng ký</text>
 
+    <text name="Avatar">Ảnh đại diện</text>
+    <text name="ChangeAvatarSuccessful">Thay ảnh đại diện thành công</text>
+    <text name="GeneralInfo">Thông tin chung</text>
+    <text name="SubTitle">Tiêu đề phụ</text>
+    <text name="Update">Cập nhật</text>
     <text name="Skip">Bỏ qua</text>
-    
     <!--    -->
     
     <!--  Identity Errors  -->

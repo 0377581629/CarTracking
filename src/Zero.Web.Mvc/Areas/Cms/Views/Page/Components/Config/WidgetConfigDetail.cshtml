@@ -1,0 +1,145 @@
+﻿@using DPS.Cms.Core.Shared
+@using DPS.Cms.Application.Shared.Dto.Page
+@model DPS.Cms.Application.Shared.Dto.Page.PageWidgetDto
+@{
+    var pageWidgetRowId = StringHelper.Identity();
+}
+<li class="pageWidgetDetail" detailId="@Model.Id" widgetId="@Model.WidgetId" pageWidgetUniqueId="@pageWidgetRowId" blockColumnId="@Model.PageBlockColumnId">
+<div class="card card-custom card-border" style="border-radius: 0; border-color: silver;">
+<div class="card-header min-h-25px px-2 pageWidgetDetailHeader @(Model.WidgetContentType == (int) CmsEnums.WidgetContentType.FixedContent ? "border-bottom-0" : "")">
+    <div class="card-toolbar m-2px">
+        <button type="button" class="btn btn-xs btn-icon btn-outline-dark sortableHandle">
+            <i class="la la-arrows-alt"></i>
+        </button>
+    </div>
+    <div class="card-title m-0">
+        <h3 class="card-label font-size-12">
+            @Model.WidgetName
+        </h3>
+    </div>
+    <div class="card-toolbar m-2px">
+        <button type="button" class="btn btn-xs btn-icon btn-outline-danger btnDeleteWidget" pageWidgetUniqueId="@pageWidgetRowId">
+            <i class="la la-trash"></i>
+        </button>
+    </div>
+</div>
+@if (Model.WidgetContentType != (int) CmsEnums.WidgetContentType.FixedContent && Model.WidgetContentCount > 0)
+{
+    <div class="card-body p-2">
+    @for (var i = 0; i < Model.WidgetContentCount; i++)
+    {
+        var detail = new PageWidgetDetailDto();
+        if (Model.Details != null && Model.Details.Count > i)
+            detail = Model.Details[i];
+        var rowId = StringHelper.Identity();
+        if (Model.WidgetContentCount > 1)
+        {
+            <div class="card card-custom card-border card-detail pageWidgetDetailConfig" rowId="@rowId">
+            <div class="card-header min-h-25px px-2" id="card_@rowId">
+                <div class="card-title">
+                    <h3 class="card-label font-size-12 text-italic">
+                        @(CmsHelper.WidgetContentType(Model.WidgetContentType, LocalizationManager.GetSource(ZeroConst.LocalizationSourceName))) @(i + 1)
+                    </h3>
+                </div>
+                <div class="card-toolbar">
+                    <button type="button" class="btn btn-xs btn-icon btn-outline-default" data-toggle="collapse" data-target="#cardDetail_@rowId" aria-expanded="false" aria-controls="cardDetail_@rowId">
+                        <i class="la la-arrows-alt-v"></i>
+                    </button>
+                </div>
+            </div>
+            <div id="cardDetail_@rowId" class="collapse">
+            <div class="card-body p-2 pageWidgetDetailWrapper" rowId="@rowId">
+            @switch (Model.WidgetContentType)
+            {
+                
+                case (int) CmsEnums.WidgetContentType.ImageBlock:
+                    <div class="col-12 px-0">
+                        <div class="form-group select2-sm">
+                            <label>@L("ImageBlockGroup")</label>
+                            <select id="ImageBlockGroupId_@rowId" class="imageBlockGroupId requiredSelect2 form-control" rowId="@rowId" detailId="@(detail.Id)" widgetId="@Model.WidgetId" initSelector="false">
+                                @if (detail.ImageBlockGroupId.HasValue)
+                                {
+                                    <option value="@detail.ImageBlockGroupId" selected>@detail.ImageBlockGroupName</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    break;
+                case (int) CmsEnums.WidgetContentType.CustomContent:
+                    <div class="col-12 px-0">
+                        <div class="form-group">
+                            <label>@L("CustomContent")</label>
+                            <div class="inputGroup">
+                                <textarea id="Custom_@rowId" type="text" rows="4" class="customContent frSimpleEditor form-control" rowId="@rowId" detailId="@(detail.Id)" widgetId="@Model.WidgetId" initEditor="false">@detail.CustomContent</textarea>
+                            </div>
+                        </div>
+                    </div>
+                    break;
+                case (int) CmsEnums.WidgetContentType.MenuGroup:
+                    <div class="col-12 px-0">
+                        <div class="form-group select2-sm">
+                            <label>@L("MenuGroupGroup")</label>
+                            <select id="MenuGroupId_@rowId" class="menuGroupId requiredSelect2 form-control" rowId="@rowId" detailId="@(detail.Id)" widgetId="@Model.WidgetId" initSelector="false">
+                                @if (detail.MenuGroupId.HasValue)
+                                {
+                                    <option value="@detail.MenuGroupId" selected>@detail.MenuGroupName</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    break;
+            }
+            </div>
+            </div>
+            </div>
+        }
+        else
+        {
+            <div class="card-body p-2 pageWidgetDetailWrapper pageWidgetDetailConfig" rowId="@rowId">
+            @switch (Model.WidgetContentType)
+            {
+                case (int) CmsEnums.WidgetContentType.ImageBlock:
+                    <div class="col-12 px-0">
+                        <div class="form-group">
+                            <label>@L("ImageBlockGroup")</label>
+                            <select id="ImageBlockGroupId_@rowId" class="imageBlockGroupId requiredSelect2 form-control" rowId="@rowId" detailId="@(detail.Id)" widgetId="@Model.WidgetId" initSelector="false">
+                                @if (detail.ImageBlockGroupId.HasValue)
+                                {
+                                    <option value="@detail.ImageBlockGroupId" selected>@detail.ImageBlockGroupName</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    break;
+                case (int) CmsEnums.WidgetContentType.CustomContent:
+                    <div class="col-12 px-0">
+                        <div class="form-group">
+                            <label>@L("CustomContent")</label>
+                            <div class="inputGroup">
+                                <textarea id="Custom_@rowId" type="text" rows="4" class="customContent frSimpleEditor form-control" rowId="@rowId" detailId="@(detail.Id)" widgetId="@Model.WidgetId" initEditor="false">@detail.CustomContent</textarea>
+                            </div>
+                        </div>
+                    </div>
+                    break;
+                case (int) CmsEnums.WidgetContentType.MenuGroup:
+                    <div class="col-12 px-0">
+                        <div class="form-group">
+                            <label>@L("MenuGroup")</label>
+                            <select id="MenuGroupId_@rowId" class="menuGroupId requiredSelect2 form-control" rowId="@rowId" detailId="@(detail.Id)" widgetId="@Model.WidgetId" initSelector="false">
+                                @if (detail.MenuGroupId.HasValue)
+                                {
+                                    <option value="@detail.MenuGroupId" selected>@detail.MenuGroupName</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    break;
+            }
+            </div>
+        }
+    }
+    </div>
+}
+
+</div>
+</li>

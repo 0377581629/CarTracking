@@ -1,0 +1,79 @@
+﻿@model Zero.Web.Areas.Cms.Models.ImageBlock.CreateOrEditImageBlockModalViewModel
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(Model.IsEditMode ? (L("Edit")) : L("Create")))
+
+<div class="modal-body">
+    <div id="ImageBlockInformationsTab">
+        <form name="ImageBlockInformationsForm" role="form" novalidate class="form-validation">
+            @if (Model.IsEditMode)
+            {
+                <input type="hidden" name="id" value="@Model.ImageBlock.Id"/>
+            }
+            <input type="hidden" name="code" value="@Model.ImageBlock.Code"/>
+            <div class="row">
+                <div class="col-3">
+                    <div class="form-group text-center">
+                        <label>@L("Image")</label>
+                        <div id="ImageWrap" class="image-input image-input-outline mb-15 @(!string.IsNullOrEmpty(Model.ImageBlock.Image) ? "image-input-changed" : "")">
+                            <input id="Image" name="image" type="hidden" value="@Model.ImageBlock.Image">
+                            <img alt="Image" id="ImageHolder" onerror="src='@GlobalConfig.DefaultImageUrl'" default-src="@GlobalConfig.DefaultImageUrl" src="@(!string.IsNullOrEmpty(Model.ImageBlock.Image) ? Model.ImageBlock.Image : GlobalConfig.DefaultImageUrl)" class="kt-avatar__holder mw-100"/>
+                            <label id="ChangeImage" class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="change" data-toggle="kt-tooltip" title="@L("ChangeImage")">
+                                <i class="fa fa-pen icon-sm text-muted"></i>
+                            </label>
+                            <span id="CancelImage" class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="cancel" data-toggle="kt-tooltip" title="@L("Cancel")">
+                                <i class="ki ki-bold-close icon-xs text-muted"></i>
+                            </span>
+                        </div>
+
+                        <span class="form-text text-muted py-10">@L("AllowedFileTypes"): png, jpg, jpeg.</span>
+                    </div>
+                </div>
+                <div class="col-9">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label>
+                                    @L("ImageBlockGroup") <span class="text-danger">*</span>
+                                </label>
+                                <select id="ImageBlockGroupId" name="imageBlockGroupId" class="form-control requiredSelect2">
+                                    @if (Model.IsEditMode)
+                                    {
+                                        <option value="@Model.ImageBlock.ImageBlockGroupId" selected>@Model.ImageBlock.ImageBlockGroupName</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label>
+                                    @L("Name") <span class="text-danger">*</span>
+                                </label>
+                                <input class="form-control" id="ImageBlock_Name" value="@Model.ImageBlock.Name" type="text" name="name" required maxlength="@ZeroConst.MaxNameLength" minlength="@ZeroConst.MinNameLength"/>
+                            </div>
+                        </div>
+                        <div class="col-9">
+                            <div class="form-group">
+                                <label for="ImageBlock_TargetUrl">@L("TargetUrl")</label>
+                                <input class="form-control" id="ImageBlock_TargetUrl" type="text" name="targetUrl" value="@Model.ImageBlock.TargetUrl"/>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="form-group text-center mb-0">
+                                <label>@L("IsActive")</label>
+                                <div class="form-control no-border">
+                                    <label class="checkbox checkbox-outline checkbox-primary inline-block">
+                                        <input type="checkbox" id="ImageBlock_IsActive" name="isActive" value="true" @Html.Raw(!Model.ImageBlock.IsActive ? "" : "checked=\"checked\"")>
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </form>
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalFooterWithSaveAndCancel.cshtml")

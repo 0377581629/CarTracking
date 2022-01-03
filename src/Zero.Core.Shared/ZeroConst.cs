@@ -71,11 +71,14 @@ namespace Zero
 
         public const string ScriptPathApp = "/view-resources/Areas/App";
 
+        public static string CmsAreas = "Cms";
+        public static string ScriptPathCms = $"{ViewResourcesAreas}{CmsAreas}";
+        
         public static NumberFormatInfo NumberFormatInfo = new() {NumberDecimalSeparator = "."};
         public static string DateFormat = "dd/MM/yyyy HH:mm:ss";
         public static string ReportExtension = ".trdx";
-        public const string DefaultAvatarUrl = "../../Common/Images/default-profile-picture.jpg";
-        public const string DefaultImageUrl = "../../Common/Images/default-image.jpg";
+        public const string DefaultAvatarUrl = "../../Common/Images/default-profile-picture.png";
+        public const string DefaultImageUrl = "../../Common/Images/default-image.png";
         #endregion
     }
 }

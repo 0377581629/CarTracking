@@ -34,5 +34,11 @@
         public static string ImportTemplatePath = "";
         public static string ImportSampleFolders = $"wwwroot/SampleFiles/";
         #endregion
+        
+        #region Others
+
+        public static string DefaultImageUrl { get; set; } = "";
+
+        #endregion
     }
 }

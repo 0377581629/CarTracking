@@ -72,7 +72,7 @@
         <div class="d-flex flex-column flex-row-fluid wrapper" id="kt_wrapper">
             <div id="kt_header" class="header  header-fixed ">
                 <div class="header-wrapper rounded-top-xl d-flex flex-grow-1 align-items-center">
-                    <div class="@(await GetContainerClass()) d-flex align-items-center justify-content-end justify-content-lg-between flex-wrap">
+                    <div class="d-flex align-items-center justify-content-end justify-content-lg-between flex-wrap">
                         @await Component.InvokeAsync(typeof(AppMenuViewComponent), new {currentPageName = ViewBag.CurrentPageName, isLeftMenuUsed = false})
                         @if (ZeroConst.MultiTenancyEnabled)
                         {

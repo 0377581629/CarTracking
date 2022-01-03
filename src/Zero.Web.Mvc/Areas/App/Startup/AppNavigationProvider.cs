@@ -21,7 +21,86 @@ namespace Zero.Web.Areas.App.Startup
                         icon: "la la-dashboard",
                         permissionDependency: new SimplePermissionDependency(AppPermissions.Dashboard)
                     )
-                ).AddItem(new MenuItemDefinition(
+                )
+                .AddItem(new MenuItemDefinition(
+                            AppPageNames.Cms.Settings,
+                            L("Settings"),
+                            icon: "la la-cog"
+                        )
+
+                        #region Settings Cms
+
+                        .AddItem(new MenuItemDefinition(
+                                AppPageNames.Cms.ImageBlockGroup,
+                                L("ImageBlockGroups"),
+                                url: $"{ZeroConst.CmsAreas}/ImageBlockGroup",
+                                permissionDependency: new SimplePermissionDependency(CmsPermissions.ImageBlockGroup)
+                            )
+                        )
+                        .AddItem(new MenuItemDefinition(
+                                AppPageNames.Cms.ImageBlock,
+                                L("ImageBlocks"),
+                                url: $"{ZeroConst.CmsAreas}/ImageBlock",
+                                permissionDependency: new SimplePermissionDependency(CmsPermissions.ImageBlock)
+                            )
+                        )
+                        .AddItem(new MenuItemDefinition(
+                                AppPageNames.Cms.PageTheme,
+                                L("PageThemes"),
+                                url: $"{ZeroConst.CmsAreas}/PageTheme",
+                                permissionDependency: new SimplePermissionDependency(CmsPermissions.PageTheme)
+                            )
+                        )
+                        .AddItem(new MenuItemDefinition(
+                                AppPageNames.Cms.PageLayout,
+                                L("PageLayouts"),
+                                url: $"{ZeroConst.CmsAreas}/PageLayout",
+                                permissionDependency: new SimplePermissionDependency(CmsPermissions.PageLayout)
+                            )
+                        )
+                        .AddItem(new MenuItemDefinition(
+                                AppPageNames.Cms.Widget,
+                                L("Widgets"),
+                                url: $"{ZeroConst.CmsAreas}/Widget",
+                                permissionDependency: new SimplePermissionDependency(CmsPermissions.Widget)
+                            )
+                        )
+                        .AddItem(new MenuItemDefinition(
+                                AppPageNames.Cms.Page,
+                                L("Pages"),
+                                url: $"{ZeroConst.CmsAreas}/Page",
+                                permissionDependency: new SimplePermissionDependency(CmsPermissions.Page)
+                            )
+                        )
+                        .AddItem(new MenuItemDefinition(
+                                AppPageNames.Cms.Tags,
+                                L("Tags"),
+                                url: $"{ZeroConst.CmsAreas}/Tags",
+                                permissionDependency: new SimplePermissionDependency(CmsPermissions.Tags)
+                            )
+                        )
+                        .AddItem(new MenuItemDefinition(
+                                AppPageNames.Cms.MenuGroup,
+                                L("MenuGroups"),
+                                url: $"{ZeroConst.CmsAreas}/MenuGroup",
+                                permissionDependency: new SimplePermissionDependency(CmsPermissions.MenuGroup)
+                            )
+                        )
+                        .AddItem(new MenuItemDefinition(
+                                AppPageNames.Cms.Menu,
+                                L("Menus"),
+                                url: $"{ZeroConst.CmsAreas}/Menu",
+                                permissionDependency: new SimplePermissionDependency(CmsPermissions.Menu)
+                            )
+                        )
+
+                    #endregion
+
+                )
+
+                #region Administration
+
+                .AddItem(new MenuItemDefinition(
                         AppPageNames.Common.Administration,
                         L("Administration"),
                         icon: "flaticon-interface-8"
@@ -149,6 +228,8 @@ namespace Zero.Web.Areas.App.Startup
                     )
                 );
 
+            #endregion
+
             if (ZeroConst.MultiTenancyEnabled)
                 menu.AddItem(new MenuItemDefinition(
                         AppPageNames.Tenant.SubscriptionManagement,
@@ -158,7 +239,7 @@ namespace Zero.Web.Areas.App.Startup
                         permissionDependency: new SimplePermissionDependency(AppPermissions.Pages_Administration_Tenant_SubscriptionManagement)
                     )
                 );
-            
+
             if (WebConsts.HangfireDashboardEnabled)
                 menu.AddItem(new MenuItemDefinition(
                         AppPageNames.Host.HangfireDashboard,

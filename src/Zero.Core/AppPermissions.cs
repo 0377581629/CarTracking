@@ -153,10 +153,10 @@
         public const string Widget_Edit = "Cms.Widget.Edit";
         public const string Widget_Delete = "Cms.Widget.Delete";
         
-        public const string Supporter = "Cms.Supporter";
-        public const string Supporter_Create = "Cms.Supporter.Create";
-        public const string Supporter_Edit = "Cms.Supporter.Edit";
-        public const string Supporter_Delete = "Cms.Supporter.Delete";
+        public const string Category = "Cms.Category";
+        public const string Category_Create = "Cms.Category.Create";
+        public const string Category_Edit = "Cms.Category.Edit";
+        public const string Category_Delete = "Cms.Category.Delete";
         
         public const string Tags = "Cms.Tags";
         public const string Tags_Create = "Cms.Tags.Create";

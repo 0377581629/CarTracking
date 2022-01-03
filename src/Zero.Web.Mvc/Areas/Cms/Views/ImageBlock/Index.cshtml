@@ -1,0 +1,68 @@
+﻿@model Zero.Web.Areas.Cms.Models.ImageBlock.ImageBlockViewModel
+@{
+    ViewBag.CurrentPageName = AppPageNames.Cms.ImageBlock;
+}
+
+@section Scripts
+{
+    <script abp-src="@ZeroConst.ScriptPathCms/ImageBlock/Index.js" asp-append-version="true"></script>
+}
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <abp-page-subheader title="@L("ImageBlocks")" description="@L("ImageBlocksHeaderInfo")">
+        @if (IsGranted(CmsPermissions.ImageBlock_Create))
+        {
+            <button id="CreateNewButton" class="btn btn-primary blue">
+                <i class="fa fa-plus"></i> @L("Create")
+            </button>
+        }
+    </abp-page-subheader>
+
+    <div class="@(await GetContainerClass())">
+        <div class="card card-custom gutter-b">
+            <div class="card-body">
+                <div class="form">
+                    <div id="ImageBlocksFormFilter">
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label>@L("ImageBlockGroup")</label>
+                                    <select id="ImageBlockGroupSelector" class="form-control">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-8">
+                                <div class="form-group">
+                                    <label>@L("Search")</label>
+                                    <div class="input-group">
+                                        <input id="ImageBlocksTableFilter" class="form-control" type="text" value="@ViewBag.FilterText" placeholder="@L("SearchWithThreeDot")" aria-describedby="basic-addon2">
+                                        <span class="input-group-btn">
+                                            <button type="button" name="RefreshButton" class="btn btn-primary">
+                                                <i class="fa fa-search"></i>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="align-items-center">
+                    <table id="ImageBlocksTable" class="display table table-striped table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th class="text-center">@L("Actions")</th>
+                            <th class="text-center"></th>
+                            <th class="text-center">@L("ImageBlockGroup")</th>
+                            <th class="text-center">@L("Name")</th>
+                            <th class="text-center">@L("TargetUrl")</th>
+                            <th class="text-center">@L("IsActive")</th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

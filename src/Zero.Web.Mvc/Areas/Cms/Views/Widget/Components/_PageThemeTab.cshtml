@@ -1,0 +1,29 @@
+﻿@model Zero.Web.Areas.Cms.Models.Widget.CreateOrEditWidgetModalViewModel
+
+<input type="hidden" id="SelectedPageThemesIds" value="@(Model.Widget.PageThemesIds != null && Model.Widget.PageThemesIds.Any() ? string.Join(',', Model.Widget.PageThemesIds) : "")"/>
+
+<div id="PageThemesFormFilter">
+    <div class="row">
+        <div class="col-12">
+            <div class="form-group">
+                <div class="input-group">
+                    <input id="PageThemesTableFilter" class="form-control" type="text" value="@ViewBag.FilterText" placeholder="@L("SearchWithThreeDot")" aria-describedby="basic-addon2">
+                    <span class="input-group-btn">
+                        <button type="button" name="RefreshButton" class="btn btn-primary" id="PageThemesTableFilterBtn">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<table id="PageThemesTable" class="display table table-bordered table-hover">
+    <thead>
+    <tr>
+        <th class="text-center">@L("Select")</th>
+        <th class="text-center">@L("PageTheme")</th>
+    </tr>
+    </thead>
+</table>

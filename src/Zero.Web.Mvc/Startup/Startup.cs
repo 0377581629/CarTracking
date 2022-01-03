@@ -324,7 +324,8 @@ namespace Zero.Web.Startup
 
             GlobalConfig.UseMenuLogo = bool.Parse(_appConfiguration["AppMenuLogo:IsActive"]);
             GlobalConfig.AppDefaultMenuLogo = _appConfiguration["AppMenuLogo:Url"];
-
+            if (!string.IsNullOrEmpty(_appConfiguration["GlobalConfig:DefaultImage"]))
+                GlobalConfig.DefaultImageUrl = _appConfiguration["GlobalConfig:DefaultImage"];
             #endregion
 
             #region Upload , Import

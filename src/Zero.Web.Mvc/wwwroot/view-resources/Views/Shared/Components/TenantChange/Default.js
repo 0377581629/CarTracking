@@ -58,12 +58,10 @@
     
     $('body').on('change', '#TenantPicker', function(){
         let tenancyName = $(this).val();
-        console.log(tenancyName);
+        
         if (!tenancyName || tenancyName.length === 0) {
             abp.multiTenancy.setTenantIdCookie(null);
-            console.log(abp.multiTenancy.tenantIdCookieName);
-            console.log('abc');
-            //location.reload();
+            location.reload();
             return;
         }
 

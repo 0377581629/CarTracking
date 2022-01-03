@@ -18,6 +18,8 @@
             public const string WebhookSubscriptions = "Administration.WebhookSubscriptions";
             public const string DynamicProperties = "Administration.DynamicProperties";
             public const string DynamicEntityProperties = "Administration.DynamicEntityProperties";
+            
+            public const string FilesManager = "Administration.FilesManager";
         }
 
         public static class Host
@@ -37,6 +39,29 @@
         {
             public const string Settings = "Administration.Settings.Tenant";
             public const string SubscriptionManagement = "Administration.SubscriptionManagement.Tenant";
+        }
+        
+        public static class Cms
+        {
+            public const string Settings = "Cms.Settings";
+            
+            public const string ImageBlockGroup = "Cms.ImageBlockGroup";
+            
+            public const string ImageBlock = "Cms.ImageBlock";
+            
+            public const string Widget = "Cms.Widget";
+            
+            public const string Page = "Cms.Page";
+            
+            public const string PageLayout = "Cms.PageLayout";
+            
+            public const string PageTheme = "Cms.PageTheme";
+            
+            public const string Tags = "Cms.Tags";
+
+            public const string MenuGroup = "Cms.MenuGroup";
+            
+            public const string Menu = "Cms.Menu";
         }
     }
 }

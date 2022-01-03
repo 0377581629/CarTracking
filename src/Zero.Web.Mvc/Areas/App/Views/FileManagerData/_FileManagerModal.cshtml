@@ -1,0 +1,11 @@
+﻿@using Zero.Web.Areas.App.Models.Common.Modals
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(L("FileSelect")))
+
+<div class="modal-body">
+    <div id="fileManagerSelector"></div>
+    <p class="text-italic text-right text-bold pt-10 mb-0">@L("AllowFileExtension"): <span id="Allowed"></span></p>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-primary hidden" id="btnSelectFile">@L("Select")</button>    
+    <button type="button" class="btn btn-secondary close-button" data-dismiss="modal">@L("Close")</button>
+</div>
