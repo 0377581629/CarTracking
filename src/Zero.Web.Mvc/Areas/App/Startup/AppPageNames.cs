@@ -62,6 +62,8 @@
             public const string MenuGroup = "Cms.MenuGroup";
             
             public const string Menu = "Cms.Menu";
+            
+            public const string Category = "Cms.Category";
         }
     }
 }

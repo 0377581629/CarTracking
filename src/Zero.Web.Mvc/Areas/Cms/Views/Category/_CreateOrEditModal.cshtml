@@ -1,0 +1,73 @@
+﻿@model Zero.Web.Areas.Cms.Models.Category.CreateOrEditCategoryModalViewModel
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(Model.IsEditMode ? L("Edit") : L("Create")))
+
+<div class="modal-body">
+    <div id="CategoryInformationsTab">
+        <form name="CategoryInformationsForm" role="form" novalidate class="form-validation">
+            @if (Model.IsEditMode)
+            {
+                <input type="hidden" name="id" value="@Model.Category.Id"/>
+                <input type="hidden" name="parentId" value="@Model.Category.ParentId"/>
+            }
+            <input type="hidden" name="code" value="@Model.Category.Code"/>
+            <input type="hidden" name="isActive" value="true"/>
+            <div class="row">
+                <div class="col-3 text-center">
+                    <div class="form-group text-center ">
+                        <label>@L("Avatar")</label>
+                        <div class="form-control no-border h-150px">
+                            <div id="ImageWrap" class="h-150px image-input image-input-outline @(!string.IsNullOrEmpty(Model.Category.Image) ? "image-input-changed" : "")">
+                                <input id="Image" name="image" type="hidden" value="@Model.Category.Image">
+                                <img alt="Image" id="ImageHolder" onerror="src='@GlobalConfig.DefaultImageUrl'" default-src="@GlobalConfig.DefaultImageUrl" src="@(!string.IsNullOrEmpty(Model.Category.Image) ? Model.Category.Image : GlobalConfig.DefaultImageUrl)" class="kt-avatar__holder mw-100 mh-100"/>
+                                <label id="ChangeImage" class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="change" data-toggle="kt-tooltip" title="@L("ChangeImage")">
+                                    <i class="fa fa-pen icon-sm text-muted"></i>
+                                </label>
+                                <span id="CancelImage" class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="cancel" data-toggle="kt-tooltip" title="@L("Cancel")">
+                                    <i class="ki ki-bold-close icon-xs text-muted"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <span class="form-text text-muted py-10">@L("AllowedFileTypes"): png, jpg, jpeg.</span>
+                    </div>
+                </div>
+                <div class="col-9">
+                    <div class="row">
+                        <div class="col-3">
+                            <div class="form-group">
+                                <label>
+                                    @L("Code") <span class="text-danger">*</span>
+                                </label>
+                                <input class="form-control" id="Category_Code" value="@Model.Category.CategoryCode" type="text" name="categoryCode" required maxlength="@ZeroConst.MaxCodeLength" minlength="@ZeroConst.MinCodeLength"/>
+                            </div>
+                        </div>
+                        <div class="col-9">
+                            <div class="form-group">
+                                <label>
+                                    @L("Name") <span class="text-danger">*</span>
+                                </label>
+                                <input class="form-control make-slug" id="Category_Name" value="@Model.Category.Name" type="text" name="name" required maxlength="@ZeroConst.MaxNameLength" minlength="@ZeroConst.MinNameLength"/>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label>
+                                    @L("Slug")
+                                </label>
+                                <input class="form-control slug-input" id="Category_Slug" data-target="Category_Name" value="@Model.Category.Slug" type="text" name="slug"/>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="Category_Note">@L("Note")</label>
+                                <input class="form-control" id="Category_Note" type="text" name="note" value="@Model.Category.Note"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalFooterWithSaveAndCancel.cshtml")

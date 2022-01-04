@@ -196,20 +196,19 @@ function whatThousandSeparator() {
     return ',';
 }
 
-function capitalizeFirstLetter(string){
+function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 function guid() {
     return 'a' + 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,
-        function(c)
-        {
+        function (c) {
             let r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
             return v.toString(16);
         });
 }
 
-function buildNestedItem(item, showEditButton = false, showDeleteButton = false, handleIconClass='la la-bars', customLabel = 'customLabelClass', customEditClass = 'customSettingClass', customDeleteClass = 'customDeleteClass') {
+function buildNestedItem(item, showEditButton = false, showDeleteButton = false, handleIconClass = 'la la-bars', customLabel = 'customLabelClass', customEditClass = 'customSettingClass', customDeleteClass = 'customDeleteClass') {
     let ddItem = $('<li>').addClass('dd-item dd-item-alt').attr('data-id', item.id);
     let ddHandle = $('<div>').addClass('dd-handle px-0').append('<span class="icon"><i class="' + handleIconClass + '"></i></span>');
     let ddEdit = $('<div>').addClass('dd-setting').append('<span class="icon ' + customEditClass + '" data-id="' + item.id + '"><i class="la la-cog"></i></span>')
@@ -224,7 +223,7 @@ function buildNestedItem(item, showEditButton = false, showDeleteButton = false,
     if (item.children !== null) {
         let ol = $('<ol>').addClass('dd-list');
         $.each(item.children, function (index, sub) {
-            ol.append(buildNestedItem(sub, showEditButton, showDeleteButton, handleIconClass,customLabel, customEditClass, customDeleteClass));
+            ol.append(buildNestedItem(sub, showEditButton, showDeleteButton, handleIconClass, customLabel, customEditClass, customDeleteClass));
         });
         ddItem.append(ol[0].outerHTML);
     }
@@ -242,6 +241,7 @@ function removeTone(str) {
     str = str.replace(/đ/g, "d");
     return str;
 }
+
 // slugify from https://gist.github.com/mathewbyrne/1280286
 function slugify(text) {
     return text.toString().toLowerCase()
@@ -267,27 +267,27 @@ function slugify(text) {
                 return select2ViLanguage;
             return null;
         }
-        
-        baseHelper.UpFirstChar = function(str) {
+
+        baseHelper.UpFirstChar = function (str) {
             return capitalizeFirstLetter(str);
         }
-        
-        baseHelper.RefreshUI = function(element) {
+
+        baseHelper.RefreshUI = function (element) {
             if (element) {
                 let detailIndex = 1;
-                
-                element.find('.detailOrder').each(function() {
+
+                element.find('.detailOrder').each(function () {
                     $(this).html(detailIndex);
                     detailIndex++;
                 });
-                
+
                 element.find('.kt-select2').select2({
                     width: '100%',
                     dropdownParent: element,
                     dropdownAutoWidth: true,
                     language: baseHelper.Select2Language()
                 });
-                
+
                 element.find('.kt-select2-non-search').select2({
                     width: '100%',
                     dropdownParent: element,
@@ -303,17 +303,17 @@ function slugify(text) {
                     closeOnSelect: false,
                     language: baseHelper.Select2Language()
                 });
-                
+
                 element.find('.touchSpin').TouchSpin({
                     verticalbuttons: true,
                     verticalupclass: 'btn-secondary',
                     verticaldownclass: 'btn-secondary'
                 });
-                
-                element.find('.number').number(true, 0, whatDecimalSeparator(),whatThousandSeparator());
-                element.find('.number1').number(true, 1, whatDecimalSeparator(),whatThousandSeparator());
-                element.find('.number2').number(true, 2, whatDecimalSeparator(),whatThousandSeparator());
-                element.find('.number3').number(true, 3, whatDecimalSeparator(),whatThousandSeparator());
+
+                element.find('.number').number(true, 0, whatDecimalSeparator(), whatThousandSeparator());
+                element.find('.number1').number(true, 1, whatDecimalSeparator(), whatThousandSeparator());
+                element.find('.number2').number(true, 2, whatDecimalSeparator(), whatThousandSeparator());
+                element.find('.number3').number(true, 3, whatDecimalSeparator(), whatThousandSeparator());
                 element.find('.numberOther').number(true, 0, '', '');
 
                 element.find('.date-picker').each(function () {
@@ -323,18 +323,18 @@ function slugify(text) {
                     });
 
                     if ($(this).attr('init-value') !== undefined && $(this).attr('init-value').length > 0) {
-                        let initDate = moment($(this).attr('init-value'),'DD/MM/YYYY').format('L');
+                        let initDate = moment($(this).attr('init-value'), 'DD/MM/YYYY').format('L');
                         $(this).val(initDate);
                     }
                 });
 
-                element.find('.datetime-picker').each(function(){
+                element.find('.datetime-picker').each(function () {
                     $(this).datetimepicker({
                         locale: abp.localization.currentLanguage.name,
                         format: 'L LT'
                     });
                     if ($(this).attr('init-value') !== undefined && $(this).attr('init-value').length > 0) {
-                        let initDate = moment($(this).attr('init-value'),'DD/MM/YYYY hh:mm').format('L LT');
+                        let initDate = moment($(this).attr('init-value'), 'DD/MM/YYYY hh:mm').format('L LT');
                         $(this).val(initDate);
                     }
 
@@ -344,15 +344,30 @@ function slugify(text) {
                     locale: abp.localization.currentLanguage.name,
                     format: 'MM/YYYY'
                 });
+
+                element.find('.make-slug').focusout(function () {
+                    let originalString = $(this).val();
+                    if (originalString === '')
+                        return; // Do nothing if nothing in the MakeSlug input
+                    let slugInput = $('.slug-input[data-target=' + $(this).attr('id') + ']');
+                    if (!slugInput) {
+                        console.log('Error: MakeSlug has invalid SlugInput');
+                        return;
+                    }
+                    if (slugInput.val() !== '')
+                        return; // SlugInput isn't empty. It already generated or entered by user before
+                    let slug = baseHelper.MakeSlug(originalString);
+                    slugInput.val(slug);
+                });
             }
         }
-        
+
         baseHelper.MiniMenu = function () {
             if (!$('body').hasClass('aside-minimize'))
                 $('body').addClass('aside-minimize');
         }
 
-        baseHelper.SimpleTableIcon = function(funcName) {
+        baseHelper.SimpleTableIcon = function (funcName) {
             switch (funcName) {
                 case 'send':
                     return 'la la-send text-primary';
@@ -416,21 +431,21 @@ function slugify(text) {
         baseHelper.SimpleRequiredSelector = function (element, placeHolder, serviceUrl, showWithCode = false) {
             return baseHelper.SimpleSelector(element, placeHolder, serviceUrl, showWithCode);
         }
-        
-        baseHelper.SelectSingleFile = function(allow, selectFileButton, cancelFileButton, fileName, fileUrl, imgHolder, wrapper, customClassAfterChange) {
-            
+
+        baseHelper.SelectSingleFile = function (allow, selectFileButton, cancelFileButton, fileName, fileUrl, imgHolder, wrapper, customClassAfterChange) {
+
             if (allow === undefined || allow == null)
                 allow = "*.jpg,*.png";
             if (selectFileButton) {
-                selectFileButton.on('click', function(){
+                selectFileButton.on('click', function () {
                     _fileManagerModal.open({
                         allowExtension: allow,
                         maxSelectCount: 1
                     }, function (selected) {
                         if (selected !== undefined && selected.length >= 1) {
-                            if (fileUrl) fileUrl.val(selected[selected.length-1].path);
-                            if (fileName) fileName.val(selected[selected.length-1].name);
-                            if (imgHolder) imgHolder.attr('src', selected[selected.length-1].path);
+                            if (fileUrl) fileUrl.val(selected[selected.length - 1].path);
+                            if (fileName) fileName.val(selected[selected.length - 1].name);
+                            if (imgHolder) imgHolder.attr('src', selected[selected.length - 1].path);
                             if (wrapper && customClassAfterChange) wrapper.addClass(customClassAfterChange);
                         }
                     });
@@ -441,24 +456,24 @@ function slugify(text) {
                     if (fileUrl) fileUrl.val('');
                     if (fileName) fileName.val('');
                     if (imgHolder) imgHolder.attr('src', imgHolder.attr('default-src'));
-                    if (wrapper && customClassAfterChange)wrapper.removeClass(customClassAfterChange);
+                    if (wrapper && customClassAfterChange) wrapper.removeClass(customClassAfterChange);
                 });
             }
         }
-        
+
         baseHelper.ShowCheckBox = function (id, customClass = '', checked = false) {
             let checkBoxLabel = $('<label>').addClass('checkbox checkbox-outline').css('display', 'inline-block');
             let checkBoxInput = $('<input>').attr('type', 'checkbox').attr('value', 'true').attr('customId', id).attr('id', guid()).addClass(customClass);
             let checkBoxSpan = $('<span>').addClass('mr-0');
             if (checked === true) {
-                checkBoxInput.attr('checked','checked');
+                checkBoxInput.attr('checked', 'checked');
             }
             checkBoxLabel.append(checkBoxInput[0].outerHTML);
             checkBoxLabel.append(checkBoxSpan[0].outerHTML);
             return checkBoxLabel[0].outerHTML;
         }
 
-        baseHelper.ShowImage = function (image, fallBackImgSrc='../../Common/Images/no_image_available.svg') {
+        baseHelper.ShowImage = function (image, fallBackImgSrc = '../../Common/Images/no_image_available.svg') {
             let img = $("<img>");
             img.addClass('w-50px h-50px b-rd-50');
             img.attr('src', fallBackImgSrc);
@@ -468,7 +483,7 @@ function slugify(text) {
             }
             return img[0].outerHTML;
         }
-        
+
         baseHelper.ShowAvatar = function (avatar) {
             return baseHelper.ShowImage(avatar, '../../Common/Images/default-profile-picture.jpg');
         }
@@ -490,7 +505,7 @@ function slugify(text) {
             }
             return $span[0].outerHTML;
         }
-        
+
         baseHelper.ShowActive = function (isActive) {
             let $span = $("<span/>");
             if (isActive) {
@@ -506,7 +521,7 @@ function slugify(text) {
             }
             return $span[0].outerHTML;
         }
-        
+
         baseHelper.ShowColor = function (colorInHex) {
             let $span = $("<span/>");
             if (colorInHex !== undefined && colorInHex !== null && colorInHex.length > 0) {
@@ -539,38 +554,38 @@ function slugify(text) {
                     return app.localize('WidgetContentType_MenuGroup');
             }
         }
-        
-        baseHelper.CanEdit = function(havePermission, currentStatus, allowedStatus, allowEdit) {
+
+        baseHelper.CanEdit = function (havePermission, currentStatus, allowedStatus, allowEdit) {
             if (allowEdit !== null && allowEdit !== undefined && allowEdit === false)
                 return false;
             if (currentStatus === null || currentStatus === undefined)
                 return havePermission;
-            let allowed = [0,1,4];
+            let allowed = [0, 1, 4];
             if (allowedStatus === null || allowedStatus === undefined) {
                 allowedStatus = allowed;
             }
             return havePermission && jQuery.inArray(parseInt(currentStatus), allowedStatus) !== -1;
         }
-        
-        baseHelper.CanRequestApprove = function(havePermission, currentStatus, allowedStatus, allowEdit) {
+
+        baseHelper.CanRequestApprove = function (havePermission, currentStatus, allowedStatus, allowEdit) {
             if (allowEdit !== null && allowEdit !== undefined && allowEdit === false)
                 return false;
             if (currentStatus === null || currentStatus === undefined)
                 return havePermission;
-            let allowed = [0,1];
+            let allowed = [0, 1];
             if (allowedStatus === null || allowedStatus === undefined) {
                 allowedStatus = allowed;
             }
             return havePermission && jQuery.inArray(parseInt(currentStatus), allowedStatus) !== -1;
         }
-        
-        baseHelper.RequestApprove = function(obj, service, reloadCallback, targetStatus) {
+
+        baseHelper.RequestApprove = function (obj, service, reloadCallback, targetStatus) {
             abp.message.confirm(
                 '',
                 app.localize('ApproveRequestMessageWarningTitle'),
                 function (isConfirmed) {
                     if (isConfirmed) {
-                        service .updateStatus({
+                        service.updateStatus({
                             id: obj.id,
                             status: targetStatus !== undefined ? targetStatus : 2
                         }).done(function () {
@@ -581,8 +596,8 @@ function slugify(text) {
                 }
             );
         }
-        
-        baseHelper.Approve = function(obj, service, reloadCallback, targetStatus) {
+
+        baseHelper.Approve = function (obj, service, reloadCallback, targetStatus) {
             abp.message.confirm(
                 '',
                 app.localize('ApproveMessageWarningTitle'),
@@ -600,7 +615,7 @@ function slugify(text) {
             );
         }
 
-        baseHelper.CanApprove = function(havePermission, currentStatus, allowedStatus, allowEdit) {
+        baseHelper.CanApprove = function (havePermission, currentStatus, allowedStatus, allowEdit) {
             if (allowEdit !== null && allowEdit !== undefined && allowEdit === false)
                 return false;
             if (currentStatus === null || currentStatus === undefined)
@@ -611,8 +626,8 @@ function slugify(text) {
             }
             return havePermission && jQuery.inArray(parseInt(currentStatus), allowedStatus) !== -1;
         }
-        
-        baseHelper.CancelApprove = function(obj, service, reloadCallback, targetStatus) {
+
+        baseHelper.CancelApprove = function (obj, service, reloadCallback, targetStatus) {
             abp.message.confirm(
                 '',
                 app.localize('ApproveCancelMessageWarningTitle'),
@@ -630,7 +645,7 @@ function slugify(text) {
             );
         }
 
-        baseHelper.CanCancelApprove = function(havePermission, currentStatus, allowedStatus, allowEdit) {
+        baseHelper.CanCancelApprove = function (havePermission, currentStatus, allowedStatus, allowEdit) {
             if (allowEdit !== null && allowEdit !== undefined && allowEdit === false)
                 return false;
             if (currentStatus === null || currentStatus === undefined)
@@ -642,7 +657,7 @@ function slugify(text) {
             return havePermission && jQuery.inArray(parseInt(currentStatus), allowedStatus) !== -1;
         }
 
-        baseHelper.Delete = function(obj, service, reloadCallback) {
+        baseHelper.Delete = function (obj, service, reloadCallback) {
             abp.message.confirm(
                 '',
                 app.localize('DeleteMessageWarningTitle'),
@@ -659,26 +674,26 @@ function slugify(text) {
             );
         }
 
-        baseHelper.CanDelete = function(havePermission, currentStatus, allowedStatus, allowEdit) {
+        baseHelper.CanDelete = function (havePermission, currentStatus, allowedStatus, allowEdit) {
             if (allowEdit !== null && allowEdit !== undefined && allowEdit === false)
                 return false;
             if (currentStatus === null || currentStatus === undefined)
                 return havePermission;
-            let allowed = [0,1];
+            let allowed = [0, 1];
             if (allowedStatus === null || allowedStatus === undefined) {
                 allowedStatus = allowed;
             }
             return havePermission && jQuery.inArray(parseInt(currentStatus), allowedStatus) !== -1;
         }
-        
-        baseHelper.ShowCheckInModal = function(record) {
+
+        baseHelper.ShowCheckInModal = function (record) {
             let obj = record[Object.keys(record)[0]];
             if (obj !== undefined) {
                 let objectDto = obj;
                 let chkInp = $("<input/>").addClass('modalSelectChecker');
-                chkInp.attr('id','checkbox_' + objectDto.id);
+                chkInp.attr('id', 'checkbox_' + objectDto.id);
                 chkInp.attr('ModalSelectObjId', objectDto.id);
-                chkInp.attr('type','checkbox');
+                chkInp.attr('type', 'checkbox');
 
                 $.each(objectDto, function (key, val) {
                     if (key === 'id')
@@ -690,7 +705,7 @@ function slugify(text) {
                 });
 
                 if (record.selected) {
-                    chkInp.attr('checked','checked');
+                    chkInp.attr('checked', 'checked');
                 }
 
                 return '<label for="checkbox_' + objectDto.id + '" class="kt-checkbox kt-checkbox--primary h-20 w-20 mt-0 pl-20">' +
@@ -700,10 +715,10 @@ function slugify(text) {
             }
             return '';
         }
-        
-        baseHelper.ShowNumber = function(input, floatCount = 0) {
-            if (input !== undefined && parseFloat(input) !== parseFloat("0")) 
-                return $.number(input,floatCount, whatDecimalSeparator(),whatThousandSeparator());
+
+        baseHelper.ShowNumber = function (input, floatCount = 0) {
+            if (input !== undefined && parseFloat(input) !== parseFloat("0"))
+                return $.number(input, floatCount, whatDecimalSeparator(), whatThousandSeparator());
             return '';
         }
 
@@ -719,29 +734,29 @@ function slugify(text) {
                     return app.localize('EmailTemplateType_SecurityCode');
             }
         }
-        
-        baseHelper.ViewFile = function(fileUrl) {
+
+        baseHelper.ViewFile = function (fileUrl) {
             _globalViewFileModal.open({
                 path: fileUrl
             });
         }
-        
-        baseHelper.NestedItemsHtml = function(items, showEditButton = false, showDeleteButton, handleIconClass='la la-bars', customLabel = 'customLabelClass', customEditClass = 'customSettingClass', customDeleteClass = 'customDeleteClass') {
+
+        baseHelper.NestedItemsHtml = function (items, showEditButton = false, showDeleteButton, handleIconClass = 'la la-bars', customLabel = 'customLabelClass', customEditClass = 'customSettingClass', customDeleteClass = 'customDeleteClass') {
             let output = '';
             $.each(items, function (index, item) {
-                output += buildNestedItem(item, showEditButton, showDeleteButton, handleIconClass,customLabel, customEditClass, customDeleteClass);
+                output += buildNestedItem(item, showEditButton, showDeleteButton, handleIconClass, customLabel, customEditClass, customDeleteClass);
             });
-            
+
             return output;
         }
-        
-        baseHelper.NestedItemHtml = function(item, showSettingButton = false, handleIconClass='la la-bars', customLabel = 'customLabelClass', customEditClass = 'customSettingClass', customDeleteClass = 'customDeleteClass') {
-            return buildNestedItem(item, showSettingButton, handleIconClass,customLabel, customEditClass, customDeleteClass);
+
+        baseHelper.NestedItemHtml = function (item, showSettingButton = false, showDeleteButton = false, handleIconClass = 'la la-bars', customLabel = 'customLabelClass', customEditClass = 'customSettingClass', customDeleteClass = 'customDeleteClass') {
+            return buildNestedItem(item, showSettingButton, showDeleteButton, handleIconClass, customLabel, customEditClass, customDeleteClass);
         }
 
-        baseHelper.ValidSelectors = function(){
+        baseHelper.ValidSelectors = function () {
             let res = true;
-            $('body').find('select.requiredSelect2').each(function() {
+            $('body').find('select.requiredSelect2').each(function () {
                 let selectId = $(this).attr('id');
                 if ($(this).hasClass('requiredSelect2') && ($(this).val() === null || $(this).val() === undefined || $(this).val() === '')) {
                     $('body').find('#select2-' + selectId + '-container').parent().addClass('invalid');
@@ -752,7 +767,7 @@ function slugify(text) {
             });
             return res;
         }
-        
+
         $('.kt-select2').select2({
             width: '100%',
             dropdownAutoWidth: true,
@@ -781,18 +796,18 @@ function slugify(text) {
             });
 
             if ($(this).attr('init-value') !== undefined) {
-                let initDate = moment($(this).attr('init-value'),'DD/MM/YYYY').format('L');
+                let initDate = moment($(this).attr('init-value'), 'DD/MM/YYYY').format('L');
                 $(this).val(initDate);
             }
         });
 
-        $('.datetime-picker').each(function(){
+        $('.datetime-picker').each(function () {
             $(this).datetimepicker({
                 locale: abp.localization.currentLanguage.name,
                 format: 'L LT'
             });
             if ($(this).attr('init-value') !== undefined) {
-                let initDate = moment($(this).attr('init-value'),'DD/MM/YYYY hh:mm').format('L LT');
+                let initDate = moment($(this).attr('init-value'), 'DD/MM/YYYY hh:mm').format('L LT');
                 $(this).val(initDate);
             }
         });
@@ -802,10 +817,10 @@ function slugify(text) {
             format: 'MM/YYYY'
         });
 
-        $('.number').number(true, 0, whatDecimalSeparator(),whatThousandSeparator());
-        $('.number1').number(true, 1, whatDecimalSeparator(),whatThousandSeparator());
-        $('.number2').number(true, 2, whatDecimalSeparator(),whatThousandSeparator());
-        $('.number3').number(true, 3, whatDecimalSeparator(),whatThousandSeparator());
+        $('.number').number(true, 0, whatDecimalSeparator(), whatThousandSeparator());
+        $('.number1').number(true, 1, whatDecimalSeparator(), whatThousandSeparator());
+        $('.number2').number(true, 2, whatDecimalSeparator(), whatThousandSeparator());
+        $('.number3').number(true, 3, whatDecimalSeparator(), whatThousandSeparator());
         $('.numberOther').number(true, 0, '', '');
 
         $(".mScrollBar").mCustomScrollbar({
@@ -815,6 +830,20 @@ function slugify(text) {
         $(document).on('hidden.bs.modal', '.modal', function () {
             $('.modal:visible').length && $(document.body).addClass('modal-open');
         });
-        
+
+        $('.make-slug').focusout(function () {
+            let originalString = $(this).val();
+            if (originalString === '')
+                return; // Do nothing if nothing in the MakeSlug input
+            let slugInput = $('.slug-input[data-target=' + $(this).attr('id') + ']');
+            if (!slugInput) {
+                console.log('Error: MakeSlug has invalid SlugInput');
+                return;
+            }
+            if (slugInput.val() !== '')
+                return; // SlugInput isn't empty. It already generated or entered by user before
+            let slug = baseHelper.MakeSlug(originalString);
+            slugInput.val(slug);
+        })
     });
 })();

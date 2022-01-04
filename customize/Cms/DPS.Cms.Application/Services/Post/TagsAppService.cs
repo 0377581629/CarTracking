@@ -13,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Zero;
 using Zero.Authorization;
 
-namespace DPS.Cms.Application.Services
+namespace DPS.Cms.Application.Services.Post
 {
     [AbpAuthorize(CmsPermissions.Tags)]
     public class TagsAppService : ZeroAppServiceBase, ITagsAppService

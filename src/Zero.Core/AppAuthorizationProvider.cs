@@ -80,6 +80,11 @@ namespace Zero.Authorization
             menu.CreateChildPermission(CmsPermissions.Menu_Edit, L("Edit"));
             menu.CreateChildPermission(CmsPermissions.Menu_Delete, L("Delete"));
             
+            var category = cmsSettings.CreateChildPermission(CmsPermissions.Category, L("Category"));
+            category.CreateChildPermission(CmsPermissions.Category_Create, L("Create"));
+            category.CreateChildPermission(CmsPermissions.Category_Edit, L("Edit"));
+            category.CreateChildPermission(CmsPermissions.Category_Delete, L("Delete"));
+            
             #endregion
             
             #region Administration

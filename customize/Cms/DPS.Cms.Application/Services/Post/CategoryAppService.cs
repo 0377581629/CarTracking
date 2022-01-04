@@ -14,7 +14,7 @@ using Zero;
 using Zero.Authorization;
 using Zero.Customize.NestedItem;
 
-namespace DPS.Cms.Application.Services
+namespace DPS.Cms.Application.Services.Post
 {
     [AbpAuthorize(CmsPermissions.Category)]
     public class CategoryAppService : ZeroAppServiceBase, ICategoryAppService

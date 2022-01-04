@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Abp.Application.Services.Dto;
 using Abp.Authorization;
 using Abp.Domain.Repositories;
-using Abp.EntityFrameworkCore.Repositories;
 using Abp.Linq.Extensions;
 using Abp.UI;
 using DPS.Cms.Application.Manager;
@@ -16,7 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using Zero;
 using Zero.Authorization;
 
-namespace DPS.Cms.Application.Services
+namespace DPS.Cms.Application.Services.Page
 {
     [AbpAuthorize(CmsPermissions.PageLayout)]
     public class PageLayoutAppService : ZeroAppServiceBase, IPageLayoutAppService
