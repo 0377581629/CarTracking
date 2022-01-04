@@ -6,6 +6,8 @@ using Abp.Application.Services.Dto;
 using Abp.Authorization;
 using Abp.Domain.Repositories;
 using Abp.Linq.Extensions;
+using DPS.Cms.Application.Manager;
+using DPS.Cms.Application.Shared.Dto.Category;
 using DPS.Cms.Application.Shared.Dto.ImageBlockGroup;
 using DPS.Cms.Application.Shared.Dto.Common;
 using DPS.Cms.Application.Shared.Dto.MenuGroup;
@@ -36,12 +38,15 @@ namespace DPS.Cms.Application.Services.Common
         private readonly IRepository<PageLayout> _pageLayoutRepository;
         private readonly IRepository<Tags> _tagsRepository;
         private readonly IRepository<MenuGroup> _menuGroupRepository;
+        private readonly CategoryManager _categoryManager;
+        
         public CmsAppService(IRepository<ImageBlockGroup> imageBlockGroupRepository, 
             IRepository<Widget> widgetRepository, 
             IRepository<PageLayout> pageLayoutRepository,
             IRepository<Tags> tagsRepository,
             IRepository<MenuGroup> menuGroupRepository, 
-            IRepository<PageTheme> pageThemeRepository)
+            IRepository<PageTheme> pageThemeRepository, 
+            CategoryManager categoryManager)
         {
             _imageBlockGroupRepository = imageBlockGroupRepository;
             _widgetRepository = widgetRepository;
@@ -49,6 +54,7 @@ namespace DPS.Cms.Application.Services.Common
             _tagsRepository = tagsRepository;
             _menuGroupRepository = menuGroupRepository;
             _pageThemeRepository = pageThemeRepository;
+            _categoryManager = categoryManager;
         }
 
         #endregion
@@ -296,6 +302,14 @@ namespace DPS.Cms.Application.Services.Common
             );
         }
         
+        #endregion
+        
+        #region Category
+
+        public async Task<List<CategoryDto>> GetAllCategory()
+        {
+            return await _categoryManager.GetAllCategory();
+        }
         #endregion
         
         #region Tags

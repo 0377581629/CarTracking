@@ -22,5 +22,10 @@ namespace DPS.Cms.Application
         {
             IocManager.RegisterAssemblyByConvention(typeof(CmsApplicationModule).GetAssembly());
         }
+
+        public override void PostInitialize()
+        {
+            
+        }
     }
 }

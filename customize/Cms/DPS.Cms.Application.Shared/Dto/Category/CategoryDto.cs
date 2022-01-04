@@ -1,8 +1,10 @@
-﻿using DPS.Cms.Core.Shared;
+﻿using Abp.AutoMapper;
+using DPS.Cms.Core.Shared;
 using Zero.Customize.Dto.Base;
 
 namespace DPS.Cms.Application.Shared.Dto.Category
 {
+	[AutoMapFrom(typeof(Core.Post.Category))]
 	public class CategoryDto : SimpleEntityDto, IHaveSeoInfo
 	{
 		public int? ParentId { get; set; }

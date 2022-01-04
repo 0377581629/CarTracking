@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Abp.Application.Services;
 using Abp.Application.Services.Dto;
+using DPS.Cms.Application.Shared.Dto.Category;
 using DPS.Cms.Application.Shared.Dto.ImageBlockGroup;
 using DPS.Cms.Application.Shared.Dto.Common;
 using DPS.Cms.Application.Shared.Dto.Page;
@@ -15,7 +16,7 @@ namespace DPS.Cms.Application.Shared.Interfaces.Common
 {
     public interface ICmsAppService : IApplicationService
     {
-        #region Image Block Group
+        #region Advertisement
 
         Task<List<ImageBlockGroupDto>> GetAllImageBlockGroup();
 
@@ -44,6 +45,11 @@ namespace DPS.Cms.Application.Shared.Interfaces.Common
         Task<List<SelectListItem>> GetAllPageLayoutDropDown(int? current = default);
 
         Task<PagedResultDto<PageLayoutDto>> GetPagedPageLayouts(CmsInput input);
+        #endregion
+        
+        #region Category
+
+        Task<List<CategoryDto>> GetAllCategory();
         #endregion
         
         #region Tags
