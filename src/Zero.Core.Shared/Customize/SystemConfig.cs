@@ -10,5 +10,19 @@
         public static bool DisableMailService { get; set; } = false;
         
         public static string LogIndex = "";
+        
+        #region File Manager
+        public static bool UseFileServer { get; set; }
+        
+        public static string MinioEndPoint { get; set; }
+        
+        public static string MinioRootBucketName { get; set; }
+        
+        public static string MinioAccessKey { get; set; }
+        
+        public static string MinioSecretKey { get; set; }
+        
+        public static string MinioRegion { get; set; }
+        #endregion
     }
 }

@@ -5,7 +5,14 @@
 
 @section Scripts
 {
+    <script abp-src="/3rds/jquery.nestable/jquery.nestable.js" asp-append-version="true"></script>
+        <script abp-src="/3rds/jquery.sortable/jquery.sortable.js" asp-append-version="true"></script>
     <script abp-src="@ZeroConst.ScriptPathCms/Menu/Index.js" asp-append-version="true"></script>
+}
+@section Styles {
+    <link href="/3rds/jquery.nestable/jquery.nestable.css" rel="stylesheet"/>
+    <link href="/3rds/jquery.nestable/jquery.nestable-custom.css" rel="stylesheet"/>
+    <link href="/3rds/jquery.sortable/jquery.sortable.css" rel="stylesheet"/>
 }
 
 <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
@@ -47,22 +54,22 @@
                         </div>
                     </div>
                 </div>
-                <div class="align-items-center">
-                    <table id="MenusTable" class="display table table-striped table-bordered table-hover">
-                        <thead>
-                        <tr>
-                            <th></th>
-                            <th class="text-center">@L("Actions")</th>
-                            <th class="text-center">@L("MenuGroup")</th>
-                            <th class="text-center">@L("Name")</th>
-                            <th class="text-center">@L("TargetUrl")</th>
-                            <th class="text-center">@L("Order")</th>
-                            <th class="text-center">@L("IsActive")</th>
-                        </tr>
-                        </thead>
-                    </table>
+                <div>
+                    <div class="dd">
+                        <ol class="dd-list" id="dd-list">
+                        </ol>
+                    </div>
                 </div>
             </div>
+            @if (IsGranted(CmsPermissions.Menu_Create) || IsGranted(CmsPermissions.Menu_Edit))
+            {
+                <div class="card-footer py-15">
+                    <button type="button" id="UpdateStructureButton" class="btn btn-primary mr-2 float-right">
+                        <i class="la la-save"></i> @L("UpdateStructure")
+                    </button>
+                </div>
+            }
+            <textarea id="TestFroala" class="frSimpleEditor" initEditor="false"></textarea>
         </div>
     </div>
 </div>

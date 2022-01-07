@@ -60,10 +60,10 @@ namespace Zero.Authorization
             page.CreateChildPermission(CmsPermissions.Page_Edit, L("Edit"));
             page.CreateChildPermission(CmsPermissions.Page_Delete, L("Delete"));
             
-            var widget = cmsSettings.CreateChildPermission(CmsPermissions.Widget, L("Widgets"));
-            widget.CreateChildPermission(CmsPermissions.Widget_Create, L("Create"));
-            widget.CreateChildPermission(CmsPermissions.Widget_Edit, L("Edit"));
-            widget.CreateChildPermission(CmsPermissions.Widget_Delete, L("Delete"));
+            var widget = cmsSettings.CreateChildPermission(CmsPermissions.Widget, L("Widgets"), multiTenancySides: _isMultiTenancyEnabled ? MultiTenancySides.Host : MultiTenancySides.Tenant);
+            widget.CreateChildPermission(CmsPermissions.Widget_Create, L("Create"), multiTenancySides: _isMultiTenancyEnabled ? MultiTenancySides.Host : MultiTenancySides.Tenant);
+            widget.CreateChildPermission(CmsPermissions.Widget_Edit, L("Edit"), multiTenancySides: _isMultiTenancyEnabled ? MultiTenancySides.Host : MultiTenancySides.Tenant);
+            widget.CreateChildPermission(CmsPermissions.Widget_Delete, L("Delete"), multiTenancySides: _isMultiTenancyEnabled ? MultiTenancySides.Host : MultiTenancySides.Tenant);
             
             var tags = cmsSettings.CreateChildPermission(CmsPermissions.Tags, L("Tags"));
             tags.CreateChildPermission(CmsPermissions.Tags_Create, L("Create"));

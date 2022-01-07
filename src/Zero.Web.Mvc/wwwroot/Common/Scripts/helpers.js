@@ -1,7 +1,7 @@
 ﻿var app = app || {};
 (function () {
 
-    var appLocalizationSource = abp.localization.getSource('Zero');
+    var appLocalizationSource = abp.localization.getSource('AbpZero');
     app.localize = function () {
         return appLocalizationSource.apply(this, arguments);
     };

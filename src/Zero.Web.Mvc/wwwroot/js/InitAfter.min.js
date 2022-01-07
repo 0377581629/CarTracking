@@ -74,6 +74,8 @@ var frEditorBaseConfig = {
     },
     fileUploadURL: '/FroalaApi/UploadFile',
     imageManagerLoadURL: '/FroalaApi/LoadImages',
+    imageManagerPageSize: 20,
+    imageManagerScrollOffset: 40,
     imageManagerDeleteURL: "/FroalaApi/DeleteImage",
     imageManagerDeleteMethod: "POST",
     imageManagerDeleteParams: {
@@ -134,7 +136,6 @@ var frEditorBaseConfig = {
                     console.log('video delete problem: ' + JSON.stringify(err));
                 })
         },
-
         // Catch image removal from the editor.
         'file.unlink': function (link) {
             $.ajax({
@@ -358,6 +359,14 @@ function slugify(text) {
                         return; // SlugInput isn't empty. It already generated or entered by user before
                     let slug = baseHelper.MakeSlug(originalString);
                     slugInput.val(slug);
+                });
+
+                element.find('.frSimpleEditor[initEditor="false"]').each(function () {
+                    let id = $(this).attr('id');
+                    if (id !== undefined && id !== null) {
+                        new FroalaEditor($(this).get(0), frEditorConfigSimple)
+                        $(this).removeAttr('initEditor');
+                    }
                 });
             }
         }
@@ -844,6 +853,14 @@ function slugify(text) {
                 return; // SlugInput isn't empty. It already generated or entered by user before
             let slug = baseHelper.MakeSlug(originalString);
             slugInput.val(slug);
-        })
+        });
+
+        $('.frSimpleEditor[initEditor="false"]').each(function () {
+            let id = $(this).attr('id');
+            if (id !== undefined && id !== null) {
+                new FroalaEditor($(this).get(0), frEditorConfigSimple)
+                $(this).removeAttr('initEditor');
+            }
+        });
     });
 })();

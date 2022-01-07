@@ -28,19 +28,21 @@
     <div class="@(await GetContainerClass())">
         <div class="card card-custom gutter-b">
             <div class="card-body" id="CategoryWrapper">
-                <div class="">
+                <div>
                     <div class="dd">
                         <ol class="dd-list" id="dd-list">
                         </ol>
                     </div>
                 </div>
             </div>
-            
-            <div class="card-footer py-15">
-                <button type="button" id="UpdateStructureButton" class="btn btn-primary mr-2 float-right">
-                    <i class="la la-save"></i> @L("UpdateStructure")
-                </button>
-            </div>
+            @if (IsGranted(CmsPermissions.Category_Create) || IsGranted(CmsPermissions.Category_Edit))
+            {
+                <div class="card-footer py-15">
+                    <button type="button" id="UpdateStructureButton" class="btn btn-primary mr-2 float-right">
+                        <i class="la la-save"></i> @L("UpdateStructure")
+                    </button>
+                </div>
+            }
             
         </div>
     </div>

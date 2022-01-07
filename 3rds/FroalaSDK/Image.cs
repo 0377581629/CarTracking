@@ -1,12 +1,7 @@
 ﻿using System;
-using System.IO;
 using System.Collections.Generic;
-#if netcore
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.StaticFiles;
-#else
-using System.Web;
-#endif
 
 namespace FroalaEditor
 {
@@ -62,11 +57,11 @@ namespace FroalaEditor
             }
 
             // Array of image objects to return.
-            List<object> response = new List<object>();
+            var response = new List<object>();
 
-            string absolutePath = File.GetAbsoluteServerPath(folderPath);
+            var absolutePath = File.GetAbsoluteServerPath(folderPath);
 
-            string[] imageMimetypes = ImageValidation.AllowedImageMimetypesDefault;
+            var imageMimetypes = ImageValidation.AllowedImageMimetypesDefault;
 
             // Check if path exists.
             if (!System.IO.Directory.Exists(absolutePath))
@@ -74,23 +69,19 @@ namespace FroalaEditor
                 throw new Exception("Images folder does not exist!");
             }
 
-            string[] fileEntries = System.IO.Directory.GetFiles(absolutePath);
+            var fileEntries = System.IO.Directory.GetFiles(absolutePath);
 
             // Add images.
-            foreach (string filePath in fileEntries)
+            foreach (var filePath in fileEntries)
             {
-                string fileName = System.IO.Path.GetFileName(filePath);
+                var fileName = System.IO.Path.GetFileName(filePath);
                 if (System.IO.File.Exists(filePath))
-                {   
-#if netcore
-                    string mimeType;
-                    new FileExtensionContentTypeProvider().TryGetContentType(filePath, out mimeType);
+                {
+                    new FileExtensionContentTypeProvider().TryGetContentType(filePath, out var mimeType);
                     if (mimeType == null) {
                         mimeType = "application/octet-stream";
                     }
-#else
-                    string mimeType = System.Web.MimeMapping.GetMimeMapping(filePath);
-#endif        
+       
 
                     if (Array.IndexOf(imageMimetypes, mimeType) >= 0)
                     {

@@ -1,11 +1,8 @@
 ﻿using ImageMagick;
 using System;
 using System.IO;
-#if netcore
 using Microsoft.AspNetCore.Http;
-#else
-using System.Web;
-#endif
+
 
 namespace FroalaEditor
 {
@@ -58,11 +55,8 @@ namespace FroalaEditor
             var httpRequest = httpContext.Request;
 
             var filesCount = 0;
-#if netcore
             filesCount = httpRequest.Form.Files.Count;
-#else
-            filesCount = httpRequest.Files.Count;
-#endif
+
 
             if (filesCount == 0)
             {
@@ -70,12 +64,8 @@ namespace FroalaEditor
             }
 
             // Get HTTP posted file based on the fieldname. 
-#if netcore
             var file = httpRequest.Form.Files.GetFile(options.Fieldname);
-#else
-            var file = httpRequest.Files.Get(options.Fieldname);
-#endif
-
+            
             if (file == null)
             {
                 throw new Exception("Fieldname is not correct. It must be: " + options.Fieldname);
@@ -91,23 +81,18 @@ namespace FroalaEditor
             // Bug Fixes in File.cs #2
             // https://github.com/froala/wysiwyg-editor-dotnet-sdk/issues/2
             // Create directory if it doesn't exist.
-            var fileRoutePath = new FileInfo(File.GetAbsoluteServerPath(fileRoute));
+            var fileRoutePath = new FileInfo(GetAbsoluteServerPath(fileRoute));
             if (fileRoutePath.Directory != null && !fileRoutePath.Directory.Exists)
             {
                 fileRoutePath.Directory.Create();
             }
 
             // Copy contents to memory stream.
-            Stream stream;
-#if netcore
-            stream = new MemoryStream();
+            Stream stream = new MemoryStream();
             file.CopyTo(stream);
             stream.Position = 0;
-#else
-            stream = file.InputStream;
-#endif
 
-            var serverPath = File.GetAbsoluteServerPath(link);
+            var serverPath = GetAbsoluteServerPath(link);
 
             // Save file to disk.
             Save(stream, serverPath, options);
@@ -131,13 +116,9 @@ namespace FroalaEditor
         /// </summary>
         /// <param name="path">Relative path.</param>
         /// <returns>Absolute path.</returns>
-        public static String GetAbsoluteServerPath(string path) 
+        public static string GetAbsoluteServerPath(string path) 
         {
-#if netcore
             return path;
-#else 
-            return HttpContext.Current.Server.MapPath(path);
-#endif
         }
 
         /// <summary>
@@ -171,11 +152,6 @@ namespace FroalaEditor
         /// <param name="filePath">Server file path.</param>
         public static void Delete(string filePath)
         {
-#if netcore
-            filePath = filePath;
-#else
-            filePath = File.GetAbsoluteServerPath(filePath);
-#endif
             // Will throw an exception if an error occurs.
             if (System.IO.File.Exists(filePath))
             {
