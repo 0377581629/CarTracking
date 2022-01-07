@@ -102,12 +102,9 @@ namespace ZERO.Web.Controllers
                                 Thumb = $"http://{SystemConfig.MinioEndPoint}/{SystemConfig.MinioRootBucketName}/{item.Key}"
                             });
                         }        
-                        Console.WriteLine("OnNext: {0}", item.Key);
                     },
-                    ex => Console.WriteLine("OnError: {0}", ex.Message),
-                    () => Console.WriteLine("OnComplete"));
+                    ex => Console.WriteLine("Minio Error: {0}", ex.Message));
                 observable.Wait();
-                Console.WriteLine(lstImages.ToJsonString());
                 return Json(lstImages);
             }
             catch (MinioException e)
