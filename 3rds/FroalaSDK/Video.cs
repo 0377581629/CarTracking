@@ -1,12 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Collections.Generic;
-#if netcore
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.StaticFiles;
-#else
-using System.Web;
-#endif
+﻿using Microsoft.AspNetCore.Http;
 
 namespace FroalaEditor
 {

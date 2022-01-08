@@ -115,6 +115,10 @@
     <text name="Menus">Menu</text>
     <text name="Menu">Menu</text>
     <text name="MenusHeaderInfo">Danh mục menu</text>
+
+    <text name="Categories">Danh mục bài viết</text>
+    <text name="Category">Danh mục bài viết</text>
+    <text name="CategoriesHeaderInfo">Danh mục bài viết</text>
     <!--    -->
     
     <!--  Cms - Common  -->
@@ -203,6 +207,11 @@
     <text name="SubTitle">Tiêu đề phụ</text>
     <text name="Update">Cập nhật</text>
     <text name="Skip">Bỏ qua</text>
+    <text name="UpdateStructure">Cập nhật cấu trúc</text>
+    <!--    -->
+    
+    <!--  Notify  -->
+    <text name="UpdateStructureSuccessfully">Cập nhật cấu trúc thành công</text>
     <!--    -->
     
     <!--  Identity Errors  -->

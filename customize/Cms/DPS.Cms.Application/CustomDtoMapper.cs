@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DPS.Cms.Application.Shared.Dto.Category;
 using DPS.Cms.Application.Shared.Dto.ImageBlock;
 using DPS.Cms.Application.Shared.Dto.ImageBlockGroup;
 using DPS.Cms.Application.Shared.Dto.Menu;
@@ -60,6 +61,10 @@ namespace DPS.Cms.Application
             configuration.CreateMap<CreateOrEditMenuDto, Menu>().ReverseMap();
             configuration.CreateMap<MenuDto, Menu>().ReverseMap();
             configuration.CreateMap<MenuDto, CreateOrEditMenuDto>().ReverseMap();
+            
+            configuration.CreateMap<CreateOrEditCategoryDto, Category>().ReverseMap();
+            configuration.CreateMap<CategoryDto, Category>().ReverseMap();
+            configuration.CreateMap<CategoryDto, CreateOrEditCategoryDto>().ReverseMap();
         }
     }
 }

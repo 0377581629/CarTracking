@@ -293,6 +293,16 @@ namespace Zero.Web.Startup
             if (!string.IsNullOrEmpty(_appConfiguration["GlobalConfig:DefaultPassword"]))
                 SystemConfig.DefaultPassword = _appConfiguration["GlobalConfig:DefaultPassword"];
 
+            SystemConfig.UseFileServer = bool.Parse(_appConfiguration["FileServer:IsActive"]);
+            if (SystemConfig.UseFileServer)
+            {
+                SystemConfig.MinioEndPoint = _appConfiguration["FileServer:EndPoint"];
+                SystemConfig.MinioRootBucketName = _appConfiguration["FileServer:RootBucketName"];
+                SystemConfig.MinioAccessKey = _appConfiguration["FileServer:AccessKey"];
+                SystemConfig.MinioSecretKey = _appConfiguration["FileServer:SecretKey"];
+                SystemConfig.MinioRegion = _appConfiguration["FileServer:Region"];
+            }
+
             #endregion
 
             #region Layout
@@ -326,6 +336,7 @@ namespace Zero.Web.Startup
             GlobalConfig.AppDefaultMenuLogo = _appConfiguration["AppMenuLogo:Url"];
             if (!string.IsNullOrEmpty(_appConfiguration["GlobalConfig:DefaultImage"]))
                 GlobalConfig.DefaultImageUrl = _appConfiguration["GlobalConfig:DefaultImage"];
+
             #endregion
 
             #region Upload , Import

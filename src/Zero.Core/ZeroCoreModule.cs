@@ -128,8 +128,6 @@ namespace Zero
             IocManager.Register<DashboardConfiguration>();
 
             Configuration.ReplaceService<IBackgroundJobManager, MyBackgroundJobManager>();
-
-            
             
             Configuration.MultiTenancy.TenantIdResolveKey = "abp.tenantid";
         }

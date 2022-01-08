@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-#if netcore
 using Newtonsoft.Json;
-#else
-using System.Web.Script.Serialization;
-#endif
 
 namespace FroalaEditor
 {
@@ -21,30 +17,30 @@ namespace FroalaEditor
         public static object GetHash(S3Config config)
         {
             // Check default region.
-            config.Region = config.Region != null ? config.Region : "us-east-1";
+            config.Region = config.Region ?? "us-east-1";
             config.Region = config.Region == "s3" ? "us-east-1" : config.Region;
 
             // Expiration s3 image signature #11
             double expirationInMinutes = 5;
-            if(double.TryParse(config.Expiration, out double parsedValue))
+            if(double.TryParse(config.Expiration, out var parsedValue))
             {
                 expirationInMinutes = parsedValue;
             }
 
             // Important variables that will be used throughout this example.
-            string bucket = config.Bucket;
-            string region = config.Region;
-            string keyStart = config.KeyStart;
-            string acl = config.Acl;
+            var bucket = config.Bucket;
+            var region = config.Region;
+            var keyStart = config.KeyStart;
+            var acl = config.Acl;
 
             // These can be found on your Account page, under Security Credentials > Access Keys.
-            string accessKey = config.AccessKey;
-            string secretKey = config.SecretKey;
+            var accessKey = config.AccessKey;
+            var secretKey = config.SecretKey;
 
-            string dateString = DateTime.Now.ToString("yyyyMMdd");
+            var dateString = DateTime.Now.ToString("yyyyMMdd");
 
-            string credential = string.Join("/", new string[] { accessKey, dateString, region, "s3/aws4_request" });
-            string xAmzDate = dateString + "T000000Z";
+            var credential = string.Join("/", new string[] { accessKey, dateString, region, "s3/aws4_request" });
+            var xAmzDate = dateString + "T000000Z";
 
             // Build policy.
             object policy = new
@@ -65,18 +61,14 @@ namespace FroalaEditor
                 }
             };
 
-#if netcore
-            string policyBase64 = Utils.Base64Encode(JsonConvert.SerializeObject(policy));
-#else
-            string policyBase64 = Utils.Base64Encode(new JavaScriptSerializer().Serialize(policy));
-#endif
-
+            var policyBase64 = Utils.Base64Encode(JsonConvert.SerializeObject(policy));
+            
             // Get signature.
-            byte[] dateKey = Utils.HMAC256(Utils.ToBytes("AWS4" + secretKey), dateString);
-            byte[] dateRegionKey = Utils.HMAC256(dateKey, region);
-            byte[] dateRegionServiceKey = Utils.HMAC256(dateRegionKey, "s3");
-            byte[] signingKey = Utils.HMAC256(dateRegionServiceKey, "aws4_request");
-            string signature = Utils.HexEncode(Utils.HMAC256(signingKey, policyBase64));
+            var dateKey = Utils.HMAC256(Utils.ToBytes("AWS4" + secretKey), dateString);
+            var dateRegionKey = Utils.HMAC256(dateKey, region);
+            var dateRegionServiceKey = Utils.HMAC256(dateRegionKey, "s3");
+            var signingKey = Utils.HMAC256(dateRegionServiceKey, "aws4_request");
+            var signature = Utils.HexEncode(Utils.HMAC256(signingKey, policyBase64));
 
             // Return Amazon S3 signing hash.
             return new Dictionary < string, object>

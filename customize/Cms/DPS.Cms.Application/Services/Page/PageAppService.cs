@@ -16,18 +16,18 @@ using Microsoft.EntityFrameworkCore;
 using Zero;
 using Zero.Authorization;
 
-namespace DPS.Cms.Application.Services
+namespace DPS.Cms.Application.Services.Page
 {
     [AbpAuthorize(CmsPermissions.Page)]
     public class PageAppService : ZeroAppServiceBase, IPageAppService
     {
         #region Constructor
-        private readonly IRepository<Page> _pageRepository;
+        private readonly IRepository<Core.Page.Page> _pageRepository;
         private readonly IRepository<PageWidget> _pageWidgetRepository;
         private readonly IRepository<PageWidgetDetail> _pageWidgetDetailRepository;
         private readonly IRepository<PageLayoutBlock> _pageLayoutBlockRepository;
         
-        public PageAppService(IRepository<Page> pageRepository, 
+        public PageAppService(IRepository<Core.Page.Page> pageRepository, 
             IRepository<PageWidgetDetail> pageWidgetDetailRepository, 
             IRepository<PageWidget> pageWidgetRepository, 
             IRepository<PageLayoutBlock> pageLayoutBlockRepository)
@@ -174,7 +174,7 @@ namespace DPS.Cms.Application.Services
         [AbpAuthorize(CmsPermissions.Page_Create)]
         protected virtual async Task Create(CreateOrEditPageDto input)
         {
-            var obj = ObjectMapper.Map<Page>(input);
+            var obj = ObjectMapper.Map<Core.Page.Page>(input);
             obj.TenantId = AbpSession.TenantId;
             await _pageRepository.InsertAndGetIdAsync(obj);
 

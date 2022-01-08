@@ -94,6 +94,13 @@ namespace Zero.Web.Areas.App.Startup
                             )
                         )
 
+                        .AddItem(new MenuItemDefinition(
+                                AppPageNames.Cms.Category,
+                                L("Categories"),
+                                url: $"{ZeroConst.CmsAreas}/Category",
+                                permissionDependency: new SimplePermissionDependency(CmsPermissions.Category)
+                            )
+                        )
                     #endregion
 
                 )

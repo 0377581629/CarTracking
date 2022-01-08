@@ -1,35 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
-using Abp.Application.Services.Dto;
 using Abp.Authorization;
 using Abp.Authorization.Users;
+using Abp.Configuration.Startup;
 using Abp.Domain.Repositories;
 using Abp.Extensions;
-using Abp.Linq.Extensions;
 using Abp.MultiTenancy;
-using Abp.Organizations;
-using Abp.UI;
+using Abp.Runtime.Session;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Zero;
+using Zero.Authorization.Roles;
 using Zero.Authorization.Users;
-using Zero.Authorization.Users.Dto;
-using Zero.Customize;
-using Zero.Dto;
-using Zero.Dto.Tenancy;
-using Zero.Editions;
-using Zero.Editions.Dto;
 using Zero.MultiTenancy;
-using Zero.MultiTenancy.Dto;
-using Zero.Organizations.Dto;
 
-namespace Zero
+namespace Zero.Customize
 {
     [AbpAuthorize]
     public class FileAppService : ZeroAppServiceBase, IFileAppService
@@ -38,13 +24,24 @@ namespace Zero
 
         private readonly IRepository<Tenant> _tenantRepository;
         private readonly IWebHostEnvironment _webHostEnvironment;
-
+        private readonly IMultiTenancyConfig _multiTenancyConfig;
+        private readonly UserManager _userManager;
+        private readonly IRepository<UserRole, long> _userRoleRepository;
+        private readonly RoleManager _roleManager;
         public FileAppService(
             IRepository<Tenant> tenantRepository,
-            IWebHostEnvironment webHostEnvironment)
+            IWebHostEnvironment webHostEnvironment, 
+            IMultiTenancyConfig multiTenancyConfig, 
+            UserManager userManager, 
+            IRepository<UserRole, long> userRoleRepository, 
+            RoleManager roleManager)
         {
             _tenantRepository = tenantRepository;
             _webHostEnvironment = webHostEnvironment;
+            _multiTenancyConfig = multiTenancyConfig;
+            _userManager = userManager;
+            _userRoleRepository = userRoleRepository;
+            _roleManager = roleManager;
         }
 
         #endregion
@@ -99,10 +96,12 @@ namespace Zero
             var fullPath = _webHostEnvironment.WebRootFileProvider.GetFileInfo(input).PhysicalPath;
             return !File.Exists(fullPath) ? "" : fullPath;
         }
+        
         public string RelativePath(string absolutePath)
         {
             return absolutePath.RemovePreFix(PhysRootPath()).Replace(@"\","/");
         }
+        
         public void Copy(string fromPath, string toPath)
         {
             try
@@ -132,6 +131,22 @@ namespace Zero
             var newFilePath = Path.Combine(_webHostEnvironment.WebRootFileProvider.GetFileInfo(fileFolder).PhysicalPath, newFileName);
             await File.WriteAllBytesAsync(newFilePath, data);
             return "/" + fileFolder.Replace(@"\", "/") + "/" + newFileName;
+        }
+
+        public async Task<string> RootFileServerBucketName()
+        {
+            var currentUser = await _userManager.GetUserAsync(AbpSession.ToUserIdentifier());
+            var roleIds = await  _userRoleRepository.GetAll()
+                .Where(o=>o.UserId == currentUser.Id)
+                .Select(o=>o.RoleId).ToListAsync();
+                
+            var isAdminUser = false;
+            if (roleIds.Any())
+            {
+                var roles = await _roleManager.Roles.Where(x => roleIds.Contains(x.Id)).ToListAsync();
+                isAdminUser = roles.FirstOrDefault(o => o.Name == StaticRoleNames.Tenants.Admin) != null;
+            }
+            return FileHelper.FileServerRootPath(_multiTenancyConfig, AbpSession, isAdminUser);
         }
     }
 }

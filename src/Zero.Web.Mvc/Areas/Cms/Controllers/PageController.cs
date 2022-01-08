@@ -32,7 +32,7 @@ namespace Zero.Web.Areas.Cms.Controllers
 			{
 				FilterText = ""
 			};
-
+			
             return View(model);
         }
 
@@ -40,13 +40,12 @@ namespace Zero.Web.Areas.Cms.Controllers
         public async Task<PartialViewResult> CreateOrEditModal(int? id)
         {
 			GetPageForEditOutput objEdit;
-
 			if (id.HasValue){
 				objEdit = await _pageAppService.GetPageForEdit(new EntityDto { Id = (int) id });
 			}
 			else{
 				objEdit = new GetPageForEditOutput{
-					Page = new CreateOrEditPageDto()
+					Page = new CreateOrEditPageDto
 					{
 						Code = StringHelper.ShortIdentity(),
 						IsActive = true,
@@ -59,8 +58,8 @@ namespace Zero.Web.Areas.Cms.Controllers
 				};
 			}
 
-			var viewModel = new CreateOrEditPageModalViewModel()
-            {
+			var viewModel = new CreateOrEditPageModalViewModel
+			{
 				Page = objEdit.Page
             };
 
@@ -84,7 +83,7 @@ namespace Zero.Web.Areas.Cms.Controllers
         {
 	        var res = new PageWidgetDto();
 	        
-	        var widget = await _cmsAppService.GetWidget(new EntityDto() {Id = widgetId});
+	        var widget = await _cmsAppService.GetWidget(new EntityDto {Id = widgetId});
 	        res.PageBlockColumnId = blockColumnId;
 	        res.WidgetId = widget.Id;
 	        res.WidgetName = widget.Name;

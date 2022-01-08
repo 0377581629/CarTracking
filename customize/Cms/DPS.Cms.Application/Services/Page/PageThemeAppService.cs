@@ -6,35 +6,35 @@ using Abp.Authorization;
 using Abp.Domain.Repositories;
 using Abp.Linq.Extensions;
 using Abp.UI;
-using DPS.Cms.Application.Shared.Dto.MenuGroup;
+using DPS.Cms.Application.Shared.Dto.PageTheme;
 using DPS.Cms.Application.Shared.Interfaces;
-using DPS.Cms.Core.Menu;
+using DPS.Cms.Core.Page;
 using Microsoft.EntityFrameworkCore;
 using Zero;
 using Zero.Authorization;
 
-namespace DPS.Cms.Application.Services
+namespace DPS.Cms.Application.Services.Page
 {
-    [AbpAuthorize(CmsPermissions.MenuGroup)]
-    public class MenuGroupAppService: ZeroAppServiceBase, IMenuGroupAppService
+    [AbpAuthorize(CmsPermissions.PageTheme)]
+    public class PageThemeAppService: ZeroAppServiceBase, IPageThemeAppService
     {
-        private readonly IRepository<MenuGroup> _menuGroupRepository;
+        private readonly IRepository<PageTheme> _pageThemeRepository;
 
-        public MenuGroupAppService(IRepository<MenuGroup> menuGroupRepository)
+        public PageThemeAppService(IRepository<PageTheme> pageThemeRepository)
         {
-            _menuGroupRepository = menuGroupRepository;
+            _pageThemeRepository = pageThemeRepository;
         }
 
 
-        private IQueryable<MenuGroupDto> MenuGroupQuery(QueryInput queryInput)
+        private IQueryable<PageThemeDto> PageThemeQuery(QueryInput queryInput)
         {
             var input = queryInput.Input;
             var id = queryInput.Id;
 
-            var query = from o in _menuGroupRepository.GetAll()
+            var query = from o in _pageThemeRepository.GetAll()
                     .WhereIf(input != null && !string.IsNullOrWhiteSpace(input.Filter), e => EF.Functions.Like(e.Name, $"%{input.Filter}%"))
                     .WhereIf(id.HasValue, e => e.Id == id.Value)
-                select new MenuGroupDto
+                select new PageThemeDto
                 {
                     Id = o.Id,
                     Numbering = o.Numbering,
@@ -51,61 +51,61 @@ namespace DPS.Cms.Application.Services
 
         private class QueryInput
         {
-            public GetAllMenuGroupInput Input { get; set; }
+            public GetAllPageThemeInput Input { get; set; }
             public int? Id { get; set; }
         }
 
-        public async Task<PagedResultDto<GetMenuGroupForViewDto>> GetAll(GetAllMenuGroupInput input)
+        public async Task<PagedResultDto<GetPageThemeForViewDto>> GetAll(GetAllPageThemeInput input)
         {
             var queryInput = new QueryInput
             {
                 Input = input
             };
 
-            var objQuery = MenuGroupQuery(queryInput);
+            var objQuery = PageThemeQuery(queryInput);
 
             var pagedAndFilteredObjs = objQuery
                 .OrderBy(input.Sorting ?? "order asc")
                 .PageBy(input);
 
             var objs = from o in pagedAndFilteredObjs
-                select new GetMenuGroupForViewDto
+                select new GetPageThemeForViewDto
                 {
-                    MenuGroup = o
+                    PageTheme = o
                 };
 
             var totalCount = await objQuery.CountAsync();
             var res = await objs.ToListAsync();
 
-            return new PagedResultDto<GetMenuGroupForViewDto>(
+            return new PagedResultDto<GetPageThemeForViewDto>(
                 totalCount,
                 res
             );
         }
 
-        [AbpAuthorize(CmsPermissions.MenuGroup_Edit)]
-        public async Task<GetMenuGroupForEditOutput> GetMenuGroupForEdit(EntityDto input)
+        [AbpAuthorize(CmsPermissions.PageTheme_Edit)]
+        public async Task<GetPageThemeForEditOutput> GetPageThemeForEdit(EntityDto input)
         {
             var queryInput = new QueryInput
             {
                 Id = input.Id
             };
 
-            var objQuery = MenuGroupQuery(queryInput);
+            var objQuery = PageThemeQuery(queryInput);
 
             var obj = await objQuery.FirstOrDefaultAsync();
 
-            var output = new GetMenuGroupForEditOutput
+            var output = new GetPageThemeForEditOutput
             {
-                MenuGroup = ObjectMapper.Map<CreateOrEditMenuGroupDto>(obj)
+                PageTheme = ObjectMapper.Map<CreateOrEditPageThemeDto>(obj)
             };
 
             return output;
         }
 
-        private async Task ValidateDataInput(CreateOrEditMenuGroupDto input)
+        private async Task ValidateDataInput(CreateOrEditPageThemeDto input)
         {
-            var res = await _menuGroupRepository.GetAll()
+            var res = await _pageThemeRepository.GetAll()
                 .Where(o => o.Code.Equals(input.Code))
                 .WhereIf(input.Id.HasValue, o => o.Id != input.Id)
                 .FirstOrDefaultAsync();
@@ -113,7 +113,7 @@ namespace DPS.Cms.Application.Services
                 throw new UserFriendlyException(L("Error"), L("CodeAlreadyExists"));
         }
 
-        public async Task CreateOrEdit(CreateOrEditMenuGroupDto input)
+        public async Task CreateOrEdit(CreateOrEditPageThemeDto input)
         {
             input.Code = input.Code.Replace(" ", "");
             await ValidateDataInput(input);
@@ -127,36 +127,35 @@ namespace DPS.Cms.Application.Services
             }
         }
 
-        [AbpAuthorize(CmsPermissions.MenuGroup_Create)]
-        protected virtual async Task Create(CreateOrEditMenuGroupDto input)
+        [AbpAuthorize(CmsPermissions.PageTheme_Create)]
+        protected virtual async Task Create(CreateOrEditPageThemeDto input)
         {
-            var obj = ObjectMapper.Map<MenuGroup>(input);
-            obj.TenantId = AbpSession.TenantId;
-            await _menuGroupRepository.InsertAndGetIdAsync(obj);
+            var obj = ObjectMapper.Map<PageTheme>(input);
+            await _pageThemeRepository.InsertAndGetIdAsync(obj);
         }
 
-        [AbpAuthorize(CmsPermissions.MenuGroup_Edit)]
-        protected virtual async Task Update(CreateOrEditMenuGroupDto input)
+        [AbpAuthorize(CmsPermissions.PageTheme_Edit)]
+        protected virtual async Task Update(CreateOrEditPageThemeDto input)
         {
             if (input.Id.HasValue)
             {
-                var obj = await _menuGroupRepository.FirstOrDefaultAsync(o => o.Id == (int) input.Id);
+                var obj = await _pageThemeRepository.FirstOrDefaultAsync(o => o.Id == (int) input.Id);
 
                 if (obj == null)
                     throw new UserFriendlyException(L("NotFound"));
 
                 ObjectMapper.Map(input, obj);
-                await _menuGroupRepository.UpdateAsync(obj);
+                await _pageThemeRepository.UpdateAsync(obj);
             }
         }
 
-        [AbpAuthorize(CmsPermissions.MenuGroup_Delete)]
+        [AbpAuthorize(CmsPermissions.PageTheme_Delete)]
         public async Task Delete(EntityDto input)
         {
-            var obj = await _menuGroupRepository.FirstOrDefaultAsync(o => o.Id == input.Id);
+            var obj = await _pageThemeRepository.FirstOrDefaultAsync(o => o.Id == input.Id);
             if (obj == null)
                 throw new UserFriendlyException(L("NotFound"));
-            await _menuGroupRepository.DeleteAsync(obj.Id);
+            await _pageThemeRepository.DeleteAsync(obj.Id);
         }
     }
 }

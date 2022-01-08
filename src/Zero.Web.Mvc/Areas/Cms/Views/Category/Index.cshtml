@@ -1,0 +1,49 @@
+﻿@model Zero.Web.Areas.Cms.Models.Category.CategoryViewModel
+@{
+    ViewBag.CurrentPageName = AppPageNames.Cms.Category;
+}
+
+@section Scripts
+{
+    <script abp-src="/3rds/jquery.nestable/jquery.nestable.js" asp-append-version="true"></script>
+    <script abp-src="/3rds/jquery.sortable/jquery.sortable.js" asp-append-version="true"></script>
+    <script abp-src="@ZeroConst.ScriptPathCms/Category/Index.js" asp-append-version="true"></script>
+}
+
+@section Styles {
+    <link href="/3rds/jquery.nestable/jquery.nestable.css" rel="stylesheet"/>
+    <link href="/3rds/jquery.nestable/jquery.nestable-custom.css" rel="stylesheet"/>
+    <link href="/3rds/jquery.sortable/jquery.sortable.css" rel="stylesheet"/>
+}
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <abp-page-subheader title="@L("Categories")" description="@L("CategoriesHeaderInfo")">
+        @if (IsGranted(CmsPermissions.Category_Create))
+        {
+            <button id="CreateNewButton" class="btn btn-primary blue">
+                <i class="fa fa-plus"></i> @L("Create")
+            </button>
+        }
+    </abp-page-subheader>
+    <div class="@(await GetContainerClass())">
+        <div class="card card-custom gutter-b">
+            <div class="card-body" id="CategoryWrapper">
+                <div>
+                    <div class="dd">
+                        <ol class="dd-list" id="dd-list">
+                        </ol>
+                    </div>
+                </div>
+            </div>
+            @if (IsGranted(CmsPermissions.Category_Create) || IsGranted(CmsPermissions.Category_Edit))
+            {
+                <div class="card-footer py-15">
+                    <button type="button" id="UpdateStructureButton" class="btn btn-primary mr-2 float-right">
+                        <i class="la la-save"></i> @L("UpdateStructure")
+                    </button>
+                </div>
+            }
+            
+        </div>
+    </div>
+</div>

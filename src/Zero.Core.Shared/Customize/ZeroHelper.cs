@@ -6,8 +6,10 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
+using Abp.Configuration.Startup;
 using Abp.Extensions;
 using Abp.Localization.Sources;
+using Abp.MultiTenancy;
 using Abp.Runtime.Session;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using NPOI.SS.UserModel;
@@ -342,6 +344,26 @@ namespace Zero
 
     public static class FileHelper
     {
+        public static string FileServerRootPath(IMultiTenancyConfig multiTenancyConfig, IAbpSession abpSession, bool isAdminUser)
+        {
+            var rootPath = SystemConfig.MinioRootBucketName;
+
+            if (!multiTenancyConfig.IsEnabled) 
+                return rootPath;
+
+            if (abpSession.MultiTenancySide == MultiTenancySides.Host && isAdminUser)
+                return rootPath;
+            
+            rootPath = Path.Combine(rootPath, abpSession.TenantId.HasValue ? abpSession.TenantId.ToString() : "Host");
+            
+            if (!isAdminUser)
+            {
+                rootPath = Path.Combine(rootPath, abpSession.UserId.ToString());
+            }
+
+            return rootPath;
+        }
+        
         public static string UploadPath(IAbpSession abpSession, ZeroEnums.FileType type)
         {
             var userPath = "";

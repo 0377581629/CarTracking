@@ -24,18 +24,18 @@ namespace DPS.Cms.Application.Services.Common
     {
         #region Constructor
         
-        private readonly IRepository<Page> _pageRepository;
+        private readonly IRepository<Core.Page.Page> _pageRepository;
         private readonly IRepository<PageWidget> _pageWidgetRepository;
         private readonly IRepository<PageWidgetDetail> _pageWidgetDetailRepository;
         private readonly IRepository<ImageBlock> _imageBlockRepository;
-        private readonly IRepository<Menu> _menuRepository;
+        private readonly IRepository<Core.Menu.Menu> _menuRepository;
         private readonly IRepository<PageLayoutBlock> _pageLayoutBlockRepository;
-        public CmsPublicAppService(IRepository<Page> pageRepository,
+        public CmsPublicAppService(IRepository<Core.Page.Page> pageRepository,
             IRepository<PageWidget> pageWidgetRepository,
             IRepository<PageWidgetDetail> pageWidgetDetailRepository,
             IRepository<ImageBlock> imageBlockRepository, 
             IRepository<PageLayoutBlock> pageLayoutBlockRepository,
-            IRepository<Menu> menuRepository)
+            IRepository<Core.Menu.Menu> menuRepository)
         {
             _pageRepository = pageRepository;
             _pageWidgetRepository = pageWidgetRepository;
