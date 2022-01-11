@@ -367,7 +367,6 @@ namespace ZERO.Web.Areas.App.Controllers
         /// <exception cref="HttpException">Forbidden</exception>
         [AcceptVerbs("POST")]
         [DisableValidation]
-        [IgnoreAntiforgeryToken]
         public virtual ActionResult Upload(string path, IFormFile file)
         {
             FileManagerEntry newEntry;
