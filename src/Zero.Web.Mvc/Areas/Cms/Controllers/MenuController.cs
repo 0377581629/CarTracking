@@ -1,8 +1,11 @@
 ﻿using System.Threading.Tasks;
 using Abp.Application.Services.Dto;
 using Abp.AspNetCore.Mvc.Authorization;
+using Abp.Domain.Repositories;
 using DPS.Cms.Application.Shared.Dto.Menu;
 using DPS.Cms.Application.Shared.Interfaces;
+using DPS.Cms.Application.Shared.Interfaces.Menu;
+using DPS.Cms.Core.Menu;
 using Microsoft.AspNetCore.Mvc;
 using Zero.Authorization;
 using Zero.Web.Areas.Cms.Models.Menu;
@@ -14,48 +17,33 @@ namespace Zero.Web.Areas.Cms.Controllers
     [AbpMvcAuthorize(CmsPermissions.Menu)]
     public class MenuController: ZeroControllerBase
     {
-        private readonly IMenuAppService _menuAppService;
+        private readonly IRepository<Menu> _menuRepository;
 
-        public MenuController(IMenuAppService menuAppService)
+        public MenuController(IRepository<Menu> menuRepository)
         {
-            _menuAppService = menuAppService;
+            _menuRepository = menuRepository;
         }
-
-
+        
         public ActionResult Index()
         {
-            var model = new MenuViewModel
-            {
-                FilterText = ""
-            };
-
-            return View(model);
+            return View();
         }
 
         [AbpMvcAuthorize(CmsPermissions.Menu_Create, CmsPermissions.Menu_Edit)]
         public async Task<PartialViewResult> CreateOrEditModal(int? id)
         {
-            GetMenuForEditOutput objEdit;
-
-            if (id.HasValue){
-                objEdit = await _menuAppService.GetMenuForEdit(new EntityDto { Id = (int) id });
-            }
-            else{
-                objEdit = new GetMenuForEditOutput{
-                    Menu = new CreateOrEditMenuDto()
-                    {
-                        Code = StringHelper.ShortIdentity(),
-                        IsActive = true
-                    }
-                };
-            }
-
-            var viewModel = new CreateOrEditMenuViewModel()
+            var model = new CreateOrEditMenuViewModel(null)
             {
-                Menu = objEdit.Menu
+                Code = StringHelper.ShortIdentity()
             };
 
-            return PartialView("_CreateOrEditModal", viewModel);
+            if (id.HasValue)
+            {
+                var obj = await _menuRepository.GetAsync(id.Value);
+                model = ObjectMapper.Map<CreateOrEditMenuViewModel>(obj);
+            }
+            
+            return PartialView("_CreateOrEditModal", model);
         }
     }
 }

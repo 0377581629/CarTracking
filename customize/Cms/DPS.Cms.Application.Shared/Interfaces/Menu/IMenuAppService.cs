@@ -1,18 +1,22 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Abp.Application.Services;
 using Abp.Application.Services.Dto;
 using DPS.Cms.Application.Shared.Dto.Menu;
+using Zero.Customize.NestedItem;
 
-namespace DPS.Cms.Application.Shared.Interfaces
+namespace DPS.Cms.Application.Shared.Interfaces.Menu
 {
     public interface IMenuAppService: IApplicationService 
     {
-        Task<PagedResultDto<GetMenuForViewDto>> GetAll(GetAllMenuInput input);
+        Task<List<NestedItem>> GetAllNested(GetAllMenuInput input);
+	    
+        Task<ListResultDto<MenuDto>> GetMenus();
         
-        Task<GetMenuForEditOutput> GetMenuForEdit(EntityDto input);
+        Task<NestedItem> CreateOrEditMenu(CreateOrEditMenuDto input);
 
-        Task CreateOrEdit(CreateOrEditMenuDto input);
-
-        Task Delete(EntityDto input);
+        Task UpdateStructure(UpdateMenuStructureInput input);
+	    
+        Task Delete(EntityDto<int> input);
     }
 }
