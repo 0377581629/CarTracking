@@ -5,18 +5,17 @@ using System.Linq;
 using System.Reactive.Linq;
 using Abp.AspNetCore.Mvc.Authorization;
 using Abp.Extensions;
-using Abp.Json;
 using Abp.Threading;
 using Abp.Web.Models;
 using FroalaEditor;
 using ImageMagick;
 using Microsoft.AspNetCore.Mvc;
 using Minio;
-using Minio.DataModel;
 using Minio.Exceptions;
 using Zero;
 using Zero.Debugging;
 using Zero.Web.Controllers;
+using FileOptions = FroalaEditor.FileOptions;
 
 namespace ZERO.Web.Controllers
 {
@@ -35,7 +34,7 @@ namespace ZERO.Web.Controllers
         {
             try
             {
-                return Json(FroalaEditor.Image.Upload(HttpContext, FileHelper.UploadPath(AbpSession, ZeroEnums.FileType.Image)));
+                return Json(Image.Upload(HttpContext, FileHelper.UploadPath(AbpSession, ZeroEnums.FileType.Image)));
             }
             catch (Exception e)
             {
@@ -47,7 +46,7 @@ namespace ZERO.Web.Controllers
         {
             try
             {
-                return Json(FroalaEditor.Video.Upload(HttpContext, FileHelper.UploadPath(AbpSession, ZeroEnums.FileType.Video)));
+                return Json(Video.Upload(HttpContext, FileHelper.UploadPath(AbpSession, ZeroEnums.FileType.Video)));
             }
             catch (Exception e)
             {
@@ -74,7 +73,7 @@ namespace ZERO.Web.Controllers
             try
             {
                 if (!SystemConfig.UseFileServer) 
-                    return Json(FroalaEditor.Image.List(FileHelper.UploadPath(AbpSession, ZeroEnums.FileType.Image)));
+                    return Json(Image.List(FileHelper.UploadPath(AbpSession, ZeroEnums.FileType.Image)));
 
                 var minioClient = new MinioClient(SystemConfig.MinioEndPoint,
                     SystemConfig.MinioAccessKey,
@@ -122,14 +121,14 @@ namespace ZERO.Web.Controllers
         {
             var resizeGeometry = new MagickGeometry(300, 300) { IgnoreAspectRatio = true };
 
-            var options = new FroalaEditor.ImageOptions
+            var options = new ImageOptions
             {
                 ResizeGeometry = resizeGeometry
             };
 
             try
             {
-                return Json(FroalaEditor.Image.Upload(HttpContext, FileHelper.UploadPath(AbpSession, ZeroEnums.FileType.Image), options));
+                return Json(Image.Upload(HttpContext, FileHelper.UploadPath(AbpSession, ZeroEnums.FileType.Image), options));
             }
             catch (Exception e)
             {
@@ -146,15 +145,15 @@ namespace ZERO.Web.Controllers
                 return info.Width == info.Height;
             }
 
-            var options = new FroalaEditor.ImageOptions
+            var options = new ImageOptions
             {
                 Fieldname = "myImage",
-                Validation = new FroalaEditor.ImageValidation(ValidationFunction)
+                Validation = new ImageValidation(ValidationFunction)
             };
 
             try
             {
-                return Json(FroalaEditor.Image.Upload(HttpContext, FileHelper.UploadPath(AbpSession, ZeroEnums.FileType.Image), options));
+                return Json(Image.Upload(HttpContext, FileHelper.UploadPath(AbpSession, ZeroEnums.FileType.Image), options));
             }
             catch (Exception e)
             {
@@ -166,7 +165,7 @@ namespace ZERO.Web.Controllers
         {
             bool ValidationFunction(string filePath, string mimeType)
             {
-                var size = new System.IO.FileInfo(filePath).Length;
+                var size = new FileInfo(filePath).Length;
                 if (size > 10 * 1024 * 1024)
                 {
                     return false;
@@ -175,15 +174,15 @@ namespace ZERO.Web.Controllers
                 return true;
             }
 
-            var options = new FroalaEditor.FileOptions
+            var options = new FileOptions
             {
                 Fieldname = "myFile",
-                Validation = new FroalaEditor.FileValidation(ValidationFunction)
+                Validation = new FileValidation(ValidationFunction)
             };
 
             try
             {
-                return Json(FroalaEditor.Image.Upload(HttpContext, FileHelper.UploadPath(AbpSession, ZeroEnums.FileType.Office), options));
+                return Json(Image.Upload(HttpContext, FileHelper.UploadPath(AbpSession, ZeroEnums.FileType.Office), options));
             }
             catch (Exception e)
             {
@@ -208,7 +207,7 @@ namespace ZERO.Web.Controllers
         {
             try
             {
-                FroalaEditor.Video.Delete(HttpContext.Request.Form["src"]);
+                Video.Delete(HttpContext.Request.Form["src"]);
                 return Json(true);
             }
             catch (Exception e)
@@ -221,7 +220,7 @@ namespace ZERO.Web.Controllers
         {
             try
             {
-                FroalaEditor.Image.Delete(HttpContext.Request.Form["src"]);
+                Image.Delete(HttpContext.Request.Form["src"]);
                 return Json(true);
             }
             catch (Exception e)
@@ -232,7 +231,7 @@ namespace ZERO.Web.Controllers
 
         public IActionResult S3Signature()
         {
-            var config = new FroalaEditor.S3Config
+            var config = new S3Config
             {
                 Bucket = Environment.GetEnvironmentVariable("AWS_BUCKET"),
                 Region = Environment.GetEnvironmentVariable("AWS_REGION"),
@@ -243,7 +242,7 @@ namespace ZERO.Web.Controllers
                 Expiration = Environment.GetEnvironmentVariable("AWS_EXPIRATION") // Expiration s3 image signature #11
             };
 
-            return Json(FroalaEditor.S3.GetHash(config));
+            return Json(S3.GetHash(config));
         }
 
         public IActionResult Error()

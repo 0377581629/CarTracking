@@ -47,6 +47,44 @@ var select2ViLanguage = {
     }
 }
 
+FroalaEditor.DefineIcon('imageKendoFileManager', {NAME: 'fileManager', SVG_KEY: 'fileManager'});
+FroalaEditor.RegisterCommand('imageKendoFileManager', {
+    title: app.localize('FileManager'),
+    focus: false,
+    undo: true,
+    refreshAfterCallback: false,
+    callback: function () {
+        let frInstance = this;
+        _fileManagerModal.open({
+            allowExtension: '*.jpg;*.png;*.jpeg',
+            maxResultCount: 1
+        }, function(selectedFiles) {
+            if (selectedFiles !== undefined && selectedFiles.length >= 1) {
+                frInstance.image.insert(selectedFiles[selectedFiles.length - 1].path);
+            }
+        })
+    }
+});
+
+FroalaEditor.DefineIcon('videoKendoFileManager', {NAME: 'fileManager', SVG_KEY: 'fileManager'});
+FroalaEditor.RegisterCommand('videoKendoFileManager', {
+    title: app.localize('FileManager'),
+    focus: false,
+    undo: true,
+    refreshAfterCallback: false,
+    callback: function () {
+        let frInstance = this;
+        _fileManagerModal.open({
+            allowExtension: '*.mp4',
+            maxResultCount: 1
+        }, function(selectedFiles) {
+            if (selectedFiles !== undefined && selectedFiles.length >= 1) {
+                frInstance.video.insertFromFileManager(selectedFiles[selectedFiles.length - 1].path);
+            }
+        })
+    }
+});
+
 var frEditorBaseConfig = {
     key: "AV:4~?3xROKLJKYHROLDXDR@d2YYGR_Bc1A8@5@4:1B2D2F2F1?1?2A3@1C1",
     enter: FroalaEditor.ENTER_DIV,
@@ -68,11 +106,14 @@ var frEditorBaseConfig = {
             'buttonsVisible': 2
         }
     },
+    
+    fileUploadURL: '/FroalaApi/UploadFile',
+    // Image Manager
+    imageInsertButtons: ["imageBack", "|", "imageUpload", "imageByURL", "imageKendoFileManager"],
     imageUploadURL: '/FroalaApi/UploadImage',
     imageUploadParams: {
         __RequestVerificationToken: abp.security.antiForgery.getToken()
     },
-    fileUploadURL: '/FroalaApi/UploadFile',
     imageManagerLoadURL: '/FroalaApi/LoadImages',
     imageManagerPageSize: 20,
     imageManagerScrollOffset: 40,
@@ -82,84 +123,19 @@ var frEditorBaseConfig = {
         __RequestVerificationToken: abp.security.antiForgery.getToken()
     },
     // Introduce the Video Upload Buttons
-    videoInsertButtons: ['videoBack', '|', 'videoByURL', 'videoEmbed', 'videoUpload'],
+    videoInsertButtons: ["videoBack", "|", "videoByURL", "videoEmbed", "videoUpload", "videoKendoFileManager"],
     // Set the video upload URL.
     videoUploadURL: '/FroalaApi/UploadVideo',
     videoUploadParams: {
         __RequestVerificationToken: abp.security.antiForgery.getToken()
     },
     // Set request type.
-    videoUploadMethod: 'POST',
-
-    events: {
-        // Catch image removal from the editor.
-        'image.removed': function ($img) {
-            $.ajax({
-                // Request method.
-                method: "POST",
-
-                // Request URL.
-                url: "/FroalaApi/DeleteImage",
-
-                // Request params.
-                data: {
-                    __RequestVerificationToken: abp.security.antiForgery.getToken(),
-                    src: $img.attr('src')
-                }
-            })
-                .done(function (data) {
-                    console.log('image was deleted');
-                })
-                .fail(function (err) {
-                    console.log('image delete problem: ' + JSON.stringify(err));
-                })
-        },
-        // Catch image removal from the editor.
-        'video.removed': function ($vid) {
-            $.ajax({
-                // Request method.
-                method: "POST",
-
-                // Request URL.
-                url: "/FroalaApi/DeleteVideo",
-
-                // Request params.
-                data: {
-                    __RequestVerificationToken: abp.security.antiForgery.getToken(),
-                    src: $vid.attr('src')
-                }
-            })
-                .done(function (data) {
-                    console.log('video was deleted');
-                })
-                .fail(function (err) {
-                    console.log('video delete problem: ' + JSON.stringify(err));
-                })
-        },
-        // Catch image removal from the editor.
-        'file.unlink': function (link) {
-            $.ajax({
-                // Request method.
-                method: "POST",
-
-                // Request URL.
-                url: "/FroalaApi/DeleteFile",
-
-                // Request params.
-                data: {
-                    __RequestVerificationToken: abp.security.antiForgery.getToken(),
-                    src: link.getAttribute('href')
-                }
-            })
-                .done(function (data) {
-                    console.log('file was deleted');
-                })
-                .fail(function (err) {
-                    console.log('file delete problem: ' + JSON.stringify(err));
-                })
-        }
-    }
+    videoUploadMethod: 'POST'
 };
+
+if (abp.localization.currentLanguage.name === 'vi') {
+    frEditorBaseConfig['language'] = 'vi';
+}
 
 var frEditorConfig = $.extend({
     heightMin: 300,
@@ -854,7 +830,7 @@ function slugify(text) {
             let slug = baseHelper.MakeSlug(originalString);
             slugInput.val(slug);
         });
-
+        
         $('.frSimpleEditor[initEditor="false"]').each(function () {
             let id = $(this).attr('id');
             if (id !== undefined && id !== null) {

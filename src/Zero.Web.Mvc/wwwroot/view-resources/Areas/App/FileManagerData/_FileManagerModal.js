@@ -7,16 +7,73 @@
         let _allowExtension;
         let _selectorResult = [];
         let _maxSelectCount = 1;
-        
-        let initFileManager = _.debounce(function(){
+
+        let initFileManager = _.debounce(function () {
             InitFileManager();
         }, 300);
-        
-        function InitFileManager(){
+
+        function InitFileManager() {
             _fileManagerSelector = modal.find('#fileManagerSelector');
+            let fileManagerConfig = {
+                dataSource: {
+                    schema: kendo.data.schemas.filemanager,
+                    transport: {
+                        read: {
+                            url: "/App/FileManagerData/Read",
+                            method: "POST",
+                            data: {
+                                filter: _modalManager.getArgs().allowExtension
+                            }
+                        },
+                        create: {
+                            url: "/App/FileManagerData/Create",
+                            method: "POST"
+                        },
+                        update: {
+                            url: "/App/FileManagerData/Update",
+                            method: "POST"
+                        },
+                        destroy: {
+                            url: "/App/FileManagerData/Destroy",
+                            method: "POST"
+                        }
+                    }
+                },
+                uploadUrl: "/App/FileManagerData/Upload",
+                upload: {
+                    upload: function (e) {
+                        e.data = {
+                            __RequestVerificationToken: abp.security.antiForgery.getToken()
+                        }
+                    }
+                },
+                toolbar: {
+                    items: [
+                        {name: "createFolder"},
+                        {name: "upload"},
+                        {name: "sortField"},
+                        {name: "changeView"},
+                        {name: "spacer"},
+                        {name: "details"},
+                        {name: "search"}
+                    ]
+                },
+                contextMenu: {
+                    items: [
+                        {name: "rename"},
+                        {name: "delete"}
+                    ]
+                },
+                draggable: false,
+                resizable: true,
+                select: FileManagerOnSelect,
+                previewPane: {
+                    singleFileTemplate: kendo.template($("#file-manager-preview-template").html())
+                }
+            };
             
             if (abp.localization.currentLanguage.name === 'vi') {
-                _fileManagerSelector.kendoFileManager({
+                fileManagerConfig = $.extend( {
                     messages: {
                         toolbar: {
                             createFolder: "Thư mục mới",
@@ -85,116 +142,19 @@
                             modifiedUtc: "Ngày chỉnh sửa UTC",
                             items: "items"
                         }
-                    },
-                    dataSource: {
-                        schema: kendo.data.schemas.filemanager,
-                        transport: {
-                            read: {
-                                url: "/App/FileManagerData/Read",
-                                method: "POST",
-                                data: {
-                                    filter: _modalManager.getArgs().allowExtension
-                                }
-                            },
-                            create: {
-                                url: "/App/FileManagerData/Create",
-                                method: "POST"
-                            },
-                            update: {
-                                url: "/App/FileManagerData/Update",
-                                method: "POST"
-                            },
-                            destroy: {
-                                url: "/App/FileManagerData/Destroy",
-                                method: "POST"
-                            }
-                        }
-                    },
-                    uploadUrl: "/App/FileManagerData/Upload",
-                    toolbar: {
-                        items: [
-                            { name: "createFolder" },
-                            { name: "upload" },
-                            { name: "sortField" },
-                            { name: "changeView" },
-                            { name: "spacer" },
-                            { name: "details" },
-                            { name: "search" }
-                        ]
-                    },
-                    contextMenu: {
-                        items: [
-                            { name: "rename" },
-                            { name: "delete" }
-                        ]
-                    },
-                    draggable: false,
-                    resizable: true,
-                    select: FileManagerOnSelect,
-                    previewPane: {
-                        singleFileTemplate: kendo.template($("#file-manager-preview-template").html())
                     }
-                });
-            } else {
-                _fileManagerSelector.kendoFileManager({
-                    dataSource: {
-                        schema: kendo.data.schemas.filemanager,
-                        transport: {
-                            read: {
-                                url: "/App/FileManagerData/Read",
-                                method: "POST",
-                                data: {
-                                    filter: _modalManager.getArgs().allowExtension
-                                }
-                            },
-                            create: {
-                                url: "/App/FileManagerData/Create",
-                                method: "POST"
-                            },
-                            update: {
-                                url: "/App/FileManagerData/Update",
-                                method: "POST"
-                            },
-                            destroy: {
-                                url: "/App/FileManagerData/Destroy",
-                                method: "POST"
-                            }
-                        }
-                    },
-                    uploadUrl: "/App/FileManagerData/Upload",
-                    toolbar: {
-                        items: [
-                            { name: "createFolder" },
-                            { name: "upload" },
-                            { name: "sortField" },
-                            { name: "changeView" },
-                            { name: "spacer" },
-                            { name: "details" },
-                            { name: "search" }
-                        ]
-                    },
-                    contextMenu: {
-                        items: [
-                            { name: "rename" },
-                            { name: "delete" }
-                        ]
-                    },
-                    draggable: false,
-                    resizable: true,
-                    select: FileManagerOnSelect,
-                    previewPane: {
-                        singleFileTemplate: kendo.template($("#file-manager-preview-template").html())
-                    }
-                });
-            }
-
+                }, fileManagerConfig);
+            } 
+            
+            _fileManagerSelector.kendoFileManager(fileManagerConfig);
+            
             let fileManager = modal.find('#fileManagerSelector').getKendoFileManager();
 
             fileManager.executeCommand({
                 command: "TogglePaneCommand",
-                options: { type: "preview" }
+                options: {type: "preview"}
             });
-            
+
             fileManager.toolbar.fileManagerDetailsToggle.switchInstance.toggle();
 
             _btnSelect.click(function () {
@@ -204,11 +164,10 @@
         }
 
         function FileManagerOnSelect(e) {
-            _selectorResult=[];
-            if (e.entries !== undefined && e.entries.length <= _maxSelectCount && e.entries.every(item => jQuery.inArray(item.extension.toLowerCase(), _allowExtension) !== -1))
-            {
+            _selectorResult = [];
+            if (e.entries !== undefined && e.entries.length <= _maxSelectCount && e.entries.every(item => jQuery.inArray(item.extension.toLowerCase(), _allowExtension) !== -1)) {
                 _btnSelect.removeClass('hidden');
-                for (let i=0;i<e.entries.length;i++) {
+                for (let i = 0; i < e.entries.length; i++) {
                     let item = e.entries[i];
                     _selectorResult.push({
                         name: item.name + item.extension,
@@ -219,25 +178,28 @@
                 _btnSelect.addClass('hidden');
             }
         }
-        
-        this.init = function(modalManager) {
+
+        this.init = function (modalManager) {
             _modalManager = modalManager;
             modal = _modalManager.getModal();
             modal.find('.modal-dialog').addClass('modal-xl');
             modal.find('#Allowed').html(_modalManager.getArgs().allowExtension);
-            _allowExtension = _modalManager.getArgs().allowExtension.replaceAll('*','').split(";");
-            _maxSelectCount = parseInt(_modalManager.getArgs().maxSelectCount);
-            
-            if (_allowExtension === undefined){
+            let modalArgs = _modalManager.getArgs();
+            if (modalArgs !== undefined && modalArgs.allowExtension !== undefined)
+                _allowExtension = _modalManager.getArgs().allowExtension.replaceAll('*', '').split(";");
+            if (modalArgs !== undefined && modalArgs.maxSelectCount !== undefined)
+                _maxSelectCount = parseInt(_modalManager.getArgs().maxSelectCount);
+
+            if (_allowExtension === undefined) {
                 _allowExtension = [];
             }
-            
-            if (_maxSelectCount === undefined){
+
+            if (_maxSelectCount === undefined) {
                 _maxSelectCount = 1;
             }
-            
+
             _btnSelect = modal.find('#btnSelectFile');
-            
+
             initFileManager();
         };
     };
