@@ -47,6 +47,44 @@ var select2ViLanguage = {
     }
 }
 
+FroalaEditor.DefineIcon('imageKendoFileManager', {NAME: 'fileManager', SVG_KEY: 'fileManager'});
+FroalaEditor.RegisterCommand('imageKendoFileManager', {
+    title: app.localize('FileManager'),
+    focus: false,
+    undo: true,
+    refreshAfterCallback: false,
+    callback: function () {
+        let frInstance = this;
+        _fileManagerModal.open({
+            allowExtension: '*.jpg;*.png;*.jpeg',
+            maxResultCount: 1
+        }, function(selectedFiles) {
+            if (selectedFiles !== undefined && selectedFiles.length >= 1) {
+                frInstance.image.insert(selectedFiles[selectedFiles.length - 1].path);
+            }
+        })
+    }
+});
+
+FroalaEditor.DefineIcon('videoKendoFileManager', {NAME: 'fileManager', SVG_KEY: 'fileManager'});
+FroalaEditor.RegisterCommand('videoKendoFileManager', {
+    title: app.localize('FileManager'),
+    focus: false,
+    undo: true,
+    refreshAfterCallback: false,
+    callback: function () {
+        let frInstance = this;
+        _fileManagerModal.open({
+            allowExtension: '*.mp4',
+            maxResultCount: 1
+        }, function(selectedFiles) {
+            if (selectedFiles !== undefined && selectedFiles.length >= 1) {
+                frInstance.video.insertFromFileManager(selectedFiles[selectedFiles.length - 1].path);
+            }
+        })
+    }
+});
+
 var frEditorBaseConfig = {
     key: "AV:4~?3xROKLJKYHROLDXDR@d2YYGR_Bc1A8@5@4:1B2D2F2F1?1?2A3@1C1",
     enter: FroalaEditor.ENTER_DIV,
@@ -68,8 +106,10 @@ var frEditorBaseConfig = {
             'buttonsVisible': 2
         }
     },
+    
     fileUploadURL: '/FroalaApi/UploadFile',
     // Image Manager
+    imageInsertButtons: ["imageBack", "|", "imageUpload", "imageByURL", "imageKendoFileManager"],
     imageUploadURL: '/FroalaApi/UploadImage',
     imageUploadParams: {
         __RequestVerificationToken: abp.security.antiForgery.getToken()
@@ -83,7 +123,7 @@ var frEditorBaseConfig = {
         __RequestVerificationToken: abp.security.antiForgery.getToken()
     },
     // Introduce the Video Upload Buttons
-    videoInsertButtons: ['videoBack', '|', 'videoByURL', 'videoEmbed', 'videoUpload'],
+    videoInsertButtons: ["videoBack", "|", "videoByURL", "videoEmbed", "videoUpload", "videoKendoFileManager"],
     // Set the video upload URL.
     videoUploadURL: '/FroalaApi/UploadVideo',
     videoUploadParams: {

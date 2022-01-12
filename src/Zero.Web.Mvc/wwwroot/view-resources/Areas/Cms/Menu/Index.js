@@ -154,15 +154,5 @@
                 getMenus();
             }
         });
-
-        let frEditor = new FroalaEditor($('#TestFroala').get(0), frEditorConfigSimple, function(){
-            frEditor.image.insert('http://localhost:9000/thegioidichvu/20210813_202134 - Copy.jpg');
-            frEditor.image.insert('http://localhost:9000/thegioidichvu/20210813_202134 - Copy.jpg');
-            frEditor.image.insert('http://localhost:9000/thegioidichvu/20210813_202134 - Copy.jpg');
-        });
-        
-        $('#OpenFileManager').on('click', function(){
-            _fileManagerModal.open();
-        })
     });
 })();
