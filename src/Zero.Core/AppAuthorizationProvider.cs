@@ -85,6 +85,11 @@ namespace Zero.Authorization
             category.CreateChildPermission(CmsPermissions.Category_Edit, L("Edit"));
             category.CreateChildPermission(CmsPermissions.Category_Delete, L("Delete"));
             
+            var post = cmsSettings.CreateChildPermission(CmsPermissions.Post, L("Post"));
+            post.CreateChildPermission(CmsPermissions.Post_Publish, L("Publish"));
+            post.CreateChildPermission(CmsPermissions.Post_Create, L("Create"));
+            post.CreateChildPermission(CmsPermissions.Post_Edit, L("Edit"));
+            post.CreateChildPermission(CmsPermissions.Post_Delete, L("Delete"));
             #endregion
             
             #region Administration

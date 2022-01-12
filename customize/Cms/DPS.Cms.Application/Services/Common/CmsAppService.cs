@@ -39,14 +39,16 @@ namespace DPS.Cms.Application.Services.Common
         private readonly IRepository<Tags> _tagsRepository;
         private readonly IRepository<MenuGroup> _menuGroupRepository;
         private readonly CategoryManager _categoryManager;
-        
+        private readonly IRepository<Category> _categoryRepository;
+
         public CmsAppService(IRepository<ImageBlockGroup> imageBlockGroupRepository, 
             IRepository<Widget> widgetRepository, 
             IRepository<PageLayout> pageLayoutRepository,
             IRepository<Tags> tagsRepository,
             IRepository<MenuGroup> menuGroupRepository, 
             IRepository<PageTheme> pageThemeRepository, 
-            CategoryManager categoryManager)
+            CategoryManager categoryManager,
+            IRepository<Category> categoryRepository)
         {
             _imageBlockGroupRepository = imageBlockGroupRepository;
             _widgetRepository = widgetRepository;
@@ -55,6 +57,7 @@ namespace DPS.Cms.Application.Services.Common
             _menuGroupRepository = menuGroupRepository;
             _pageThemeRepository = pageThemeRepository;
             _categoryManager = categoryManager;
+            _categoryRepository = categoryRepository;
         }
 
         #endregion
@@ -305,10 +308,42 @@ namespace DPS.Cms.Application.Services.Common
         #endregion
         
         #region Category
+        
+        private IQueryable<CategoryDto> CategoryQuery(CmsInput input = null)
+        {
+            var query = from o in _categoryRepository.GetAll()
+                    .Where(o => !o.IsDeleted)
+                    .WhereIf(input != null && !string.IsNullOrWhiteSpace(input.Filter), e => EF.Functions.Like(e.Name, $"%{input.Filter}%"))
+                select new CategoryDto
+                {
+                    Id = o.Id,
+                    Numbering = o.Numbering,
+                    Code = o.Code,
+                    Name = o.Name,
+                    Note = o.Note,
+                    Order = o.Order,
+                    IsDefault = o.IsDefault,
+                    IsActive = o.IsActive
+                };
+            return query;
+        }
 
         public async Task<List<CategoryDto>> GetAllCategory()
         {
             return await _categoryManager.GetAllCategory();
+        }
+        
+        public async Task<PagedResultDto<CategoryDto>> GetPagedCategories(CmsInput input)
+        {
+            var objQuery = CategoryQuery(input);
+            var pagedAndFilteredObj = objQuery.OrderBy(input.Sorting ?? "name asc").PageBy(input);
+            var totalCount = await objQuery.CountAsync();
+            var res = await pagedAndFilteredObj.ToListAsync();
+
+            return new PagedResultDto<CategoryDto>(
+                totalCount,
+                res
+            );
         }
         #endregion
         

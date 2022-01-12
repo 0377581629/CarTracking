@@ -141,7 +141,6 @@ namespace DPS.Cms.Application.Services.Menu
             if (input.Id.HasValue)
             {
                 var obj = await _menuGroupRepository.FirstOrDefaultAsync(o => o.Id == (int) input.Id);
-
                 if (obj == null)
                     throw new UserFriendlyException(L("NotFound"));
 

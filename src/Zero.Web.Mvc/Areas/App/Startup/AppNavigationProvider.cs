@@ -101,6 +101,13 @@ namespace Zero.Web.Areas.App.Startup
                                 permissionDependency: new SimplePermissionDependency(CmsPermissions.Category)
                             )
                         )
+                        .AddItem(new MenuItemDefinition(
+                                AppPageNames.Cms.Post,
+                                L("Posts"),
+                                url: $"{ZeroConst.CmsAreas}/Post",
+                                permissionDependency: new SimplePermissionDependency(CmsPermissions.Post)
+                            )
+                        )
                     #endregion
 
                 )

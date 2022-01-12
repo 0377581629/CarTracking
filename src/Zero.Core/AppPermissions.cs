@@ -158,6 +158,12 @@
         public const string Category_Edit = "Cms.Category.Edit";
         public const string Category_Delete = "Cms.Category.Delete";
         
+        public const string Post = "Cms.Post";
+        public const string Post_Publish = "Cms.Post.Publish";
+        public const string Post_Create = "Cms.Post.Create";
+        public const string Post_Edit = "Cms.Post.Edit";
+        public const string Post_Delete = "Cms.Post.Delete";
+        
         public const string Tags = "Cms.Tags";
         public const string Tags_Create = "Cms.Tags.Create";
         public const string Tags_Edit = "Cms.Tags.Edit";

@@ -50,6 +50,8 @@ namespace DPS.Cms.Application.Shared.Interfaces.Common
         #region Category
 
         Task<List<CategoryDto>> GetAllCategory();
+
+        Task<PagedResultDto<CategoryDto>> GetPagedCategories(CmsInput input);
         #endregion
         
         #region Tags
