@@ -1,15 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using Abp.Application.Services.Dto;
 using Abp.Authorization;
 using Abp.Domain.Repositories;
-using Abp.Linq.Extensions;
 using Abp.UI;
 using DPS.Cms.Application.Manager;
 using DPS.Cms.Application.Shared.Dto.Menu;
-using DPS.Cms.Application.Shared.Interfaces;
 using DPS.Cms.Application.Shared.Interfaces.Menu;
 using Microsoft.EntityFrameworkCore;
 using Zero;
@@ -29,18 +26,18 @@ namespace DPS.Cms.Application.Services.Menu
             _menuManager = menuManager;
             _menuRepository = menuRepository;
         }
-        
+
         private IQueryable<NestedItem> MenuNestedQuery(GetAllMenuInput input)
         {
             var query = from obj in _menuRepository.GetAll()
                     .Where(o => o.TenantId == AbpSession.TenantId)
                     .OrderBy(o => o.Code)
-                    .Where(o=>o.MenuGroupId==input.MenuGroupId)
+                    .Where(o => o.MenuGroupId == input.MenuGroupId)
                 select new NestedItem
                 {
                     Id = obj.Id,
                     ParentId = obj.ParentId,
-                    DisplayName = $"{obj.Code} - {obj.Name}"
+                    DisplayName = obj.Name
                 };
             return query;
         }
@@ -95,14 +92,15 @@ namespace DPS.Cms.Application.Services.Menu
             return new NestedItem()
             {
                 Id = menu.Id,
-                DisplayName = $"{menu.Code} - {menu.Name}"
+                DisplayName = menu.Name
             };
         }
 
         [AbpAuthorize(CmsPermissions.Menu_Edit)]
         private async Task<NestedItem> UpdateMenu(CreateOrEditMenuDto input)
         {
-            var obj = await _menuRepository.FirstOrDefaultAsync(o => o.TenantId == AbpSession.TenantId && o.Id == input.Id);
+            var obj = await _menuRepository.FirstOrDefaultAsync(o =>
+                o.TenantId == AbpSession.TenantId && o.Id == input.Id);
 
             if (obj == null)
                 throw new UserFriendlyException(L("NotFound"));
@@ -116,7 +114,7 @@ namespace DPS.Cms.Application.Services.Menu
             return new NestedItem()
             {
                 Id = obj.Id,
-                DisplayName = $"{obj.Code} - {obj.Name}"
+                DisplayName = obj.Name
             };
         }
 
@@ -129,11 +127,11 @@ namespace DPS.Cms.Application.Services.Menu
         [AbpAuthorize(CmsPermissions.Menu_Delete)]
         public async Task Delete(EntityDto<int> input)
         {
-            var obj = await _menuRepository.FirstOrDefaultAsync(o => o.TenantId == AbpSession.TenantId && o.Id == input.Id);
+            var obj = await _menuRepository.FirstOrDefaultAsync(o =>
+                o.TenantId == AbpSession.TenantId && o.Id == input.Id);
             if (obj == null)
                 throw new UserFriendlyException(L("NotFound"));
             await _menuRepository.DeleteAsync(input.Id);
         }
-        
     }
 }

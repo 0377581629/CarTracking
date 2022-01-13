@@ -8,21 +8,9 @@
             @Html.HiddenFor(m => m.Id)
             @Html.HiddenFor(m => m.ParentId)
             <div class="row mb-10">
-                <div class="col-4">
-                    <div class="form-group">
-                        <label>
-                            @L("MenuGroup") <span class="text-danger">*</span>
-                        </label>
-                        <select id="MenuGroupId" name="menuGroupId" class="form-control requiredSelect2">
-                            @if (Model.IsEditMode)
-                            {
-                                <option value="@Model.MenuGroupId" selected>@Model.MenuGroupName</option>
-                            }
-                        </select>
-                    </div>
-                </div>
                 <input type="hidden" name="code" value="@Model.Code" />
-                <div class="col-8">
+                <input type="hidden" name="menuGroupId" value="@Model.MenuGroupId" />
+                <div class="col-12">
                     <div class="form-group">
                         <label>
                             @L("Name") <span class="text-danger">*</span>

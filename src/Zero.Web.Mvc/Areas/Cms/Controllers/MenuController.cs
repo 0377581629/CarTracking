@@ -2,6 +2,7 @@
 using Abp.Application.Services.Dto;
 using Abp.AspNetCore.Mvc.Authorization;
 using Abp.Domain.Repositories;
+using Abp.UI;
 using DPS.Cms.Application.Shared.Dto.Menu;
 using DPS.Cms.Application.Shared.Interfaces;
 using DPS.Cms.Application.Shared.Interfaces.Menu;
@@ -30,16 +31,17 @@ namespace Zero.Web.Areas.Cms.Controllers
         }
 
         [AbpMvcAuthorize(CmsPermissions.Menu_Create, CmsPermissions.Menu_Edit)]
-        public async Task<PartialViewResult> CreateOrEditModal(int? id)
+        public async Task<PartialViewResult> CreateOrEditModal(CreateOrEditMenuInput input)
         {
             var model = new CreateOrEditMenuViewModel(null)
             {
-                Code = StringHelper.ShortIdentity()
+                Code = StringHelper.ShortIdentity(),
+                MenuGroupId = input.MenuGroupId
             };
 
-            if (id.HasValue)
+            if (input.Id.HasValue)
             {
-                var obj = await _menuRepository.GetAsync(id.Value);
+                var obj = await _menuRepository.GetAsync(input.Id.Value);
                 model = ObjectMapper.Map<CreateOrEditMenuViewModel>(obj);
             }
             

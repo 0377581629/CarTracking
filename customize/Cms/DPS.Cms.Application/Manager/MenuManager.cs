@@ -33,7 +33,6 @@ namespace DPS.Cms.Application.Manager
 
         public virtual async Task UpdateAsync(Menu obj)
         {
-            await Validate(obj);
             await _menuRepository.UpdateAsync(obj);
         }
 

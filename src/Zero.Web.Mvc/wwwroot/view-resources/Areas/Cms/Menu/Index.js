@@ -70,9 +70,15 @@
 
     if (_createMenuButton) {
         _createMenuButton.on('click', function () {
-            _createOrEditModal.open({}, function (data) {
-                _ddList.append(baseHelper.NestedItemHtml(data, _permissions.edit, _permissions.delete));
-            });
+            if(menuGroupSelector.val() === null || menuGroupSelector.val() === undefined){
+                abp.message.error(app.localize('PleaseSelectMenuGroup'), app.localize('Error'));
+            }else{
+                _createOrEditModal.open({
+                    menuGroupId: menuGroupSelector.val()
+                }, function (data) {
+                    _ddList.append(baseHelper.NestedItemHtml(data, _permissions.edit, _permissions.delete));
+                });
+            }
         })
     }
 
