@@ -72,39 +72,7 @@ namespace ZERO.Web.Controllers
         {
             try
             {
-                if (!SystemConfig.UseFileServer) 
-                    return Json(Image.List(FileHelper.UploadPath(AbpSession, ZeroEnums.FileType.Image)));
-
-                var minioClient = new MinioClient(SystemConfig.MinioEndPoint,
-                    SystemConfig.MinioAccessKey,
-                    SystemConfig.MinioSecretKey);
-                if (!DebugHelper.IsDebug)
-                    minioClient = minioClient.WithSSL();
-
-                var rootBucket = AsyncHelper.RunSync(() => _fileService.RootFileServerBucketName());
-                
-                if (!AsyncHelper.RunSync(() => minioClient.BucketExistsAsync(rootBucket)))
-                {
-                    AsyncHelper.RunSync(() => minioClient.MakeBucketAsync(rootBucket));
-                }
-
-                var lstImages = new List<ImageModel>();
-                var observable = minioClient.ListObjectsAsync(rootBucket, recursive: true);
-                observable.Subscribe(
-                    item =>
-                    {
-                        if (!item.IsDir && ImageValidation.AllowedImageExtsDefault.Contains(Path.GetExtension(item.Key).RemovePreFix(".")))
-                        {
-                            lstImages.Add(new ImageModel
-                            {
-                                Url = $"http://{SystemConfig.MinioEndPoint}/{SystemConfig.MinioRootBucketName}/{item.Key}",
-                                Thumb = $"http://{SystemConfig.MinioEndPoint}/{SystemConfig.MinioRootBucketName}/{item.Key}"
-                            });
-                        }        
-                    },
-                    ex => Console.WriteLine("Minio Error: {0}", ex.Message));
-                observable.Wait();
-                return Json(lstImages);
+                return Json(Image.List(FileHelper.UploadPath(AbpSession, ZeroEnums.FileType.Image)));
             }
             catch (MinioException e)
             {

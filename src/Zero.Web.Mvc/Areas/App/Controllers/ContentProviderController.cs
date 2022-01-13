@@ -1,21 +1,31 @@
-﻿#if NETSTANDARD1_6
-    using Microsoft.Net.Http.Headers;
-#else
-using System.Net.Http.Headers;
-#endif
+﻿using System.Net.Http.Headers;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reactive.Linq;
+using System.Reactive.Threading.Tasks;
+using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Web;
+using Abp.Configuration.Startup;
+using Abp.Domain.Repositories;
+using Abp.Json;
 using Abp.Runtime.Validation;
-using Abp.UI;
+using Abp.Threading;
 using Abp.Web.Models;
 using Kendo.Mvc.Infrastructure;
 using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using PayPalHttp;
+using Minio;
+using Minio.DataModel;
 using Z.EntityFramework.Extensions.Internal;
+using Zero;
+using Zero.Debugging;
+using Zero.MultiTenancy;
 using Zero.Web.Controllers;
 
 namespace ZERO.Web.Areas.App.Controllers
@@ -23,93 +33,101 @@ namespace ZERO.Web.Areas.App.Controllers
     [DontWrapResult]
     public abstract class ContentProviderController : ZeroControllerBase, IContentProviderController
     {
-        private readonly IContentBrowser _directoryBrowser;
-        private readonly IContentPermission _permission;
-        protected readonly IHostingEnvironment HostingEnvironment;
+        #region Constructor
 
-        protected ContentProviderController(IHostingEnvironment hostingEnvironment)
+        private readonly IContentBrowser _directoryBrowser;
+#pragma warning disable CS0618
+        private readonly IHostingEnvironment _hostingEnvironment;
+#pragma warning restore CS0618
+        private readonly IRepository<Tenant> _tenantRepository;
+        private readonly IFileAppService _fileAppService;
+        private readonly IMultiTenancyConfig _multiTenancyConfig;
+        private MinioClient _minioClient = new(SystemConfig.MinioEndPoint, SystemConfig.MinioAccessKey, SystemConfig.MinioSecretKey);
+
+        protected ContentProviderController(IHostingEnvironment hostingEnvironment, IFileAppService fileAppService, IMultiTenancyConfig multiTenancyConfig, IRepository<Tenant> tenantRepository)
             : this(DI.Current.Resolve<IContentBrowser>(),
-                   DI.Current.Resolve<IContentPermission>(),
-                   hostingEnvironment)
+                hostingEnvironment, fileAppService, multiTenancyConfig, tenantRepository)
         {
         }
 
         protected ContentProviderController(IContentBrowser directoryBrowser,
-            IContentPermission permission,
-            IHostingEnvironment hostingEnvironment)
+            IHostingEnvironment hostingEnvironment, IFileAppService fileAppService, IMultiTenancyConfig multiTenancyConfig, IRepository<Tenant> tenantRepository)
         {
             _directoryBrowser = directoryBrowser;
             _directoryBrowser.HostingEnvironment = hostingEnvironment;
-            _permission = permission;
-            HostingEnvironment = hostingEnvironment;
+            _hostingEnvironment = hostingEnvironment;
+            _fileAppService = fileAppService;
+            _multiTenancyConfig = multiTenancyConfig;
+            _tenantRepository = tenantRepository;
+            ContentPath = RootContentPath();
         }
 
-        /// <summary>
-        /// Gets the base path from which content will be served.
-        /// </summary>
-        protected abstract string ContentPath
+        #endregion
+
+        private readonly string ContentPath;
+
+        private static string Filter => "*.*";
+
+        public async Task<JsonResult> Read(string target, string filter)
         {
-            get;
-        }
-
-        /// <summary>
-        /// Gets the valid file extensions by which served files will be filtered.
-        /// </summary>
-        protected virtual string Filter => "*.*";
-
-        /// <summary>
-        /// Determines if content of a given path can be browsed.
-        /// </summary>
-        /// <param name="path">The path which will be browsed.</param>
-        /// <returns>true if browsing is allowed, otherwise false.</returns>
-        public virtual bool Authorize(string path)
-        {
-            return CanAccess(path);
-        }
-
-        protected virtual bool CanAccess(string path)
-        {
-            var rootPath = Path.GetFullPath(Path.Combine(HostingEnvironment.WebRootPath, ContentPath));
-
-            return _permission.CanAccess(rootPath, path);
-        }
-
-        protected string NormalizePath(string path)
-        {
-            if (string.IsNullOrEmpty(path))
+            if (!SystemConfig.UseFileServer)
             {
-                return Path.GetFullPath(Path.Combine(HostingEnvironment.WebRootPath, ContentPath));
-            }
-            path = path.Replace("/",@"\");
-            var pathElements = path.Split(@"\").ToList();
-            pathElements = pathElements.Where(o => !string.IsNullOrEmpty(o)).ToList();
-            path = HostingEnvironment.WebRootPath;
-            foreach (var pathElement in pathElements)
-            {
-                path += @"\" + pathElement;
-            }
+                var path = NormalizePath(target);
 
-            if (path.Contains(HostingEnvironment.WebRootPath))
-            {
-                while (path.Contains(HostingEnvironment.WebRootPath))
+                if (!Authorize(path)) throw new Exception("Forbidden");
+
+                try
                 {
-                    path = path.ReplaceFirst(HostingEnvironment.WebRootPath, "");
-                }
+                    var files = _directoryBrowser.GetFiles(path, !string.IsNullOrEmpty(filter) ? filter : Filter);
+                    var directories = _directoryBrowser.GetDirectories(path);
+                    var result = files.Concat(directories).Select(VirtualizePath);
 
-                path = HostingEnvironment.WebRootPath + path;
+                    return Json(result.ToArray());
+                }
+                catch (DirectoryNotFoundException)
+                {
+                    throw new Exception("File Not Found");
+                }
+            }
+
+            if (!DebugHelper.IsDebug)
+                _minioClient = _minioClient.WithSSL();
+
+            var rootBucket = ContentPath;
+
+            if (!await _minioClient.BucketExistsAsync(rootBucket))
+                await _minioClient.MakeBucketAsync(rootBucket);
+
+            if (!string.IsNullOrEmpty(target))
+            {
+                target = target.Substring(target.IndexOf(rootBucket, StringComparison.InvariantCultureIgnoreCase) + rootBucket.Length + 1);
             }
             
-            return Path.GetFullPath(path);
+            return Json((await GetFileEntryFromFileServer(rootBucket,target)).ToArray());
         }
 
-        protected FileManagerEntry VirtualizePath(FileManagerEntry entry)
+        private async Task<List<FileManagerEntry>> GetFileEntryFromFileServer(string path, string prefix)
         {
-            entry.Path = entry.Path.Replace(Path.Combine(HostingEnvironment.WebRootPath), "").Replace(@"\", "/");
-            if (entry.Path[0] == '/')
-                entry.Path = entry.Path.Remove(0, 1);
-            return entry;
+            var lstFileEntry = new List<FileManagerEntry>();
+            var meth = _minioClient.GetType().GetMethod("GetObjectListAsync", BindingFlags.NonPublic | BindingFlags.Instance);
+            if (meth == null) return lstFileEntry;
+            // bucket name, prefix, delimiter - Empty if recursive = true
+            var minioObjects = await _minioClient.ListObjectsAsync(path, prefix: prefix, recursive: false);
+            lstFileEntry = minioObjects
+                .Select( item => new FileManagerEntry
+                {
+                    Name = HttpUtility.UrlDecode(item.Key),
+                    Size = (long)item.Size,
+                    Path = $"{(!DebugHelper.IsDebug ? "https" : "http")}://{SystemConfig.MinioEndPoint}/{SystemConfig.MinioRootBucketName}/{HttpUtility.UrlDecode(item.Key)}",
+                    Extension = !item.IsDir ? Path.GetExtension(item.Key) : "",
+                    IsDirectory = item.IsDir,
+                    Modified = item.LastModifiedDateTime ?? DateTime.MinValue
+                })
+                .OrderBy(o=>o.IsDirectory)
+                .ToList();
+            return lstFileEntry;
         }
-        
+
         [DisableValidation]
         public ActionResult Create(string target, FileManagerEntry entry)
         {
@@ -133,7 +151,108 @@ namespace ZERO.Web.Areas.App.Controllers
             return Json(VirtualizePath(newEntry));
         }
 
-        protected FileManagerEntry CopyEntry(string target, FileManagerEntry entry)
+        [DisableValidation]
+        public ActionResult Destroy(FileManagerEntry entry)
+        {
+            var path = NormalizePath(entry.Path);
+
+            if (!string.IsNullOrEmpty(path))
+            {
+                if (entry.IsDirectory)
+                {
+                    DeleteDirectory(path);
+                }
+                else
+                {
+                    DeleteFile(path);
+                }
+
+                return Json(new object[0]);
+            }
+
+            throw new Exception("File Not Found");
+        }
+
+        [DisableValidation]
+        public ActionResult Update(string target, FileManagerEntry entry)
+        {
+            FileManagerEntry newEntry;
+
+            if (!Authorize(NormalizePath(entry.Path)) && !Authorize(NormalizePath(target)))
+            {
+                throw new Exception("Forbidden");
+            }
+
+            newEntry = RenameEntry(entry);
+
+            return Json(VirtualizePath(newEntry));
+        }
+
+        [AcceptVerbs("POST")]
+        [DisableValidation]
+        public virtual ActionResult Upload(string path, IFormFile file)
+        {
+            path = NormalizePath(path);
+            var fileName = Path.GetFileName(file.FileName);
+
+            if (!AuthorizeUpload(path, file)) throw new Exception("Forbidden");
+
+            SaveFile(file, path);
+            var newEntry = _directoryBrowser.GetFile(Path.Combine(path, fileName));
+
+            return Json(VirtualizePath(newEntry));
+        }
+
+        #region Support Method
+
+        private bool CanAccess(string path)
+        {
+            return path.StartsWith(_hostingEnvironment.WebRootFileProvider.GetFileInfo(RootContentPath()).PhysicalPath);
+        }
+
+        private string NormalizePath(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+            {
+                return Path.GetFullPath(Path.Combine(_hostingEnvironment.WebRootPath, ContentPath));
+            }
+
+            path = path.Replace("/", @"\");
+            var pathElements = path.Split(@"\").ToList();
+            pathElements = pathElements.Where(o => !string.IsNullOrEmpty(o)).ToList();
+            path = _hostingEnvironment.WebRootPath;
+            foreach (var pathElement in pathElements)
+            {
+                path += @"\" + pathElement;
+            }
+
+            if (path.Contains(_hostingEnvironment.WebRootPath))
+            {
+                while (path.Contains(_hostingEnvironment.WebRootPath))
+                {
+                    path = path.ReplaceFirst(_hostingEnvironment.WebRootPath, "");
+                }
+
+                path = _hostingEnvironment.WebRootPath + path;
+            }
+
+            return Path.GetFullPath(path);
+        }
+
+        private bool Authorize(string path)
+        {
+            return CanAccess(path);
+        }
+
+        private FileManagerEntry VirtualizePath(FileManagerEntry entry)
+        {
+            entry.Path = entry.Path.Replace(Path.Combine(_hostingEnvironment.WebRootPath), "").Replace(@"\", "/");
+            if (entry.Path[0] == '/')
+                entry.Path = entry.Path.Remove(0, 1);
+            return entry;
+        }
+
+        private FileManagerEntry CopyEntry(string target, FileManagerEntry entry)
         {
             var path = NormalizePath(entry.Path);
             var physicalPath = path;
@@ -155,7 +274,7 @@ namespace ZERO.Web.Areas.App.Controllers
             return newEntry;
         }
 
-        protected void CopyDirectory(DirectoryInfo source, DirectoryInfo target)
+        private void CopyDirectory(DirectoryInfo source, DirectoryInfo target)
         {
             foreach (var fi in source.GetFiles())
             {
@@ -172,7 +291,7 @@ namespace ZERO.Web.Areas.App.Controllers
             }
         }
 
-        protected FileManagerEntry CreateNewFolder(string target, FileManagerEntry entry)
+        private FileManagerEntry CreateNewFolder(string target, FileManagerEntry entry)
         {
             FileManagerEntry newEntry;
             var path = NormalizePath(target);
@@ -185,7 +304,7 @@ namespace ZERO.Web.Areas.App.Controllers
             return newEntry;
         }
 
-        protected string EnsureUniqueName(string target, FileManagerEntry entry)
+        private string EnsureUniqueName(string target, FileManagerEntry entry)
         {
             var tempName = entry.Name + entry.Extension;
             var sequence = 0;
@@ -210,28 +329,8 @@ namespace ZERO.Web.Areas.App.Controllers
 
             return physicalTarget;
         }
-        [DisableValidation]
-        public ActionResult Destroy(FileManagerEntry entry)
-        {
-            var path = NormalizePath(entry.Path);
 
-            if (!string.IsNullOrEmpty(path))
-            {
-                if (entry.IsDirectory)
-                {
-                    DeleteDirectory(path);
-                }
-                else
-                {
-                    DeleteFile(path);
-                }
-
-                return Json(new object[0]);
-            }
-            throw new Exception("File Not Found");
-        }
-
-        protected void DeleteFile(string path)
+        private void DeleteFile(string path)
         {
             if (!Authorize(path))
             {
@@ -246,7 +345,7 @@ namespace ZERO.Web.Areas.App.Controllers
             }
         }
 
-        protected void DeleteDirectory(string path)
+        private void DeleteDirectory(string path)
         {
             if (!Authorize(path))
             {
@@ -260,53 +359,16 @@ namespace ZERO.Web.Areas.App.Controllers
                 Directory.Delete(physicalPath, true);
             }
         }
-        
-        public JsonResult Read(string target, string filter)
+
+        private bool IsValidFile(string fileName)
         {
-            var path = NormalizePath(target);
-            
-            if (Authorize(path))
-            {
-                try
-                {
-                    var files = _directoryBrowser.GetFiles(path, !string.IsNullOrEmpty(filter)?filter:Filter);
-                    var directories = _directoryBrowser.GetDirectories(path);
-                    var result = files.Concat(directories).Select(VirtualizePath);
+            var extension = Path.GetExtension(fileName);
+            var allowedExtensions = Filter.Split(',');
 
-                    return Json(result.ToArray());
-                }
-                catch (DirectoryNotFoundException)
-                {
-                    throw new Exception("File Not Found");
-                }
-            }
-
-            throw new Exception("Forbidden");
+            return allowedExtensions.Any(e => e.Equals("*.*") || e.EndsWith(extension, StringComparison.OrdinalIgnoreCase));
         }
 
-        /// <summary>
-        /// Updates an entry with a given entry.
-        /// </summary>
-        /// <param name="path">The path to the parent folder in which the folder should be created.</param>
-        /// <param name="entry">The entry.</param>
-        /// <returns>An empty <see cref="ContentResult"/>.</returns>
-        /// <exception cref="HttpException">Forbidden</exception>
-        [DisableValidation]
-        public ActionResult Update(string target, FileManagerEntry entry)
-        {
-            FileManagerEntry newEntry;
-
-            if (!Authorize(NormalizePath(entry.Path)) && !Authorize(NormalizePath(target)))
-            {
-                throw new Exception("Forbidden");
-            }
-
-            newEntry = RenameEntry(entry);
-
-            return Json(VirtualizePath(newEntry));
-        }
-
-        protected FileManagerEntry RenameEntry(FileManagerEntry entry)
+        private FileManagerEntry RenameEntry(FileManagerEntry entry)
         {
             var path = NormalizePath(entry.Path);
             var physicalPath = path;
@@ -328,13 +390,7 @@ namespace ZERO.Web.Areas.App.Controllers
             return newEntry;
         }
 
-        /// <summary>
-        /// Determines if a file can be uploaded to a given path.
-        /// </summary>
-        /// <param name="path">The path to which the file should be uploaded.</param>
-        /// <param name="file">The file which should be uploaded.</param>
-        /// <returns>true if the upload is allowed, otherwise false.</returns>
-        public bool AuthorizeUpload(string path, IFormFile file)
+        private bool AuthorizeUpload(string path, IFormFile file)
         {
             if (!CanAccess(path))
             {
@@ -350,41 +406,13 @@ namespace ZERO.Web.Areas.App.Controllers
             return true;
         }
 
-        private bool IsValidFile(string fileName)
+        private string GetFileName(IFormFile file)
         {
-            var extension = Path.GetExtension(fileName);
-            var allowedExtensions = Filter.Split(',');
-
-            return allowedExtensions.Any(e => e.Equals("*.*") || e.EndsWith(extension, StringComparison.OrdinalIgnoreCase));
+            var fileContent = ContentDispositionHeaderValue.Parse(file.ContentDisposition);
+            return Path.GetFileName(fileContent.FileName.Trim('"'));
         }
 
-        /// <summary>
-        /// Uploads a file to a given path.
-        /// </summary>
-        /// <param name="path">The path to which the file should be uploaded.</param>
-        /// <param name="file">The file which should be uploaded.</param>
-        /// <returns>A <see cref="JsonResult"/> containing the uploaded file's size and name.</returns>
-        /// <exception cref="HttpException">Forbidden</exception>
-        [AcceptVerbs("POST")]
-        [DisableValidation]
-        public virtual ActionResult Upload(string path, IFormFile file)
-        {
-            FileManagerEntry newEntry;
-            path = NormalizePath(path);
-            var fileName = Path.GetFileName(file.FileName);
-
-            if (AuthorizeUpload(path, file))
-            {
-                SaveFile(file, path);
-                newEntry = _directoryBrowser.GetFile(Path.Combine(path, fileName));
-
-                return Json(VirtualizePath(newEntry));
-            }
-
-            throw new Exception("Forbidden");
-        }
-
-        protected void SaveFile(IFormFile file, string pathToSave)
+        private void SaveFile(IFormFile file, string pathToSave)
         {
             try
             {
@@ -394,21 +422,46 @@ namespace ZERO.Web.Areas.App.Controllers
             }
             catch (Exception ex)
             {
-                Logger.Error("Upload - SaveFile",ex);
+                Logger.Error("Upload - SaveFile", ex);
                 throw new Exception(ex.Message);
             }
         }
 
-        public string GetFileName(IFormFile file)
+        private const string ContentFolderRoot = "Files";
+
+        private string RootContentPath()
         {
-            var fileContent = ContentDispositionHeaderValue.Parse(file.ContentDisposition);
-            return Path.GetFileName(fileContent.FileName.Trim('"'));
+            if (SystemConfig.UseFileServer) return AsyncHelper.RunSync(() => _fileAppService.RootFileServerBucketName());
+
+            var targetPath = ContentFolderRoot;
+
+            if (_multiTenancyConfig.IsEnabled && AbpSession.TenantId.HasValue)
+            {
+                var currentTenant = _tenantRepository.Get(AbpSession.TenantId.Value);
+                targetPath = Path.Combine(targetPath, currentTenant.TenancyName);
+            }
+            else
+            {
+                targetPath = Path.Combine(targetPath, "Host");
+            }
+
+            if (AbpSession.UserId.HasValue)
+                targetPath = Path.Combine(targetPath, AbpSession.UserId.ToString());
+
+            var physicalPath = _hostingEnvironment.WebRootFileProvider.GetFileInfo(targetPath).PhysicalPath;
+
+            if (!Directory.Exists(physicalPath))
+                Directory.CreateDirectory(physicalPath);
+
+            return targetPath;
         }
+
+        #endregion
     }
-    
+
     public interface IContentProviderController
     {
-        JsonResult Read(string target, string filter);
+        Task<JsonResult> Read(string target, string filter);
 
         ActionResult Destroy(FileManagerEntry entry);
 

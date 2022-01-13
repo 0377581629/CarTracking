@@ -52,7 +52,6 @@
                         {name: "createFolder"},
                         {name: "upload"},
                         {name: "sortField"},
-                        {name: "changeView"},
                         {name: "spacer"},
                         {name: "details"},
                         {name: "search"}
@@ -147,15 +146,6 @@
             } 
             
             _fileManagerSelector.kendoFileManager(fileManagerConfig);
-            
-            let fileManager = modal.find('#fileManagerSelector').getKendoFileManager();
-
-            fileManager.executeCommand({
-                command: "TogglePaneCommand",
-                options: {type: "preview"}
-            });
-
-            fileManager.toolbar.fileManagerDetailsToggle.switchInstance.toggle();
 
             _btnSelect.click(function () {
                 _modalManager.setResult(_selectorResult);

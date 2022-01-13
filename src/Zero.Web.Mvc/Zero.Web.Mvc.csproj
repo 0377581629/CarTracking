@@ -51,6 +51,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\3rds\FroalaSDK\FroalaEditorSDK.csproj" />
+    <ProjectReference Include="..\..\3rds\MinioSDK\MinioSDK.csproj" />
     <ProjectReference Include="..\Zero.Web.Core\Zero.Web.Core.csproj" />
   </ItemGroup>
 
@@ -66,7 +67,6 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Minio" Version="3.1.13" />
   </ItemGroup>
 
   <!-- Report -->

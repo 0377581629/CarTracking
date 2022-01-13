@@ -100,4 +100,6 @@
     });
 
     getMenus();
+    
+    _fileManagerModal.open();
 });
