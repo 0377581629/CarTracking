@@ -1,11 +1,31 @@
-﻿using DPS.Cms.Application.Shared.Dto.Menu;
+﻿using Abp.AutoMapper;
+using Abp.Domain.Entities;
+using DPS.Cms.Application.Shared.Dto.Menu;
 
 namespace Zero.Web.Areas.Cms.Models.Menu
 {
-    public class CreateOrEditMenuViewModel
+    [AutoMapFrom(typeof(DPS.Cms.Core.Menu.Menu))]
+    public class CreateOrEditMenuViewModel: Entity<int?>
     {
-        public CreateOrEditMenuDto Menu { get; set; }
+        public int? ParentId { get; set; }
 
-        public bool IsEditMode => Menu.Id.HasValue;
+        public CreateOrEditMenuViewModel(int? parentId)
+        {
+            ParentId = parentId;
+        }
+        
+        public string Code { get; set; }
+
+        public string Name { get; set; }
+        
+        public string Url { get; set; }
+        
+        public int MenuGroupId { get; set; }
+        
+        public int MenuGroupCode { get; set; }
+        
+        public int MenuGroupName { get; set; }
+        
+        public bool IsEditMode => Id.HasValue;
     }
 }

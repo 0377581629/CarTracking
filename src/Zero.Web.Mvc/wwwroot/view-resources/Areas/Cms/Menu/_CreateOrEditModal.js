@@ -31,10 +31,11 @@
             const Menu = _$MenuInformationForm.serializeFormToObject();
 
             _modalManager.setBusy(true);
-            _MenusService.createOrEdit(
+            _MenusService.createOrEditMenu(
                 Menu
-            ).done(function () {
+            ).done(function (result) {
                 abp.notify.info(app.localize('SavedSuccessfully'));
+                _modalManager.setResult(result);
                 _modalManager.close();
                 abp.event.trigger('app.createOrEditMenuModalSaved');
             }).always(function () {

@@ -3,7 +3,7 @@ using Abp.Application.Services;
 using Abp.Application.Services.Dto;
 using DPS.Cms.Application.Shared.Dto.MenuGroup;
 
-namespace DPS.Cms.Application.Shared.Interfaces
+namespace DPS.Cms.Application.Shared.Interfaces.Menu
 {
     public interface IMenuGroupAppService: IApplicationService 
     {
