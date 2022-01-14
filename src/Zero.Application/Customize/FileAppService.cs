@@ -7,13 +7,11 @@ using Abp.Authorization.Users;
 using Abp.Configuration.Startup;
 using Abp.Domain.Repositories;
 using Abp.Extensions;
-using Abp.MultiTenancy;
 using Abp.Runtime.Session;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Zero.Authorization.Roles;
 using Zero.Authorization.Users;
-using Zero.MultiTenancy;
 
 namespace Zero.Customize
 {
@@ -22,21 +20,18 @@ namespace Zero.Customize
     {
         #region Constructor
 
-        private readonly IRepository<Tenant> _tenantRepository;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IMultiTenancyConfig _multiTenancyConfig;
         private readonly UserManager _userManager;
         private readonly IRepository<UserRole, long> _userRoleRepository;
         private readonly RoleManager _roleManager;
         public FileAppService(
-            IRepository<Tenant> tenantRepository,
             IWebHostEnvironment webHostEnvironment, 
             IMultiTenancyConfig multiTenancyConfig, 
             UserManager userManager, 
             IRepository<UserRole, long> userRoleRepository, 
             RoleManager roleManager)
         {
-            _tenantRepository = tenantRepository;
             _webHostEnvironment = webHostEnvironment;
             _multiTenancyConfig = multiTenancyConfig;
             _userManager = userManager;
@@ -45,8 +40,6 @@ namespace Zero.Customize
         }
 
         #endregion
-
-        private const string ContentFolderRoot = "Files";
 
         public string PhysRootPath()
         {
@@ -58,26 +51,12 @@ namespace Zero.Customize
             return _webHostEnvironment.WebRootFileProvider.GetFileInfo(input).PhysicalPath;
         }
 
-        public string FileFolder(string extentPath)
+        public async Task<string> FileFolder(string extentPath)
         {
-            var targetPath = ContentFolderRoot;
-
-            if (AbpSession.MultiTenancySide == MultiTenancySides.Tenant && AbpSession.TenantId.HasValue)
-            {
-                var currentTenant = _tenantRepository.Get(AbpSession.TenantId.Value);
-                targetPath = Path.Combine(targetPath, currentTenant.TenancyName);
-            }
-            else
-            {
-                targetPath = Path.Combine(targetPath, "Host");
-            }
-
-            if (AbpSession.UserId.HasValue)
-                targetPath = Path.Combine(targetPath, AbpSession.UserId.ToString());
+            var targetPath = FileHelper.UploadPath(_multiTenancyConfig, AbpSession, await IsAdminUser());
 
             if (!string.IsNullOrEmpty(extentPath))
                 targetPath = Path.Combine(targetPath, extentPath);
-            
             
             var physicalPath = _webHostEnvironment.WebRootFileProvider.GetFileInfo(targetPath).PhysicalPath;
 
@@ -85,10 +64,15 @@ namespace Zero.Customize
                 Directory.CreateDirectory(physicalPath);
             return targetPath;
         }
-
-        public string SavePath(string extentPath = null)
+        
+        public async Task<string> RootFileServerBucketName()
         {
-            return _webHostEnvironment.WebRootFileProvider.GetFileInfo(FileFolder(extentPath)).PhysicalPath;
+            return FileHelper.FileServerRootPath(_multiTenancyConfig, AbpSession, await IsAdminUser());
+        }
+
+        public async Task<string> SavePath(string extentPath = null)
+        {
+            return _webHostEnvironment.WebRootFileProvider.GetFileInfo(await FileFolder(extentPath)).PhysicalPath;
         }
 
         public string PhysicalPath(string input)
@@ -127,13 +111,13 @@ namespace Zero.Customize
 
         public async Task<string> SaveFile(string newFileName, byte[] data)
         {
-            var fileFolder = FileFolder(null);
+            var fileFolder = await FileFolder(null);
             var newFilePath = Path.Combine(_webHostEnvironment.WebRootFileProvider.GetFileInfo(fileFolder).PhysicalPath, newFileName);
             await File.WriteAllBytesAsync(newFilePath, data);
             return "/" + fileFolder.Replace(@"\", "/") + "/" + newFileName;
         }
 
-        public async Task<string> RootFileServerBucketName()
+        private async Task<bool> IsAdminUser()
         {
             var currentUser = await _userManager.GetUserAsync(AbpSession.ToUserIdentifier());
             var roleIds = await  _userRoleRepository.GetAll()
@@ -146,7 +130,8 @@ namespace Zero.Customize
                 var roles = await _roleManager.Roles.Where(x => roleIds.Contains(x.Id)).ToListAsync();
                 isAdminUser = roles.FirstOrDefault(o => o.Name == StaticRoleNames.Tenants.Admin) != null;
             }
-            return FileHelper.FileServerRootPath(_multiTenancyConfig, AbpSession, isAdminUser);
+
+            return isAdminUser;
         }
     }
 }

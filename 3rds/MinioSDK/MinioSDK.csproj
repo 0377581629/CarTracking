@@ -5,8 +5,8 @@
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <SignAssembly>true</SignAssembly>
     <PublicSign Condition="'$(OS)' != 'Windows_NT'">true</PublicSign>
-    <TargetFramework>netstandard2.0</TargetFramework>
     <PackageId>MinioSDK</PackageId>
+    <TargetFrameworks>net5.0;netstandard2.0</TargetFrameworks>
   </PropertyGroup>
 
   <PropertyGroup Label="Package">

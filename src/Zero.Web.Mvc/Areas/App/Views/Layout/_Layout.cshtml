@@ -179,10 +179,10 @@
         <div class="#:styles.filePreview#">
         	#if(kendo.getFileGroup(selection[0].extension, true) == "file-image"){#
         	    #if (selection[0].path.indexOf("http")>-1) {#
-        	        <img src="#:selection[0].path#" style="max-width: 100%"/>
+        	        <img src="#:selection[0].actualPath#" style="max-width: 100%"/>
         	    #}
         	    else {#
-        	        <img src="/#:selection[0].path#" style="max-width: 100%"/>
+        	        <img src="/#:selection[0].actualPath#" style="max-width: 100%"/>
         	    #}#
             #} else {#
             	<span class='k-file-icon k-icon k-i-#: !selection[0].isDirectory ? kendo.getFileGroup(selection[0].extension, true) : "folder" #'></span>

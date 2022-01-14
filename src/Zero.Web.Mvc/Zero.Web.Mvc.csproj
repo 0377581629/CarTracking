@@ -70,11 +70,6 @@
   </ItemGroup>
 
   <!-- Report -->
-  <ItemGroup>
-    <Reference Include="Kendo.Mvc, Version=2021.1.119.0, Culture=neutral, PublicKeyToken=121fae78165ba3d4">
-      <HintPath>..\..\3rds\Telerik\Kendo.Mvc.dll</HintPath>
-    </Reference>
-  </ItemGroup>
 
   <ItemGroup>
     <Reference Include="Telerik.Reporting, Version=15.0.21.120, Culture=neutral, PublicKeyToken=a9d7983dfcc261be">

@@ -16,6 +16,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\3rds\MinioSDK\MinioSDK.csproj" />
     <ProjectReference Include="..\..\customize\Cms\DPS.Cms.Application\DPS.Cms.Application.csproj" />
     <ProjectReference Include="..\Zero.Application\Zero.Application.csproj" />
     <ProjectReference Include="..\Zero.EntityFrameworkCore\Zero.EntityFrameworkCore.csproj" />
@@ -46,11 +47,9 @@
 
   <ItemGroup>
     <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="5.0.1" />
-    <PackageReference Include="System.Drawing.Common" Version="5.0.1" />
     <PackageReference Include="System.Security.Cryptography.Pkcs" Version="5.0.1" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
     <PackageReference Include="Microsoft.AspNetCore.DataProtection.Abstractions" Version="5.0.3" />
-    
   </ItemGroup>
 
 </Project>

@@ -7,8 +7,8 @@ var _globalViewFileModal = new app.ModalManager({
 });
 
 var _fileManagerModal = new app.ModalManager({
-    viewUrl: abp.appPath + 'App/FileManagerData/FileManagerModal',
-    scriptUrl: abp.appPath + 'view-resources/Areas/App/FileManagerData/_FileManagerModal.js',
+    viewUrl: abp.appPath + 'App/FilesManager/FileManagerModal',
+    scriptUrl: abp.appPath + 'view-resources/Areas/App/FilesManager/_FileManagerModal.js',
     modalClass: 'FileManagerModal'
 });
 
