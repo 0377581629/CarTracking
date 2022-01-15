@@ -47,6 +47,7 @@
 
     <text name="MB_Submit">Xác nhận</text>
     <text name="MB_Invalid">Không hợp lệ</text>
+    <text name="NotFound">Không có bản ghi</text>
     <!--    -->
     
     <!--  Cms  -->
@@ -123,6 +124,11 @@
     <text name="Posts">Bài viết</text>
     <text name="Post">Bài viết</text>
     <text name="PostHeaderInfo">Danh sách bài viết</text>
+    
+    <text name="NewPostsHeaderInfo">Thêm mới danh sách bài viết</text>
+    <text name="EditPostHeaderInfo">Cập nhật danh sách bài viết</text>
+    
+    <text name="BackToListingPage">Trở lại danh sách</text>
     <!--    -->
     
     <!--  Cms - Common  -->
@@ -196,6 +202,7 @@
     <text name="Content">Nội dung</text>
     <text name="Note">Ghi chú</text>
     <text name="Description">Mô tả</text>
+    <text name="Summary">Tóm tắt</text>
 
     <text name="SelectAll">Tất cả</text>
     <text name="NoneSelect">Không lựa chọn</text>
@@ -333,6 +340,9 @@
     <text name="AdditionalWebhookHeaders">Header bổ sung</text>
 
     <text name="Details">Chi tiết</text>
+    <text name="Views">Views</text>
+    <text name="User">User</text>
+    <text name="STT">STT</text>
     
     <text name="ViewWebhookSecret">Xem</text>
     <text name="WebhookSecret">Mã an ninh</text>

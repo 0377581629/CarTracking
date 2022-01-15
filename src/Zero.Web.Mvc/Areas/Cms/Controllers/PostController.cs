@@ -3,6 +3,7 @@ using Abp.Application.Services.Dto;
 using Abp.AspNetCore.Mvc.Authorization;
 using DPS.Cms.Application.Shared.Dto.Post;
 using DPS.Cms.Application.Shared.Interfaces;
+using DPS.Cms.Application.Shared.Interfaces.Common;
 using Microsoft.AspNetCore.Mvc;
 using Zero.Authorization;
 using Zero.Web.Areas.Cms.Models.Post;
@@ -15,9 +16,11 @@ namespace Zero.Web.Areas.Cms.Controllers
     public class PostController : ZeroControllerBase
     {
         private readonly IPostAppService _postAppService;
-        public PostController(IPostAppService postAppService)
+        private readonly ICmsAppService _cmsAppService;
+        public PostController(IPostAppService postAppService, ICmsAppService cmsAppService)
         {
             _postAppService = postAppService;
+            _cmsAppService = cmsAppService;
         }
 
         public ActionResult Index()
@@ -31,7 +34,7 @@ namespace Zero.Web.Areas.Cms.Controllers
         }
 
         [AbpMvcAuthorize(CmsPermissions.Post_Create, CmsPermissions.Post_Edit)]
-        public async Task<PartialViewResult> CreateOrEdit(int? id)
+        public async Task<ActionResult> CreateOrEdit(int? id)
         {
             GetPostForEditOutput objEdit;
 
@@ -47,13 +50,13 @@ namespace Zero.Web.Areas.Cms.Controllers
                     }
                 };
             }
-
             var viewModel = new CreateOrEditPostViewModel()
             {
-                Post = objEdit.Post
+                Post = objEdit.Post,
+                ListCategory = await _cmsAppService.GetCategory()
             };
 
-            return PartialView("CreateOrEdit", viewModel);
+            return View("CreateOrEdit", viewModel);
         }
     }
 }

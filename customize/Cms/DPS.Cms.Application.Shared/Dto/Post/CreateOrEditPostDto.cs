@@ -1,11 +1,19 @@
-﻿using DPS.Cms.Core.Shared;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using Abp.Domain.Entities;
+using DPS.Cms.Application.Shared.Dto.Post.PostTags;
+using DPS.Cms.Application.Shared.Dto.Tags;
+using DPS.Cms.Core.Shared;
+using JetBrains.Annotations;
+using Zero;
 using Zero.Customize.Dto.Base;
 
 namespace DPS.Cms.Application.Shared.Dto.Post
 {
-    public class CreateOrEditPostDto  : SimpleCreateOrEditEntityDto, IHaveSeoInfo
+    public class CreateOrEditPostDto  : SimpleCreateOrEditDto, IHaveSeoInfo, IMayHaveTenant
     {
-        public int CategoryId { get; set; }
+        public int? CategoryId { get; set; }
         
         public string CategoryCode { get; set; }
         
@@ -35,5 +43,13 @@ namespace DPS.Cms.Application.Shared.Dto.Post
         public bool AuthorDefault { get; set; }
         public string Author { get; set; }
         #endregion
+
+        public int? TenantId { get; set; }
+        
+        [CanBeNull] 
+        public List<PostTagDetailDto> ListTags { get; set; }
+    
+        [StringLength(ZeroConst.MaxNameLength, MinimumLength = ZeroConst.MinNameLength)]
+        public string Name { get; set; }
     }
 }

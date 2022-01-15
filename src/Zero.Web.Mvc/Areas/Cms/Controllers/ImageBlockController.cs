@@ -29,7 +29,7 @@ namespace Zero.Web.Areas.Cms.Controllers
 
             return View(model);
         }
-
+        
         [AbpMvcAuthorize(CmsPermissions.ImageBlock_Create, CmsPermissions.ImageBlock_Edit)]
         public async Task<PartialViewResult> CreateOrEditModal(int? id)
         {
@@ -38,7 +38,8 @@ namespace Zero.Web.Areas.Cms.Controllers
 			if (id.HasValue){
 				objEdit = await _imageBlockAppService.GetImageBlockForEdit(new EntityDto { Id = (int) id });
 			}
-			else{
+			else 
+			{
 				objEdit = new GetImageBlockForEditOutput{
 					ImageBlock = new CreateOrEditImageBlockDto()
 					{
@@ -47,12 +48,12 @@ namespace Zero.Web.Areas.Cms.Controllers
 					}
 				};
 			}
-
+			
 			var viewModel = new CreateOrEditImageBlockModalViewModel()
             {
 				ImageBlock = objEdit.ImageBlock
             };
-
+			
             return PartialView("_CreateOrEditModal", viewModel);
         }
     }

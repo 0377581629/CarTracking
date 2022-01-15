@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Zero.EntityFrameworkCore;
 
 namespace Zero.Migrations
 {
     [DbContext(typeof(ZeroDbContext))]
-    partial class ZeroDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220115085520_PostTagDetail_Update_Colum_IsDelete")]
+    partial class PostTagDetail_Update_Colum_IsDelete
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

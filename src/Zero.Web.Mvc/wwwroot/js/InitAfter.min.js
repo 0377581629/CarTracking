@@ -418,7 +418,6 @@ function slugify(text) {
         }
 
         baseHelper.SelectSingleFile = function (allow, selectFileButton, cancelFileButton, fileName, fileUrl, imgHolder, wrapper, customClassAfterChange) {
-
             if (allow === undefined || allow == null)
                 allow = "*.jpg,*.png";
             if (selectFileButton) {
@@ -432,18 +431,18 @@ function slugify(text) {
                             if (fileName) fileName.val(selected[selected.length - 1].name);
                             if (imgHolder) imgHolder.attr('src', selected[selected.length - 1].path);
                             if (wrapper && customClassAfterChange) wrapper.addClass(customClassAfterChange);
+                        }  if (cancelFileButton) {
+                            cancelFileButton.on('click', function () {
+                                if (fileUrl) fileUrl.val('');
+                                if (fileName) fileName.val('');
+                                if (imgHolder) imgHolder.attr('src', imgHolder.attr('default-src'));
+                                if (wrapper && customClassAfterChange) wrapper.removeClass(customClassAfterChange);
+                            });
                         }
                     });
                 });
             }
-            if (cancelFileButton) {
-                cancelFileButton.on('click', function () {
-                    if (fileUrl) fileUrl.val('');
-                    if (fileName) fileName.val('');
-                    if (imgHolder) imgHolder.attr('src', imgHolder.attr('default-src'));
-                    if (wrapper && customClassAfterChange) wrapper.removeClass(customClassAfterChange);
-                });
-            }
+          
         }
 
         baseHelper.ShowCheckBox = function (id, customClass = '', checked = false) {
