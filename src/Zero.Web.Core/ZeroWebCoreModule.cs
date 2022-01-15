@@ -130,8 +130,6 @@ namespace Zero.Web
 
             IocManager.Resolve<ApplicationPartManager>()
                 .AddApplicationPartsIfNotAddedBefore(typeof(ZeroWebCoreModule).Assembly);
-            
-            
         }
 
         private void SetAppFolders()

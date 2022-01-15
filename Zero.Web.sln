@@ -55,6 +55,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DPS.Cms.Application.Shared"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DPS.Cms.Application", "customize\Cms\DPS.Cms.Application\DPS.Cms.Application.csproj", "{FEC10E45-D3CA-4FCC-9786-5A63F811AEE9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinioSDK", "3rds\MinioSDK\MinioSDK.csproj", "{62851A15-6DD0-4D10-9A9D-816A09FA5B26}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -137,6 +139,10 @@ Global
 		{FEC10E45-D3CA-4FCC-9786-5A63F811AEE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FEC10E45-D3CA-4FCC-9786-5A63F811AEE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FEC10E45-D3CA-4FCC-9786-5A63F811AEE9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62851A15-6DD0-4D10-9A9D-816A09FA5B26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62851A15-6DD0-4D10-9A9D-816A09FA5B26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62851A15-6DD0-4D10-9A9D-816A09FA5B26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62851A15-6DD0-4D10-9A9D-816A09FA5B26}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -163,6 +169,7 @@ Global
 		{AC7F5CCE-EDD7-4472-BBC7-67D10B33402C} = {A184D172-85C1-4059-B0AB-EA8C3C241404}
 		{8B00FA4C-29B6-4C52-AD54-A973366884FE} = {A184D172-85C1-4059-B0AB-EA8C3C241404}
 		{FEC10E45-D3CA-4FCC-9786-5A63F811AEE9} = {A184D172-85C1-4059-B0AB-EA8C3C241404}
+		{62851A15-6DD0-4D10-9A9D-816A09FA5B26} = {B57AF337-BDC4-4734-82A1-2E59237FEA44}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {23CD4D4B-B131-473D-9ECB-5DD96E739671}

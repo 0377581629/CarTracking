@@ -1,4 +1,5 @@
 ﻿@model Zero.Web.Areas.Cms.Models.Menu.MenuViewModel
+
 @{
     ViewBag.CurrentPageName = AppPageNames.Cms.Menu;
 }
@@ -6,9 +7,10 @@
 @section Scripts
 {
     <script abp-src="/3rds/jquery.nestable/jquery.nestable.js" asp-append-version="true"></script>
-        <script abp-src="/3rds/jquery.sortable/jquery.sortable.js" asp-append-version="true"></script>
+    <script abp-src="/3rds/jquery.sortable/jquery.sortable.js" asp-append-version="true"></script>
     <script abp-src="@ZeroConst.ScriptPathCms/Menu/Index.js" asp-append-version="true"></script>
 }
+
 @section Styles {
     <link href="/3rds/jquery.nestable/jquery.nestable.css" rel="stylesheet"/>
     <link href="/3rds/jquery.nestable/jquery.nestable-custom.css" rel="stylesheet"/>
@@ -24,52 +26,46 @@
             </button>
         }
     </abp-page-subheader>
-
     <div class="@(await GetContainerClass())">
         <div class="card card-custom gutter-b">
-            <div class="card-body">
+            <div class="card-body" id="MenuWrapper">
                 <div class="form">
                     <div id="MenusFormFilter">
                         <div class="row">
-                            <div class="col-4">
+                            <div class="col-10">
+                                <label>@L("MenuGroup")</label>
                                 <div class="form-group">
-                                    <label>@L("MenuGroup")</label>
                                     <select id="MenuGroupSelector" class="form-control">
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-8">
+                            <div class="col-2">
+                                <label style="color: transparent">@L("Search")</label>
+                                
                                 <div class="form-group">
-                                    <label>@L("Search")</label>
-                                    <div class="input-group">
-                                        <input id="MenusTableFilter" class="form-control" type="text" value="@ViewBag.FilterText" placeholder="@L("SearchWithThreeDot")" aria-describedby="basic-addon2">
-                                        <span class="input-group-btn">
-                                            <button type="button" name="RefreshButton" class="btn btn-primary">
-                                                <i class="fa fa-search"></i>
-                                            </button>
-                                        </span>
-                                    </div>
+                                    <button type="button" name="RefreshButton" class="btn btn-icon btn-primary w-p100">
+                                        <i class="fa fa-search"></i>
+                                    </button>
                                 </div>
                             </div>
+                            
                         </div>
                     </div>
                 </div>
-                <div>
+                <div class="">
                     <div class="dd">
                         <ol class="dd-list" id="dd-list">
                         </ol>
                     </div>
                 </div>
             </div>
-            @if (IsGranted(CmsPermissions.Menu_Create) || IsGranted(CmsPermissions.Menu_Edit))
-            {
-                <div class="card-footer py-15">
-                    <button type="button" id="UpdateStructureButton" class="btn btn-primary mr-2 float-right">
-                        <i class="la la-save"></i> @L("UpdateStructure")
-                    </button>
-                </div>
-            }
-            <textarea id="TestFroala" class="frSimpleEditor" initEditor="false"></textarea>
+
+            <div class="card-footer py-15">
+                <button type="button" id="UpdateStructureButton" class="btn btn-primary mr-2 float-right">
+                    <i class="la la-save"></i> @L("UpdateStructure")
+                </button>
+            </div>
+
         </div>
     </div>
 </div>

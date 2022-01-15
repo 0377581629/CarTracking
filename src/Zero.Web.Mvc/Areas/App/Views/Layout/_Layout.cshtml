@@ -178,7 +178,12 @@
     <div class="#:styles.fileInfo#">
         <div class="#:styles.filePreview#">
         	#if(kendo.getFileGroup(selection[0].extension, true) == "file-image"){#
-            	<img src="/#:selection[0].path#" style="max-width: 100%"/> 
+        	    #if (selection[0].path.indexOf("http")>-1) {#
+        	        <img src="#:selection[0].actualPath#" style="max-width: 100%"/>
+        	    #}
+        	    else {#
+        	        <img src="/#:selection[0].actualPath#" style="max-width: 100%"/>
+        	    #}#
             #} else {#
             	<span class='k-file-icon k-icon k-i-#: !selection[0].isDirectory ? kendo.getFileGroup(selection[0].extension, true) : "folder" #'></span>
             #}#
@@ -188,19 +193,19 @@
         <dl class="#:styles.fileMeta#">
             #for(var i = 0; i < metaFields.length; i+=1){#
             #var field = metaFields[i]#
+            #if (field != "created" && field != "createdUtc") {#
             <dt class="#:styles.metaLabel#">#:messages[field]#: </dt>
             <dd class="#:styles.metaValue# #:styles[field]#">
-                #if(field == "size"){#
-                 #:kendo.getFileSizeMessage(selection[0][field])#
-                #} else if(selection[0][field] instanceof Date) {#
-                 #:kendo.toString(selection[0][field], "G")#
-                #} else if(field == "extension") {#
-                 #:kendo.getFileGroup(selection[0].extension)#
-                #} else {#
-                 #:selection[0][field]#
+                #if(field == "extension") {#
+                    #:kendo.getFileGroup(selection[0].extension)#
+                #} else if(field == "size"){#
+                    #:kendo.getFileSizeMessage(selection[0][field])#
+                #} else if(field == "modified") {#
+                    #:kendo.toString(selection[0][field], "G")#
                 #}#
             </dd>
             <dd class="k-line-break"></dd>
+            #}#
             # } #
         </dl>
         #}#

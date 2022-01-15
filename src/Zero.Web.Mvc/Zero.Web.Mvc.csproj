@@ -51,6 +51,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\3rds\FroalaSDK\FroalaEditorSDK.csproj" />
+    <ProjectReference Include="..\..\3rds\MinioSDK\MinioSDK.csproj" />
     <ProjectReference Include="..\Zero.Web.Core\Zero.Web.Core.csproj" />
   </ItemGroup>
 
@@ -66,15 +67,9 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Minio" Version="3.1.13" />
   </ItemGroup>
 
   <!-- Report -->
-  <ItemGroup>
-    <Reference Include="Kendo.Mvc, Version=2021.1.119.0, Culture=neutral, PublicKeyToken=121fae78165ba3d4">
-      <HintPath>..\..\3rds\Telerik\Kendo.Mvc.dll</HintPath>
-    </Reference>
-  </ItemGroup>
 
   <ItemGroup>
     <Reference Include="Telerik.Reporting, Version=15.0.21.120, Culture=neutral, PublicKeyToken=a9d7983dfcc261be">

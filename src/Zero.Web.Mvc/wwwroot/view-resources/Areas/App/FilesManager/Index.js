@@ -11,30 +11,29 @@
             schema: kendo.data.schemas.filemanager,
             transport: {
                 read: {
-                    url: "/Base/FileManagerData/Read",
+                    url: "/Base/FilesManager/Read",
                     method: "POST"
                 },
                 create: {
-                    url: "/Base/FileManagerData/Create",
+                    url: "/Base/FilesManager/Create",
                     method: "POST"
                 },
                 update: {
-                    url: "/Base/FileManagerData/Update",
+                    url: "/Base/FilesManager/Update",
                     method: "POST"
                 },
                 destroy: {
-                    url: "/Base/FileManagerData/Destroy",
+                    url: "/Base/FilesManager/Destroy",
                     method: "POST"
                 }
             }
         },
-        uploadUrl: "/Base/FileManagerData/Upload",
+        uploadUrl: "/Base/FilesManager/Upload",
         toolbar: {
             items: [
                 { name: "createFolder" },
                 { name: "upload" },
                 { name: "sortField" },
-                { name: "changeView" },
                 { name: "spacer" },
                 { name: "details" },
                 { name: "search" }

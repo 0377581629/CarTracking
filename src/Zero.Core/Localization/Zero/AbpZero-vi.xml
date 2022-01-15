@@ -116,6 +116,7 @@
     <text name="Menus">Menu</text>
     <text name="Menu">Menu</text>
     <text name="MenusHeaderInfo">Danh mục menu</text>
+    <text name="PleaseSelectMenuGroup">Vui lòng chọn nhóm menu</text>
 
     <text name="Categories">Danh mục bài viết</text>
     <text name="Category">Danh mục bài viết</text>

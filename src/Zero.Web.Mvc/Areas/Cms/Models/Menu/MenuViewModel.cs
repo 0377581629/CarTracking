@@ -2,6 +2,6 @@
 {
     public class MenuViewModel
     {
-        public string FilterText { get; set; }
+        
     }
 }

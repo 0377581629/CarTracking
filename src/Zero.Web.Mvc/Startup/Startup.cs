@@ -43,6 +43,9 @@ using Zero.Web.HealthCheck;
 using Owl.reCAPTCHA;
 using HealthChecksUISettings = HealthChecks.UI.Configuration.Settings;
 using Microsoft.AspNetCore.Server.Kestrel.Https;
+using ZERO.Web.Areas.App.Controllers;
+using Zero.Web.FileManager;
+using Zero.Web.FileManager.Interfaces;
 
 namespace Zero.Web.Startup
 {
@@ -119,7 +122,8 @@ namespace Zero.Web.Startup
             }
 
             services.AddScoped<IWebResourceManager, WebResourceManager>();
-
+            services.AddSingleton<IContentBrowser, ContentBrowser>();
+            
             services.AddSignalR();
 
             services.Configure<SecurityStampValidatorOptions>(options => { options.ValidationInterval = TimeSpan.Zero; });

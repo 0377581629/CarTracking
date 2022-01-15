@@ -19,27 +19,27 @@
                     schema: kendo.data.schemas.filemanager,
                     transport: {
                         read: {
-                            url: "/App/FileManagerData/Read",
+                            url: "/App/FilesManager/Read",
                             method: "POST",
                             data: {
                                 filter: _modalManager.getArgs().allowExtension
                             }
                         },
                         create: {
-                            url: "/App/FileManagerData/Create",
+                            url: "/App/FilesManager/Create",
                             method: "POST"
                         },
                         update: {
-                            url: "/App/FileManagerData/Update",
+                            url: "/App/FilesManager/Update",
                             method: "POST"
                         },
                         destroy: {
-                            url: "/App/FileManagerData/Destroy",
+                            url: "/App/FilesManager/Destroy",
                             method: "POST"
                         }
                     }
                 },
-                uploadUrl: "/App/FileManagerData/Upload",
+                uploadUrl: "/App/FilesManager/Upload",
                 upload: {
                     upload: function (e) {
                         e.data = {
@@ -52,7 +52,6 @@
                         {name: "createFolder"},
                         {name: "upload"},
                         {name: "sortField"},
-                        {name: "changeView"},
                         {name: "spacer"},
                         {name: "details"},
                         {name: "search"}
@@ -71,9 +70,9 @@
                     singleFileTemplate: kendo.template($("#file-manager-preview-template").html())
                 }
             };
-            
+
             if (abp.localization.currentLanguage.name === 'vi') {
-                fileManagerConfig = $.extend( {
+                fileManagerConfig = $.extend({
                     messages: {
                         toolbar: {
                             createFolder: "Thư mục mới",
@@ -144,18 +143,9 @@
                         }
                     }
                 }, fileManagerConfig);
-            } 
-            
+            }
+
             _fileManagerSelector.kendoFileManager(fileManagerConfig);
-            
-            let fileManager = modal.find('#fileManagerSelector').getKendoFileManager();
-
-            fileManager.executeCommand({
-                command: "TogglePaneCommand",
-                options: {type: "preview"}
-            });
-
-            fileManager.toolbar.fileManagerDetailsToggle.switchInstance.toggle();
 
             _btnSelect.click(function () {
                 _modalManager.setResult(_selectorResult);
@@ -171,7 +161,7 @@
                     let item = e.entries[i];
                     _selectorResult.push({
                         name: item.name + item.extension,
-                        path: "/" + item.path
+                        path: "/" + item.actualPath
                     });
                 }
             } else {

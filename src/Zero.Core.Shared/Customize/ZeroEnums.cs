@@ -119,6 +119,7 @@ namespace Zero
 
         public enum FileType
         {
+            Root = 0,
             Image = 1,
             Audio = 2,
             Video = 3,

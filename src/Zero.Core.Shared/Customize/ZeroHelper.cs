@@ -344,6 +344,8 @@ namespace Zero
 
     public static class FileHelper
     {
+        private const string ContentFolderRoot = "Files";
+        
         public static string FileServerRootPath(IMultiTenancyConfig multiTenancyConfig, IAbpSession abpSession, bool isAdminUser)
         {
             var rootPath = SystemConfig.MinioRootBucketName;
@@ -364,45 +366,38 @@ namespace Zero
             return rootPath;
         }
         
-        public static string UploadPath(IAbpSession abpSession, ZeroEnums.FileType type)
+        public static string UploadPath(IMultiTenancyConfig multiTenancyConfig, IAbpSession abpSession, bool isAdminUser, ZeroEnums.FileType type = ZeroEnums.FileType.Root)
         {
-            var userPath = "";
-            if (abpSession.TenantId.HasValue)
-                userPath += "Tenant" + abpSession.TenantId + "/";
-            else
-                userPath += "Host/";
-
-            if (abpSession.UserId.HasValue)
-                userPath += abpSession.UserId + "/";
-
-            return "wwwroot/uploads/" + userPath + TypePath(type) + "/";
-        }
-
-        public static bool CheckPermissionPath(IAbpSession abpSession,
-            ZeroEnums.FileType type, string checkPath)
-        {
-            if (string.IsNullOrEmpty(checkPath)) return false;
-            var path = UploadPath(abpSession, type);
-            return checkPath.IndexOf(path, StringComparison.Ordinal) == 0;
+            var uploadPath = Path.Combine($"{Path.DirectorySeparatorChar}{ContentFolderRoot}");
+            if (!multiTenancyConfig.IsEnabled)
+            {
+                if (!isAdminUser && abpSession.UserId.HasValue)
+                    uploadPath = Path.Combine(uploadPath, abpSession.UserId.Value.ToString());
+                if (type != ZeroEnums.FileType.Root)
+                    uploadPath = Path.Combine(uploadPath, TypePath(type));
+                return uploadPath;
+            }
+            
+            uploadPath = Path.Combine(uploadPath, abpSession.TenantId.HasValue ? abpSession.TenantId.ToString() : "Host");
+            if (!isAdminUser && abpSession.UserId.HasValue)
+                uploadPath = Path.Combine(uploadPath, abpSession.UserId.Value.ToString());
+            if (type != ZeroEnums.FileType.Root)
+                uploadPath = Path.Combine(uploadPath, TypePath(type));
+            return uploadPath;
         }
 
         private static string TypePath(ZeroEnums.FileType type)
         {
-            switch (type)
+            return type switch
             {
-                case ZeroEnums.FileType.Image:
-                    return "Image";
-                case ZeroEnums.FileType.Audio:
-                    return "Audio";
-                case ZeroEnums.FileType.Video:
-                    return "Video";
-                case ZeroEnums.FileType.Office:
-                    return "Office";
-                case ZeroEnums.FileType.Compress:
-                    return "Compress";
-                default:
-                    return "Others";
-            }
+                ZeroEnums.FileType.Root => "",
+                ZeroEnums.FileType.Image => "Image",
+                ZeroEnums.FileType.Audio => "Audio",
+                ZeroEnums.FileType.Video => "Video",
+                ZeroEnums.FileType.Office => "Office",
+                ZeroEnums.FileType.Compress => "Compress",
+                _ => "Others"
+            };
         }
         
         private static List<string> _knownTypes;

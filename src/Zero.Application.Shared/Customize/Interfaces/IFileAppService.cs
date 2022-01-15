@@ -9,9 +9,11 @@ namespace Zero
 	    
 	    string FullFilePath(string input);
 	    
-	    string FileFolder(string extentPath = null);
+	    Task<string> FileFolder(string extentPath = null);
 	    
-	    string SavePath(string extentPath = null);
+	    Task<string> RootFileServerBucketName();
+	    
+	    Task<string> SavePath(string extentPath = null);
 	    
 	    string PhysicalPath(string input);
 	    
@@ -24,7 +26,5 @@ namespace Zero
 	    string NewGuidFileName(string fileName);
 	    
 	    Task<string> SaveFile(string fileName, byte[] data);
-
-	    Task<string> RootFileServerBucketName();
     }
 }
