@@ -5,6 +5,7 @@ using DPS.Cms.Application.Shared.Dto.ImageBlock;
 using DPS.Cms.Application.Shared.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Zero.Authorization;
+using Zero.Customize;
 using Zero.Web.Areas.Cms.Models.ImageBlock;
 using Zero.Web.Controllers;
 

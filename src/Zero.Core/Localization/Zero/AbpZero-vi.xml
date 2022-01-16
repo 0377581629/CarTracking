@@ -417,6 +417,8 @@
     <text name="CurrencyRatesHeaderInfo">Số liệu tỷ giá</text>
     <text name="CurrencyRateWarning">Lưu ý: Số liệu tỷ giá được sử dụng khi thực hiện giao dịch thanh toán</text>
     <!--    -->
+
+    <text name="Rename">Đổi tên</text>
     
     <text name="HomePage">Trang chủ</text>
     <text name="AboutUs">Về chúng tôi</text>

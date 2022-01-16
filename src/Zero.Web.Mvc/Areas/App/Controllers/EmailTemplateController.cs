@@ -4,6 +4,7 @@ using Abp.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Zero;
 using Zero.Authorization;
+using Zero.Customize;
 using Zero.Customize.Dto.EmailTemplate;
 using Zero.Customize.Interfaces;
 using ZERO.Web.Areas.App.Models.EmailTemplate;

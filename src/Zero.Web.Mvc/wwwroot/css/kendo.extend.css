@@ -108,3 +108,26 @@
 .trv-content {
     border: none;
 }
+
+.k-filemanager-details-toggle > label {
+    padding-top: 4px;
+}
+
+.k-filemanager-details-toggle .k-switch {
+    width: 3em;
+}
+
+.k-filemanager-details-toggle .k-switch-container {
+    width: 3em;
+    height: 25px;
+}
+
+.k-filemanager-details-toggle .k-switch-handle {
+    width: 1.5em;
+    height: 1.5em;
+    top: -2.5px;
+}
+
+.k-filemanager-details-toggle .k-switch-on .k-switch-handle {
+    left: calc(100% - 1.5em);
+}

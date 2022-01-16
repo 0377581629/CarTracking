@@ -1,4 +1,5 @@
 ﻿@using Zero.Web.Areas.App.Models.Common.Modals
+@using Zero.Customize
 @model ZERO.Web.Areas.App.Models.EmailTemplate.CreateOrEditEmailTemplateModalViewModel
 
 @await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(Model.IsEditMode ? (L("Edit")) : L("Create")))

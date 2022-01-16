@@ -49,7 +49,7 @@ var select2ViLanguage = {
 
 FroalaEditor.DefineIcon('imageKendoFileManager', {NAME: 'fileManager', SVG_KEY: 'fileManager'});
 FroalaEditor.RegisterCommand('imageKendoFileManager', {
-    title: app.localize('FileManager'),
+    title: app.localize('SelectFile'),
     focus: false,
     undo: true,
     refreshAfterCallback: false,
@@ -68,7 +68,7 @@ FroalaEditor.RegisterCommand('imageKendoFileManager', {
 
 FroalaEditor.DefineIcon('videoKendoFileManager', {NAME: 'fileManager', SVG_KEY: 'fileManager'});
 FroalaEditor.RegisterCommand('videoKendoFileManager', {
-    title: app.localize('FileManager'),
+    title: app.localize('SelectFile'),
     focus: false,
     undo: true,
     refreshAfterCallback: false,
@@ -98,7 +98,7 @@ var frEditorBaseConfig = {
             'buttons': ['alignLeft', 'alignCenter', 'formatOLSimple', 'alignRight', 'alignJustify', 'formatOL', 'formatUL', 'paragraphFormat', 'paragraphStyle', 'lineHeight', 'outdent', 'indent', 'quote']
         },
         'moreRich': {
-            'buttons': ['insertLink', 'insertImage', 'insertVideo', 'insertFile', 'insertTable', 'emoticons', 'fontAwesome', 'specialCharacters', 'embedly', 'insertHR']
+            'buttons': ['insertLink', 'insertImage', 'insertVideo', 'insertTable', 'emoticons', 'fontAwesome', 'specialCharacters', 'embedly', 'insertHR']
         },
         'moreMisc': {
             'buttons': ['undo', 'redo', 'fullscreen', 'print', 'getPDF', 'spellChecker', 'selectAll', 'html', 'help'],
@@ -106,31 +106,9 @@ var frEditorBaseConfig = {
             'buttonsVisible': 2
         }
     },
-    
     fileUploadURL: '/FroalaApi/UploadFile',
-    // Image Manager
-    imageInsertButtons: ["imageBack", "|", "imageUpload", "imageByURL", "imageKendoFileManager"],
-    imageUploadURL: '/FroalaApi/UploadImage',
-    imageUploadParams: {
-        __RequestVerificationToken: abp.security.antiForgery.getToken()
-    },
-    imageManagerLoadURL: '/FroalaApi/LoadImages',
-    imageManagerPageSize: 20,
-    imageManagerScrollOffset: 40,
-    imageManagerDeleteURL: "/FroalaApi/DeleteImage",
-    imageManagerDeleteMethod: "POST",
-    imageManagerDeleteParams: {
-        __RequestVerificationToken: abp.security.antiForgery.getToken()
-    },
-    // Introduce the Video Upload Buttons
-    videoInsertButtons: ["videoBack", "|", "videoByURL", "videoEmbed", "videoUpload", "videoKendoFileManager"],
-    // Set the video upload URL.
-    videoUploadURL: '/FroalaApi/UploadVideo',
-    videoUploadParams: {
-        __RequestVerificationToken: abp.security.antiForgery.getToken()
-    },
-    // Set request type.
-    videoUploadMethod: 'POST'
+    imageInsertButtons: ["imageBack", "|", "imageByURL", "imageKendoFileManager"],
+    videoInsertButtons: ["videoBack", "|", "videoByURL", "videoEmbed", "videoKendoFileManager"],
 };
 
 if (abp.localization.currentLanguage.name === 'vi') {

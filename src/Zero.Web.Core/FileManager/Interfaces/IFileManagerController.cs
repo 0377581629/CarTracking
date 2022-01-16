@@ -9,12 +9,12 @@ namespace Zero.Web.FileManager.Interfaces
     {
         Task<JsonResult> Read(string target, string filter);
 
-        ActionResult Destroy(FileManagerViewModel viewModel);
+        Task<ActionResult> Destroy(FileManagerViewModel viewModel);
 
         ActionResult Create(string target, FileManagerViewModel viewModel);
 
-        ActionResult Update(string target, FileManagerViewModel viewModel);
+        Task<ActionResult> Update(string target, FileManagerViewModel viewModel);
 
-        ActionResult Upload(string path, IFormFile file);
+        Task<ActionResult> Upload(string path, IFormFile file);
     }
 }

@@ -5,6 +5,7 @@ using DPS.Cms.Application.Shared.Dto.PageTheme;
 using DPS.Cms.Application.Shared.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Zero.Authorization;
+using Zero.Customize;
 using Zero.Web.Areas.Cms.Models.PageTheme;
 using Zero.Web.Controllers;
 

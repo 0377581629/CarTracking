@@ -3,6 +3,7 @@ using Abp.Application.Services.Dto;
 using Abp.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Zero.Authorization;
+using Zero.Customize;
 using Zero.Customize.Dto.Dashboard.DashboardWidget;
 using Zero.Customize.Interfaces;
 using Zero.Web.Areas.App.Models.DashboardWidget;

@@ -2,7 +2,10 @@
     app.modals.FileManagerModal = function () {
         let _modalManager;
         let modal;
-        let _fileManagerSelector;
+        let _fileManager;
+        let _fileManagerPager;
+        let _fileManagerDataSource;
+        let _fileManagerPageSize = 30;
         let _btnSelect;
         let _allowExtension;
         let _selectorResult = [];
@@ -13,32 +16,36 @@
         }, 300);
 
         function InitFileManager() {
-            _fileManagerSelector = modal.find('#fileManagerSelector');
-            let fileManagerConfig = {
-                dataSource: {
-                    schema: kendo.data.schemas.filemanager,
-                    transport: {
-                        read: {
-                            url: "/App/FilesManager/Read",
-                            method: "POST",
-                            data: {
-                                filter: _modalManager.getArgs().allowExtension
-                            }
-                        },
-                        create: {
-                            url: "/App/FilesManager/Create",
-                            method: "POST"
-                        },
-                        update: {
-                            url: "/App/FilesManager/Update",
-                            method: "POST"
-                        },
-                        destroy: {
-                            url: "/App/FilesManager/Destroy",
-                            method: "POST"
+            _fileManager = modal.find('#fileManager');
+            _fileManagerPager = modal.find('#fileManagerPager');
+            _fileManagerDataSource = new kendo.data.FileManagerDataSource({
+                schema: kendo.data.schemas.filemanager,
+                transport: {
+                    read: {
+                        url: "/App/FilesManager/Read",
+                        method: "POST",
+                        data: {
+                            filter: _modalManager.getArgs().allowExtension
                         }
+                    },
+                    create: {
+                        url: "/App/FilesManager/Create",
+                        method: "POST"
+                    },
+                    update: {
+                        url: "/App/FilesManager/Update",
+                        method: "POST"
+                    },
+                    destroy: {
+                        url: "/App/FilesManager/Destroy",
+                        method: "POST"
                     }
                 },
+                pageSize: _fileManagerPageSize
+            });
+            
+            let fileManagerConfig = {
+                dataSource: _fileManagerDataSource,
                 uploadUrl: "/App/FilesManager/Upload",
                 upload: {
                     upload: function (e) {
@@ -47,27 +54,27 @@
                         }
                     }
                 },
-                toolbar: {
-                    items: [
-                        {name: "createFolder"},
-                        {name: "upload"},
-                        {name: "sortField"},
-                        {name: "spacer"},
-                        {name: "details"},
-                        {name: "search"}
-                    ]
-                },
                 contextMenu: {
                     items: [
-                        {name: "rename"},
-                        {name: "delete"}
+                        {name: "rename", text: app.localize('Rename'), command: "RenameCommand"},
+                        {name: "delete", text: app.localize('Delete'), command: "DeleteCommand"}
                     ]
                 },
-                draggable: false,
-                resizable: true,
                 select: FileManagerOnSelect,
                 previewPane: {
                     singleFileTemplate: kendo.template($("#file-manager-preview-template").html())
+                },
+                views: {
+                    list: {
+                        pageable: true,
+                        template: kendo.template($("#file-manager-list-view-template").html()),
+                        dataSource: _fileManagerDataSource
+                    },
+                    grid: {
+                        pageable : {
+                            pageSize: _fileManagerPageSize
+                        }
+                    }
                 }
             };
 
@@ -145,8 +152,8 @@
                 }, fileManagerConfig);
             }
 
-            _fileManagerSelector.kendoFileManager(fileManagerConfig);
-
+            _fileManager.kendoFileManager(fileManagerConfig);
+            
             _btnSelect.click(function () {
                 _modalManager.setResult(_selectorResult);
                 _modalManager.close();
@@ -161,7 +168,7 @@
                     let item = e.entries[i];
                     _selectorResult.push({
                         name: item.name + item.extension,
-                        path: "/" + item.actualPath
+                        path: item.actualPath
                     });
                 }
             } else {

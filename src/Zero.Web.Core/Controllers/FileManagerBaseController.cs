@@ -3,9 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
-using System.Web;
 using Abp.Extensions;
 using Abp.Runtime.Validation;
 using Abp.Threading;
@@ -14,7 +12,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Minio;
+using Minio.Exceptions;
 using Z.EntityFramework.Extensions.Internal;
+using Zero.Customize;
 using Zero.Debugging;
 using Zero.Web.FileManager.Interfaces;
 using Zero.Web.FileManager.Model;
@@ -58,6 +58,7 @@ namespace Zero.Web.Controllers
                     var files = _directoryBrowser.GetFiles(path, !string.IsNullOrEmpty(filter) ? filter : Filter);
                     var directories = _directoryBrowser.GetDirectories(path);
                     var result = files.Concat(directories).Select(VirtualizePath).ToList();
+
                     return Json(result.ToArray());
                 }
                 catch (DirectoryNotFoundException)
@@ -66,78 +67,34 @@ namespace Zero.Web.Controllers
                 }
             }
 
-            var rootBucket = _contentPath;
+            if (string.IsNullOrEmpty(target))
+                return Json((await GetFileEntryFromFileServer(_contentPath, target)).ToArray());
 
-            if (!string.IsNullOrEmpty(target))
-            {
-                target = target.Substring(target.IndexOf(rootBucket, StringComparison.InvariantCultureIgnoreCase) + rootBucket.Length + 1);
-            }
+            if (target.Contains(_contentPath))
+                target = target[(target.IndexOf(_contentPath, StringComparison.InvariantCultureIgnoreCase) + _contentPath.Length + 1)..];
+            if (target.EndsWith("/"))
+                target = target.RemovePostFix("/");
 
-            return Json((await GetFileEntryFromFileServer(rootBucket, target)).ToArray());
-        }
-
-        private async Task<List<FileManagerViewModel>> GetFileEntryFromFileServer(string path, string prefix)
-        {
-            var minioClient = new MinioClient(SystemConfig.MinioEndPoint, SystemConfig.MinioAccessKey, SystemConfig.MinioSecretKey);
-            if (!DebugHelper.IsDebug)
-                minioClient = minioClient.WithSSL();
-
-            var rootBucket = _contentPath;
-
-            if (!await minioClient.BucketExistsAsync(rootBucket))
-                await minioClient.MakeBucketAsync(rootBucket);
-
-            var lstFileEntry = new List<FileManagerViewModel>();
-            var meth = minioClient.GetType().GetMethod("GetObjectListAsync", BindingFlags.NonPublic | BindingFlags.Instance);
-            if (meth == null) return lstFileEntry;
-            // bucket name, prefix, delimiter - Empty if recursive = true
-            var minioObjects = await minioClient.ListObjectsAsync(path, prefix: prefix, recursive: false);
-            lstFileEntry = minioObjects
-                .Select(item => new FileManagerViewModel
-                {
-                    Name = string.IsNullOrEmpty(prefix) ? item.Key.RemovePostFix("/") : item.Key.RemovePostFix("/").RemovePreFix(prefix),
-                    Size = (long)item.Size,
-                    Path = $"{(!DebugHelper.IsDebug ? "https" : "http")}://{SystemConfig.MinioEndPoint}/{SystemConfig.MinioRootBucketName}/{HttpUtility.UrlDecode(item.Key)}",
-                    ActualPath = $"{(!DebugHelper.IsDebug ? "https" : "http")}://{SystemConfig.MinioEndPoint}/{SystemConfig.MinioRootBucketName}/{HttpUtility.UrlDecode(item.Key)}",
-                    Extension = !item.IsDir ? Path.GetExtension(item.Key) : "",
-                    IsDirectory = item.IsDir,
-                    Modified = item.LastModifiedDateTime ?? DateTime.MinValue
-                })
-                .OrderBy(o => o.IsDirectory)
-                .ToList();
-            return lstFileEntry;
+            return Json((await GetFileEntryFromFileServer(_contentPath, target)).ToArray());
         }
 
         [DisableValidation]
         public ActionResult Create(string target, FileManagerViewModel viewModel)
         {
-            FileManagerViewModel newViewModel;
-
-            if (!Authorize(NormalizePath(target)))
-            {
-                throw new Exception("Forbidden");
-            }
-
-
-            if (String.IsNullOrEmpty(viewModel.Path))
-            {
-                newViewModel = CreateNewFolder(target, viewModel);
-            }
-            else
-            {
-                newViewModel = CopyEntry(target, viewModel);
-            }
-
+            if (!Authorize(NormalizePath(target))) throw new Exception("Forbidden");
+            var newViewModel = string.IsNullOrEmpty(viewModel.Path) ? CreateNewFolder(target, viewModel) : CopyEntry(target, viewModel);
             return Json(VirtualizePath(newViewModel));
         }
 
         [DisableValidation]
-        public ActionResult Destroy(FileManagerViewModel viewModel)
+        public async Task<ActionResult> Destroy(FileManagerViewModel viewModel)
         {
-            var path = NormalizePath(viewModel.Path);
-
-            if (!string.IsNullOrEmpty(path))
+            if (!SystemConfig.UseFileServer)
             {
+                var path = NormalizePath(viewModel.Path);
+
+                if (string.IsNullOrEmpty(path)) throw new Exception("File Not Found");
+
                 if (viewModel.IsDirectory)
                 {
                     DeleteDirectory(path);
@@ -146,44 +103,124 @@ namespace Zero.Web.Controllers
                 {
                     DeleteFile(path);
                 }
-
-                return Json(new object[0]);
             }
 
-            throw new Exception("File Not Found");
+            var oldKey = "";
+            if (viewModel.IsDirectory)
+            {
+                oldKey = viewModel.ActualPath.RemovePreFix($"{(!DebugHelper.IsDebug ? "https" : "http")}://{SystemConfig.MinioEndPoint}/{SystemConfig.MinioRootBucketName}");
+                var lstToMove = await GetFileEntryFromFileServer(_contentPath, oldKey, true);
+                foreach (var obj in lstToMove)
+                {
+                    await FileServerDeleteObject(obj.Path);
+                }
+            }
+            else
+            {
+                oldKey = viewModel.ActualPath.RemovePreFix($"{(!DebugHelper.IsDebug ? "https" : "http")}://{SystemConfig.MinioEndPoint}/{SystemConfig.MinioRootBucketName}/");
+                await FileServerDeleteObject(oldKey);
+            }
+
+            return Json(Array.Empty<object>());
         }
 
         [DisableValidation]
-        public ActionResult Update(string target, FileManagerViewModel viewModel)
+        public async Task<ActionResult> Update(string target, FileManagerViewModel viewModel)
         {
-            FileManagerViewModel newViewModel;
-
-            if (!Authorize(NormalizePath(viewModel.Path)) && !Authorize(NormalizePath(target)))
+            if (!SystemConfig.UseFileServer)
             {
-                throw new Exception("Forbidden");
+                if (!Authorize(NormalizePath(viewModel.Path)) && !Authorize(NormalizePath(target)))
+                {
+                    throw new Exception("Forbidden");
+                }
+
+                var newViewModel = RenameEntry(viewModel);
+
+                return Json(VirtualizePath(newViewModel));
             }
 
-            newViewModel = RenameEntry(viewModel);
-
-            return Json(VirtualizePath(newViewModel));
+            string oldKey = "", newKey = "";
+            if (viewModel.IsDirectory)
+            {
+                oldKey = viewModel.ActualPath.RemovePreFix($"{(!DebugHelper.IsDebug ? "https" : "http")}://{SystemConfig.MinioEndPoint}/{SystemConfig.MinioRootBucketName}");
+                // newKey = oldKey.RemovePostFix(Path.GetFileName(viewModel.Path) + "/") + $"{viewModel.Name}/";
+                var lstToMove = await GetFileEntryFromFileServer(_contentPath, oldKey, true);
+                oldKey = oldKey.RemovePreFix("/");
+                newKey = oldKey.RemovePostFix(Path.GetFileName(viewModel.Path) + "/") + $"{viewModel.Name}/";
+                foreach (var obj in lstToMove)
+                {
+                    var newObjKey = newKey + obj.Path.RemovePreFix(oldKey);
+                    await FileServerCopyObject(obj.Path, newObjKey);
+                    await FileServerDeleteObject(obj.Path);
+                }
+                return Json(new FileManagerViewModel
+                {
+                    Name = viewModel.Name,
+                    Path = newKey.RemovePostFix("/"),
+                    ActualPath = $"{(!DebugHelper.IsDebug ? "https" : "http")}://{SystemConfig.MinioEndPoint}/{SystemConfig.MinioRootBucketName}/{newKey}",
+                    Size = viewModel.Size,
+                    Extension = "",
+                    IsDirectory = viewModel.IsDirectory,
+                    HasDirectories = viewModel.HasDirectories,
+                    Modified = DateTime.Now,
+                    ModifiedUtc = DateTime.UtcNow
+                });
+            }
+            
+            oldKey = viewModel.ActualPath.RemovePreFix($"{(!DebugHelper.IsDebug ? "https" : "http")}://{SystemConfig.MinioEndPoint}/{SystemConfig.MinioRootBucketName}/");
+            newKey = oldKey.RemovePostFix(Path.GetFileName(viewModel.Path)) + $"{viewModel.Name}{viewModel.Extension}";
+            await FileServerCopyObject(oldKey, newKey);
+            await FileServerDeleteObject(oldKey);
+            return Json(new FileManagerViewModel
+            {
+                Name = Path.GetFileNameWithoutExtension(viewModel.Name),
+                Path = newKey,
+                ActualPath = $"{(!DebugHelper.IsDebug ? "https" : "http")}://{SystemConfig.MinioEndPoint}/{SystemConfig.MinioRootBucketName}/{newKey}",
+                Size = viewModel.Size,
+                Extension = viewModel.Extension,
+                Modified = DateTime.Now,
+                ModifiedUtc = DateTime.UtcNow,
+                IsDirectory = viewModel.IsDirectory
+            });
+            
         }
 
         [AcceptVerbs("POST")]
         [DisableValidation]
-        public virtual ActionResult Upload(string path, IFormFile file)
+        public async Task<ActionResult> Upload(string path, IFormFile file)
         {
-            path = NormalizePath(path);
-            var fileName = Path.GetFileName(file.FileName);
+            if (!SystemConfig.UseFileServer)
+            {
+                path = NormalizePath(path);
+                var fileName = Path.GetFileName(file.FileName);
 
-            if (!AuthorizeUpload(path, file)) throw new Exception("Forbidden");
+                if (!AuthorizeUpload(path, file))
+                    throw new Exception("Forbidden");
+                SaveFile(file, path);
+                var newEntry = _directoryBrowser.GetFile(Path.Combine(path, fileName));
+                return Json(VirtualizePath(newEntry));
+            }
 
-            SaveFile(file, path);
-            var newEntry = _directoryBrowser.GetFile(Path.Combine(path, fileName));
+            FileHelper.Validate(file);
 
-            return Json(VirtualizePath(newEntry));
+            path = $"{Path.Combine(string.IsNullOrEmpty(path) ? _contentPath : path, file.FileName).Replace(@"\", "/")}";
+
+            await FileServerUpload(path, file.Length, file.OpenReadStream());
+
+            return Json(new FileManagerViewModel
+            {
+                Name = Path.GetFileNameWithoutExtension(file.FileName),
+                Path = path,
+                ActualPath = $"{(!DebugHelper.IsDebug ? "https" : "http")}://{SystemConfig.MinioEndPoint}/{SystemConfig.MinioRootBucketName}/{path}",
+                Size = file.Length,
+                Extension = Path.GetExtension(file.FileName),
+                Modified = DateTime.Now,
+                ModifiedUtc = DateTime.UtcNow,
+                IsDirectory = false
+            });
         }
 
-        #region Support Method
+        #region Support Method - Normal
 
         private bool Authorize(string path)
         {
@@ -204,7 +241,7 @@ namespace Zero.Web.Controllers
             }
 
             path = Path.Combine(_contentPath, path);
-            
+
             path = path.Replace("/", @"\");
             var pathElements = path.Split(@"\").ToList();
             pathElements = pathElements.Where(o => !string.IsNullOrEmpty(o)).ToList();
@@ -230,20 +267,26 @@ namespace Zero.Web.Controllers
         private FileManagerViewModel VirtualizePath(FileManagerViewModel viewModel)
         {
             viewModel.Path = viewModel.Path
-                .Replace(_hostingEnvironment.WebRootPath, "")
-                //.Replace(@"wwwroot\", "")
-                .Replace(_contentPath, "")
+                .RemovePreFix(_hostingEnvironment.WebRootPath + _contentPath)
                 .Replace(@"\", "/");
             viewModel.ActualPath = viewModel.ActualPath
-                .Replace(_hostingEnvironment.WebRootPath, "")
-                //.Replace(@"wwwroot\", "")
-                // .Replace(_contentPath, "")
+                .RemovePreFix(_hostingEnvironment.WebRootPath)
                 .Replace(@"\", "/");
-            if (viewModel.Path[0] == '/')
-                viewModel.Path = viewModel.Path.Remove(0, 1);
-            if (viewModel.ActualPath[0] == '/')
-                viewModel.ActualPath = viewModel.ActualPath.Remove(0, 1);
-            
+            if (viewModel.IsDirectory)
+            {
+                if (viewModel.Path[0] == '/')
+                    viewModel.Path = viewModel.Path.Remove(0, 1);
+                if (viewModel.ActualPath[0] == '/')
+                    viewModel.ActualPath = viewModel.ActualPath.Remove(0, 1);
+            }
+            else
+            {
+                if (viewModel.Path[0] != '/')
+                    viewModel.Path = $"/{viewModel.Path}";
+                if (viewModel.ActualPath[0] != '/')
+                    viewModel.ActualPath = $"/{viewModel.ActualPath}";
+            }
+
             return viewModel;
         }
 
@@ -288,15 +331,14 @@ namespace Zero.Web.Controllers
 
         private FileManagerViewModel CreateNewFolder(string target, FileManagerViewModel viewModel)
         {
-            FileManagerViewModel newViewModel;
             var path = NormalizePath(target);
             var physicalPath = EnsureUniqueName(path, viewModel);
 
             Directory.CreateDirectory(physicalPath);
 
-            newViewModel = _directoryBrowser.GetDirectory(physicalPath);
+            var newViewModel = _directoryBrowser.GetDirectory(physicalPath);
 
-            return newViewModel;
+            return VirtualizePath(newViewModel);
         }
 
         private string EnsureUniqueName(string target, FileManagerViewModel viewModel)
@@ -366,18 +408,17 @@ namespace Zero.Web.Controllers
         private FileManagerViewModel RenameEntry(FileManagerViewModel viewModel)
         {
             var path = NormalizePath(viewModel.Path);
-            var physicalPath = path;
             var physicalTarget = EnsureUniqueName(Path.GetDirectoryName(path), viewModel);
             FileManagerViewModel newViewModel;
 
             if (viewModel.IsDirectory)
             {
-                Directory.Move(physicalPath, physicalTarget);
+                Directory.Move(path, physicalTarget);
                 newViewModel = _directoryBrowser.GetDirectory(physicalTarget);
             }
             else
             {
-                var file = new FileInfo(physicalPath);
+                var file = new FileInfo(path);
                 System.IO.File.Move(file.FullName, physicalTarget);
                 newViewModel = _directoryBrowser.GetFile(physicalTarget);
             }
@@ -404,7 +445,7 @@ namespace Zero.Web.Controllers
         private string GetFileName(IFormFile file)
         {
             var fileContent = ContentDispositionHeaderValue.Parse(file.ContentDisposition);
-            if (fileContent.FileName != null) 
+            if (fileContent.FileName != null)
                 return Path.GetFileName(fileContent.FileName.Trim('"'));
             throw new Exception("FileName is null");
         }
@@ -427,6 +468,123 @@ namespace Zero.Web.Controllers
         private string RootContentPath()
         {
             return SystemConfig.UseFileServer ? AsyncHelper.RunSync(() => _fileAppService.RootFileServerBucketName()) : AsyncHelper.RunSync(() => _fileAppService.FileFolder());
+        }
+
+        #endregion
+
+        #region Support Method - File Server
+
+        private async Task<List<FileManagerViewModel>> GetFileEntryFromFileServer(string path, string prefix, bool recursive = false)
+        {
+            var minioClient = new MinioClient(SystemConfig.MinioEndPoint, SystemConfig.MinioAccessKey, SystemConfig.MinioSecretKey);
+            if (!DebugHelper.IsDebug)
+                minioClient = minioClient.WithSSL();
+
+            var rootBucket = _contentPath;
+
+            if (!await minioClient.BucketExistsAsync(rootBucket))
+                await minioClient.MakeBucketAsync(rootBucket);
+
+            if (!string.IsNullOrEmpty(prefix))
+                prefix += "/";
+            // bucket name, prefix, delimiter - Empty if recursive = true
+            var minioObjects = await minioClient.ListObjectsAsync(path, prefix, recursive);
+            var lstFileEntry = minioObjects
+                .Select(item => new FileManagerViewModel
+                {
+                    Name = Path.GetFileNameWithoutExtension(!string.IsNullOrEmpty(prefix) ? item.Key.RemovePostFix("/").RemovePreFix(prefix) : item.Key.RemovePostFix("/")),
+                    Size = (long)item.Size,
+                    Path = item.Key.RemovePostFix("/"),
+                    ActualPath = $"{(!DebugHelper.IsDebug ? "https" : "http")}://{SystemConfig.MinioEndPoint}/{SystemConfig.MinioRootBucketName}/{item.Key}",
+                    Extension = !item.IsDir ? Path.GetExtension(item.Key) : "",
+                    IsDirectory = item.IsDir,
+                    Modified = item.LastModifiedDateTime ?? DateTime.MinValue
+                })
+                .OrderByDescending(o => o.IsDirectory)
+                .ToList();
+            return lstFileEntry;
+        }
+
+        private async Task FileServerUpload(string objectKey, long size, Stream file)
+        {
+            try
+            {
+                var minioClient = new MinioClient(SystemConfig.MinioEndPoint, SystemConfig.MinioAccessKey, SystemConfig.MinioSecretKey);
+                if (!DebugHelper.IsDebug)
+                    minioClient = minioClient.WithSSL();
+
+                var rootBucket = _contentPath;
+
+                if (!await minioClient.BucketExistsAsync(rootBucket))
+                    await minioClient.MakeBucketAsync(rootBucket);
+
+                // Upload a file to bucket.
+                await minioClient.PutObjectAsync(rootBucket, objectKey, size, file);
+                Console.WriteLine("Successfully uploaded " + objectKey);
+            }
+            catch (MinioException e)
+            {
+                Console.WriteLine("File Upload Error: {0}", e.Message);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("File Upload Error: {0}", e.Message);
+            }
+        }
+
+        private async Task FileServerCopyObject(string objectKey, string desObjectKey)
+        {
+            if (objectKey == desObjectKey)
+                return;
+            try
+            {
+                var minioClient = new MinioClient(SystemConfig.MinioEndPoint, SystemConfig.MinioAccessKey, SystemConfig.MinioSecretKey);
+                if (!DebugHelper.IsDebug)
+                    minioClient = minioClient.WithSSL();
+
+                var rootBucket = _contentPath;
+
+                if (!await minioClient.BucketExistsAsync(rootBucket))
+                    await minioClient.MakeBucketAsync(rootBucket);
+
+                await minioClient.CopyObjectAsync(rootBucket, objectKey, rootBucket, desObjectKey);
+                Console.WriteLine("Successfully copy " + objectKey);
+            }
+            catch (MinioException e)
+            {
+                Console.WriteLine("File Copy Error: {0}", e.Message);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("File Copy Error: {0}", e.Message);
+            }
+        }
+
+        private async Task FileServerDeleteObject(string objectKey)
+        {
+            try
+            {
+                var minioClient = new MinioClient(SystemConfig.MinioEndPoint, SystemConfig.MinioAccessKey, SystemConfig.MinioSecretKey);
+                if (!DebugHelper.IsDebug)
+                    minioClient = minioClient.WithSSL();
+
+                var rootBucket = _contentPath;
+
+                if (!await minioClient.BucketExistsAsync(rootBucket))
+                    await minioClient.MakeBucketAsync(rootBucket);
+
+                // Upload a file to bucket.
+                await minioClient.RemoveObjectAsync(rootBucket, objectKey);
+                Console.WriteLine("Removed " + objectKey);
+            }
+            catch (MinioException e)
+            {
+                Console.WriteLine("Remove Error: {0}", e.Message);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Remove Error: {0}", e.Message);
+            }
         }
 
         #endregion

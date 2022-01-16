@@ -165,7 +165,7 @@ namespace Minio
             while (isRunning)
             {
                 var (item1, item2) = await GetObjectListAsync(bucketName, prefix, delimiter, marker, cancellationToken).ConfigureAwait(false);
-                foreach (var itm in item2.Where(itm => item1.EncodingType == "url"))
+                foreach (var itm in item2.Where(_ => item1.EncodingType == "url"))
                 {
                     itm.Key = HttpUtility.UrlDecode(itm.Key);
                 }

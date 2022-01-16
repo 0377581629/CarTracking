@@ -2,7 +2,8 @@
 @await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(L("FileSelect")))
 
 <div class="modal-body">
-    <div id="fileManagerSelector"></div>
+    <div id="fileManager"></div>
+    <div id="fileManagerPager"></div>
     <p class="text-italic text-right text-bold pt-10 mb-0">@L("AllowFileExtension"): <span id="Allowed"></span></p>
 </div>
 <div class="modal-footer">

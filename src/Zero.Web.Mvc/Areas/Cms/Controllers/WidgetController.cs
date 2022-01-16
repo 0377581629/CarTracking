@@ -6,6 +6,7 @@ using DPS.Cms.Application.Shared.Dto.Widget;
 using DPS.Cms.Application.Shared.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Zero.Authorization;
+using Zero.Customize;
 using Zero.Web.Areas.Cms.Models.Widget;
 using Zero.Web.Controllers;
 

@@ -178,12 +178,7 @@
     <div class="#:styles.fileInfo#">
         <div class="#:styles.filePreview#">
         	#if(kendo.getFileGroup(selection[0].extension, true) == "file-image"){#
-        	    #if (selection[0].path.indexOf("http")>-1) {#
-        	        <img src="#:selection[0].actualPath#" style="max-width: 100%"/>
-        	    #}
-        	    else {#
-        	        <img src="/#:selection[0].actualPath#" style="max-width: 100%"/>
-        	    #}#
+        	    <img src="#:selection[0].actualPath#" style="max-width: 100%"/>
             #} else {#
             	<span class='k-file-icon k-icon k-i-#: !selection[0].isDirectory ? kendo.getFileGroup(selection[0].extension, true) : "folder" #'></span>
             #}#
@@ -209,6 +204,19 @@
             # } #
         </dl>
         #}#
+    </div>
+</script>
+
+<script id="file-manager-list-view-template" type="text/kendo-x-tmpl">
+     <div class="k-listview-item" title="#: isDirectory ? name : name+extension #" data-uid="#uid#" role="option">
+        <div class="k-file-preview h-50px">
+            #if(kendo.getFileGroup(extension, true) == "file-image" && size < 1000000){#
+                <img src="#:actualPath#" style="max-width: 100%"/> 
+            #} else {#
+                <span class='k-file-icon k-icon k-i-#: !isDirectory ? kendo.getFileGroup(extension, true) : "folder" #'></span>
+            #}#
+        </div>
+        <div class="k-file-name file-name mt-0">#: isDirectory ? name : name+extension #</div>
     </div>
 </script>
 

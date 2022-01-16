@@ -11,6 +11,7 @@ using DPS.Cms.Application.Shared.Interfaces.Menu;
 using Microsoft.EntityFrameworkCore;
 using Zero;
 using Zero.Authorization;
+using Zero.Customize;
 using Zero.Customize.NestedItem;
 
 namespace DPS.Cms.Application.Services.Menu
