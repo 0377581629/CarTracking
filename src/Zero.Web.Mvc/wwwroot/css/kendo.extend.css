@@ -109,6 +109,10 @@
     border: none;
 }
 
+.k-filemanager-view {
+     overflow: hidden; 
+}
+
 .k-filemanager-details-toggle > label {
     padding-top: 4px;
 }

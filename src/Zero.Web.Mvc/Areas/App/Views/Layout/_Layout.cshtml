@@ -193,9 +193,9 @@
             <dd class="#:styles.metaValue# #:styles[field]#">
                 #if(field == "extension") {#
                     #:kendo.getFileGroup(selection[0].extension)#
-                #} else if(field == "size"){#
+                #} else if(field == "size" && selection[0]['isDirectory'] === false){#
                     #:kendo.getFileSizeMessage(selection[0][field])#
-                #} else if(field == "modified") {#
+                #} else if(field == "modified" && selection[0][field].getYear() > 1) {#
                     #:kendo.toString(selection[0][field], "G")#
                 #}#
             </dd>

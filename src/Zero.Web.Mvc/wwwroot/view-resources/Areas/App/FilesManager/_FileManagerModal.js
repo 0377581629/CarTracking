@@ -43,7 +43,7 @@
                 },
                 pageSize: _fileManagerPageSize
             });
-            
+
             let fileManagerConfig = {
                 dataSource: _fileManagerDataSource,
                 uploadUrl: "/App/FilesManager/Upload",
@@ -66,14 +66,85 @@
                 },
                 views: {
                     list: {
-                        pageable: true,
+                        scrollable: "endless",
+                        height: 400,
                         template: kendo.template($("#file-manager-list-view-template").html()),
-                        dataSource: _fileManagerDataSource
                     },
                     grid: {
-                        pageable : {
+                        pageable: {
                             pageSize: _fileManagerPageSize
-                        }
+                        },
+                        columns: [
+                            {
+                                title: '',
+                                template: function (item) {
+                                    let icon = !item.isDirectory ? kendo.getFileGroup(item.extension, true) : 'folder';
+
+                                    if (kendo.getFileGroup(item.extension, true) === "file-image" && item.size < 1000000) {
+                                        return '<img src="' + item.actualPath + '" style="max-width: 28px; max-height: 28px"/>'
+                                    }
+
+                                    return '<div class=\'file-group-icon\'>' +
+                                        '<span class=\'k-icon k-i-' + icon + '\'></span>' +
+                                        '</div>';
+                                },
+                                width: "40px",
+                                headerAttributes: {
+                                    "class": "k-text-center",
+                                    style: "font-weight: bold"
+                                },
+                                attributes: {
+                                    "class": "table-cell k-text-center"
+                                }
+                            },
+                            {
+                                field: 'name',
+                                title: app.localize('Name'),
+                                template: function (item) {
+                                    return '<div class=\'file-name\'>' + kendo.htmlEncode(item.name + item.extension) + '<div>';
+                                },
+                                headerAttributes: {
+                                    "class": "k-text-center",
+                                    style: "font-weight: bold"
+                                }
+                            },
+                            {
+                                field: 'size',
+                                title: app.localize('FileSize'),
+                                template: function (item) {
+                                    if (!item.isDirectory) {
+                                        return kendo.getFileSizeMessage(item.size);
+                                    } else {
+                                        return '';
+                                    }
+                                },
+                                width: "80px",
+                                headerAttributes: {
+                                    "class": "k-text-center",
+                                    style: "font-weight: bold"
+                                },
+                                attributes: {
+                                    "class": "table-cell k-text-right"
+                                }
+                            },
+                            {
+                                field: 'modified',
+                                title: app.localize('FileModifiedDate'),
+                                template: function (item) {
+                                    if (item.modified.getYear() > 1)
+                                        return kendo.toString(item.modified, "G");
+                                    return '';
+                                },
+                                width: "100px",
+                                headerAttributes: {
+                                    "class": "k-text-center",
+                                    style: "font-weight: bold"
+                                },
+                                attributes: {
+                                    "class": "table-cell k-text-center"
+                                }
+                            }
+                        ]
                     }
                 }
             };
@@ -153,7 +224,7 @@
             }
 
             _fileManager.kendoFileManager(fileManagerConfig);
-            
+
             _btnSelect.click(function () {
                 _modalManager.setResult(_selectorResult);
                 _modalManager.close();

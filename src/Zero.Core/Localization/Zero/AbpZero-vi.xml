@@ -145,6 +145,8 @@
     <text name="AllowedFileTypes">Định dạng hỗ trợ</text>
     <text name="AllowFileExtension">Định dạng file cho phép</text>
     
+    <text name="FileSize">Kích thước</text>
+    <text name="FileModifiedDate">Ngày chỉnh sửa</text>
     <!--  Payment  -->
     
     <text name="CheckoutWithPaypal">Thanh toán qua Paypal (USD)</text>
