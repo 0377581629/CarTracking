@@ -19,12 +19,6 @@
 
 <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
     <abp-page-subheader title="@L("Menus")" description="@L("MenusHeaderInfo")">
-        @if (IsGranted(CmsPermissions.Menu_Create))
-        {
-            <button id="CreateNewButton" class="btn btn-primary blue">
-                <i class="fa fa-plus"></i> @L("Create")
-            </button>
-        }
     </abp-page-subheader>
     <div class="@(await GetContainerClass())">
         <div class="card card-custom gutter-b">
@@ -43,7 +37,7 @@
                                 <label style="color: transparent">@L("Search")</label>
                                 
                                 <div class="form-group">
-                                    <button type="button" name="RefreshButton" class="btn btn-icon btn-primary w-p100">
+                                    <button type="button" id="RefreshButton" class="btn btn-icon btn-primary w-p100">
                                         <i class="fa fa-search"></i>
                                     </button>
                                 </div>
@@ -60,10 +54,19 @@
                 </div>
             </div>
 
-            <div class="card-footer py-15">
-                <button type="button" id="UpdateStructureButton" class="btn btn-primary mr-2 float-right">
-                    <i class="la la-save"></i> @L("UpdateStructure")
-                </button>
+            <div class="card-footer py-15 text-right" id="MenuFunctionsWrapper" style="display:none">
+                @if (IsGranted(CmsPermissions.Menu_Create))
+                {
+                    <button id="CreateNewButton" class="btn btn-primary blue">
+                        <i class="fa fa-plus"></i> @L("Create")
+                    </button>
+                }
+                @if (IsGranted(CmsPermissions.Menu_Create) || IsGranted(CmsPermissions.Menu_Edit))
+                {
+                    <button type="button" id="UpdateStructureButton" class="btn btn-primary ml-2">
+                        <i class="la la-save"></i> @L("UpdateStructure")
+                    </button>    
+                }
             </div>
         </div>
     </div>

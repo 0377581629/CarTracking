@@ -22,11 +22,12 @@
     let _dd = _menuWrapper.find('.dd');
     let _ddList = _dd.find('#dd-list');
     let _menusFormFilter = $('#MenusFormFilter');
-
+    let _menusFunctionsWrapper = $('#MenuFunctionsWrapper')
+    
     let menuGroupSelector;
     menuGroupSelector = $('#MenuGroupSelector');
     baseHelper.SimpleRequiredSelector(menuGroupSelector, app.localize('PleaseSelect'), "/Cms/GetPagedMenuGroups");
-
+    
     function getMenus() {
         abp.ui.setBusy(_menuWrapper);
         _ddList.empty();
@@ -50,6 +51,11 @@
         });
         
         $('.dd-empty').addClass('hidden');
+        
+        if (menuGroupSelector.val() !== undefined && menuGroupSelector.val() !== null)
+            _menusFunctionsWrapper.show();
+        else
+            _menusFunctionsWrapper.hide();
     }
 
     _menuWrapper.on('click', '.customSettingClass', function () {
@@ -99,5 +105,7 @@
         getMenus();
     });
 
+    $('#RefreshButton').on('click', getMenus);
+    
     getMenus();
 });
