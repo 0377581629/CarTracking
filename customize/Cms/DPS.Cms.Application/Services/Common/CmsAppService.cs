@@ -332,6 +332,13 @@ namespace DPS.Cms.Application.Services.Common
         {
             return await _categoryManager.GetAllCategory();
         }
+
+        public async Task<List<SelectListItem>> GetCategory()
+        {
+             var res = _categoryRepository.GetAll();
+                       return res.Select(o =>
+                           new SelectListItem(o.Name, o.Id.ToString())).ToList();
+        }
         
         public async Task<PagedResultDto<CategoryDto>> GetPagedCategories(CmsInput input)
         {

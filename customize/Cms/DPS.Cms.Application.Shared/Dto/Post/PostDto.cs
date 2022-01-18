@@ -7,7 +7,7 @@ namespace DPS.Cms.Application.Shared.Dto.Post
     [AutoMapFrom(typeof(Core.Post.Post))]
     public class PostDto : SimpleEntityDto, IHaveSeoInfo
     {
-        public int CategoryId { get; set; }
+        public int? CategoryId { get; set; }
         
         public string CategoryCode { get; set; }
         

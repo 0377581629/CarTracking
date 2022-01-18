@@ -110,7 +110,7 @@ namespace DPS.Cms.Application.Services.Advertisement
             {
                 ImageBlock = ObjectMapper.Map<CreateOrEditImageBlockDto>(obj)
             };
-
+            
             return output;
         }
 

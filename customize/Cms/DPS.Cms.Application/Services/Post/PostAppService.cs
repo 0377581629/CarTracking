@@ -1,15 +1,20 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using Abp.Application.Services.Dto;
 using Abp.Authorization;
 using Abp.Domain.Repositories;
+using Abp.EntityFrameworkCore.Repositories;
 using Abp.Linq.Extensions;
 using Abp.UI;
 using DPS.Cms.Application.Shared.Dto.Post;
+using DPS.Cms.Application.Shared.Dto.Post.PostTags;
 using DPS.Cms.Application.Shared.Interfaces;
 using post = DPS.Cms.Core.Post;
 using Microsoft.EntityFrameworkCore;
+using NUglify.Helpers;
 using Zero;
 using Zero.Authorization;
 
@@ -19,10 +24,13 @@ namespace DPS.Cms.Application.Services.Post
     public class PostAppService : ZeroAppServiceBase, IPostAppService
     {
         private readonly IRepository<post.Post> _postRepository;
-        
-        public PostAppService(IRepository<post.Post> postRepository)
+        private readonly IRepository<post.PostTagDetail> _postTagDetailRepository;
+
+        public PostAppService(IRepository<post.Post> postRepository,
+            IRepository<post.PostTagDetail> postTagDetailRepository)
         {
             _postRepository = postRepository;
+            _postTagDetailRepository = postTagDetailRepository;
         }
 
         private IQueryable<PostDto> PostQuery(QueryInput queryInput)
@@ -31,7 +39,8 @@ namespace DPS.Cms.Application.Services.Post
             var id = queryInput.Id;
 
             var query = from o in _postRepository.GetAll()
-                    .WhereIf(input != null && !string.IsNullOrWhiteSpace(input.Filter), e => EF.Functions.Like(e.Name, $"%{input.Filter}%"))
+                    .WhereIf(input != null && !string.IsNullOrWhiteSpace(input.Filter),
+                        e => EF.Functions.Like(e.Name, $"%{input.Filter}%"))
                     .WhereIf(input != null && input.CategoryId.HasValue, e => e.CategoryId == input.CategoryId)
                     .WhereIf(id.HasValue, e => e.Id == id.Value)
                 select new PostDto
@@ -43,6 +52,8 @@ namespace DPS.Cms.Application.Services.Post
                     Note = o.Note,
                     Order = o.Order,
                     CategoryId = o.CategoryId,
+                    CategoryName = o.Category.Name,
+                    CategoryCode = o.Category.Code,
                     About = o.About,
                     Summary = o.Summary,
                     Slug = o.Slug,
@@ -50,19 +61,19 @@ namespace DPS.Cms.Application.Services.Post
                     Image = o.Image,
                     ViewCount = o.ViewCount,
                     CommentCount = o.CommentCount,
-                    
+
                     IsDefault = o.IsDefault,
                     IsActive = o.IsActive,
-                    
+
                     TitleDefault = o.TitleDefault,
                     Title = o.Title,
-                    
+
                     DescriptionDefault = o.DescriptionDefault,
                     Description = o.Description,
-                    
+
                     KeywordDefault = o.KeywordDefault,
                     Keyword = o.Keyword,
-                    
+
                     AuthorDefault = o.AuthorDefault,
                     Author = o.Author
                 };
@@ -116,12 +127,33 @@ namespace DPS.Cms.Application.Services.Post
 
             var obj = await objQuery.FirstOrDefaultAsync();
 
+            var post = ObjectMapper.Map<CreateOrEditPostDto>(obj);
+            
+            post.ListTags = TagsQuery(obj.Id).DistinctBy(x => x.TagId).ToList();
+            
             var output = new GetPostForEditOutput
             {
-                Post = ObjectMapper.Map<CreateOrEditPostDto>(obj)
+                Post = post
             };
 
             return output;
+        }
+
+        private IQueryable<PostTagDetailDto> TagsQuery(int postId)
+        {
+            var query = from x in _postTagDetailRepository.GetAll()
+                    .Where(x => x.PostId == postId && !x.IsDeleted)
+                select new PostTagDetailDto()
+                {
+                    Id = x.Id,
+                    PostId = x.PostId,
+                    TagId = x.TagId,
+                    TagName =  x.Tag.Name ,
+                    TagCode = x.Tag.Code,
+                    TagNote = x.Tag.Note
+                };
+
+            return query;
         }
 
         private async Task ValidateDataInput(CreateOrEditPostDto input)
@@ -153,7 +185,30 @@ namespace DPS.Cms.Application.Services.Post
         {
             var obj = ObjectMapper.Map<post.Post>(input);
             obj.TenantId = AbpSession.TenantId;
-            await _postRepository.InsertAndGetIdAsync(obj);
+            obj.Name = obj.Title;
+            obj.Category = null;
+            try
+            {
+                await _postRepository.InsertAndGetIdAsync(obj);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+
+            input.ListTags ??= new List<PostTagDetailDto>();
+            var lstTags = ObjectMapper.Map<List<post.PostTagDetail>>(input.ListTags);
+            foreach (var detail in lstTags)
+            {
+                detail.TagId = detail.TagId;
+                detail.PostId = obj.Id;
+            }
+
+            await _postTagDetailRepository.GetDbContext().BulkSynchronizeAsync(lstTags,
+                options => { options.ColumnSynchronizeDeleteKeySubsetExpression = detail => detail.PostId; });
+
+
             if (obj.IsDefault)
             {
                 var otherObjs = await _postRepository.GetAllListAsync(o => o.Id != obj.Id);
@@ -167,6 +222,7 @@ namespace DPS.Cms.Application.Services.Post
             }
         }
 
+
         [AbpAuthorize(CmsPermissions.Post_Edit)]
         protected virtual async Task Update(CreateOrEditPostDto input)
         {
@@ -174,9 +230,12 @@ namespace DPS.Cms.Application.Services.Post
             {
                 var obj = await _postRepository.FirstOrDefaultAsync(o => o.Id == (int) input.Id);
                 if (obj == null) throw new UserFriendlyException(L("NotFound"));
-                
+
                 ObjectMapper.Map(input, obj);
-                
+
+                obj.Category = null;
+                obj.Name = obj.Title;
+
                 if (obj.IsDefault)
                 {
                     var otherObjs = await _postRepository.GetAllListAsync(o => o.Id != obj.Id);
@@ -188,11 +247,31 @@ namespace DPS.Cms.Application.Services.Post
                         }
                     }
                 }
-
+                
                 await _postRepository.UpdateAsync(obj);
+                
+                // Tags
+                input.ListTags ??= new List<PostTagDetailDto>();
+
+                var lstTags = ObjectMapper.Map<List<post.PostTagDetail>>(input.ListTags);
+                
+                foreach (var detail in lstTags)
+                {
+                    detail.PostId = obj.Id;
+                }
+
+                if (lstTags.Any())
+                {
+                    await _postTagDetailRepository.GetDbContext().BulkSynchronizeAsync(lstTags,
+                        options => { options.ColumnSynchronizeDeleteKeySubsetExpression = detail => detail.PostId; });
+                }
+                else
+                {
+                    await _postTagDetailRepository.DeleteAsync(o => o.PostId == obj.Id);
+                }
             }
         }
-        
+
         [AbpAuthorize(CmsPermissions.Post_Publish)]
         public async Task UpdateStatus(EntityDto input)
         {

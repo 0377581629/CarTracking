@@ -44,7 +44,6 @@ namespace DPS.Cms.Application.Services.Post
                     IsDefault = o.IsDefault,
                     IsActive = o.IsActive,
                 };
-
             return query;
         }
 
