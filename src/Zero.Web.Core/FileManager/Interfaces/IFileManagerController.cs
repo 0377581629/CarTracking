@@ -11,7 +11,7 @@ namespace Zero.Web.FileManager.Interfaces
 
         Task<ActionResult> Destroy(FileManagerViewModel viewModel);
 
-        ActionResult Create(string target, FileManagerViewModel viewModel);
+        Task<ActionResult> Create(string target, FileManagerViewModel viewModel);
 
         Task<ActionResult> Update(string target, FileManagerViewModel viewModel);
 

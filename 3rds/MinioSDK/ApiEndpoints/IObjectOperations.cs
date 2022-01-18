@@ -102,7 +102,7 @@ namespace Minio
         /// <param name="cancellationToken">Optional cancellation token to cancel the operation</param>
         /// <returns></returns>
         Task<IObservable<DeleteError>> RemoveObjectAsync(string bucketName, IEnumerable<string> objectsList, CancellationToken cancellationToken = default);
-
+        
         /// <summary>
         /// Tests the object's existence and returns metadata about existing objects.
         /// </summary>
