@@ -1,10 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using Abp.Domain.Entities;
+using Abp.Domain.Entities.Auditing;
 
 namespace DPS.Cms.Core.Post
 {
     [Table("Cms_Post_Category_Detail")]
-    public class PostCategoryDetail : Entity
+    public class PostCategoryDetail : FullAuditedEntity
     {
         public int PostId { get; set; }
         

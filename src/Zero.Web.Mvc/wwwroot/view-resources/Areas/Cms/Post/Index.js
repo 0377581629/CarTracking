@@ -66,10 +66,11 @@
                                 icon: 'la la-edit text-primary',
                                 text: app.localize('Edit'),
                                 visible: function (data) {
+                                    console.log(data)
                                     return _permissions.edit;
                                 },
                                 action: function (data) {
-                                    _createOrEditModal.open({id: data.record.post.id});
+                                    window.location = "/Cms/Post/CreateOrEdit?id=" + data.record.post.id;
                                 }
                             },
                             {
@@ -86,31 +87,33 @@
                 },
                 {
                     targets: 2,
-                    width: 100,
-                    class: "text-center",
-                    data: "post.code",
-                    name: "code"
-                },
-                {
-                    targets: 3,
                     data: "post.name",
                     name: "name"
                 },
                 {
-                    targets: 4,
+                    targets: 3,
                     width: 250,
                     data: "post.categoryName",
                     name: "categoryName"
                 },
                 {
+                    targets: 4,
+                    data: "post.name",
+                    name: "name",
+                },
+                {
+                    width: 60,
                     targets: 5,
-                    data: "post.isActive",
-                    name: "isActive",
-                    class: "text-center",
-                    width: 80,
-                    render: function(isActive) {
-                        return baseHelper.ShowActive(isActive);
-                    }
+                    class: "text-right",
+                    data: "post.commentCount",
+                    name: "commentCount",
+                },
+                {
+                    width: 60,
+                    targets: 6,
+                    class: "text-right",
+                    data: "post.viewCount",
+                    name: "viewCount",
                 }
             ]
         });

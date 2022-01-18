@@ -1,9 +1,13 @@
-﻿using DPS.Cms.Application.Shared.Dto.Post;
+﻿using System.Collections.Generic;
+using DPS.Cms.Application.Shared.Dto.Category;
+using DPS.Cms.Application.Shared.Dto.Post;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Zero.Web.Areas.Cms.Models.Post
 {
     public class CreateOrEditPostViewModel
     {
+        public List<SelectListItem> ListCategory { get; set; }
         public CreateOrEditPostDto Post { get; set; }
 
         public bool IsEditMode => Post.Id.HasValue;
