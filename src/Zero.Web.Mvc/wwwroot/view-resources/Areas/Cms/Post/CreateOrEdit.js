@@ -10,6 +10,10 @@
     let TagSelector = $('#TagsSelector');
     let backToListingPage = $('#backToListingPage');
 
+    let featuresTree = new FeaturesTree();
+    console.log('$(\'.category-tree\')',$('.category-tree'))
+    featuresTree.init($('.category-tree'));
+    
     ChangeAvatar.on('click', function () {
         _fileManagerModal.open({
             allowExtension: "*.jpg;*.png;*.jpeg",
@@ -35,6 +39,11 @@
     const _postService = abp.services.app.post;
 
     saveButton.on('click', function () {
+        console.log('vao');
+
+        var x = featuresTree.getFeatureValues();
+        console.log('x',x);
+        return;
         if (!_$PostForm.valid()) {
             return;
         }

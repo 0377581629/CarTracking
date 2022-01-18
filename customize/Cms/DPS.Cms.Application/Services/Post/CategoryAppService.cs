@@ -64,6 +64,7 @@ namespace DPS.Cms.Application.Services.Post
                     ParentCode = o.Parent != null ? o.Parent.Code : "",
                     ParentCategoryCode = o.Parent != null ? o.Parent.CategoryCode : "",
                     ParentName = o.Parent != null ? o.Parent.Name : "",
+                    Name = o.Name,
                     Code = o.Code,
                     CategoryCode = o.CategoryCode,
                     About = o.About,
