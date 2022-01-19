@@ -9,7 +9,7 @@
 
 @section Scripts
 {
-    <script abp-src="@ZeroConst.ScriptPathApp/Views/Common/_FeaturesTree.js" asp-append-version="true"></script>
+    <script abp-src="@ZeroConst.ScriptPathApp/Views/Common/_CategoriesTree.js" asp-append-version="true"></script>
     <script abp-src="@ZeroConst.ScriptPathCms/Post/CreateOrEdit.js" asp-append-version="true" xmlns="http://www.w3.org/1999/html"></script>
     <script abp-src="/js/initAfter.js" asp-append-version="true"></script>
 }
@@ -80,7 +80,7 @@
                                                     <i class="ki ki-bold-close icon-xs text-muted"></i>
                                                 </span>
 
-                                                <div class="dropzone dropzone-default dz-clickable" class="dropify" id="ChangeAvatar">
+                                                <div class="dropzone dropzone-default dz-clickable dropify"  id="ChangeAvatar">
                                                     <input id="Avatar" name="image" type="hidden" value="@Model.Post.Image">
                                                     <img alt="Avatar" id="AvatarHolder" onerror="src='@GlobalConfig.DefaultImageUrl'" default-src="@GlobalConfig.DefaultImageUrl" src="@(!string.IsNullOrEmpty(Model.Post.Image) ? Model.Post.Image : GlobalConfig.DefaultImageUrl)" class="kt-avatar__holder mw-100"/>
                                                     <span class="form-text text-muted py-10">@L("AllowedFileTypes"): png, jpg, jpeg.</span>
@@ -112,7 +112,7 @@
                                     <div class="row col-12">
                                         <div class="col-12">
                                             <div class="form-group">
-                                                <label for="Description">@L("Description")</label>
+                                                <label for="Description">@L("Content")</label>
                                                 <textarea class="form-control" id="Description" value="@Model.Post.Description" type="text" name="description">@Model.Post.Description</textarea>
                                             </div>
                                         </div>
@@ -120,7 +120,7 @@
                                     </div>
 
                                     <div class="row col-12">
-                                        <div class="col-8">
+                                        <div class="col-4">
                                             <div class="form-group">
                                                 <label>
                                                     @L("Author")
@@ -128,12 +128,11 @@
                                                 <input class="form-control" id="Author" value="@Model.Post.Author" type="text" name="author"/>
                                             </div>
                                         </div>
-                                        <div class="col-4">
+                                        <div class="col-8">
                                             <div class="form-group">
                                                 <label>
                                                     @L("Tags")
                                                 </label>
-
                                                 <select id="TagsSelector" name="TagsId" multiple class="form-control">
                                                     @if (Model.Post != null && Model.Post.ListTags != null && Model.Post.ListTags.Count > 0)
                                                     {
@@ -159,7 +158,7 @@
                                     <div class="col-12">
                                         <div class="form-group">
                                             <label>
-                                                @L("Category") <span class="text-danger">(*)</span>
+                                                @L("CategoryMain") <span class="text-danger">(*)</span>
                                             </label>
                                             @Html.DropDownList("CategoryId", SelectListHelper.ListWithNull(L("NoneSelect"), Model.ListCategory, Model.Post.CategoryId), new {@class = "form-control kt-select2"})
                                         </div>
@@ -167,7 +166,7 @@
                                     <div class="col-12">
                                         <div class="form-group">
                                             <label>
-                                                @L("Category")
+                                                @L("CategorySub")
                                             </label>
                                             <div class="h-500 mScrollBar">
                                                 <div class="category-tree">

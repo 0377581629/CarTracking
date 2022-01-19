@@ -8,6 +8,7 @@ using DPS.Cms.Application.Shared.Dto.Page;
 using DPS.Cms.Application.Shared.Dto.PageLayout;
 using DPS.Cms.Application.Shared.Dto.PageTheme;
 using DPS.Cms.Application.Shared.Dto.Post;
+using DPS.Cms.Application.Shared.Dto.Post.PostCategory;
 using DPS.Cms.Application.Shared.Dto.Post.PostTags;
 using DPS.Cms.Application.Shared.Dto.Tags;
 using DPS.Cms.Application.Shared.Dto.Widget;
@@ -75,6 +76,7 @@ namespace DPS.Cms.Application
             
             configuration.CreateMap<PostTagDetailDto, PostDto>().ReverseMap();
             configuration.CreateMap<PostTagDetail, PostTagDetailDto>().ReverseMap();
+            configuration.CreateMap<PostCategoryDetail, PostCategoryDetailDto>().ReverseMap();
         }
     }
 }

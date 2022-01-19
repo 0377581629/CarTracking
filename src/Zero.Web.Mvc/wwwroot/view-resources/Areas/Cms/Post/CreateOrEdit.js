@@ -1,6 +1,5 @@
 (function ($) {
-
-    new FroalaEditor('#Description', frEditorConfigSimple);
+    const _postService = abp.services.app.post;
     let postForm = $('#PostForm');
     let saveButton = $('#SaveButton');
     let _imageHolder = $('#AvatarHolder');
@@ -10,85 +9,16 @@
     let TagSelector = $('#TagsSelector');
     let backToListingPage = $('#backToListingPage');
 
-    let featuresTree = new FeaturesTree();
-    console.log('$(\'.category-tree\')',$('.category-tree'))
-    featuresTree.init($('.category-tree'));
-    
-    ChangeAvatar.on('click', function () {
-        _fileManagerModal.open({
-            allowExtension: "*.jpg;*.png;*.jpeg",
-            maxSelectCount: 1
-        }, function (selected) {
-            if (selected !== undefined && selected.length >= 1) {
-                if (_imageValue) _imageValue.val(selected[selected.length - 1].path);
-                if (_imageHolder) _imageHolder.attr('src', selected[selected.length - 1].path);
-            }
-        });
-    });
-
-    CancelAvatar.on('click', function () {
-        _imageHolder.attr('src', '');
-        _imageValue.val('')
-    });
-
-
     let _$PostForm = null;
     _$PostForm = $('.form-validation-post');
     _$PostForm.validate();
 
-    const _postService = abp.services.app.post;
+    new FroalaEditor('#Description', frEditorConfigSimple);
 
-    saveButton.on('click', function () {
-        console.log('vao');
-
-        var x = featuresTree.getFeatureValues();
-        console.log('x',x);
-        return;
-        if (!_$PostForm.valid()) {
-            return;
-        }
-        var post = postForm.serializeFormToObject();
-        
-        let data = $("#TagsSelector").val();
-        let listTags = [];
-        if(data.length >0){
-            data.forEach( (e)=>{
-                listTags.push({TagId: e}) ;
-            })
-            data.listTags = listTags;
-        }
-        post.listTags = listTags;
-        
-        _postService.createOrEdit(
-            post
-        ).done(function () {
-            abp.notify.info(app.localize('SavedSuccessfully'));
-            window.location = '/Cms/Post/Index';
-        }).always(function () {
-        });
-    });
-
-
-
-    function GetTagsDetail() {
-        let details = [];
-        if (TagSelector) {
-            TagSelector.find('.criteriaInAdmissionPlanDetailRow').each(function () {
-                let rowId = $(this).attr('rowId');
-                let detail = {
-                    id: criteriaDetailTable.find('.detailId[rowId="' + rowId + '"]').val(),
-                    admissionPlanId: criteriaDetailTable.find('.admissionPlanId[rowId="' + rowId + '"]').val(),
-                    criteriaId: criteriaDetailTable.find('.criteriaId[rowId="' + rowId + '"]').val(),
-                    isRequired: criteriaDetailTable.find('.detailIsRequired[rowId="' + rowId + '"]').prop('checked')
-                };
-                details.push(detail);
-            });
-        }
-        return details;
-    }
+    let categoriesTree = new CategoriesTree();
+    categoriesTree.init($('.category-tree'));
 
     let CategorySelector = $('#CategorySelector');
-
     CategorySelector.select2({
         width: '100%',
         ajax: {
@@ -129,11 +59,6 @@
         language: abp.localization.currentLanguage.name
     });
 
-    
-    backToListingPage.on('click', function () {
-        window.location = '/Cms/Post';
-    })
-
     TagSelector.select2({
         width: '100%',
         placeholder: app.localize('PleaseSelect'),
@@ -151,7 +76,6 @@
             },
             processResults: function (data, params) {
                 params.page = params.page || 1;
-                console.log('data',data);
 
                 let res = $.map(data.result.items, function (item) {
                     return {
@@ -177,7 +101,62 @@
         },
         language: abp.localization.currentLanguage.name
     });
+
+    ChangeAvatar.on('click', function () {
+        _fileManagerModal.open({
+            allowExtension: "*.jpg;*.png;*.jpeg",
+            maxSelectCount: 1
+        }, function (selected) {
+            if (selected !== undefined && selected.length >= 1) {
+                if (_imageValue) _imageValue.val(selected[selected.length - 1].path);
+                if (_imageHolder) _imageHolder.attr('src', selected[selected.length - 1].path);
+            }
+        });
+    });
+
+    CancelAvatar.on('click', function () {
+        _imageHolder.attr('src', '');
+        _imageValue.val('')
+    });
+
+    backToListingPage.on('click', function () {
+        window.location = '/Cms/Post';
+    })
+
     
+    function convertKeyForArrayInput(arr, keyNew) {
+        let arrayOutput = [];
+        if (arr.length > 0) {
+            arr.forEach(function (value) {
+                let obj = {};
+                obj[keyNew] = value;
+                arrayOutput.push(obj);
+            })
+        }
+        return arrayOutput;
+    }
+
+    saveButton.on('click', function () {
+        if (!_$PostForm.valid()) {
+            return;
+        }
+        if(!CategorySelector.val()){
+            abp.notify.error(app.localize('CategoryMissError'));
+            return;
+        }
+        let post = postForm.serializeFormToObject();
+        post.ListCategories = convertKeyForArrayInput(categoriesTree.getSelectedCategoriess(), 'categoryId');
+        post.listTags = convertKeyForArrayInput($("#TagsSelector").val(), 'tagId');
+        _postService.createOrEdit(
+            post
+        ).done(function () {
+            abp.notify.info(app.localize('SavedSuccessfully'));
+            window.location = '/Cms/Post/Index';
+        }).always(function () {
+        });
+    });
+
+
 })(jQuery);
 
 
