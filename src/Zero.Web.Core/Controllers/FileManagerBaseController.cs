@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Abp.Extensions;
 using Abp.Runtime.Validation;
@@ -72,9 +73,6 @@ namespace Zero.Web.Controllers
 
             if (string.IsNullOrEmpty(target))
                 return Json((await GetFileEntryFromFileServer(_contentPath, target)).ToArray());
-
-            if (target.Contains(_contentPath))
-                target = target[(target.IndexOf(_contentPath, StringComparison.InvariantCultureIgnoreCase) + _contentPath.Length + 1)..];
             if (target.EndsWith("/"))
                 target = target.RemovePostFix("/");
             var allObjects = await GetFileEntryFromFileServer(_contentPath, target);
@@ -92,8 +90,8 @@ namespace Zero.Web.Controllers
                 var newViewModel = string.IsNullOrEmpty(viewModel.Path) ? CreateNewFolder(target, viewModel) : CopyEntry(target, viewModel);
                 return Json(VirtualizePath(newViewModel));    
             }
-            var path = $"{Path.Combine(string.IsNullOrEmpty(target) ? _contentPath : target, viewModel.Name, TemporaryDirectoryFileName).Replace(@"\", "/")}";
-            var folderPath = $"{Path.Combine(string.IsNullOrEmpty(target) ? _contentPath : target, viewModel.Name).Replace(@"\", "/")}";
+            var path = $"{Path.Combine(string.IsNullOrEmpty(target) ? "" : target, viewModel.Name, TemporaryDirectoryFileName).Replace(@"\", "/")}";
+            var folderPath = $"{Path.Combine(string.IsNullOrEmpty(target) ? "" : target, viewModel.Name).Replace(@"\", "/")}";
             var temporaryDirectoryPhysPath = _hostingEnvironment.WebRootFileProvider.GetFileInfo(TemporaryDirectoryFilePath).PhysicalPath;
             await using var fs = System.IO.File.Open(temporaryDirectoryPhysPath, FileMode.Open, FileAccess.Read);
             await FileServerUpload(path, fs.Length, fs);
@@ -133,8 +131,12 @@ namespace Zero.Web.Controllers
             string oldKey;
             if (viewModel.IsDirectory)
             {
-                oldKey = viewModel.ActualPath.RemovePreFix($"{(!DebugHelper.IsDebug ? "https" : "http")}://{SystemConfig.MinioEndPoint}/{SystemConfig.MinioRootBucketName}");
+                oldKey = viewModel.ActualPath.RemovePreFix($"{(!DebugHelper.IsDebug ? "https" : "http")}://{SystemConfig.MinioEndPoint}/{SystemConfig.MinioRootBucketName}/");
                 var lstToMove = await GetFileEntryFromFileServer(_contentPath, oldKey, true);
+                // foreach (var itm in lstToMove)
+                // {
+                //     await FileServerDeleteObject(itm.Path);
+                // }
                 await FileServerDeleteObjects(lstToMove.Select(o=>o.Path).ToList());
             }
             else
@@ -497,7 +499,7 @@ namespace Zero.Web.Controllers
 
         #region Support Method - File Server
 
-        private async Task<List<FileManagerViewModel>> GetFileEntryFromFileServer(string path, string prefix, bool recursive = false)
+        private async Task<List<FileManagerViewModel>> GetFileEntryFromFileServer(string bucketName, string prefix, bool recursive = false)
         {
             var minioClient = new MinioClient(SystemConfig.MinioEndPoint, SystemConfig.MinioAccessKey, SystemConfig.MinioSecretKey);
             if (!DebugHelper.IsDebug)
@@ -508,10 +510,10 @@ namespace Zero.Web.Controllers
             if (!await minioClient.BucketExistsAsync(rootBucket))
                 await minioClient.MakeBucketAsync(rootBucket);
 
-            if (!string.IsNullOrEmpty(prefix))
+            if (!string.IsNullOrEmpty(prefix) && !prefix.EndsWith("/"))
                 prefix += "/";
             // bucket name, prefix, delimiter - Empty if recursive = true
-            var minioObjects = await minioClient.ListObjectsAsync(path, prefix, recursive);
+            var minioObjects = await minioClient.ListObjectsAsync(bucketName, prefix, recursive);
             var lstFileEntry = minioObjects
                 .Select(item => new FileManagerViewModel
                 {
@@ -543,7 +545,6 @@ namespace Zero.Web.Controllers
 
                 // Upload a file to bucket.
                 await minioClient.PutObjectAsync(rootBucket, objectKey, size, file);
-                Console.WriteLine("Successfully uploaded " + objectKey);
             }
             catch (MinioException e)
             {
@@ -571,7 +572,6 @@ namespace Zero.Web.Controllers
                     await minioClient.MakeBucketAsync(rootBucket);
 
                 await minioClient.CopyObjectAsync(rootBucket, objectKey, rootBucket, desObjectKey);
-                Console.WriteLine("Successfully copy " + objectKey);
             }
             catch (MinioException e)
             {
@@ -623,7 +623,8 @@ namespace Zero.Web.Controllers
                     await minioClient.MakeBucketAsync(rootBucket);
 
                 // Upload a file to bucket.
-                await minioClient.RemoveObjectAsync(rootBucket, objectKeys);
+                var observable  = await minioClient.RemoveObjectAsync(rootBucket, objectKeys);
+                observable.Wait();
             }
             catch (MinioException e)
             {

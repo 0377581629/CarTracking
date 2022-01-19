@@ -84,7 +84,7 @@
 
     backToListingPage.on('click', function () {
         window.location = '/Cms/Post';
-    })
+    });
     
     function convertKeyForArrayInput(arr, keyNew) {
         let arrayOutput = [];
