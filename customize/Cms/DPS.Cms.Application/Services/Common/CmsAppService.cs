@@ -335,7 +335,7 @@ namespace DPS.Cms.Application.Services.Common
 
         public async Task<List<SelectListItem>> GetCategory()
         {
-             var res = _categoryRepository.GetAll();
+             var res = await _categoryManager.GetAllCategory();
                        return res.Select(o =>
                            new SelectListItem(o.Name, o.Id.ToString())).ToList();
         }

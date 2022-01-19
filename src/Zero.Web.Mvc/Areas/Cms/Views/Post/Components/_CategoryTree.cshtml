@@ -1,0 +1,21 @@
+﻿@using Zero.Web.Areas.Cms.Models.Post
+@model Zero.Web.Areas.Cms.Models.Post.CategoryTreeItemModel
+@{
+    var categories = Model.Categories.Items.Where(p => p.ParentId == Model.ParentId).ToList();
+    if (categories.Any())
+    {
+        <ul>
+            @foreach (var category in categories)
+            {
+                var selected = Model?.ListParentSelected?.Contains(category.Id);
+                <li id="@category.Id" class="jstree-open" data-jstree='{"selected": @selected.ToString().ToLower()}'>
+                    @category.Name
+                    @if (Model.Categories.Items.Any(p => p.ParentId == category.Id))
+                    {
+                        @await Html.PartialAsync("Components/_CategoryTree", new CategoryTreeItemModel(Model.Categories, category.Id, Model?.ListParentSelected))
+                    }
+                </li>
+            }
+        </ul>
+    }
+}

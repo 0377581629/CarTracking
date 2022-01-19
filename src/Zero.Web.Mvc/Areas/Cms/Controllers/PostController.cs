@@ -18,10 +18,13 @@ namespace Zero.Web.Areas.Cms.Controllers
     {
         private readonly IPostAppService _postAppService;
         private readonly ICmsAppService _cmsAppService;
-        public PostController(IPostAppService postAppService, ICmsAppService cmsAppService)
+        private readonly ICategoryAppService _categoryAppService;
+
+        public PostController(IPostAppService postAppService, ICmsAppService cmsAppService, ICategoryAppService categoryAppService)
         {
             _postAppService = postAppService;
             _cmsAppService = cmsAppService;
+            _categoryAppService = categoryAppService;
         }
 
         public ActionResult Index()
@@ -54,7 +57,8 @@ namespace Zero.Web.Areas.Cms.Controllers
             var viewModel = new CreateOrEditPostViewModel()
             {
                 Post = objEdit.Post,
-                ListCategory = await _cmsAppService.GetCategory()
+                ListCategory = await _cmsAppService.GetCategory(),
+                Categories = await _categoryAppService.GetCategories()
             };
 
             return View("CreateOrEdit", viewModel);

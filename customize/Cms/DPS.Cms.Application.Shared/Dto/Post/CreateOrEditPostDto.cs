@@ -2,8 +2,10 @@
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Abp.Domain.Entities;
+using DPS.Cms.Application.Shared.Dto.Post.PostCategory;
 using DPS.Cms.Application.Shared.Dto.Post.PostTags;
 using DPS.Cms.Application.Shared.Dto.Tags;
+using DPS.Cms.Core.Post;
 using DPS.Cms.Core.Shared;
 using JetBrains.Annotations;
 using Zero;
@@ -48,6 +50,11 @@ namespace DPS.Cms.Application.Shared.Dto.Post
         
         [CanBeNull] 
         public List<PostTagDetailDto> ListTags { get; set; }
+        
+        
+        public List<PostCategoryDetailDto> ListCategories { get; set; }
+        
+        // public List<PostTagDetailDto> ListTags { get; set; }
     
         [StringLength(ZeroConst.MaxNameLength, MinimumLength = ZeroConst.MinNameLength)]
         public string Name { get; set; }

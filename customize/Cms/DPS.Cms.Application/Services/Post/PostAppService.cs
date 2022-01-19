@@ -10,6 +10,7 @@ using Abp.EntityFrameworkCore.Repositories;
 using Abp.Linq.Extensions;
 using Abp.UI;
 using DPS.Cms.Application.Shared.Dto.Post;
+using DPS.Cms.Application.Shared.Dto.Post.PostCategory;
 using DPS.Cms.Application.Shared.Dto.Post.PostTags;
 using DPS.Cms.Application.Shared.Interfaces;
 using post = DPS.Cms.Core.Post;
@@ -25,12 +26,15 @@ namespace DPS.Cms.Application.Services.Post
     {
         private readonly IRepository<post.Post> _postRepository;
         private readonly IRepository<post.PostTagDetail> _postTagDetailRepository;
+        private readonly IRepository<post.PostCategoryDetail> _postCategoryDetailRepository;
 
         public PostAppService(IRepository<post.Post> postRepository,
-            IRepository<post.PostTagDetail> postTagDetailRepository)
+            IRepository<post.PostTagDetail> postTagDetailRepository,
+            IRepository<post.PostCategoryDetail> postCategoryDetailRepository)
         {
             _postRepository = postRepository;
             _postTagDetailRepository = postTagDetailRepository;
+            _postCategoryDetailRepository = postCategoryDetailRepository;
         }
 
         private IQueryable<PostDto> PostQuery(QueryInput queryInput)
@@ -128,9 +132,10 @@ namespace DPS.Cms.Application.Services.Post
             var obj = await objQuery.FirstOrDefaultAsync();
 
             var post = ObjectMapper.Map<CreateOrEditPostDto>(obj);
-            
+
             post.ListTags = TagsQuery(obj.Id).DistinctBy(x => x.TagId).ToList();
-            
+            post.ListCategories = await CategoriesQuery(obj.Id).ToListAsync();
+
             var output = new GetPostForEditOutput
             {
                 Post = post
@@ -148,9 +153,23 @@ namespace DPS.Cms.Application.Services.Post
                     Id = x.Id,
                     PostId = x.PostId,
                     TagId = x.TagId,
-                    TagName =  x.Tag.Name ,
+                    TagName = x.Tag.Name,
                     TagCode = x.Tag.Code,
                     TagNote = x.Tag.Note
+                };
+
+            return query;
+        }
+
+        private IQueryable<PostCategoryDetailDto> CategoriesQuery(int postId)
+        {
+            var query = from x in _postCategoryDetailRepository.GetAll()
+                    .Where(x => x.PostId == postId && !x.IsDeleted)
+                select new PostCategoryDetailDto()
+                {
+                    Id = x.Id,
+                    PostId = x.PostId,
+                    CategoryId = x.CategoryId,
                 };
 
             return query;
@@ -198,15 +217,9 @@ namespace DPS.Cms.Application.Services.Post
             }
 
             input.ListTags ??= new List<PostTagDetailDto>();
-            var lstTags = ObjectMapper.Map<List<post.PostTagDetail>>(input.ListTags);
-            foreach (var detail in lstTags)
-            {
-                detail.TagId = detail.TagId;
-                detail.PostId = obj.Id;
-            }
-
-            await _postTagDetailRepository.GetDbContext().BulkSynchronizeAsync(lstTags,
-                options => { options.ColumnSynchronizeDeleteKeySubsetExpression = detail => detail.PostId; });
+            input.ListCategories ??= new List<PostCategoryDetailDto>();
+            await BulkAsyncPostTag(input, obj.Id);
+            await BulkAsyncPostCategory(input, obj.Id);
 
 
             if (obj.IsDefault)
@@ -247,28 +260,50 @@ namespace DPS.Cms.Application.Services.Post
                         }
                     }
                 }
-                
+
                 await _postRepository.UpdateAsync(obj);
                 
-                // Tags
                 input.ListTags ??= new List<PostTagDetailDto>();
+                input.ListCategories ??= new List<PostCategoryDetailDto>();
+                await BulkAsyncPostTag(input, obj.Id);
+                await BulkAsyncPostCategory(input, obj.Id);
+            }
+        }
+        
+        private async Task BulkAsyncPostCategory(CreateOrEditPostDto input, int postId)
+        {
+            var lstCategories = ObjectMapper.Map<List<post.PostCategoryDetail>>(input.ListCategories);
+            foreach (var detail in lstCategories)
+            {
+                detail.CategoryId = detail.CategoryId;
+                detail.PostId = postId;
+            }
 
-                var lstTags = ObjectMapper.Map<List<post.PostTagDetail>>(input.ListTags);
-                
-                foreach (var detail in lstTags)
-                {
-                    detail.PostId = obj.Id;
-                }
+            if (lstCategories.Any())
+            {
+                await _postCategoryDetailRepository.GetDbContext().BulkSynchronizeAsync(lstCategories,
+                    options => { options.ColumnSynchronizeDeleteKeySubsetExpression = detail => detail.PostId; });
+            }
+            else
+            {
+                await _postCategoryDetailRepository.DeleteAsync(o => o.PostId == postId);
+            }
+        }
 
-                if (lstTags.Any())
-                {
-                    await _postTagDetailRepository.GetDbContext().BulkSynchronizeAsync(lstTags,
-                        options => { options.ColumnSynchronizeDeleteKeySubsetExpression = detail => detail.PostId; });
-                }
-                else
-                {
-                    await _postTagDetailRepository.DeleteAsync(o => o.PostId == obj.Id);
-                }
+        private async Task BulkAsyncPostTag(CreateOrEditPostDto input, int postId)
+        {
+            var lstTags = ObjectMapper.Map<List<post.PostTagDetail>>(input.ListTags);
+
+            foreach (var detail in lstTags) detail.PostId = postId;
+
+            if (lstTags.Any())
+            {
+                await _postTagDetailRepository.GetDbContext().BulkSynchronizeAsync(lstTags,
+                    options => { options.ColumnSynchronizeDeleteKeySubsetExpression = detail => detail.PostId; });
+            }
+            else
+            {
+                await _postTagDetailRepository.DeleteAsync(o => o.PostId == postId);
             }
         }
 
