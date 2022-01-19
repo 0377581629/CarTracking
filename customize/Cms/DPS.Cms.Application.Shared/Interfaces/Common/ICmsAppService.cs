@@ -52,7 +52,6 @@ namespace DPS.Cms.Application.Shared.Interfaces.Common
         Task<List<CategoryDto>> GetAllCategory();
         Task<List<SelectListItem>> GetCategory();
         
-
         Task<PagedResultDto<CategoryDto>> GetPagedCategories(CmsInput input);
         #endregion
         

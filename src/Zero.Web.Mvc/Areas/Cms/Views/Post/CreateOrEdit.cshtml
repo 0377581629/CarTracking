@@ -1,62 +1,31 @@
-﻿@using Zero.Customize
-@using Zero.Web.Areas.Cms.Models.Post
+﻿@using Zero.Web.Areas.Cms.Models.Post
 @model Zero.Web.Areas.Cms.Models.Post.CreateOrEditPostViewModel
 
 @{
     ViewBag.CurrentPageName = AppPageNames.Cms.Post;
 }
 
-
 @section Scripts
 {
     <script abp-src="@ZeroConst.ScriptPathApp/Views/Common/_CategoriesTree.js" asp-append-version="true"></script>
-    <script abp-src="@ZeroConst.ScriptPathCms/Post/CreateOrEdit.js" asp-append-version="true" xmlns="http://www.w3.org/1999/html"></script>
-    <script abp-src="/js/initAfter.js" asp-append-version="true"></script>
+    <script abp-src="@ZeroConst.ScriptPathCms/Post/CreateOrEdit.js" asp-append-version="true"></script>
 }
 
-<div class="content d-flex flex-column flex-column-fluid col-12" id="kt_content">
-    <!--begin::Subheader-->
-    <div class="subheader py-2 py-lg-6 subheader-solid" id="kt_subheader">
-        <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
-            <!--begin::Info-->
-            <div class="d-flex align-items-center flex-wrap mr-1">
-                <!--begin::Mobile Toggle-->
-                <button class="burger-icon burger-icon-left mr-4 d-inline-block d-lg-none" id="kt_subheader_mobile_toggle">
-                    <span></span>
-                </button>
-                <!--end::Mobile Toggle-->
-                <!--begin::Page Heading-->
-                <div class="d-flex align-items-baseline flex-wrap mr-5">
-                    <!--begin::Page Title-->
-                    <h5 class="text-dark font-weight-bold my-1 mr-5">
-                        @L("Posts")
-                    </h5>
-                    <!--end::Page Title-->
-                    <div class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
-                    <span class="text-muted font-weight-bold mr-4">
-                        @(Model.IsEditMode ? L("EditPostHeaderInfo") : L("NewPostsHeaderInfo"))
-                    </span>
-                </div>
-                <!--end::Page Heading-->
-            </div>
-            <!--end::Info-->
-            <!--begin::Toolbar-->
-            <div class="d-flex align-items-center">
-                <button id="backToListingPage" class="btn btn-secondary blue">
-                    <i class="la la-arrow-left"></i> @L("BackToListingPage")
-                </button>
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <abp-page-subheader title="@L("Posts")" description="@(Model.IsEditMode ? L("EditPostHeaderInfo") : L("NewPostsHeaderInfo"))">
+        <button id="backToListingPage" class="btn btn-secondary blue">
+            <i class="la la-arrow-left"></i> @L("BackToListingPage")
+        </button>
+        @if (IsGranted(CmsPermissions.Post_Create) || IsGranted(CmsPermissions.Post_Edit))
+        {
+            <button id="SaveButton" class="btn btn-primary blue">
+                <i class="la la-save"></i> @L("Save")
+            </button>
+        }
+    </abp-page-subheader>
 
-                <button id="SaveButton" class="btn btn-primary blue">
-                    <i class="la la-save"></i> @L("Save")
-                </button>
-
-            </div>
-            <!--end::Toolbar-->
-        </div>
-    </div>
-    <!--end::Subheader-->
     <!--begin::Entry-->
-    <div >
+    <div class="@(await GetContainerClass())">
         <!--begin::Container-->
         <form action="" role="form" novalidate class="form-validation-post" name="PostForm" id="PostForm">
 
@@ -69,109 +38,97 @@
 
             <div class="row">
                 <div class="col-md-8">
-                    <div class="container-fluid">
-                        <div class="card card-custom overflow-hidden">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-12 row">
-                                        <div class="col-3">
-                                            <div class="form-group">
-                                                <span id="CancelAvatar" class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="cancel" data-toggle="kt-tooltip" title="@L("CancelAvatar")">
-                                                    <i class="ki ki-bold-close icon-xs text-muted"></i>
-                                                </span>
+                    <div class="card card-custom overflow-hidden">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-3">
+                                    <div class="form-group">
+                                        <span id="CancelAvatar" class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="cancel" data-toggle="kt-tooltip" title="@L("CancelAvatar")">
+                                            <i class="ki ki-bold-close icon-xs text-muted"></i>
+                                        </span>
 
-                                                <div class="dropzone dropzone-default dz-clickable dropify"  id="ChangeAvatar">
-                                                    <input id="Avatar" name="image" type="hidden" value="@Model.Post.Image">
-                                                    <img alt="Avatar" id="AvatarHolder" onerror="src='@GlobalConfig.DefaultImageUrl'" default-src="@GlobalConfig.DefaultImageUrl" src="@(!string.IsNullOrEmpty(Model.Post.Image) ? Model.Post.Image : GlobalConfig.DefaultImageUrl)" class="kt-avatar__holder mw-100"/>
-                                                    <span class="form-text text-muted py-10">@L("AllowedFileTypes"): png, jpg, jpeg.</span>
-                                                </div>
-
-                                            </div>
-                                        </div>
-
-                                        <div class="col-9">
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    <label>
-                                                        @L("Title") <span class="text-danger">(*)</span>
-                                                    </label>
-                                                    <input class="form-control" id="Title" value="@Model.Post.Title" type="text" name="title" required/>
-                                                </div>
-                                            </div>
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    <label for="Summary">
-                                                        @L("Summary") <span class="text-danger">(*)</span>
-                                                    </label>
-                                                    <textarea class="form-control" id="Summary" rows="8" value="@Model.Post.Summary" type="text" name="summary" required>@Model.Post.Summary</textarea>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row col-12">
-                                        <div class="col-12">
-                                            <div class="form-group">
-                                                <label for="Description">@L("Content")</label>
-                                                <textarea class="form-control" id="Description" value="@Model.Post.Description" type="text" name="description">@Model.Post.Description</textarea>
-                                            </div>
+                                        <div class="dropzone dropzone-default dz-clickable dropify" id="ChangeAvatar">
+                                            <input id="Avatar" name="image" type="hidden" value="@Model.Post.Image">
+                                            <img alt="Avatar" id="AvatarHolder" onerror="src='@GlobalConfig.DefaultImageUrl'" default-src="@GlobalConfig.DefaultImageUrl" src="@(!string.IsNullOrEmpty(Model.Post.Image) ? Model.Post.Image : GlobalConfig.DefaultImageUrl)" class="kt-avatar__holder mw-100"/>
+                                            <span class="form-text text-muted py-10">@L("AllowedFileTypes"): png, jpg, jpeg.</span>
                                         </div>
 
                                     </div>
-
-                                    <div class="row col-12">
-                                        <div class="col-4">
-                                            <div class="form-group">
-                                                <label>
-                                                    @L("Author")
-                                                </label>
-                                                <input class="form-control" id="Author" value="@Model.Post.Author" type="text" name="author"/>
-                                            </div>
-                                        </div>
-                                        <div class="col-8">
-                                            <div class="form-group">
-                                                <label>
-                                                    @L("Tags")
-                                                </label>
-                                                <select id="TagsSelector" name="TagsId" multiple class="form-control">
-                                                    @if (Model.Post != null && Model.Post.ListTags != null && Model.Post.ListTags.Count > 0)
-                                                    {
-                                                        foreach (var tags in Model.Post.ListTags)
-                                                        {
-                                                            <option selected="selected" value="@tags.TagId">@tags.TagName</option>
-                                                        }
-                                                    }
-                                                </select>
-                                            </div>
-                                        </div>
+                                </div>
+                                <div class="col-9">
+                                    <div class="form-group">
+                                        <label>
+                                            @L("Title") <span class="text-danger">(*)</span>
+                                        </label>
+                                        <input class="form-control" id="Title" value="@Model.Post.Title" type="text" name="title" required/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="Summary">
+                                            @L("Summary") <span class="text-danger">(*)</span>
+                                        </label>
+                                        <textarea class="form-control" id="Summary" rows="7" value="@Model.Post.Summary" type="text" name="summary" required>@Model.Post.Summary</textarea>
                                     </div>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label for="Description">@L("Content")</label>
+                                        <textarea class="form-control" id="Description" value="@Model.Post.Description" type="text" name="description">@Model.Post.Description</textarea>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label>
+                                            @L("Author")
+                                        </label>
+                                        <input class="form-control" id="Author" value="@Model.Post.Author" type="text" name="author"/>
+                                    </div>
+                                </div>
+                                <div class="col-8">
+                                    <div class="form-group">
+                                        <label>
+                                            @L("Tags")
+                                        </label>
+                                        <select id="TagsSelector" name="TagsId" multiple class="form-control">
+                                            @if (Model.Post != null && Model.Post.ListTags != null && Model.Post.ListTags.Count > 0)
+                                            {
+                                                foreach (var tags in Model.Post.ListTags)
+                                                {
+                                                    <option selected="selected" value="@tags.TagId">@tags.TagName</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="container-fluid">
-                        <div class="card card-custom overflow-hidden">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <div class="form-group">
-                                            <label>
-                                                @L("CategoryMain") <span class="text-danger">(*)</span>
-                                            </label>
-                                            @Html.DropDownList("CategoryId", SelectListHelper.ListWithNull(L("NoneSelect"), Model.ListCategory, Model.Post.CategoryId), new {@class = "form-control kt-select2"})
-                                        </div>
+                    <div class="card card-custom overflow-hidden">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label>
+                                            @L("CategoryMain") <span class="text-danger">(*)</span>
+                                        </label>
+                                        <select id="CategoryId" name="categoryId" class="form-control requiredSelect2">
+                                            @if (Model.IsEditMode)
+                                            {
+                                                <option value="@Model.Post.CategoryId">@Model.Post.CategoryName</option>
+                                            }
+                                        </select>
                                     </div>
-                                    <div class="col-12">
-                                        <div class="form-group">
-                                            <label>
-                                                @L("CategorySub")
-                                            </label>
-                                            <div class="h-500 mScrollBar">
-                                                <div class="category-tree">
-                                                    @await Html.PartialAsync("Components/_CategoryTree", new CategoryTreeItemModel(Model.Categories, null, Model.Post?.ListCategories?.Select(o => o.CategoryId).ToList()))
-                                                </div>
+                                    <div class="form-group">
+                                        <label>
+                                            @L("CategorySub")
+                                        </label>
+                                        <div class="form-control mScrollBar" style="height: 200px !important;">
+                                            <div class="category-tree">
+                                                @await Html.PartialAsync("Components/_CategoryTree", new CategoryTreeItemModel(Model.Categories, null, Model.Post?.ListCategories?.Select(o => o.CategoryId).ToList()))
                                             </div>
                                         </div>
                                     </div>
@@ -179,6 +136,7 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </form>

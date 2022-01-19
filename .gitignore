@@ -130,6 +130,7 @@ src/Zero.Web.Mvc/wwwroot/view-resources/**/*.min.*
 src/Zero.Web.Mvc/wwwroot/Common/**/*.min.*
 src/Zero.Web.Mvc/wwwroot/metronic/**/*.min.*
 src/Zero.Web.Mvc/package-lock.json
+src/Zero.Web.Mvc/wwwroot/Files/*
 
 src/Zero.Web.Public/wwwroot/lib
 src/Zero.Web.Public/wwwroot/dist

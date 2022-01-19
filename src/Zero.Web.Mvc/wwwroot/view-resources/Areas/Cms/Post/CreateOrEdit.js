@@ -1,4 +1,5 @@
-(function ($) {
+(function () {
+    $(function () {
     const _postService = abp.services.app.post;
     let postForm = $('#PostForm');
     let saveButton = $('#SaveButton');
@@ -13,51 +14,13 @@
     _$PostForm = $('.form-validation-post');
     _$PostForm.validate();
 
-    new FroalaEditor('#Description', frEditorConfigSimple);
+    new FroalaEditor('#Description', frEditorConfig);
 
     let categoriesTree = new CategoriesTree();
     categoriesTree.init($('.category-tree'));
 
-    let CategorySelector = $('#CategorySelector');
-    CategorySelector.select2({
-        width: '100%',
-        ajax: {
-            url: abp.appPath + "api/services/app/Category/GetAllNested",
-            dataType: 'json',
-            delay: 50,
-            data: function (params) {
-                return {
-                    filter: params.term,
-                    skipCount: ((params.page || 1) - 1) * 10,
-                };
-            },
-            processResults: function (data, params) {
-                params.page = params.page || 1;
-                console.log(data)
-                let res = $.map(data.result, function (item) {
-                    return {
-                        text: item.displayName,
-                        id: item.id
-                    }
-                });
-
-                if (data.result.totalCount === 0) {
-                    res.splice(0, 0, {
-                        text: app.localize('NotFound')
-                    });
-                }
-
-                return {
-                    results: res,
-                    pagination: {
-                        more: (params.page * 10) < data.result.totalCount
-                    }
-                };
-            },
-            cache: true
-        },
-        language: abp.localization.currentLanguage.name
-    });
+    let mainCategoryId = $('#CategoryId');
+    baseHelper.SimpleRequiredSelector(mainCategoryId, app.localize('PleaseSelect'), "/Cms/GetPagedCategories");
 
     TagSelector.select2({
         width: '100%',
@@ -122,7 +85,6 @@
     backToListingPage.on('click', function () {
         window.location = '/Cms/Post';
     })
-
     
     function convertKeyForArrayInput(arr, keyNew) {
         let arrayOutput = [];
@@ -137,13 +99,12 @@
     }
 
     saveButton.on('click', function () {
-        if (!_$PostForm.valid()) {
+        let selectorsValid = baseHelper.ValidSelectors();
+        
+        if (!_$PostForm.valid() || !selectorsValid) {
             return;
         }
-        if(!CategorySelector.val()){
-            abp.notify.error(app.localize('CategoryMissError'));
-            return;
-        }
+        
         let post = postForm.serializeFormToObject();
         post.ListCategories = convertKeyForArrayInput(categoriesTree.getSelectedCategoriess(), 'categoryId');
         post.listTags = convertKeyForArrayInput($("#TagsSelector").val(), 'tagId');
@@ -155,8 +116,6 @@
         }).always(function () {
         });
     });
-
-
-})(jQuery);
-
+    });
+})();
 
