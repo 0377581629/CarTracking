@@ -139,3 +139,4 @@ src/Zero.Web.Public/wwwroot/view-resources/**/*.min.*
 src/Zero.Web.Public/wwwroot/Common/**/*.min.*
 src/Zero.Web.Public/node_modules
 src/Zero.Web.Mvc/wwwroot/css/kendo.extend.min.css
+src/Zero.Web.Mvc/wwwroot/css/bootstrap.extend.min.css
