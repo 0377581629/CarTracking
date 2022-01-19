@@ -10,7 +10,7 @@ namespace DPS.Cms.Core.Post
     {
         public int? TenantId { get; set; }
         
-        public int? CategoryId { get; set; }
+        public int CategoryId { get; set; }
         
         [ForeignKey("CategoryId")]
         public virtual Category Category { get; set; }

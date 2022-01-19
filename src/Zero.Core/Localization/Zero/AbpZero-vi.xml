@@ -120,7 +120,10 @@
 
     <text name="Categories">Danh mục bài viết</text>
     <text name="Category">Danh mục bài viết</text>
+    <text name="CategoryMain">Danh mục chính</text>
+    <text name="CategorySub">Danh mục phụ</text>
     <text name="CategoriesHeaderInfo">Danh mục bài viết</text>
+    <text name="CategoryMissError">Vui lòng chọn danh mục chính</text>
 
     <text name="Posts">Bài viết</text>
     <text name="Post">Bài viết</text>
