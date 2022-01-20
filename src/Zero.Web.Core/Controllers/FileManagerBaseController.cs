@@ -72,10 +72,10 @@ namespace Zero.Web.Controllers
             }
 
             if (string.IsNullOrEmpty(target))
-                return Json((await GetFileEntryFromFileServer(_contentPath, target)).ToArray());
+                return Json((await FileServerGetObjects(target)).ToArray());
             if (target.EndsWith("/"))
                 target = target.RemovePostFix("/");
-            var allObjects = await GetFileEntryFromFileServer(_contentPath, target);
+            var allObjects = await FileServerGetObjects(target);
             
             return Json(allObjects.Where(o=>!o.ActualPath.EndsWith(TemporaryDirectoryFileName)).ToArray());
         }
@@ -90,10 +90,14 @@ namespace Zero.Web.Controllers
                 var newViewModel = string.IsNullOrEmpty(viewModel.Path) ? CreateNewFolder(target, viewModel) : CopyEntry(target, viewModel);
                 return Json(VirtualizePath(newViewModel));    
             }
+
+            viewModel.Name = await FileServerEnsureUniqueFolderName(target, viewModel);
+            
             var path = $"{Path.Combine(string.IsNullOrEmpty(target) ? "" : target, viewModel.Name, TemporaryDirectoryFileName).Replace(@"\", "/")}";
             var folderPath = $"{Path.Combine(string.IsNullOrEmpty(target) ? "" : target, viewModel.Name).Replace(@"\", "/")}";
             var temporaryDirectoryPhysPath = _hostingEnvironment.WebRootFileProvider.GetFileInfo(TemporaryDirectoryFilePath).PhysicalPath;
             await using var fs = System.IO.File.Open(temporaryDirectoryPhysPath, FileMode.Open, FileAccess.Read);
+            
             await FileServerUpload(path, fs.Length, fs);
             
             return Json(new FileManagerViewModel
@@ -132,11 +136,7 @@ namespace Zero.Web.Controllers
             if (viewModel.IsDirectory)
             {
                 oldKey = viewModel.ActualPath.RemovePreFix($"{(!DebugHelper.IsDebug ? "https" : "http")}://{SystemConfig.MinioEndPoint}/{SystemConfig.MinioRootBucketName}/");
-                var lstToMove = await GetFileEntryFromFileServer(_contentPath, oldKey, true);
-                // foreach (var itm in lstToMove)
-                // {
-                //     await FileServerDeleteObject(itm.Path);
-                // }
+                var lstToMove = await FileServerGetObjects(oldKey, true);
                 await FileServerDeleteObjects(lstToMove.Select(o=>o.Path).ToList());
             }
             else
@@ -168,7 +168,7 @@ namespace Zero.Web.Controllers
             {
                 oldKey = viewModel.ActualPath.RemovePreFix($"{(!DebugHelper.IsDebug ? "https" : "http")}://{SystemConfig.MinioEndPoint}/{SystemConfig.MinioRootBucketName}");
                 // newKey = oldKey.RemovePostFix(Path.GetFileName(viewModel.Path) + "/") + $"{viewModel.Name}/";
-                var lstToMove = await GetFileEntryFromFileServer(_contentPath, oldKey, true);
+                var lstToMove = await FileServerGetObjects(oldKey, true);
                 oldKey = oldKey.RemovePreFix("/");
                 newKey = oldKey.RemovePostFix(Path.GetFileName(viewModel.Path) + "/") + $"{viewModel.Name}/";
                 foreach (var obj in lstToMove)
@@ -376,7 +376,7 @@ namespace Zero.Web.Controllers
             {
                 while (Directory.Exists(physicalTarget))
                 {
-                    tempName = viewModel.Name + String.Format("({0})", ++sequence);
+                    tempName = viewModel.Name + $"({++sequence})";
                     physicalTarget = Path.Combine(NormalizePath(target), tempName);
                 }
             }
@@ -384,7 +384,7 @@ namespace Zero.Web.Controllers
             {
                 while (System.IO.File.Exists(physicalTarget))
                 {
-                    tempName = viewModel.Name + String.Format("({0})", ++sequence) + viewModel.Extension;
+                    tempName = viewModel.Name + $"({++sequence})" + viewModel.Extension;
                     physicalTarget = Path.Combine(NormalizePath(target), tempName);
                 }
             }
@@ -499,21 +499,19 @@ namespace Zero.Web.Controllers
 
         #region Support Method - File Server
 
-        private async Task<List<FileManagerViewModel>> GetFileEntryFromFileServer(string bucketName, string prefix, bool recursive = false)
+        private async Task<List<FileManagerViewModel>> FileServerGetObjects(string prefix, bool recursive = false)
         {
             var minioClient = new MinioClient(SystemConfig.MinioEndPoint, SystemConfig.MinioAccessKey, SystemConfig.MinioSecretKey);
             if (!DebugHelper.IsDebug)
                 minioClient = minioClient.WithSSL();
 
-            var rootBucket = _contentPath;
-
-            if (!await minioClient.BucketExistsAsync(rootBucket))
-                await minioClient.MakeBucketAsync(rootBucket);
+            if (!await minioClient.BucketExistsAsync(_contentPath))
+                await minioClient.MakeBucketAsync(_contentPath);
 
             if (!string.IsNullOrEmpty(prefix) && !prefix.EndsWith("/"))
                 prefix += "/";
             // bucket name, prefix, delimiter - Empty if recursive = true
-            var minioObjects = await minioClient.ListObjectsAsync(bucketName, prefix, recursive);
+            var minioObjects = await minioClient.ListObjectsAsync(_contentPath, prefix, recursive);
             var lstFileEntry = minioObjects
                 .Select(item => new FileManagerViewModel
                 {
@@ -528,6 +526,41 @@ namespace Zero.Web.Controllers
                 .OrderByDescending(o => o.IsDirectory)
                 .ToList();
             return lstFileEntry;
+        }
+
+        private async Task<string> FileServerEnsureUniqueFolderName(string target, FileManagerViewModel viewModel)
+        {
+            var folderName = viewModel.Name;
+            var path = $"{Path.Combine(string.IsNullOrEmpty(target) ? "" : target, folderName, TemporaryDirectoryFileName).Replace(@"\", "/")}";
+            
+            var sequence = 0;
+            
+            while (await FileServerCheckExisted(path) && sequence <= 2000)
+            {
+                folderName = viewModel.Name + $"({++sequence})";
+                path = $"{Path.Combine(string.IsNullOrEmpty(target) ? "" : target, folderName, TemporaryDirectoryFileName).Replace(@"\", "/")}";
+            }
+            
+            return folderName;
+        }
+        
+        private async Task<bool> FileServerCheckExisted(string objectKey)
+        {
+            var minioClient = new MinioClient(SystemConfig.MinioEndPoint, SystemConfig.MinioAccessKey, SystemConfig.MinioSecretKey);
+            if (!DebugHelper.IsDebug)
+                minioClient = minioClient.WithSSL();
+
+            if (!await minioClient.BucketExistsAsync(_contentPath))
+                await minioClient.MakeBucketAsync(_contentPath);
+            try
+            {
+                await minioClient.StatObjectAsync(_contentPath, objectKey);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         private async Task FileServerUpload(string objectKey, long size, Stream file)
@@ -591,13 +624,10 @@ namespace Zero.Web.Controllers
                 if (!DebugHelper.IsDebug)
                     minioClient = minioClient.WithSSL();
 
-                var rootBucket = _contentPath;
+                if (!await minioClient.BucketExistsAsync(_contentPath))
+                    await minioClient.MakeBucketAsync(_contentPath);
 
-                if (!await minioClient.BucketExistsAsync(rootBucket))
-                    await minioClient.MakeBucketAsync(rootBucket);
-
-                // Upload a file to bucket.
-                await minioClient.RemoveObjectAsync(rootBucket, objectKey);
+                await minioClient.RemoveObjectAsync(_contentPath, objectKey);
             }
             catch (MinioException e)
             {
