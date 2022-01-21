@@ -24,5 +24,11 @@
         
         public static string MinioRegion { get; set; }
         #endregion
+        
+        #region Email Validation
+        public static bool UseEmailValidation { get; set; }
+        public static string EmailValidationEndPoint { get; set; }
+        public static string EmailValidationApiKey { get; set; }
+        #endregion
     }
 }

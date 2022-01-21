@@ -55,11 +55,11 @@ namespace TelerikCommon
                     
                     _document = provider.Import(fs);
                     IFormatProvider<RadFlowDocument> formatProvider = new PdfFormatProvider();
-                    var path = FroalaEditor.File.GetAbsoluteServerPath(savePath);
-                    using (var stream = File.OpenWrite(path))
-                    {
-                        formatProvider.Export(_document, stream);
-                    }
+                    // var path = FroalaEditor.File.GetAbsoluteServerPath(savePath);
+                    // using (var stream = File.OpenWrite(path))
+                    // {
+                    //     formatProvider.Export(_document, stream);
+                    // }
                     // var psi = new ProcessStartInfo()
                     // {
                     //     FileName = path,
@@ -88,11 +88,11 @@ namespace TelerikCommon
             {
                 _document = provider.Import(data);
                 IFormatProvider<RadFlowDocument> formatProvider = new PdfFormatProvider();
-                var path = FroalaEditor.File.GetAbsoluteServerPath(savePath);
-                using (var stream = File.OpenWrite(path))
-                {
-                    formatProvider.Export(_document, stream);
-                }
+                // var path = FroalaEditor.File.GetAbsoluteServerPath(savePath);
+                // using (var stream = File.OpenWrite(path))
+                // {
+                //     formatProvider.Export(_document, stream);
+                // }
             }
             catch (Exception)
             {
