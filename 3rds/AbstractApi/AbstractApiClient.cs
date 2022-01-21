@@ -9,6 +9,7 @@ namespace AbstractApi
     {
         public async Task<bool> Valid(string emailAddress)
         {
+            if (!Config.IsActive) return true;
             var fullRequestUrl = $"{Config.Endpoint}?api_key={Config.ApiKey}&email={emailAddress}";
             var httpClient = new HttpClient();
             var response = await httpClient.GetAsync(fullRequestUrl);

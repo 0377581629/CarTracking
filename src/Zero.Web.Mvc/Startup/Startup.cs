@@ -307,6 +307,17 @@ namespace Zero.Web.Startup
                 SystemConfig.MinioRegion = _appConfiguration["FileServer:Region"];
             }
 
+            SystemConfig.UseEmailValidation = bool.Parse(_appConfiguration["EmailValidationServer:IsActive"]);
+            if (SystemConfig.UseEmailValidation)
+            {
+                SystemConfig.EmailValidationEndPoint = _appConfiguration["EmailValidationServer:EndPoint"];
+                SystemConfig.EmailValidationApiKey = _appConfiguration["EmailValidationServer:ApiKey"];
+                
+                AbstractApi.Config.IsActive = SystemConfig.UseEmailValidation;
+                AbstractApi.Config.Endpoint = SystemConfig.EmailValidationEndPoint;
+                AbstractApi.Config.ApiKey = SystemConfig.EmailValidationApiKey;
+            }
+            
             #endregion
 
             #region Layout
