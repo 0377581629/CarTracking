@@ -22,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\3rds\AbstractApi\AbstractApi.csproj" />
     <ProjectReference Include="..\Zero.Application.Shared\Zero.Application.Shared.csproj" />
     <ProjectReference Include="..\Zero.Core\Zero.Core.csproj" />
     <ProjectReference Include="..\Zero.EntityFrameworkCore\Zero.EntityFrameworkCore.csproj" />

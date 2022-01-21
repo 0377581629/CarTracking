@@ -50,7 +50,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\3rds\FroalaSDK\FroalaEditorSDK.csproj" />
     <ProjectReference Include="..\..\3rds\MinioSDK\MinioSDK.csproj" />
     <ProjectReference Include="..\Zero.Web.Core\Zero.Web.Core.csproj" />
   </ItemGroup>
