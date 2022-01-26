@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Abp.AspNetCore.Mvc.Authorization;
 using Abp.Domain.Repositories;
 using DPS.Cms.Application.Shared.Dto.Menu;
@@ -30,6 +32,13 @@ namespace Zero.Web.Areas.Cms.Controllers
         [AbpMvcAuthorize(CmsPermissions.Menu_Create, CmsPermissions.Menu_Edit)]
         public async Task<PartialViewResult> CreateOrEditModal(CreateOrEditMenuInput input)
         {
+            var ghnApi = new GHN.ApiClient();
+            var provinces = await ghnApi.GetProvinces();
+            Console.WriteLine(provinces.Count);
+            var districts = await ghnApi.GetDistricts(provinces.First().Id);
+            Console.WriteLine(districts.Count);
+            var wards = await ghnApi.GetWards(districts.First().Id);
+            Console.WriteLine(wards.Count);
             var model = new CreateOrEditMenuViewModel(null)
             {
                 Code = StringHelper.ShortIdentity(),

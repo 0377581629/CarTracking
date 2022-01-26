@@ -23,7 +23,7 @@ namespace alepay
     {
         #region Constructor
 
-        private RestClient restClient;
+        private RestClient _restClient;
         
         private string BaseUrl { get; set; }
         
@@ -119,7 +119,7 @@ namespace alepay
         #region Private, helper methods, classes
         private RestClient GetRestClient()
         {
-            return restClient ?? (restClient = new RestClient(BaseUrl));
+            return _restClient ?? (_restClient = new RestClient(BaseUrl));
         }
 
         private async Task<T> HandleCommonAPI<T>(string requestPath,

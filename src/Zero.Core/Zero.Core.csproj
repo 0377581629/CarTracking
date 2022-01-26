@@ -43,7 +43,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\3rds\Alepay\alepay_api_client\alepay_api_client.csproj" />
+    <ProjectReference Include="..\..\3rds\Alepay\AlepayApi\AlepayApi.csproj" />
     <ProjectReference Include="..\Zero.Core.Shared\Zero.Core.Shared.csproj" />
   </ItemGroup>
 
