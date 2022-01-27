@@ -2,8 +2,90 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace GHN
+namespace GHN.Models
 {
+    #region Address
+
+    public class Province
+    {
+        [JsonProperty("ProvinceID")]
+        public ulong Id { get; set; }
+        
+        [JsonProperty("Code")]
+        public string Code { get; set; }
+        
+        [JsonProperty("ProvinceName")]
+        public string Name { get; set; }
+    }
+    
+    [Serializable]
+    public class District
+    {
+        [JsonProperty("DistrictID")]
+        public ulong Id { get; set; }
+        
+        [JsonProperty("ProvinceID")]
+        public ulong ProvinceId { set; get; }
+        
+        [JsonProperty("Code")]
+        public string Code { set; get; }
+        
+        [JsonProperty("DistrictName")]
+        public string Name { get; set; }
+    }
+
+    [Serializable]
+    public class Ward
+    {
+        [JsonProperty("WardCode")]
+        public ulong Id { set; get; }
+        
+        [JsonProperty("WardName")]
+        public string Name { set; get; }
+        
+        [JsonProperty("DistrictID")]
+        public ulong DistrictId { set; get; }
+    }
+    
+    #endregion
+    
+    #region Store
+
+    public class Store
+    {
+        [JsonProperty("_id")]
+        public ulong Id { get; set; }
+        
+        [JsonProperty("name")]
+        public string Name { get; set; }
+        
+        [JsonProperty("phone")]
+        public string Phone { get; set; }
+        
+        [JsonProperty("address")]
+        public string Address { get; set; }
+        
+        [JsonProperty("ward_code")]
+        public string WardCode { get; set; }
+        
+        [JsonProperty("district_id")]
+        public ulong DistrictId { get; set; }
+        
+        [JsonProperty("client_id")]
+        public ulong ClientId { get; set; }
+        
+        [JsonProperty("bank_account_id")]
+        public ulong BankAccountId { get; set; }
+        
+        [JsonProperty("status")]
+        public byte Status { get; set; }
+        
+        [JsonProperty("version_no")]
+        public string Version { get; set; }
+    }
+
+    
+    #endregion
     [Serializable]
     public class HubUpdateRequest
     {
@@ -379,50 +461,7 @@ namespace GHN
         public decimal ServiceID { set; get; }
     }
 
-    #region Address
-
-    public class Province
-    {
-        [JsonProperty("ProvinceID")]
-        public int Id { get; set; }
-        
-        [JsonProperty("Code")]
-        public string Code { get; set; }
-        
-        [JsonProperty("ProvinceName")]
-        public string Name { get; set; }
-    }
     
-    [Serializable]
-    public class District
-    {
-        [JsonProperty("DistrictID")]
-        public int Id { get; set; }
-        
-        [JsonProperty("ProvinceID")]
-        public int ProvinceId { set; get; }
-        
-        [JsonProperty("Code")]
-        public string Code { set; get; }
-        
-        [JsonProperty("DistrictName")]
-        public string Name { get; set; }
-    }
-
-    [Serializable]
-    public class Ward
-    {
-        [JsonProperty("WardCode")]
-        public int Id { set; get; }
-        
-        [JsonProperty("WardName")]
-        public string Name { set; get; }
-        
-        [JsonProperty("DistrictID")]
-        public int DistrictId { set; get; }
-    }
-    
-    #endregion
     
     [Serializable]
     public class Hub

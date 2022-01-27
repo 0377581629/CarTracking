@@ -19,7 +19,7 @@ namespace alepay
     /// APIClient giao tiếp với cổng thanh toán AlePay
     /// Được viết dựa theo: TÀI LIỆU TÍCH HỢP THANH TOÁN NGAY + TRẢ GÓP ALEPAY version 3.0
     /// </summary>
-    public class AlePayAPIClient
+    public class AlePayApiClient
     {
         #region Constructor
 
@@ -32,7 +32,7 @@ namespace alepay
         private string ChecksumKey { get; set; }
 
         
-        public AlePayAPIClient(string baseUrl, string tokenKey, string checksumKey)
+        public AlePayApiClient(string baseUrl, string tokenKey, string checksumKey)
         {
             BaseUrl = baseUrl;
             TokenKey = tokenKey;

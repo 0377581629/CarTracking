@@ -100,7 +100,7 @@ namespace alepay.Models
         /// </summary>
         public long? TransactionTime { get; set; }
 
-        public DateTime? TransactionTimeWindows => AlePayAPIClient.UnixTimeStampMilisecsToDateTime(TransactionTime);
+        public DateTime? TransactionTimeWindows => AlePayApiClient.UnixTimeStampMilisecsToDateTime(TransactionTime);
 
         /// <summary>
         /// Thời gian thanh toán thành công (millisecond)

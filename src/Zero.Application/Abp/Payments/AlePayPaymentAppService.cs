@@ -12,7 +12,7 @@ namespace Zero.Abp.Payments
     {
         private readonly ISubscriptionPaymentRepository _subscriptionPaymentRepository;
         private readonly IUserSubscriptionPaymentRepository _userSubscriptionPaymentRepository;
-        private readonly AlePayAPIClient _alePayApiClient;
+        private readonly AlePayApiClient _alePayApiClient;
         public AlePayPaymentAppService(
             ISubscriptionPaymentRepository subscriptionPaymentRepository,
             IUserSubscriptionPaymentRepository userSubscriptionPaymentRepository, 
@@ -20,7 +20,7 @@ namespace Zero.Abp.Payments
         {
             _subscriptionPaymentRepository = subscriptionPaymentRepository;
             _userSubscriptionPaymentRepository = userSubscriptionPaymentRepository;
-            _alePayApiClient = new AlePayAPIClient( alePayConfiguration.BaseUrl, alePayConfiguration.TokenKey, alePayConfiguration.ChecksumKey);
+            _alePayApiClient = new AlePayApiClient( alePayConfiguration.BaseUrl, alePayConfiguration.TokenKey, alePayConfiguration.ChecksumKey);
         }
 
         public async Task<string> CreatePayment(AlePayCreatePaymentInput input)

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace GHN.Models
 {
@@ -13,4 +14,22 @@ namespace GHN.Models
         [JsonProperty("data")]
         public T Data { get; set; }
     }
+
+    #region Store
+    public class StoreResponseModel
+    {
+        [JsonProperty("last_offset")]
+        public ulong LastOffset { get; set; }
+        
+        [JsonProperty("shops")]
+        public List<Store> Stores { get; set; }
+    }
+
+    public class CreateStoreResponseModel
+    {
+        [JsonProperty("shop_id")]
+        public ulong ShopId { get; set; }
+    }
+    
+    #endregion
 }

@@ -11,7 +11,7 @@ using RestSharp.Serializers;
 
 namespace GHN
 {
-    public class ApiClient
+    public class GHNApiClient
     {
         #region Constructor
 
@@ -20,7 +20,7 @@ namespace GHN
         private readonly string _token = "e5347cba-7edc-11ec-b18b-3a9c67615aba";
         private readonly string _shopId = "";
 
-        public ApiClient(string baseUrl = null, string token = null, string shopId = null)
+        public GHNApiClient(string baseUrl = null, string token = null, string shopId = null)
         {
             if (!string.IsNullOrEmpty(baseUrl))
                 _url = baseUrl;
@@ -39,19 +39,36 @@ namespace GHN
             => await HandleCommonApi<List<Province>>("master-data/province", Method.GET);
 
         // Get Districts
-        public async Task<List<District>> GetDistricts(int provinceId)
+        public async Task<List<District>> GetDistricts(ulong provinceId)
             => await HandleCommonApi<List<District>>("master-data/district", Method.GET, parameters: new Dictionary<string, string>
             {
                 {"province_id",provinceId.ToString()}
             });
 
         //Get wards
-        public async Task<List<Ward>> GetWards(int districtId)
+        public async Task<List<Ward>> GetWards(ulong districtId)
             => await HandleCommonApi<List<Ward>>("master-data/ward", Method.GET, parameters: new Dictionary<string, string>
             {
                 {"district_id",districtId.ToString()}
             });
 
+        #endregion
+        
+        #region Store
+        // Get Stores
+        public async Task<List<Store>> GetStores()
+            => (await HandleCommonApi<StoreResponseModel>("v2/shop/all", Method.GET, parameters: new Dictionary<string, string>
+            {
+                {"offset", "0"},
+                {"limit", "200"},
+                {"client_phone", ""}
+            })).Stores;
+        
+        // Create Store
+        public async Task<ulong> CreateStore(CreateStoreModel input)
+            => (await HandleCommonApi<CreateStoreResponseModel>("v2/shop/register", Method.POST, input)).ShopId;
+
+        
         #endregion
 
         #region Private Methods

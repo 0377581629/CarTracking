@@ -5,6 +5,7 @@ using Abp.AspNetCore.Mvc.Authorization;
 using Abp.Domain.Repositories;
 using DPS.Cms.Application.Shared.Dto.Menu;
 using DPS.Cms.Core.Menu;
+using GHN.Models;
 using Microsoft.AspNetCore.Mvc;
 using Zero.Authorization;
 using Zero.Customize;
@@ -32,13 +33,25 @@ namespace Zero.Web.Areas.Cms.Controllers
         [AbpMvcAuthorize(CmsPermissions.Menu_Create, CmsPermissions.Menu_Edit)]
         public async Task<PartialViewResult> CreateOrEditModal(CreateOrEditMenuInput input)
         {
-            var ghnApi = new GHN.ApiClient();
+            var ghnApi = new GHN.GHNApiClient();
             var provinces = await ghnApi.GetProvinces();
             Console.WriteLine(provinces.Count);
             var districts = await ghnApi.GetDistricts(provinces.First().Id);
             Console.WriteLine(districts.Count);
             var wards = await ghnApi.GetWards(districts.First().Id);
             Console.WriteLine(wards.Count);
+            var stores = await ghnApi.GetStores();
+            Console.WriteLine(stores.Count);
+            var storeId = await ghnApi.CreateStore(new CreateStoreModel
+            {
+                DistrictId = wards.First().DistrictId,
+                WardId = wards.First().Id.ToString(),
+                Address = "663 Truong Dinh Str",
+                Name = "Shop thu 3",
+                Phone = "0383213993"
+            });
+            Console.WriteLine(storeId);
+            
             var model = new CreateOrEditMenuViewModel(null)
             {
                 Code = StringHelper.ShortIdentity(),
