@@ -17,7 +17,7 @@ namespace GHN
 
         private RestClient _restClient;
         private readonly string _url = @"https://online-gateway.ghn.vn/shiip/public-api/";
-        private readonly string _token = "e5347cba-7edc-11ec-b18b-3a9c67615aba";
+        private readonly string _token = "a592c6f4-7f8e-11ec-b18b-3a9c67615aba";
         private readonly string _shopId = "";
 
         public GHNApiClient(string baseUrl = null, string token = null, string shopId = null)
@@ -42,33 +42,59 @@ namespace GHN
         public async Task<List<District>> GetDistricts(ulong provinceId)
             => await HandleCommonApi<List<District>>("master-data/district", Method.GET, parameters: new Dictionary<string, string>
             {
-                {"province_id",provinceId.ToString()}
+                { "province_id", provinceId.ToString() }
             });
 
         //Get wards
         public async Task<List<Ward>> GetWards(ulong districtId)
             => await HandleCommonApi<List<Ward>>("master-data/ward", Method.GET, parameters: new Dictionary<string, string>
             {
-                {"district_id",districtId.ToString()}
+                { "district_id", districtId.ToString() }
             });
 
         #endregion
-        
+
         #region Store
+
         // Get Stores
         public async Task<List<Store>> GetStores()
             => (await HandleCommonApi<StoreResponseModel>("v2/shop/all", Method.GET, parameters: new Dictionary<string, string>
             {
-                {"offset", "0"},
-                {"limit", "200"},
-                {"client_phone", ""}
+                { "offset", "0" },
+                { "limit", "200" },
+                { "client_phone", "" }
             })).Stores;
-        
+
         // Create Store
-        public async Task<ulong> CreateStore(CreateStoreModel input)
+        public async Task<ulong> CreateStore(CreateStoreRequestModel input)
             => (await HandleCommonApi<CreateStoreResponseModel>("v2/shop/register", Method.POST, input)).ShopId;
 
-        
+        #endregion
+
+        #region Order
+
+        public async Task<SearchOrderResponseModel> GetOrders(SearchOrderRequestModel input)
+            => await HandleCommonApi<SearchOrderResponseModel>("v2/shipping-order/search", Method.POST, input);
+
+        #endregion
+
+        #region Pick shift
+
+        public async Task<List<PickShift>> GetPickShifts()
+            => await HandleCommonApi<List<PickShift>>("v2/shift/date", Method.GET);
+
+        #endregion
+
+        #region Services
+
+        public async Task<List<Service>> GetServices(uint shopId, uint fromDistrictId, uint toDistrictId)
+            => await HandleCommonApi<List<Service>>("v2/shipping-order/available-services", Method.GET, parameters: new Dictionary<string, string>
+            {
+                { "shop_id", shopId.ToString() },
+                { "from_district", fromDistrictId.ToString() },
+                { "to_district", toDistrictId.ToString() }
+            });
+
         #endregion
 
         #region Private Methods
@@ -78,13 +104,13 @@ namespace GHN
             return _restClient ?? (_restClient = new RestClient(_url));
         }
 
-        private async Task<T> HandleCommonApi<T>(string requestPath, Method requestType, RequestModel model = null, Dictionary<string,string> parameters = null)
+        private async Task<T> HandleCommonApi<T>(string requestPath, Method requestType, RequestModel model = null, Dictionary<string, string> parameters = null)
         {
             var request = new RestRequest("/" + requestPath, requestType)
             {
                 JsonSerializer = new RestSharpJsonNetSerializer()
             };
-            
+
             request.AddHeader("token", _token);
             if (!string.IsNullOrEmpty(_shopId))
                 request.AddHeader("ShopId", _shopId);
@@ -97,12 +123,12 @@ namespace GHN
                     request.AddParameter(param.Key, param.Value);
                 }
             }
-            
+
             var fullUrl = GetRestClient().BuildUri(request);
             Console.WriteLine(fullUrl);
-            
+
             var response = await GetRestClient().ExecuteAsync(request);
-            
+
             if (!response.IsSuccessful || string.IsNullOrEmpty(response.Content))
                 return (T)Activator.CreateInstance(typeof(T));
 

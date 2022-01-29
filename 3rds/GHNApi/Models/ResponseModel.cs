@@ -32,4 +32,13 @@ namespace GHN.Models
     }
     
     #endregion
+
+    public class SearchOrderResponseModel
+    {
+        [JsonProperty("data")]
+        public List<OrderInfo> Orders { get; set; }
+        
+        [JsonProperty("total")]
+        public ulong Total { get; set; }
+    }
 }

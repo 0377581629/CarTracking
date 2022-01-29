@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Abp.AspNetCore.Mvc.Authorization;
 using Abp.Domain.Repositories;
+using Abp.Json;
 using DPS.Cms.Application.Shared.Dto.Menu;
 using DPS.Cms.Core.Menu;
 using GHN.Models;
@@ -16,7 +17,7 @@ namespace Zero.Web.Areas.Cms.Controllers
 {
     [Area("Cms")]
     [AbpMvcAuthorize(CmsPermissions.Menu)]
-    public class MenuController: ZeroControllerBase
+    public class MenuController : ZeroControllerBase
     {
         private readonly IRepository<Menu> _menuRepository;
 
@@ -24,7 +25,7 @@ namespace Zero.Web.Areas.Cms.Controllers
         {
             _menuRepository = menuRepository;
         }
-        
+
         public ActionResult Index()
         {
             return View();
@@ -34,24 +35,22 @@ namespace Zero.Web.Areas.Cms.Controllers
         public async Task<PartialViewResult> CreateOrEditModal(CreateOrEditMenuInput input)
         {
             var ghnApi = new GHN.GHNApiClient();
-            var provinces = await ghnApi.GetProvinces();
-            Console.WriteLine(provinces.Count);
-            var districts = await ghnApi.GetDistricts(provinces.First().Id);
-            Console.WriteLine(districts.Count);
-            var wards = await ghnApi.GetWards(districts.First().Id);
-            Console.WriteLine(wards.Count);
-            var stores = await ghnApi.GetStores();
-            Console.WriteLine(stores.Count);
-            var storeId = await ghnApi.CreateStore(new CreateStoreModel
+            try
             {
-                DistrictId = wards.First().DistrictId,
-                WardId = wards.First().Id.ToString(),
-                Address = "663 Truong Dinh Str",
-                Name = "Shop thu 3",
-                Phone = "0383213993"
-            });
-            Console.WriteLine(storeId);
-            
+                var provinces = await ghnApi.GetProvinces();
+                var districts = await ghnApi.GetDistricts(provinces.First().Id);
+                var pickShifts = await ghnApi.GetPickShifts();
+
+                var services = await ghnApi.GetServices(1786717, districts.First().Id, districts.Last().Id);
+
+                Console.WriteLine(pickShifts.ToJsonString());
+                Console.WriteLine(services.ToJsonString());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
             var model = new CreateOrEditMenuViewModel(null)
             {
                 Code = StringHelper.ShortIdentity(),
@@ -63,7 +62,7 @@ namespace Zero.Web.Areas.Cms.Controllers
                 var obj = await _menuRepository.GetAsync(input.Id.Value);
                 model = ObjectMapper.Map<CreateOrEditMenuViewModel>(obj);
             }
-            
+
             return PartialView("_CreateOrEditModal", model);
         }
     }
