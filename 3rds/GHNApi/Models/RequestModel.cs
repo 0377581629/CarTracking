@@ -55,6 +55,48 @@ namespace GHN.Models
 
     public class CreateOrderRequestModel : RequestModel
     {
+        [JsonProperty("client_order_code")]
+        public string ClientOrderCode { get; set; }
+        
+        [JsonProperty("items")]
+        public Item[] Items { get; set; }
+        
+        [JsonProperty("content")]
+        public string Content { get; set; }
+        
+        /// <summary>
+        /// Note for shipper
+        /// </summary>
+        [JsonProperty("note")]
+        public string Note { get; set; }
+        
+        /// <summary>
+        /// Accept values: CHOTHUHANG, CHOXEMHANGKHONGTHU, KHONGCHOXEMHANG
+        /// </summary>
+        [JsonProperty("required_note")]
+        public string RequiredNote { get; set; }
+
+        #region Payment
+        [JsonProperty("coupon")]
+        public string Coupon { get; set; }
+        
+        [JsonProperty("cod_amount")]
+        public uint CODAmount { get; set; }
+        
+        [JsonProperty("payment_type_id")]
+        public uint PaymentTypeId { get; set; }
+        
+        [JsonProperty("service_type_id")]
+        public uint ServiceTypeId { get; set; }
+        
+        [JsonProperty("service_id")]
+        public uint ServiceId { get; set; }
+        
+        [JsonProperty("insurance_value")]
+        public uint InsuranceValue { get; set; }
+        
+        #endregion
+        
         #region To
         [JsonProperty("to_name")]
         public string ToName { get; set; }
@@ -88,15 +130,7 @@ namespace GHN.Models
         
         #endregion
         
-        [JsonProperty("client_order_code")]
-        public string ClientOrderCode { get; set; }
-        
-        [JsonProperty("cod_amount")]
-        public uint CODAmount { get; set; }
-        
-        [JsonProperty("content")]
-        public string Content { get; set; }
- 
+        #region Dimension
         [JsonProperty("weight")]
         public uint Weight { get; set; }
         
@@ -108,37 +142,84 @@ namespace GHN.Models
         
         [JsonProperty("height")]
         public uint Height { get; set; }
+        #endregion
         
+        #region Delivery
+        /// <summary>
+        /// The shipper not pickup parcels at shop’s address
+        /// </summary>
         [JsonProperty("pick_station_id")]
         public uint PickStationId { get; set; }
+        
+        /// <summary>
+        /// Picking shift
+        /// </summary>
+        [JsonProperty("pick_shift")]
+        public int[] PickShift { get; set; }
+        #endregion
+    }
+    
+    #endregion
+    
+    #region Fee
+
+    /// <summary>
+    /// Service Type Id is null while ServiceId not null.
+    /// </summary>
+    public class FeeCalculationRequestModel : RequestModel
+    {
+        [JsonProperty("from_district_id")]
+        public uint FromDistrictId { get; set; }
+        
+        [JsonProperty("to_district_id")]
+        public uint ToDistrictId { get; set; }
+        
+        [JsonProperty("to_ward_code")]
+        public string ToWardCode { get; set; }
+        
+        #region Dimension
+        [JsonProperty("weight")]
+        public uint Weight { get; set; }
+        
+        [JsonProperty("length")]
+        public uint Length { get; set; }
+        
+        [JsonProperty("width")]
+        public uint Width { get; set; }
+        
+        [JsonProperty("height")]
+        public uint Height { get; set; }
+        #endregion
+        
+        [JsonProperty("service_id")]
+        public uint? ServiceId { get; set; }
+        
+        [JsonProperty("service_type_id")]
+        public uint? ServiceTypeId { get; set; }
         
         [JsonProperty("insurance_value")]
         public uint InsuranceValue { get; set; }
         
         [JsonProperty("coupon")]
         public string Coupon { get; set; }
-        
-        [JsonProperty("service_type_id")]
-        public uint ServiceTypeId { get; set; }
-        
-        [JsonProperty("service_id")]
-        public uint ServiceId { get; set; }
-        
-        [JsonProperty("payment_type_id")]
-        public uint PaymentTypeId { get; set; }
-        
-        [JsonProperty("note")]
-        public string Note { get; set; }
-        
-        [JsonProperty("required_note")]
-        public string RequiredNote { get; set; }
-        
-        [JsonProperty("pick_shift")]
-        public int[] PickShift { get; set; }
-        
-        [JsonProperty("items")]
-        public Item[] Items { get; set; }
     }
+    #endregion
+    
+    #region Station
 
+    public class GetStationRequestModel : RequestModel
+    {
+        [JsonProperty("district_id")]
+        public uint DistrictId { get; set; }
+        
+        [JsonProperty("ward_code")]
+        public string WardCode { get; set; }
+
+        [JsonProperty("offset")]
+        public uint Offset { get; set; } = 0;
+
+        [JsonProperty("limit")]
+        public uint Limit { get; set; } = 1000;
+    }
     #endregion
 }

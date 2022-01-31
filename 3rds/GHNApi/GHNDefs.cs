@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Zero.Extensions;
 
 namespace GHN
 {
@@ -29,5 +30,12 @@ namespace GHN
             { "damage", "Damaged goods"},
             { "lost", "The goods are lost"}
         };
+
+        public enum RequiredNote
+        {
+            [StringValue("GHN_Delivery_AllowTest")] ChoThuHang,
+            [StringValue("GHN_Delivery_AllowView")] ChoXemHangKhongThu,
+            [StringValue("GHN_Delivery_NotView")] KhongChoXemHang
+        }
     }
 }

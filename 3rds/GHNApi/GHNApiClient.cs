@@ -78,6 +78,12 @@ namespace GHN
 
         #endregion
 
+        #region Station
+        public async Task<string> GetStations(GetStationRequestModel input)
+            => await HandleCommonApi<string>("v2/station/get", Method.POST, input);
+
+        #endregion
+        
         #region Pick shift
 
         public async Task<List<PickShift>> GetPickShifts()
@@ -95,6 +101,11 @@ namespace GHN
                 { "to_district", toDistrictId.ToString() }
             });
 
+        #endregion
+        
+        #region Fee
+        public async Task<FeeCalculationResponseModel> FeeCalculation(FeeCalculationRequestModel input)
+            => await HandleCommonApi<FeeCalculationResponseModel>("v2/shipping-order/fee", Method.POST, input);
         #endregion
 
         #region Private Methods

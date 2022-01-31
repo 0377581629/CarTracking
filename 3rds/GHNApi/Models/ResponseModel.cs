@@ -33,6 +33,7 @@ namespace GHN.Models
     
     #endregion
 
+    #region Order
     public class SearchOrderResponseModel
     {
         [JsonProperty("data")]
@@ -41,4 +42,73 @@ namespace GHN.Models
         [JsonProperty("total")]
         public ulong Total { get; set; }
     }
+
+    public class CreateOrderResponseModel
+    {
+        [JsonProperty("expected_delivery_time")]
+        public string ExpectedDeliveryTimeUTC { get; set; }
+        
+        [JsonProperty("fee")]
+        public CreateOrderFeeResponseModel Fee { get; set; }
+        
+        [JsonProperty("order_code")]
+        public string OrderCode { get; set; }
+        
+        [JsonProperty("sort_code")]
+        public string SortCode { get; set; }
+        
+        [JsonProperty("total_fee")]
+        public uint TotalFee { get; set; }
+        
+        [JsonProperty("trans_type")]
+        public string TransType { get; set; }
+    }
+
+    public class CreateOrderFeeResponseModel
+    {
+        [JsonProperty("coupon")]
+        public uint Coupon { get; set; }
+        
+        [JsonProperty("insurance")]
+        public uint Insurance { get; set; }
+        
+        [JsonProperty("main_service")]
+        public uint MainService { get; set; }
+        
+        [JsonProperty("r2s")]
+        public uint ReturnToStore { get; set; }
+        
+        [JsonProperty("return")]
+        public uint Return { get; set; }
+        
+        [JsonProperty("station_do")]
+        public uint PickupFeeAtStation { get; set; }
+        
+        [JsonProperty("station_pu")]
+        public uint DeliveryFeeAtStation { get; set; }
+    }
+    #endregion
+    
+    #region Fee
+    public class FeeCalculationResponseModel
+    {
+        [JsonProperty("total")]
+        public uint Total { get; set; }
+        
+        [JsonProperty("service_fee")]
+        public uint Service { get; set; }
+        
+        [JsonProperty("insurance_fee")]
+        public uint Insurance { get; set; }
+        
+        [JsonProperty("pick_station_fee")]
+        public uint PickStation { get; set; }
+        
+        [JsonProperty("coupon_fee")]
+        public uint Coupon { get; set; }
+        
+        [JsonProperty("r2s_fee")]
+        public uint ReturnToStore { get; set; }
+    }
+    #endregion
 }
