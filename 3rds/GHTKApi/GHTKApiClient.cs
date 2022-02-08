@@ -15,96 +15,49 @@ namespace GHTK
 
         private RestClient _restClient;
         private readonly string _url = @"https://services.giaohangtietkiem.vn";
-        private readonly string _token = "a592c6f4-7f8e-11ec-b18b-3a9c67615aba";
-        private readonly string _shopId = "";
+        private readonly string _token = "a5F81c906c42F4a2c052bFB03Cf8d5120F9eDd99";
 
-        public GHTKApiClient(string baseUrl = null, string token = null, string shopId = null)
+        public GHTKApiClient(string baseUrl = null, string token = null)
         {
             if (!string.IsNullOrEmpty(baseUrl))
                 _url = baseUrl;
             if (!string.IsNullOrEmpty(token))
                 _token = token;
-            if (!string.IsNullOrEmpty(shopId))
-                _shopId = shopId;
         }
 
         #endregion
 
-        #region Address
+        // Get Address 3 level
+        public async Task<List<Province>> GetAddresses()
+            => await HandleCustomCommonApi<List<Province>>("https://provinces.open-api.vn",
+                "/api/", Method.GET, parameters: new Dictionary<string, string>
+                {
+                    { "depth", "3" }
+                });
 
-        // Get Provinces
-        public async Task<List<Province>> GetProvinces()
-            => await HandleCommonApi<List<Province>>("master-data/province", Method.GET);
+        // Get Level 4 Addresses
+        public async Task<List<string>> GetAddressesLevel4(string provinceName, string districtName, string wardName)
+            => await HandleCommonApi<List<string>>(
+                "/services/address/getAddressLevel4", Method.GET, parameters: new Dictionary<string, string>
+                {
+                    { "province", provinceName },
+                    { "district", districtName },
+                    { "ward_street", wardName }
+                });
 
-        // Get Districts
-        public async Task<List<District>> GetDistricts(ulong provinceId)
-            => await HandleCommonApi<List<District>>("master-data/district", Method.GET, parameters: new Dictionary<string, string>
-            {
-                { "province_id", provinceId.ToString() }
-            });
+        // Get Pick Address
+        public async Task<List<PickAddress>> GetPickAddresses()
+            => await HandleCommonApi<List<PickAddress>>("/services/shipment/list_pick_add", Method.GET);
 
-        //Get wards
-        public async Task<List<Ward>> GetWards(ulong districtId)
-            => await HandleCommonApi<List<Ward>>("master-data/ward", Method.GET, parameters: new Dictionary<string, string>
-            {
-                { "district_id", districtId.ToString() }
-            });
-
-        #endregion
-
-        #region Store
-
-        // Get Stores
-        public async Task<List<Store>> GetStores()
-            => (await HandleCommonApi<StoreResponseModel>("v2/shop/all", Method.GET, parameters: new Dictionary<string, string>
-            {
-                { "offset", "0" },
-                { "limit", "200" },
-                { "client_phone", "" }
-            })).Stores;
-
-        // Create Store
-        public async Task<ulong> CreateStore(CreateStoreRequestModel input)
-            => (await HandleCommonApi<CreateStoreResponseModel>("v2/shop/register", Method.POST, input)).ShopId;
-
-        #endregion
-
-        #region Order
-
-        public async Task<SearchOrderResponseModel> GetOrders(SearchOrderRequestModel input)
-            => await HandleCommonApi<SearchOrderResponseModel>("v2/shipping-order/search", Method.POST, input);
-
-        #endregion
-
-        #region Station
-        public async Task<string> GetStations(GetStationRequestModel input)
-            => await HandleCommonApi<string>("v2/station/get", Method.POST, input);
-
-        #endregion
         
-        #region Pick shift
+        public async Task<OrderResponseModel> CreateOrder(Order input)
+            => await HandleOrderApi<OrderResponseModel>("/services/shipment/order/?ver=1.5", Method.POST, new CreateOrderRequestModel { Order = input });
 
-        public async Task<List<PickShift>> GetPickShifts()
-            => await HandleCommonApi<List<PickShift>>("v2/shift/date", Method.GET);
+        public async Task<OrderStatus> GetOrderStatus(string ghtkLabelId)
+            => await HandleOrderApi<OrderStatus>($"/services/shipment/v2/{ghtkLabelId}", Method.GET);
 
-        #endregion
-
-        #region Services
-
-        public async Task<List<Service>> GetServices(uint shopId, uint fromDistrictId, uint toDistrictId)
-            => await HandleCommonApi<List<Service>>("v2/shipping-order/available-services", Method.GET, parameters: new Dictionary<string, string>
-            {
-                { "shop_id", shopId.ToString() },
-                { "from_district", fromDistrictId.ToString() },
-                { "to_district", toDistrictId.ToString() }
-            });
-
-        #endregion
-        
-        #region Fee
-        public async Task<FeeCalculationResponseModel> FeeCalculation(FeeCalculationRequestModel input)
-            => await HandleCommonApi<FeeCalculationResponseModel>("v2/shipping-order/fee", Method.POST, input);
-        #endregion
+        public async Task CancelOrder(string ghtkLabelId) 
+            => await HandleOrderApi($"/services/shipment/v2/{ghtkLabelId}", Method.POST);
 
         #region Private Methods
 
@@ -120,9 +73,8 @@ namespace GHTK
                 JsonSerializer = new RestSharpJsonNetSerializer()
             };
 
-            request.AddHeader("token", _token);
-            if (!string.IsNullOrEmpty(_shopId))
-                request.AddHeader("ShopId", _shopId);
+            request.AddHeader("Token", _token);
+
             if (model != null)
                 request.AddJsonBody(model);
             if (parameters != null)
@@ -148,13 +100,113 @@ namespace GHTK
             return (T)Activator.CreateInstance(typeof(T));
         }
 
+        private async Task<T> HandleOrderApi<T>(string requestPath, Method requestType, RequestModel model = null, Dictionary<string, string> parameters = null)
+        {
+            var request = new RestRequest("/" + requestPath, requestType)
+            {
+                JsonSerializer = new RestSharpJsonNetSerializer()
+            };
+
+            request.AddHeader("Token", _token);
+
+            if (model != null)
+                request.AddJsonBody(model);
+            if (parameters != null)
+            {
+                foreach (var param in parameters)
+                {
+                    request.AddParameter(param.Key, param.Value);
+                }
+            }
+
+            var fullUrl = GetRestClient().BuildUri(request);
+            Console.WriteLine(fullUrl);
+
+            var response = await GetRestClient().ExecuteAsync(request);
+
+            if (!response.IsSuccessful || string.IsNullOrEmpty(response.Content))
+                return (T)Activator.CreateInstance(typeof(T));
+
+            var resModel = JsonConvert.DeserializeObject<ResponseModel<T>>(response.Content);
+            if (resModel != null)
+                return resModel.Order;
+
+            return (T)Activator.CreateInstance(typeof(T));
+        }
+
+        private async Task<T> HandleCustomCommonApi<T>(string baseUrl, string requestPath, Method requestType, RequestModel model = null, Dictionary<string, string> parameters = null)
+        {
+            var request = new RestRequest("/" + requestPath, requestType)
+            {
+                JsonSerializer = new RestSharpJsonNetSerializer()
+            };
+
+            request.AddHeader("Token", _token);
+
+            if (model != null)
+                request.AddJsonBody(model);
+            if (parameters != null)
+            {
+                foreach (var param in parameters)
+                {
+                    request.AddParameter(param.Key, param.Value);
+                }
+            }
+
+            var client = new RestClient(baseUrl);
+            var fullUrl = client.BuildUri(request);
+            Console.WriteLine(fullUrl);
+
+            var response = await client.ExecuteAsync(request);
+
+            if (!response.IsSuccessful || string.IsNullOrEmpty(response.Content))
+                return (T)Activator.CreateInstance(typeof(T));
+
+            var resModel = JsonConvert.DeserializeObject<T>(response.Content);
+            if (resModel != null)
+                return resModel;
+
+            return (T)Activator.CreateInstance(typeof(T));
+        }
+
+        private async Task HandleOrderApi(string requestPath, Method requestType, RequestModel model = null, Dictionary<string, string> parameters = null)
+        {
+            var request = new RestRequest("/" + requestPath, requestType)
+            {
+                JsonSerializer = new RestSharpJsonNetSerializer()
+            };
+
+            request.AddHeader("Token", _token);
+
+            if (model != null)
+                request.AddJsonBody(model);
+            if (parameters != null)
+            {
+                foreach (var param in parameters)
+                {
+                    request.AddParameter(param.Key, param.Value);
+                }
+            }
+
+            var fullUrl = GetRestClient().BuildUri(request);
+            Console.WriteLine(fullUrl);
+
+            var response = await GetRestClient().ExecuteAsync(request);
+
+            if (!response.IsSuccessful || string.IsNullOrEmpty(response.Content)) throw new Exception("Error");
+            var resModel = JsonConvert.DeserializeObject<SimpleResponseModel>(response.Content);
+            if (resModel != null && !resModel.Success)
+                throw new Exception(resModel.Message);
+            throw new Exception("Error");
+        }
+
         /// 
         /// Default JSON serializer for request bodies
         /// Doesn't currently use the SerializeAs attribute, defers to Newtonsoft's attributes
         /// 
         private class RestSharpJsonNetSerializer : ISerializer
         {
-            private readonly Newtonsoft.Json.JsonSerializer _serializer;
+            private readonly JsonSerializer _serializer;
 
             /// 
             /// Default serializer
@@ -162,7 +214,7 @@ namespace GHTK
             public RestSharpJsonNetSerializer()
             {
                 ContentType = "application/json";
-                _serializer = new Newtonsoft.Json.JsonSerializer
+                _serializer = new JsonSerializer
                 {
                     MissingMemberHandling = MissingMemberHandling.Ignore,
                     NullValueHandling = NullValueHandling.Include,
@@ -173,7 +225,7 @@ namespace GHTK
             /// 
             /// Default serializer with overload for allowing custom Json.NET settings
             /// 
-            public RestSharpJsonNetSerializer(Newtonsoft.Json.JsonSerializer serializer)
+            public RestSharpJsonNetSerializer(JsonSerializer serializer)
             {
                 ContentType = "application/json";
                 _serializer = serializer;

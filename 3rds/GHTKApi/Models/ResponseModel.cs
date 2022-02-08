@@ -1,114 +1,49 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace GHTK.Models
 {
-    public class ResponseModel<T>
+    public class SimpleResponseModel
     {
-        [JsonProperty("code")]
-        public int Code { get; set; }
+        [JsonProperty("success")]
+        public bool Success { get; set; }
         
         [JsonProperty("message")]
         public string Message { get; set; }
-        
+    }
+    
+    public class ResponseModel<T> : SimpleResponseModel
+    {
         [JsonProperty("data")]
         public T Data { get; set; }
-    }
-
-    #region Store
-    public class StoreResponseModel
-    {
-        [JsonProperty("last_offset")]
-        public ulong LastOffset { get; set; }
         
-        [JsonProperty("shops")]
-        public List<Store> Stores { get; set; }
+        [JsonProperty("order")]
+        public T Order { get; set; }
     }
 
-    public class CreateStoreResponseModel
+    public class OrderResponseModel
     {
-        [JsonProperty("shop_id")]
-        public ulong ShopId { get; set; }
-    }
-    
-    #endregion
-
-    #region Order
-    public class SearchOrderResponseModel
-    {
-        [JsonProperty("data")]
-        public List<OrderInfo> Orders { get; set; }
+        [JsonProperty("partner_id")]
+        public string PartnerId { get; set; }
         
-        [JsonProperty("total")]
-        public ulong Total { get; set; }
-    }
-
-    public class CreateOrderResponseModel
-    {
-        [JsonProperty("expected_delivery_time")]
-        public string ExpectedDeliveryTimeUTC { get; set; }
+        [JsonProperty("label")]
+        public string Label { get; set; }
+        
+        [JsonProperty("area")]
+        public string Area { get; set; }
         
         [JsonProperty("fee")]
-        public CreateOrderFeeResponseModel Fee { get; set; }
-        
-        [JsonProperty("order_code")]
-        public string OrderCode { get; set; }
-        
-        [JsonProperty("sort_code")]
-        public string SortCode { get; set; }
-        
-        [JsonProperty("total_fee")]
-        public uint TotalFee { get; set; }
-        
-        [JsonProperty("trans_type")]
-        public string TransType { get; set; }
-    }
-
-    public class CreateOrderFeeResponseModel
-    {
-        [JsonProperty("coupon")]
-        public uint Coupon { get; set; }
-        
-        [JsonProperty("insurance")]
-        public uint Insurance { get; set; }
-        
-        [JsonProperty("main_service")]
-        public uint MainService { get; set; }
-        
-        [JsonProperty("r2s")]
-        public uint ReturnToStore { get; set; }
-        
-        [JsonProperty("return")]
-        public uint Return { get; set; }
-        
-        [JsonProperty("station_do")]
-        public uint PickupFeeAtStation { get; set; }
-        
-        [JsonProperty("station_pu")]
-        public uint DeliveryFeeAtStation { get; set; }
-    }
-    #endregion
-    
-    #region Fee
-    public class FeeCalculationResponseModel
-    {
-        [JsonProperty("total")]
-        public uint Total { get; set; }
-        
-        [JsonProperty("service_fee")]
-        public uint Service { get; set; }
+        public uint Fee { get; set; }
         
         [JsonProperty("insurance_fee")]
-        public uint Insurance { get; set; }
+        public uint InsuranceFee { get; set; }
         
-        [JsonProperty("pick_station_fee")]
-        public uint PickStation { get; set; }
+        [JsonProperty("estimated_pick_time")]
+        public string EstimatePickTime { get; set; }
         
-        [JsonProperty("coupon_fee")]
-        public uint Coupon { get; set; }
+        [JsonProperty("estimated_deliver_time")]
+        public string EstimateDeliverTime { get; set; }
         
-        [JsonProperty("r2s_fee")]
-        public uint ReturnToStore { get; set; }
+        [JsonProperty("status_id")]
+        public uint StatusId { get; set; }
     }
-    #endregion
 }

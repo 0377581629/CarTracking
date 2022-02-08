@@ -1,8 +1,13 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Abp.AspNetCore.Mvc.Authorization;
 using Abp.Domain.Repositories;
+using Abp.Json;
 using DPS.Cms.Application.Shared.Dto.Menu;
 using DPS.Cms.Core.Menu;
+using GHN;
+using GHTK;
 using Microsoft.AspNetCore.Mvc;
 using Zero.Authorization;
 using Zero.Customize;
@@ -22,8 +27,22 @@ namespace Zero.Web.Areas.Cms.Controllers
             _menuRepository = menuRepository;
         }
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
+            var ghtkApi = new GHTKApiClient();
+            var lstAddresses = await ghtkApi.GetAddresses();
+            Console.WriteLine(lstAddresses.Count);
+
+            var lstAddressesLevel4 =
+                await ghtkApi.GetAddressesLevel4(lstAddresses.First().Name, 
+                    lstAddresses.First().Districts.First().Name, 
+                    lstAddresses.First().Districts.First().Wards.First().Name);
+
+            Console.WriteLine(lstAddressesLevel4.ToJsonString());
+            
+            var ghnApi = new GHNApiClient();
+            var provinces = await ghnApi.GetProvinces();
+            Console.WriteLine(provinces.Count);
             return View();
         }
 

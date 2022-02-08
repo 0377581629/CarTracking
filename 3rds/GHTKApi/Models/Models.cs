@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace GHTK.Models
@@ -8,441 +7,235 @@ namespace GHTK.Models
 
     public class Province
     {
-        [JsonProperty("ProvinceID")]
-        public uint Id { get; set; }
-        
-        [JsonProperty("Code")]
-        public string Code { get; set; }
-        
-        [JsonProperty("ProvinceName")]
-        public string Name { get; set; }
+        [JsonProperty("code")] public uint Id { get; set; }
+
+        [JsonProperty("codename")] public string Code { get; set; }
+
+        [JsonProperty("name")] public string Name { get; set; }
+
+        [JsonProperty("division_type")] public string DivisionType { get; set; }
+
+        [JsonProperty("phone_code")] public uint PhoneCode { get; set; }
+
+        [JsonProperty("districts")] public List<District> Districts { get; set; }
     }
-    
-    [Serializable]
+
     public class District
     {
-        [JsonProperty("DistrictID")]
-        public uint Id { get; set; }
-        
-        [JsonProperty("ProvinceID")]
+        [JsonProperty("code")] public uint Id { get; set; }
+
+        [JsonProperty("codename")] public string Code { set; get; }
+
+        [JsonProperty("short_codename")] public string ShortCode { get; set; }
+
+        [JsonProperty("name")] public string Name { get; set; }
+
+        [JsonProperty("division_type")] public string DivisionType { get; set; }
+
         public uint ProvinceId { set; get; }
-        
-        [JsonProperty("Code")]
-        public string Code { set; get; }
-        
-        [JsonProperty("DistrictName")]
-        public string Name { get; set; }
+
+        [JsonProperty("wards")] public List<Ward> Wards { get; set; }
     }
 
-    [Serializable]
     public class Ward
     {
-        [JsonProperty("WardCode")]
-        public string Code { set; get; }
-        
-        [JsonProperty("WardName")]
-        public string Name { set; get; }
-        
-        [JsonProperty("DistrictID")]
+        [JsonProperty("code")] public uint Id { get; set; }
+
+        [JsonProperty("codename")] public string Code { set; get; }
+
+        [JsonProperty("short_codename")] public string ShortCode { get; set; }
+
+        [JsonProperty("name")] public string Name { set; get; }
+
+        [JsonProperty("division_type")] public string DivisionType { get; set; }
+
         public uint DistrictId { set; get; }
     }
-    
-    #endregion
-    
-    #region Store
 
-    public class Store
+    #endregion
+
+    public class PickAddress
     {
-        [JsonProperty("_id")]
-        public ulong Id { get; set; }
-        
-        [JsonProperty("name")]
-        public string Name { get; set; }
-        
-        [JsonProperty("phone")]
-        public string Phone { get; set; }
-        
-        [JsonProperty("address")]
-        public string Address { get; set; }
-        
-        [JsonProperty("ward_code")]
-        public string WardCode { get; set; }
-        
-        [JsonProperty("district_id")]
-        public uint DistrictId { get; set; }
-        
-        [JsonProperty("client_id")]
-        public uint ClientId { get; set; }
-        
-        [JsonProperty("bank_account_id")]
-        public uint BankAccountId { get; set; }
-        
-        [JsonProperty("status")]
-        public byte Status { get; set; }
-        
-        [JsonProperty("version_no")]
-        public string Version { get; set; }
+        [JsonProperty("pick_address_id")] public uint Id { get; set; }
+
+        [JsonProperty("address")] public string Address { get; set; }
+
+        [JsonProperty("pick_tel")] public string Phone { get; set; }
+
+        [JsonProperty("pick_name")] public string Name { get; set; }
     }
 
-    
-    #endregion
-    
-    #region Order
-    
-    public class OrderInfo
+    public class Order
     {
-        [JsonProperty("_id")]
-        public string Id { get; set; }
-        
-        [JsonProperty("shop_id")]
-        public uint ShopId { get; set; }
-        
-        [JsonProperty("client_id")]
-        public uint ClientId { get; set; }
-        
-        [JsonProperty("client_order_code")]
-        public string ClientOrderCode { get; set; }
-        
-        [JsonProperty("sort_code")]
-        public string SortCode { get; set; }
-        
-        [JsonProperty("seal_code")]
-        public string SealCode { get; set; }
-        
-        [JsonProperty("content")]
-        public string Content { get; set; }
+        [JsonProperty("id")] public string Code { get; set; }
 
-        [JsonProperty("items")]
-        public Item[] Items { get; set; }
+        [JsonProperty("note")] public string Note { get; set; }
 
-        [JsonProperty("order_code")]
-        public string OrderCode { get; set; }
-        
-        [JsonProperty("order_date")]
-        public string OrderDateUTC { get; set; }
-        
-        [JsonProperty("order_value")]
-        public uint OrderValue { get; set; }
+        #region Pick
 
-        [JsonProperty("note")]
-        public string Note { get; set; }
-        
-        [JsonProperty("employee_note")]
-        public string EmployeeNote { get; set; }
-        
-        #region Payment
-        [JsonProperty("coupon")]
-        public string Coupon { get; set; }
-        
-        [JsonProperty("insurance_value")]
-        public uint InsuranceValue { get; set; }
-        
-        [JsonProperty("payment_type_id")]
-        public int PaymentTypeId { get; set; }
-        
-        [JsonProperty("payment_type_ids")]
-        public int[] PaymentTypeIds { get; set; }
+        [JsonProperty("pick_money")] public uint PickMoney { get; set; }
+
+        [JsonProperty("pick_name")] public string PickName { get; set; }
+
+        [JsonProperty("pick_address_id")] public string PickAddressId { get; set; }
+
+        [JsonProperty("pick_province")] public string PickProvinceName { get; set; }
+
+        [JsonProperty("pick_district")] public string PickDistrictName { get; set; }
+
+        [JsonProperty("pick_ward")] public string PickWardName { get; set; }
+
+        [JsonProperty("pick_street")] public string PickStreetName { get; set; }
+
+        [JsonProperty("pick_address")] public string PickAddressDetail { get; set; }
+
+        [JsonProperty("pick_tel")] public string PickPhone { get; set; }
+
+        [JsonProperty("pick_email")] public string PickEmail { get; set; }
+
+        #endregion
+
+        #region Receive
+
+        [JsonProperty("name")] public string ReceiveName { get; set; }
+
+        [JsonProperty("province")] public string ReceiveProvinceName { get; set; }
+
+        [JsonProperty("district")] public string ReceiveDistrictName { get; set; }
+
+        [JsonProperty("ward")] public string ReceiveWardName { get; set; }
+
+        [JsonProperty("street")] public string ReceiveStreetName { get; set; }
+
+        [JsonProperty("hamlet")] public string ReceiveHamlet { get; set; } = "Khác";
+
+        [JsonProperty("address")] public string ReceiveAddressDetail { get; set; }
+
+        [JsonProperty("tel")] public string ReceivePhone { get; set; }
+
+        [JsonProperty("email")] public string ReceiveEmail { get; set; }
+
+        #endregion
+
+        #region Return
+
+        /// <summary>
+        /// 0 or 1 - 0 Return address is Pick address, 1 to use diff address
+        /// </summary>
+        [JsonProperty("use_return_address")]
+        public int ReturnAddressSameAsPick { get; set; } = 0;
+
+        [JsonProperty("return_name")] public string ReturnName { get; set; }
+
+        [JsonProperty("email")] public string ReturnAddressId { get; set; }
+
+        [JsonProperty("return_province")] public string ReturnProvinceName { get; set; }
+
+        [JsonProperty("return_district")] public string ReturnDistrictName { get; set; }
+
+        [JsonProperty("return_ward")] public string ReturnWardName { get; set; }
+
+        [JsonProperty("return_street")] public string ReturnStreetName { get; set; }
+
+        [JsonProperty("return_address")] public string ReturnAddressDetail { get; set; }
+
+        [JsonProperty("return_tel")] public string ReturnPhone { get; set; }
+
+        [JsonProperty("return_email")] public string ReturnEmail { get; set; }
+
         #endregion
         
-        #region COD
-        [JsonProperty("cod_collect_date")]
-        public string CODCollectDateUTC { get; set; }
+        /// <summary>
+        /// 0 or 1
+        /// </summary>
+        [JsonProperty("is_freeship")]
+        public uint FreeShip { get; set; } = 0;
         
-        [JsonProperty("cod_transfer_date")]
-        public string CODTransferDate { get; set; }
+        [JsonProperty("value")] public uint InsuranceValue { get; set; }
         
-        [JsonProperty("cod_amount")]
-        public decimal CODAmount { get; set; }
+        [JsonProperty("pick_session")] public string PickSession { get; set; }
+
+        [JsonProperty("pick_option")] public string PickOption { get; set; } = "cod";
+
+        [JsonProperty("deliver_option")] public string DeliverOption { get; set; } = "xteam";
         
-        [JsonProperty("is_cod_collected")]
-        public bool IsCODCollected { get; set; }
+        [JsonProperty("products")] public List<Product> Products { get; set; }
         
-        [JsonProperty("is_cod_transferred")]
-        public bool IsCODTransferred { get; set; }
-        #endregion
-        
-        #region Dimension
-        [JsonProperty("height")]
-        public uint Height { get; set; }
-        
-        [JsonProperty("width")]
-        public uint Width { get; set; }
+        [JsonProperty("tags")] public List<int> Tags { get; set; }
+    }
+
+    public class Product
+    {
+        [JsonProperty("name")]
+        public string Name { get; set; }
         
         [JsonProperty("weight")]
-        public uint Weight { get; set; }
+        public double WeightInKg { get; set; }
         
-        [JsonProperty("converted_weight")]
-        public uint ConvertedWeight { get; set; }
-        
-        [JsonProperty("length")]
-        public uint Length { get; set; }
-        #endregion
-        
-        #region Current
-        [JsonProperty("current_transport_warehouse_id")]
-        public ulong CurrentTransportWarehouseId { get; set; }
-        
-        [JsonProperty("current_warehouse_id")]
-        public ulong CurrentWarehouseId { get; set; }
-        #endregion
-        
-        #region Service
-        [JsonProperty("service_id")]
-        public uint ServiceId { get; set; }
-        
-        [JsonProperty("service_type_id")]
-        public uint ServiceTypeId { get; set; }
-        
-        [JsonProperty("custom_service_fee")]
-        public decimal CustomServiceFee { get; set; }
-        #endregion
-        
-        #region Delivery
-        [JsonProperty("deliver_station_id")]
-        public uint DeliverStationId { get; set; }
-        
-        [JsonProperty("deliver_warehouse_id")]
-        public uint DeliverWarehouseId { get; set; }
-        
-        [JsonProperty("next_warehouse_id")]
-        public uint NextWarehouseId { get; set; }
-        
-        [JsonProperty("leadtime")]
-        public string ExpectedDeliveryTimeUTC { get; set; }
-        
-        [JsonProperty("finish_date")]
-        public string FinishDateUTC { get; set; }
-        
-        [JsonProperty("is_partial_return")]
-        public bool IsPartialReturn { get; set; }
-        #endregion
-        
-        #region From
-        [JsonProperty("from_address")]
-        public string FromAddress { get; set; }
-        
-        [JsonProperty("from_district_id")]
-        public uint FromDistrictId { get; set; }
-        
-        [JsonProperty("from_location")]
-        public Location FromLocation { get; set; }
-        
-        [JsonProperty("from_name")]
-        public string FromName { get; set; }
-        
-        [JsonProperty("from_phone")]
-        public string FromPhone { get; set; }
-        
-        [JsonProperty("from_ward_code")]
-        public string FromWardCode { get; set; }
-        #endregion
-        
-        #region To
-        [JsonProperty("to_address")]
-        public string ToAddress { get; set; }
-        
-        [JsonProperty("to_district_id")]
-        public uint ToDistrictId { get; set; }
-        
-        [JsonProperty("to_location")]
-        public Location ToLocation { get; set; }
-        
-        [JsonProperty("to_name")]
-        public string ToName { get; set; }
-        
-        [JsonProperty("to_phone")]
-        public string ToPhone { get; set; }
-        
-        [JsonProperty("to_ward_code")]
-        public string ToWardCode { get; set; }
-        #endregion
-        
-        #region Pick
-        [JsonProperty("pick_station_id")]
-        public uint PickStationId { get; set; }
-        
-        [JsonProperty("pick_warehouse_id")]
-        public uint PickWarehouseId { get; set; }
-        
-        [JsonProperty("pickup_time")]
-        public string PickUpTimeUTC { get; set; }
-        #endregion
-        
-        #region Return
-        [JsonProperty("required_note")]
-        public string RequiredNote { get; set; }
-        
-        [JsonProperty("return_address")]
-        public string ReturnAddress { get; set; }
-        
-        [JsonProperty("return_district_id")]
-        public ulong ReturnDistrictId { get; set; }
-        
-        [JsonProperty("return_location")]
-        public Location ReturnLocation { get; set; }
-        
-        [JsonProperty("return_name")]
-        public string ReturnName { get; set; }
-        
-        [JsonProperty("return_phone")]
-        public string ReturnPhone { get; set; }
-        
-        [JsonProperty("return_ward_code")]
-        public string ReturnWardCode { get; set; }
-        
-        [JsonProperty("return_warehouse_id")]
-        public uint ReturnWarehouseId { get; set; }
-        #endregion
-
-        #region Created Info
-        [JsonProperty("created_client")]
-        public uint CreatedClient { get; set; }
-        
-        [JsonProperty("created_date")]
-        public string CreatedDateUTC { get; set; }
-        
-        [JsonProperty("created_employee")]
-        public uint CreatedEmployee { get; set; }
-        
-        [JsonProperty("created_ip")]
-        public string CreatedIp { get; set; }
-        
-        [JsonProperty("created_source")]
-        public string CreatedSource { get; set; }
-        #endregion
-        
-        #region UpdatedInfo
-        [JsonProperty("updated_client")]
-        public uint UpdatedClient { get; set; }
-        
-        [JsonProperty("updated_date")]
-        public string UpdatedDateUTC { get; set; }
-        
-        [JsonProperty("updated_employee")]
-        public uint UpdatedEmployee { get; set; }
-        
-        [JsonProperty("updated_ip")]
-        public string UpdatedIp { get; set; }
-        
-        [JsonProperty("updated_source")]
-        public string UpdatedSource { get; set; }
-        
-        [JsonProperty("updated_warehouse")]
-        public uint UpdatedWarehouse { get; set; }
-        #endregion
-
-        [JsonProperty("soc_id")]
-        public string SOCId { get; set; }
-        
-        [JsonProperty("log")]
-        public Log[] Logs { get; set; }
-        
-        [JsonProperty("tag")]
-        public string[] Tags { get; set; }
-        
-        [JsonProperty("status")]
-        public string Status { get; set; }
-        
-        [JsonProperty("version_no")]
-        public string Version { get; set; }
-    }
-
-    public class Location
-    {
-        [JsonProperty("cell_code")]
-        public string CellCode { get; set; }
-        
-        [JsonProperty("lat")]
-        public double Lat { get; set; }
-        
-        [JsonProperty("long")]
-        public double Long { get; set; }
-        
-        [JsonProperty("place_id")]
-        public string PlaceId { get; set; }
-        
-        [JsonProperty("trust_level")]
-        public byte TrustLevel { get; set; }
-        
-        [JsonProperty("wardcode")]
-        public string WardCode { get; set; }
-    }
-
-    public class Item
-    {
-        [JsonProperty("code")]
-        public string Code { get; set; }
-        
-        [JsonProperty("name")]
-        public string Name { get; set; }
+        [JsonProperty("product_code")]
+        public string ProductCode { get; set; }
         
         [JsonProperty("quantity")]
         public uint Quantity { get; set; }
     }
 
-    public class Log
+    public class OrderStatus
     {
-        [JsonProperty("payment_type_id")]
-        public uint PaymentTypeId { get; set; }
+        [JsonProperty("label_id")]
+        public string LabelId { get; set; }
         
-        [JsonProperty("driver_id")]
-        public uint DriverId { get; set; }
-        
-        [JsonProperty("driver_name")]
-        public string DriverName { get; set; }
-        
-        [JsonProperty("reason_code")]
-        public string ReasonCode { get; set; }
-        
-        [JsonProperty("reason")]
-        public string  Reason { get; set; }
+        [JsonProperty("partner_id")]
+        public string PartnerId { get; set; }
         
         [JsonProperty("status")]
         public string Status { get; set; }
         
-        [JsonProperty("updated_date")]
-        public string UpdatedDateUTC { get; set; }
-    }
-    
-    #endregion
-
-    #region Pick Shift
-    public class PickShift
-    {
-        [JsonProperty("id")]
-        public uint Id { get; set; }
+        [JsonProperty("status_text")]
+        public string StatusText { get; set; }
         
-        [JsonProperty("title")]
-        public string Title { get; set; }
+        [JsonProperty("created")]
+        public string CreationTime { get; set; }
         
-        [JsonProperty("from_time")]
-        public uint FromTime { get; set; }
+        [JsonProperty("modified")]
+        public string ModifiedTime { get; set; }
         
-        [JsonProperty("to_time")]
-        public uint ToTime { get; set; }
-    }
-    #endregion
-    
-    #region Services
-
-    public class Service
-    {
-        [JsonProperty("service_id")]
-        public uint Id { get; set; }
+        [JsonProperty("message")]
+        public string Message { get; set; }
         
-        [JsonProperty("service_type_id")]
-        public uint TypeId { get; set; }
+        [JsonProperty("pick_date")]
+        public string PickDate { get; set; }
         
-        [JsonProperty("short_name")]
-        public string Name { get; set; }
-    }
-    #endregion
-    
-    [Serializable]
-    public class OrderCost
-    {
-        public decimal Cost { set; get; }
-        public string Name { set; get; }
-        public decimal ServiceId { set; get; }
+        [JsonProperty("deliver_date")]
+        public string DeliverDate { get; set; }
+        
+        [JsonProperty("customer_fullname")]
+        public string ReceiveFullName { get; set; }
+        
+        [JsonProperty("customer_tel")]
+        public string ReceivePhone { get; set; }
+        
+        [JsonProperty("address")]
+        public string ReceiveAddress { get; set; }
+        
+        [JsonProperty("storage_day")]
+        public uint StorageDays { get; set; }
+        
+        [JsonProperty("ship_money")]
+        public uint ShipFee { get; set; }
+        
+        [JsonProperty("insurance")]
+        public uint InsuranceFee { get; set; }
+        
+        [JsonProperty("value")]
+        public uint InsuranceValue { get; set; }
+        
+        [JsonProperty("weight")]
+        public uint WeightInGr { get; set; }
+        
+        [JsonProperty("pick_money")]
+        public uint PickMoney { get; set; }
+        
+        [JsonProperty("is_freeship")]
+        public uint IsFreeShip { get; set; }
     }
 }
