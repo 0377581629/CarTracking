@@ -84,6 +84,42 @@ namespace GHN.Models
         public string Version { get; set; }
     }
 
+    public class Station
+    {
+        [JsonProperty("address")]
+        public string Address { get; set; }
+        
+        [JsonProperty("locationId")]
+        public uint LocationId { get; set; }
+        
+        [JsonProperty("locationCode")]
+        public string LocationCode { get; set; }
+        
+        [JsonProperty("locationName")]
+        public string LocationName { get; set; }
+        
+        [JsonProperty("email")]
+        public string Email { get; set; }
+        
+        [JsonProperty("latitude")]
+        public double Latitude { get; set; }
+        
+        [JsonProperty("longitude")]
+        public double Longitude { get; set; }
+        
+        [JsonProperty("provinceName")]
+        public string ProvinceName { get; set; }
+        
+        [JsonProperty("districtName")]
+        public string DistrictName { get; set; }
+        
+        [JsonProperty("wardName")]
+        public string WardName { get; set; }
+        
+        [JsonProperty("iframeMap")]
+        public string IframeMap { get; set; }
+        
+    }
     
     #endregion
     

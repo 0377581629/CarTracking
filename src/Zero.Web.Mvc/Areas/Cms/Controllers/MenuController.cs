@@ -3,10 +3,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Abp.AspNetCore.Mvc.Authorization;
 using Abp.Domain.Repositories;
+using Abp.Extensions;
 using Abp.Json;
 using DPS.Cms.Application.Shared.Dto.Menu;
 using DPS.Cms.Core.Menu;
 using GHN;
+using GHN.Models;
 using GHTK;
 using Microsoft.AspNetCore.Mvc;
 using Zero.Authorization;
@@ -42,7 +44,18 @@ namespace Zero.Web.Areas.Cms.Controllers
             
             var ghnApi = new GHNApiClient();
             var provinces = await ghnApi.GetProvinces();
+            
             Console.WriteLine(provinces.Count);
+            
+            var districts = await ghnApi.GetDistricts(provinces.First().Id);
+            var stations = await ghnApi.GetStations(new GetStationRequestModel
+            {
+                DistrictId = "1485",
+                Limit = 1000,
+                Offset = 0
+            });
+            Console.WriteLine(stations.ToJsonString());
+            
             return View();
         }
 

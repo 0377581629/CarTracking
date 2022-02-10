@@ -39,14 +39,14 @@ namespace GHN
             => await HandleCommonApi<List<Province>>("master-data/province", Method.GET);
 
         // Get Districts
-        public async Task<List<District>> GetDistricts(ulong provinceId)
+        public async Task<List<District>> GetDistricts(uint provinceId)
             => await HandleCommonApi<List<District>>("master-data/district", Method.GET, parameters: new Dictionary<string, string>
             {
                 { "province_id", provinceId.ToString() }
             });
 
         //Get wards
-        public async Task<List<Ward>> GetWards(ulong districtId)
+        public async Task<List<Ward>> GetWards(uint districtId)
             => await HandleCommonApi<List<Ward>>("master-data/ward", Method.GET, parameters: new Dictionary<string, string>
             {
                 { "district_id", districtId.ToString() }
@@ -79,8 +79,8 @@ namespace GHN
         #endregion
 
         #region Station
-        public async Task<string> GetStations(GetStationRequestModel input)
-            => await HandleCommonApi<string>("v2/station/get", Method.POST, input);
+        public async Task<List<Station>> GetStations(GetStationRequestModel input)
+            => await HandleCommonApi<List<Station>>("v2/station/get", Method.POST, input);
 
         #endregion
         

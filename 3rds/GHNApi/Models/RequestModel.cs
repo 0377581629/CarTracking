@@ -210,7 +210,7 @@ namespace GHN.Models
     public class GetStationRequestModel : RequestModel
     {
         [JsonProperty("district_id")]
-        public uint DistrictId { get; set; }
+        public string DistrictId { get; set; }
         
         [JsonProperty("ward_code")]
         public string WardCode { get; set; }
