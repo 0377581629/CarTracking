@@ -15,5 +15,7 @@ namespace Zero.Web.Areas.App.Views.Shared.Components.AppMenu
         public bool RootLevel { get; set; }
         
         public bool IsTabMenuUsed { get; set; }
+        
+        public bool IsMegaMenuChild { get; set; }
     }
 }

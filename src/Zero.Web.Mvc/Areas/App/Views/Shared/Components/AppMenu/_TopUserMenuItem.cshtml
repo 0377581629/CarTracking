@@ -15,51 +15,133 @@ else
 {
     if (Model.MenuItem.Items.IsNullOrEmpty())
     {
-        <li class="menu-item menu-item-submenu menu-item-rel @GetActiveLinkClass(Model)" aria-haspopup="true">
-            <a href="@Model.MenuItem.CalculateUrl(ApplicationPath)" class="menu-link">
-                @if (!Model.RootLevel)
-                {
-                    <i class="menu-bullet menu-bullet-dot">
-                        <span></span>
-                    </i>
-                }
-                <span class="menu-text">@Model.MenuItem.DisplayName</span>
-            </a>
-        </li>
+        if (!Model.IsMegaMenuChild)
+        {
+            <li class="menu-item menu-item-submenu menu-item-rel @GetActiveLinkClass(Model)" aria-haspopup="true">
+                <a href="@Model.MenuItem.CalculateUrl(ApplicationPath)" class="menu-link">
+                    @if (!Model.RootLevel)
+                    {
+                        <i class="menu-bullet menu-bullet-dot">
+                            <span></span>
+                        </i>
+                    }
+                    <span class="menu-text">@Model.MenuItem.DisplayName</span>
+                </a>
+            </li>
+        }
+        else
+        {
+            <li class="menu-item @GetActiveLinkClass(Model)" aria-haspopup="true">
+                <a href="@Model.MenuItem.CalculateUrl(ApplicationPath)" class="menu-link">
+                    @if (!Model.RootLevel)
+                    {
+                        <i class="menu-bullet menu-bullet-dot">
+                            <span></span>
+                        </i>
+                    }
+                    <span class="menu-text">@Model.MenuItem.DisplayName</span>
+                </a>
+            </li>
+        }
+        
     }
     else
     {
-        <li class="menu-item menu-item-submenu menu-item-open-dropdown @GetMenuItemClass(Model) @GetActiveMenuClass(Model)" data-menu-toggle="hover" aria-haspopup="true">
-            <a href="javascript:;" class="menu-link menu-toggle">
-                <span class="menu-text">@Model.MenuItem.DisplayName</span>
-                <i class="menu-arrow"></i>
-            </a>
-            <div class="menu-submenu menu-submenu-classic @GetSubMenuClass(Model)">
-                <ul class="menu-subnav">
-                    @for (var i = 0; i < Model.MenuItem.Items.Count; i++)
-                    {
-                        var childMenuItem = orderedChildMenuItems[i];
-                        if (!childMenuItem.IsVisible)
+        if (!IsMegaMenu(Model))
+        {
+            <li class="menu-item menu-item-submenu menu-item-open-dropdown @GetMenuItemClass(Model) @GetActiveMenuClass(Model)" data-menu-toggle="hover" aria-haspopup="true">
+                <a href="javascript:;" class="menu-link menu-toggle">
+                    <span class="menu-text">@Model.MenuItem.DisplayName</span>
+                    <i class="menu-arrow"></i>
+                </a>
+                <div class="menu-submenu @GetSubMenuClass(Model)">
+                    <ul class="menu-subnav">
+                        @for (var i = 0; i < Model.MenuItem.Items.Count; i++)
                         {
-                            continue;
+                            var childMenuItem = orderedChildMenuItems[i];
+                            if (!childMenuItem.IsVisible)
+                            {
+                                continue;
+                            }
+                            @await Html.PartialAsync("Components/AppMenu/_TopUserMenuItem", new UserMenuItemViewModel
+                            {
+                                MenuItem = childMenuItem,
+                                MenuItemIndex = i,
+                                CurrentPageName = Model.CurrentPageName,
+                                RootLevel = false
+                            })
                         }
-                        @await Html.PartialAsync("Components/AppMenu/_TopUserMenuItem", new UserMenuItemViewModel
+                    </ul>
+                </div>
+            </li>
+        }
+        else
+        {
+            if (GetMegaMenuLevel(Model) == 0)
+            {
+                <li class="menu-item menu-item-submenu @GetActiveMegaMenuClass(Model)" data-menu-toggle="hover" aria-haspopup="true">
+                    <a href="javascript:;" class="menu-link menu-toggle">
+                        <span class="menu-text">@Model.MenuItem.DisplayName</span>
+                        <i class="menu-arrow"></i>
+                    </a>
+                    <div class="menu-submenu menu-submenu-fixed menu-submenu-center">
+                        <div class="menu-subnav">
+                            <ul class="menu-content">
+                                @for (var i = 0; i < Model.MenuItem.Items.Count; i++)
+                                {
+                                    var childMenuItem = orderedChildMenuItems[i];
+                                    if (!childMenuItem.IsVisible)
+                                    {
+                                        continue;
+                                    }
+                                    @await Html.PartialAsync("Components/AppMenu/_TopUserMenuItem", new UserMenuItemViewModel
+                                    {
+                                        MenuItem = childMenuItem,
+                                        MenuItemIndex = i,
+                                        CurrentPageName = Model.CurrentPageName,
+                                        RootLevel = false,
+                                        IsMegaMenuChild = true
+                                    })
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+            }
+            else
+            {
+                <li class="menu-item @GetActiveMegaMenuClass(Model)" aria-haspopup="true">
+                    <h3 class="menu-heading menu-toggle">
+                        <span class="menu-text">@Model.MenuItem.DisplayName</span>
+                        <i class="menu-arrow"></i>
+                    </h3>
+                    <ul class="menu-inner">
+                        @for (var i = 0; i < Model.MenuItem.Items.Count; i++)
                         {
-                            MenuItem = childMenuItem,
-                            MenuItemIndex = i,
-                            CurrentPageName = Model.CurrentPageName,
-                            RootLevel = false
-                        })
-                    }
-                </ul>
-            </div>
-        </li>
+                            var childMenuItem = orderedChildMenuItems[i];
+                            if (!childMenuItem.IsVisible)
+                            {
+                                continue;
+                            }
+                            @await Html.PartialAsync("Components/AppMenu/_TopUserMenuItem", new UserMenuItemViewModel
+                            {
+                                MenuItem = childMenuItem,
+                                MenuItemIndex = i,
+                                CurrentPageName = Model.CurrentPageName,
+                                RootLevel = false,
+                                IsMegaMenuChild = true
+                            })
+                        }
+                    </ul>
+                </li>
+            }
+        }
     }
 }
 
 @functions
 {
-    public static string GetActiveLinkClass(UserMenuItemViewModel model)
+    private static string GetActiveLinkClass(UserMenuItemViewModel model)
     {
         var activeClass = " ";
         if (!model.MenuItem.IsMenuActive(model.CurrentPageName))
@@ -72,7 +154,7 @@ else
         return activeClass;
     }
 
-    public static string GetActiveMenuClass(UserMenuItemViewModel model)
+    private static string GetActiveMenuClass(UserMenuItemViewModel model)
     {
         if (!model.MenuItem.IsMenuActive(model.CurrentPageName))
         {
@@ -82,7 +164,7 @@ else
         return "menu-item-here menu-item-active ";
     }
 
-    public static string GetMenuItemClass(UserMenuItemViewModel model)
+    private static string GetMenuItemClass(UserMenuItemViewModel model)
     {
         var menuItemClass = " ";
         if (model.RootLevel)
@@ -93,9 +175,9 @@ else
         return menuItemClass;
     }
 
-    public static string GetSubMenuClass(UserMenuItemViewModel model)
+    private static string GetSubMenuClass(UserMenuItemViewModel model)
     {
-        var menuItemClass = " ";
+        var menuItemClass = " menu-submenu-classic  ";
         if (model.RootLevel)
         {
             menuItemClass += "menu-submenu-left ";
@@ -106,5 +188,27 @@ else
         }
 
         return menuItemClass;
+    }
+
+    private static string GetActiveMegaMenuClass(UserMenuItemViewModel model)
+    {
+        return !model.MenuItem.IsMenuActive(model.CurrentPageName) ? "" : "menu-item-open menu-item-here menu-item-active ";
+    }
+    
+    private static bool IsMegaMenu(UserMenuItemViewModel model)
+    {
+        return model.MenuItem.CustomData is Dictionary<string, string>dictionary &&
+               dictionary.ContainsKey("useMegaMenu") &&
+               dictionary["useMegaMenu"] == "true";
+    }
+
+    private static int GetMegaMenuLevel(UserMenuItemViewModel model)
+    {
+        if (model.MenuItem.CustomData is Dictionary<string, string>dictionary &&
+            dictionary.ContainsKey("useMegaMenu") &&
+            dictionary["useMegaMenu"] == "true" &&
+            dictionary.ContainsKey("megaMenuLevel"))
+            return int.Parse(dictionary["megaMenuLevel"]);
+        return 0;
     }
 }
