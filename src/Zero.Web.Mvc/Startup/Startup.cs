@@ -43,6 +43,9 @@ using Zero.Web.HealthCheck;
 using Owl.reCAPTCHA;
 using HealthChecksUISettings = HealthChecks.UI.Configuration.Settings;
 using Microsoft.AspNetCore.Server.Kestrel.Https;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Telerik.Reporting.Cache.File;
+using Telerik.Reporting.Services;
 using ZERO.Web.Areas.App.Controllers;
 using Zero.Web.FileManager;
 using Zero.Web.FileManager.Interfaces;
@@ -145,6 +148,27 @@ namespace Zero.Web.Startup
 
             services.Configure<RazorViewEngineOptions>(options => { options.ViewLocationExpanders.Add(new RazorViewLocationExpander()); });
 
+            #region Telerik Report Rest service Configuration
+
+            services.AddControllers();
+
+            services.Configure<IISServerOptions>(options =>
+            {
+                options.AllowSynchronousIO = true;
+                options.MaxRequestBodySize = int.MaxValue;
+            });
+
+            // Configure dependencies for ReportsController.
+            services.TryAddSingleton<IReportServiceConfiguration>(sp =>
+                new ReportServiceConfiguration
+                {
+                    HostAppId = $"ReportingCore5App-{Guid.NewGuid()}",
+                    Storage = new FileStorage(),
+                    ReportSourceResolver = new UriReportSourceResolver(Path.Combine(sp.GetService<IWebHostEnvironment>()?.ContentRootPath ?? string.Empty, "Reports")),
+                });
+
+            #endregion
+            
             //Configure Abp and Dependency Injection
             return services.AddAbp<ZeroWebMvcModule>(options =>
             {
