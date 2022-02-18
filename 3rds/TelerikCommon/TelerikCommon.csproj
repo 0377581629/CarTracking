@@ -5,10 +5,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\FroalaSDK\FroalaEditorSDK.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
       <Reference Include="Telerik.Documents.Core, Version=2021.1.118.20, Culture=neutral, PublicKeyToken=5803cfa389c90ce7">
         <HintPath>..\TelerikDPL\Telerik.Documents.Core.dll</HintPath>
       </Reference>
@@ -41,9 +37,11 @@
       </Reference>
     </ItemGroup>
 
-    <ItemGroup>
-      <PackageReference Include="SixLabors.ImageSharp" Version="1.0.3" />
-      <PackageReference Include="TiffLibrary.ImageSharpAdapter" Version="0.5.260" />
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Magick.NET-Q16-HDRI-AnyCPU" Version="9.1.1" />
+    <PackageReference Include="Magick.NET.Core" Version="9.1.1" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.3" />
+    <PackageReference Include="TiffLibrary.ImageSharpAdapter" Version="0.5.260" />
+  </ItemGroup>
 
 </Project>
