@@ -238,4 +238,9 @@ namespace GHTK.Models
         [JsonProperty("is_freeship")]
         public uint IsFreeShip { get; set; }
     }
+
+    public class PrintOrder : SimpleResponseModel
+    {
+        public byte[] LabelPdfFileBlob { get; set; }    
+    }
 }

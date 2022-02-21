@@ -29,7 +29,7 @@ namespace GHTK
 
         // Get Address 3 level
         public async Task<List<Province>> GetAddresses()
-            => await HandleCustomCommonApi<List<Province>>("https://provinces.open-api.vn",
+            => await HandleCustomApi<List<Province>>("https://provinces.open-api.vn",
                 "/api/", Method.GET, parameters: new Dictionary<string, string>
                 {
                     { "depth", "3" }
@@ -49,7 +49,7 @@ namespace GHTK
         public async Task<List<PickAddress>> GetPickAddresses()
             => await HandleCommonApi<List<PickAddress>>("/services/shipment/list_pick_add", Method.GET);
 
-        
+        // Order
         public async Task<OrderResponseModel> CreateOrder(Order input)
             => await HandleOrderApi<OrderResponseModel>("/services/shipment/order/?ver=1.5", Method.POST, new CreateOrderRequestModel { Order = input });
 
@@ -58,7 +58,10 @@ namespace GHTK
 
         public async Task CancelOrder(string ghtkLabelId) 
             => await HandleOrderApi($"/services/shipment/v2/{ghtkLabelId}", Method.POST);
-
+        
+        public async Task<PrintOrder> PrintLabel(string ghtkLabelId)
+            => await HandlePrintOrder($"/services/label/{ghtkLabelId}", Method.GET);
+        
         #region Private Methods
 
         private RestClient GetRestClient()
@@ -100,6 +103,37 @@ namespace GHTK
             return (T)Activator.CreateInstance(typeof(T));
         }
 
+        private async Task HandleOrderApi(string requestPath, Method requestType, RequestModel model = null, Dictionary<string, string> parameters = null)
+        {
+            var request = new RestRequest("/" + requestPath, requestType)
+            {
+                JsonSerializer = new RestSharpJsonNetSerializer()
+            };
+
+            request.AddHeader("Token", _token);
+
+            if (model != null)
+                request.AddJsonBody(model);
+            if (parameters != null)
+            {
+                foreach (var param in parameters)
+                {
+                    request.AddParameter(param.Key, param.Value);
+                }
+            }
+
+            var fullUrl = GetRestClient().BuildUri(request);
+            Console.WriteLine(fullUrl);
+
+            var response = await GetRestClient().ExecuteAsync(request);
+
+            if (!response.IsSuccessful || string.IsNullOrEmpty(response.Content)) throw new Exception("Error");
+            var resModel = JsonConvert.DeserializeObject<SimpleResponseModel>(response.Content);
+            if (resModel != null && !resModel.Success)
+                throw new Exception(resModel.Message);
+            throw new Exception("Error");
+        }
+
         private async Task<T> HandleOrderApi<T>(string requestPath, Method requestType, RequestModel model = null, Dictionary<string, string> parameters = null)
         {
             var request = new RestRequest("/" + requestPath, requestType)
@@ -134,7 +168,7 @@ namespace GHTK
             return (T)Activator.CreateInstance(typeof(T));
         }
 
-        private async Task<T> HandleCustomCommonApi<T>(string baseUrl, string requestPath, Method requestType, RequestModel model = null, Dictionary<string, string> parameters = null)
+        private async Task<T> HandleCustomApi<T>(string baseUrl, string requestPath, Method requestType, RequestModel model = null, Dictionary<string, string> parameters = null)
         {
             var request = new RestRequest("/" + requestPath, requestType)
             {
@@ -168,8 +202,8 @@ namespace GHTK
 
             return (T)Activator.CreateInstance(typeof(T));
         }
-
-        private async Task HandleOrderApi(string requestPath, Method requestType, RequestModel model = null, Dictionary<string, string> parameters = null)
+        
+        private async Task<PrintOrder> HandlePrintOrder(string requestPath, Method requestType, RequestModel model = null, Dictionary<string, string> parameters = null)
         {
             var request = new RestRequest("/" + requestPath, requestType)
             {
@@ -191,13 +225,26 @@ namespace GHTK
             var fullUrl = GetRestClient().BuildUri(request);
             Console.WriteLine(fullUrl);
 
+            var res = new PrintOrder();
+            
             var response = await GetRestClient().ExecuteAsync(request);
 
-            if (!response.IsSuccessful || string.IsNullOrEmpty(response.Content)) throw new Exception("Error");
-            var resModel = JsonConvert.DeserializeObject<SimpleResponseModel>(response.Content);
-            if (resModel != null && !resModel.Success)
-                throw new Exception(resModel.Message);
-            throw new Exception("Error");
+            if (!response.IsSuccessful || string.IsNullOrEmpty(response.Content))
+                return res;
+            if (response.ContentType != "application/pdf")
+            {
+                var simpleResponse = JsonConvert.DeserializeObject<SimpleResponseModel>(response.Content);
+                if (simpleResponse != null)
+                {
+                    res.Success = simpleResponse.Success;
+                    res.Message = simpleResponse.Message;
+                }
+                return res;
+            }
+
+            res.Success = true;
+            res.LabelPdfFileBlob = response.RawBytes;
+            return res;
         }
 
         /// 

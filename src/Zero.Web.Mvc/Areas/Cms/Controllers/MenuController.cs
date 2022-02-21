@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Abp.AspNetCore.Mvc.Authorization;
@@ -23,38 +24,18 @@ namespace Zero.Web.Areas.Cms.Controllers
     public class MenuController : ZeroControllerBase
     {
         private readonly IRepository<Menu> _menuRepository;
+        private readonly IFileAppService _fileAppService;
 
-        public MenuController(IRepository<Menu> menuRepository)
+        public MenuController(IRepository<Menu> menuRepository, IFileAppService fileAppService)
         {
             _menuRepository = menuRepository;
+            _fileAppService = fileAppService;
         }
 
         public async Task<ActionResult> Index()
         {
             var ghtkApi = new GHTKApiClient();
-            var lstAddresses = await ghtkApi.GetAddresses();
-            Console.WriteLine(lstAddresses.Count);
-
-            var lstAddressesLevel4 =
-                await ghtkApi.GetAddressesLevel4(lstAddresses.First().Name, 
-                    lstAddresses.First().Districts.First().Name, 
-                    lstAddresses.First().Districts.First().Wards.First().Name);
-
-            Console.WriteLine(lstAddressesLevel4.ToJsonString());
-            
-            var ghnApi = new GHNApiClient();
-            var provinces = await ghnApi.GetProvinces();
-            
-            Console.WriteLine(provinces.Count);
-            
-            var districts = await ghnApi.GetDistricts(provinces.First().Id);
-            var stations = await ghnApi.GetStations(new GetStationRequestModel
-            {
-                DistrictId = "1485",
-                Limit = 1000,
-                Offset = 0
-            });
-            Console.WriteLine(stations.ToJsonString());
+            var res = await ghtkApi.PrintLabel("S19806501.BO.SG01-F06.1965415192");
             
             return View();
         }
