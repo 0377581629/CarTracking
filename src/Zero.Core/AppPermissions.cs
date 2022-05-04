@@ -179,4 +179,20 @@
         public const string Menu_Edit = "Cms.Menu.Edit";
         public const string Menu_Delete = "Cms.Menu.Delete";
     }
+    
+    public static class LibPermissions
+    {
+        public const string GeneralSettings = "Lib.GeneralSetting";
+        
+        #region Basic
+
+        public const string Categories = "Lib.Categories";
+        
+        public const string RfidType = "Lib.RfidType";
+        public const string RfidType_Create = "Lib.RfidType.Create";
+        public const string RfidType_Edit = "Lib.RfidType.Edit";
+        public const string RfidType_Delete = "Lib.RfidType.Delete";
+
+        #endregion
+    }
 }

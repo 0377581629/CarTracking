@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\customize\Cms\DPS.Cms.Core\DPS.Cms.Core.csproj" />
+    <ProjectReference Include="..\..\customize\Lib\DPS.Lib.Core\DPS.Lib.Core.csproj" />
     <ProjectReference Include="..\Zero.Core\Zero.Core.csproj" />
   </ItemGroup>
 

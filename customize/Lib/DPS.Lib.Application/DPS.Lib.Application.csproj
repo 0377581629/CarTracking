@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\src\Zero.Application\Zero.Application.csproj" />
+      <ProjectReference Include="..\..\..\src\Zero.Core\Zero.Core.csproj" />
+      <ProjectReference Include="..\DPS.Lib.Application.Shared\DPS.Lib.Application.Shared.csproj" />
+      <ProjectReference Include="..\DPS.Lib.Core\DPS.Lib.Core.csproj" />
+    </ItemGroup>
+
+</Project>

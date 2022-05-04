@@ -193,6 +193,17 @@ namespace Zero.Authorization
             administration.CreateChildPermission(AppPermissions.Pages_Administration_HangfireDashboard, L("HangfireDashboard"), multiTenancySides: _isMultiTenancyEnabled ? MultiTenancySides.Host : MultiTenancySides.Tenant);
             #endregion
         }
+        
+        private void SetLibConfiguration(ref Permission pages)
+        {
+            // Library
+            var generalSettings = pages.CreateChildPermission(LibPermissions.GeneralSettings, L("Library"));
+
+            var rfidType = generalSettings.CreateChildPermission(LibPermissions.RfidType, L("RfidType"));
+            rfidType.CreateChildPermission(LibPermissions.RfidType_Create, L("Create"));
+            rfidType.CreateChildPermission(LibPermissions.RfidType_Edit, L("Edit"));
+            rfidType.CreateChildPermission(LibPermissions.RfidType_Delete, L("Delete"));
+        }
 
         private static ILocalizableString L(string name)
         {

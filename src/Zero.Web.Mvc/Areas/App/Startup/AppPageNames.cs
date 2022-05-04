@@ -20,6 +20,7 @@
             public const string DynamicEntityProperties = "Administration.DynamicEntityProperties";
             
             public const string FilesManager = "Administration.FilesManager";
+            public const string Settings = "Administration.Settings";
         }
 
         public static class Host
@@ -66,6 +67,13 @@
             public const string Category = "Cms.Category";
 
             public const string Post = "Cms.Post";
+        }
+        
+        public static class Lib
+        {
+            public const string GeneralSettings = "Lib.GeneralSetting";
+            
+            public const string RfidType = "Lib.RfidType";
         }
     }
 }

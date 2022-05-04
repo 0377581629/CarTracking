@@ -74,6 +74,9 @@ namespace Zero
         public static string CmsAreas = "Cms";
         public static string ScriptPathCms = $"{ViewResourcesAreas}{CmsAreas}";
         
+        public static string LibAreas = "Lib";
+        public static string ScriptPathLib = $"{ViewResourcesAreas}{LibAreas}";
+        
         public static NumberFormatInfo NumberFormatInfo = new() {NumberDecimalSeparator = "."};
         public static string DateFormat = "dd/MM/yyyy HH:mm:ss";
         public static string ReportExtension = ".trdx";

@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <AssemblyName>DPS.Lib.Core</AssemblyName>
+        <RootNamespace>DPS.Lib.Core</RootNamespace>
+        <LangVersion>9</LangVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\src\Zero.Core\Zero.Core.csproj" />
+      <ProjectReference Include="..\DPS.Lib.Core.Shared\DPS.Lib.Core.Shared.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Abp" Version="6.3.0" />
+    </ItemGroup>
+
+</Project>

@@ -5,6 +5,7 @@ using DPS.Cms.Core.Menu;
 using DPS.Cms.Core.Page;
 using DPS.Cms.Core.Post;
 using DPS.Cms.Core.Widget;
+using DPS.Lib.Core.Basic.Rfid;
 using Microsoft.EntityFrameworkCore;
 using Zero.Abp.Authorization.Accounting;
 using Zero.Abp.Payments;
@@ -76,6 +77,12 @@ namespace Zero.EntityFrameworkCore
         public virtual DbSet<PostTagDetail> PostTagDetails { get; set; }
         
         public virtual DbSet<Tags> Tags { get; set; }
+        #endregion
+
+        #region Lib
+
+        public virtual DbSet<RfidType> RfidTypes { get; set; }
+
         #endregion
         
         #region Abp Customize
