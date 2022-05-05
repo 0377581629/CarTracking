@@ -137,7 +137,8 @@ namespace Zero.Web.Areas.App.Startup
 
                     .AddItem(new MenuItemDefinition(
                             AppPageNames.Lib.GeneralSettings,
-                            L("Library")
+                            L("Library"),
+                            icon: "la la-cog"
                         )
                         .AddItem(new MenuItemDefinition(
                                 AppPageNames.Lib.RfidType,

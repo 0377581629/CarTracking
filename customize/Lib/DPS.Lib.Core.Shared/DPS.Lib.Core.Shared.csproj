@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
         <LangVersion>9</LangVersion>
-        <PackageId>DPS.Cms.Core.Shared</PackageId>
+        <PackageId>DPS.Lib.Core.Shared</PackageId>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="Abp" Version="6.3.0" />

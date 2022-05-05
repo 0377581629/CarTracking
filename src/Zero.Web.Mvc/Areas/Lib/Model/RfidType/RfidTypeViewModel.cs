@@ -2,6 +2,6 @@
 {
     public class RfidTypeViewModel
     {
-        
+        public string FilterText { get; set; }
     }
 }

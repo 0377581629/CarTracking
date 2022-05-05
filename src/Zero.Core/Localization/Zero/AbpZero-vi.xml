@@ -1,6 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <localizationDictionary culture="vi">
   <texts>
+    <!--  CarTracking  -->
+    <text name="Library">Danh mục</text>
+    <text name="RfidType">Loại thẻ RFID</text>
+    <text name="RfidTypes">Loại thẻ RFID</text>
+    <text name="RfidTypeHeaderInfo">Danh mục loại thẻ RFID</text>
+    <!--    -->
+    
     <!--  Mobile  -->
     <text name="MB_Login">Đăng nhập</text>
     <text name="MB_SignUp">Đăng ký</text>

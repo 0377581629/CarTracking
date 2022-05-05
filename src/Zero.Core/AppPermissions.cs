@@ -119,6 +119,11 @@
         #endregion
     }
     
+    public static class CommonPermissions
+    {
+        public const string Settings = "Administration.Settings";
+    }
+    
     public static class CmsPermissions
     {
         public static string Settings = "Cms.Settings";

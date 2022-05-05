@@ -2,6 +2,6 @@
 {
     public class GetRfidTypeForEditOutput
     {
-        
+        public CreateOrEditRfidTypeDto RfidType { get; set; }
     }
 }

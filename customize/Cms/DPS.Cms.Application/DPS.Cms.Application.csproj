@@ -12,6 +12,7 @@
       <ProjectReference Include="..\..\..\src\Zero.Core\Zero.Core.csproj" />
       <ProjectReference Include="..\DPS.Cms.Application.Shared\DPS.Cms.Application.Shared.csproj" />
       <ProjectReference Include="..\DPS.Cms.Core\DPS.Cms.Core.csproj" />
+      <ProjectReference Include="..\..\Lib\DPS.Lib.Application.Shared\DPS.Lib.Application.Shared.csproj" />
     </ItemGroup>
 
     <ItemGroup>

@@ -11,6 +11,7 @@ using Abp.Reflection.Extensions;
 using Abp.Runtime.Caching.Redis;
 using Abp.Zero.Configuration;
 using DPS.Cms.Application;
+using DPS.Lib.Application;
 using DPS.Reporting.Application;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
@@ -35,6 +36,7 @@ namespace Zero.Web
         typeof(AbpRedisCacheModule), //AbpRedisCacheModule dependency (and Abp.RedisCache nuget package) can be removed if not using Redis cache
         typeof(AbpHangfireAspNetCoreModule), //AbpHangfireModule dependency (and Abp.Hangfire.AspNetCore nuget package) can be removed if not using Hangfire
         typeof(CmsApplicationModule),
+        typeof(LibApplicationModule),
         typeof(ReportingApplicationModule)
     )]
     public class ZeroWebCoreModule : AbpModule
@@ -66,6 +68,10 @@ namespace Zero.Web
             Configuration.Modules.AbpAspNetCore()
                 .CreateControllersForAppServices(
                     typeof(CmsApplicationModule).GetAssembly()
+                );
+            Configuration.Modules.AbpAspNetCore()
+                .CreateControllersForAppServices(
+                    typeof(LibApplicationModule).GetAssembly()
                 );
             
             Configuration.Modules.AbpAspNetCore()

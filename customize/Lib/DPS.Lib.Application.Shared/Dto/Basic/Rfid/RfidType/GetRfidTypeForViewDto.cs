@@ -2,6 +2,6 @@
 {
     public class GetRfidTypeForViewDto
     {
-        
+        public RfidTypeDto RfidType { get; set; }
     }
 }

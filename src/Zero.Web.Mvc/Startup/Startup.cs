@@ -99,8 +99,8 @@ namespace Zero.Web.Startup
                 //Swagger - Enable this line and the related lines in Configure method to enable swagger UI
                 services.AddSwaggerGen(options =>
                 {
-                    options.SwaggerDoc("v1", new OpenApiInfo() { Title = "Zero API", Version = "v1" });
-                    options.DocInclusionPredicate((docName, description) => true);
+                    options.SwaggerDoc("v1", new OpenApiInfo { Title = "Zero API", Version = "v1" });
+                    options.DocInclusionPredicate((_, _) => true);
                     options.ParameterFilter<SwaggerEnumParameterFilter>();
                     options.SchemaFilter<SwaggerEnumSchemaFilter>();
                     options.OperationFilter<SwaggerOperationIdFilter>();
@@ -388,6 +388,9 @@ namespace Zero.Web.Startup
                 GlobalConfig.ImportSampleFolders = _appConfiguration["GlobalConfig:ImportSampleFolders"];
 
             #endregion
+            
+            if (!string.IsNullOrEmpty(_appConfiguration["GlobalConfig:DefaultAvatarUrl"]))
+                GlobalConfig.DefaultAvatarUrl = _appConfiguration["GlobalConfig:DefaultAvatarUrl"];
         }
     }
 }

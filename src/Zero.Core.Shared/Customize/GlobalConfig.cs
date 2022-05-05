@@ -38,6 +38,8 @@
         #region Others
 
         public static string DefaultImageUrl { get; set; } = "";
+        
+        public static string DefaultAvatarUrl { get; set; }= "../../Common/Images/default-profile-picture.png";
 
         #endregion
     }

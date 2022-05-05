@@ -21,5 +21,10 @@ namespace DPS.Lib.Application
         {
             IocManager.RegisterAssemblyByConvention(typeof(LibApplicationModule).GetAssembly());
         }
+        
+        public override void PostInitialize()
+        {
+            
+        }
     }
 }
