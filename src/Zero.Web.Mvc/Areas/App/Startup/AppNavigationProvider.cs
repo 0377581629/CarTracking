@@ -138,7 +138,7 @@ namespace Zero.Web.Areas.App.Startup
                     .AddItem(new MenuItemDefinition(
                             AppPageNames.Lib.GeneralSettings,
                             L("Library"),
-                            icon: "la la-cog"
+                            icon: "la la-align-justify"
                         )
                         .AddItem(new MenuItemDefinition(
                                 AppPageNames.Lib.RfidType,

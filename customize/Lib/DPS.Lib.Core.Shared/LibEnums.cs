@@ -57,5 +57,17 @@ namespace DPS.Lib.Core.Shared
             [StringValue("WidgetContentType_MenuGroup")]
             MenuGroup = 12,
         }
+        
+        public enum CardType
+        {
+            [StringValue("CardType_Owner")]
+            Owner = 1,
+
+            [StringValue("CardType_Driver")] 
+            Driver = 2,
+
+            [StringValue("CardType_Car")]
+            Car = 3,
+        }
     }
 }

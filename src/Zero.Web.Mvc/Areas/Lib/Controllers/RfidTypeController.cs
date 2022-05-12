@@ -1,8 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Abp.Application.Services.Dto;
 using Abp.AspNetCore.Mvc.Authorization;
 using DPS.Lib.Application.Shared.Dto.Basic.Rfid.RfidType;
 using DPS.Lib.Application.Shared.Interface.Basic.Rfid;
+using DPS.Lib.Core.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Zero.Authorization;
 using Zero.Customize;
@@ -47,14 +49,17 @@ namespace Zero.Web.Areas.Lib.Controllers
                     RfidType = new CreateOrEditRfidTypeDto()
                     {
                         Code = StringHelper.ShortIdentity(),
-                        IsActive = true
+                        IsBlackList = false,
+                        CardType = (int)LibEnums.CardType.Owner,
+                        RegisterDate = DateTime.Today
                     }
                 };
             }
 
             var viewModel = new CreateOrEditRfidTypeViewModel()
             {
-                RfidType = getRfidTypeForEditOutput.RfidType
+                RfidType = getRfidTypeForEditOutput.RfidType,
+                ListCardType = LibHelper.ListCardType(0, LocalizationSource)
             };
 
             return PartialView("_CreateOrEditModal", viewModel);

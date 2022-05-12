@@ -2483,7 +2483,17 @@ namespace Zero.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("CardDer")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CardNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CardType")
+                        .HasColumnType("int");
+
                     b.Property<string>("Code")
+                        .IsRequired()
                         .HasMaxLength(95)
                         .HasColumnType("nvarchar(95)");
 
@@ -2499,10 +2509,7 @@ namespace Zero.Migrations
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDefault")
+                    b.Property<bool>("IsBlackList")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsDeleted")
@@ -2514,26 +2521,23 @@ namespace Zero.Migrations
                     b.Property<long?>("LastModifierUserId")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(512)
-                        .HasColumnType("nvarchar(512)");
+                    b.Property<DateTime>("RegisterDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("Note")
+                    b.Property<string>("SerialNumber")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Numbering")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Order")
-                        .HasColumnType("int");
 
                     b.Property<int?>("TenantId")
                         .HasColumnType("int");
 
+                    b.Property<long?>("UserId")
+                        .HasColumnType("bigint");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Lib_RfidType");
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Lib_Basic_RfidType");
                 });
 
             modelBuilder.Entity("Zero.Abp.Authorization.Accounting.UserInvoice", b =>
@@ -3932,6 +3936,15 @@ namespace Zero.Migrations
                     b.Navigation("PageTheme");
 
                     b.Navigation("Widget");
+                });
+
+            modelBuilder.Entity("DPS.Lib.Core.Basic.Rfid.RfidType", b =>
+                {
+                    b.HasOne("Zero.Authorization.Users.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Zero.Abp.Payments.SubscriptionPayment", b =>

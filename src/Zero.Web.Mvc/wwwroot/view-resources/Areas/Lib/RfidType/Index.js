@@ -88,22 +88,50 @@
                 },
                 {
                     targets: 3,
-                    data: "rfidType.name",
-                    name: "name"
+                    data: "rfidType.userName",
+                    name: "userName"
                 },
                 {
                     targets: 4,
-                    data: "rfidType.note",
-                    name: "note"
+                    data: "rfidType.cardNumber",
+                    name: "cardNumber"
                 },
                 {
                     targets: 5,
-                    data: "rfidType.isActive",
-                    name: "isActive",
+                    data: "rfidType.cardType",
+                    name: "cardType",
+                    render: function (cardType) {
+                        if (cardType === 1)
+                            return app.localize('CardType_Owner')
+                        if (cardType === 2)
+                            return app.localize('CardType_Driver')
+                        if (cardType === 3)
+                            return app.localize('CardType_Car')
+                    }
+                },
+                {
+                    targets: 6,
+                    width: 80,
+                    data: "rfidType.registerDate",
+                    name: "registerDate",
+                    class: "text-center",
+                    render: function (date) {
+                        return moment(date).format('L');
+                    }
+                },
+                {
+                    targets: 7,
+                    data: "rfidType.serialNumber",
+                    name: "serialNumber"
+                },
+                {
+                    targets: 8,
+                    data: "rfidType.isBlackList",
+                    name: "isBlackList",
                     class: "text-center",
                     width: 80,
-                    render: function(isActive) {
-                        return baseHelper.ShowActive(isActive);
+                    render: function(isBlackList) {
+                        return baseHelper.ShowActive(isBlackList);
                     }
                 }
             ]

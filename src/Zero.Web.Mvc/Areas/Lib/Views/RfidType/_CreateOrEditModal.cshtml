@@ -1,3 +1,4 @@
+@using DPS.Lib.Core.Shared
 @model Zero.Web.Areas.Lib.Model.RfidType.CreateOrEditRfidTypeViewModel
 
 @await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(Model.IsEditMode ? (L("Edit")) : L("Create")))
@@ -23,29 +24,73 @@
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="RfidType_Name">
-                            @L("Name") <span class="text-danger">*</span>
+                        <label for="RfidType_CardNumber">
+                            @L("CardNumber") <span class="text-danger">*</span>
                         </label>
-                        <input class="form-control" id="RfidType_Name" value="@Model.RfidType.Name" type="text" name="name" required maxlength="@ZeroConst.MaxNameLength" minlength="@ZeroConst.MinNameLength"/>
+                        <input class="form-control" id="RfidType_CardNumber" value="@Model.RfidType.CardNumber" type="text" name="cardNumber" required/>
                     </div>
                 </div>
                 <div class="col-2">
                     <div class="form-group mb-0">
-                        <label>@L("IsActive")</label>
+                        <label>@L("IsBlackList")</label>
                         <div class="form-control no-border">
                             <span class="switch switch-sm switch-icon">
                                 <label>
-                                    <input type="checkbox" value="true" id="RfidType_IsActive" name="isActive" @Html.Raw(!Model.RfidType.IsActive ? "" : "checked=\"checked\"")/>
+                                    <input type="checkbox" value="true" id="RfidType_IsBlackList" name="isBlackList" @Html.Raw(!Model.RfidType.IsBlackList ? "" : "checked=\"checked\"")/>
                                     <span></span>
                                 </label>
                             </span>
                         </div>
                     </div>
                 </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="RfidType_SerialNumber">
+                            @L("SerialNumber")
+                        </label>
+                        <input class="form-control" id="RfidType_SerialNumber" value="@Model.RfidType.SerialNumber" type="text" name="serialNumber"/>
+                    </div>
+                </div>
+                
+                <div class="col-6">
+                    <div class="form-group">
+                        <label>@L("RegisterDate")</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control dateTime date-picker text-center" id="RegisterDate" name="RegisterDate" init-value="@Model.RfidType.RegisterDate.ToString("dd/MM/yyyy")">
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <i class="la la-calendar"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-6">
+                    <div class="form-group">
+                        <label>@L("User")</label>
+                        <select id="UserId" style="width:100%;" name="userId" class="form-control">
+                            @if (!string.IsNullOrEmpty(Model.RfidType.UserName) && Model.RfidType.UserId > 0)
+                            {
+                                <option value="@Model.RfidType.UserId" selected="selected">@Model.RfidType.UserName</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="col-6">
+                    <div class="form-group">
+                        <label>
+                            @L("CardType") 
+                        </label>
+                        @Html.DropDownList("CardType", LibHelper.ListCardType(Model.RfidType.CardType, LocalizationManager.GetSource(ZeroConst.LocalizationSourceName)), new {@class = "form-control kt-select2-non-search", @id = "CardType"})
+                    </div>
+                </div>
+
                 <div class="col-12">
                     <div class="form-group">
-                        <label for="RfidType_Note">@L("Note")</label>
-                        <input class="form-control" id="RfidType_Note" type="text" name="note" value="@Model.RfidType.Note"/>
+                        <label for="RfidType_CardDer">@L("CardDer")</label>
+                        <input class="form-control" id="RfidType_CardDer" type="text" name="cardDer" value="@Model.RfidType.CardDer"/>
                     </div>
                 </div>
             </div>

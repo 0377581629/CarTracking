@@ -40,6 +40,13 @@ namespace DPS.Lib.Core.Shared
         }
 
         #endregion
+        
+        public static List<SelectListItem> ListCardType(int currentCardType, ILocalizationSource lang)
+        {
+            return (from cardType in (LibEnums.CardType[]) Enum.GetValues(typeof(LibEnums.CardType))
+                select new SelectListItem(lang.GetString(cardType.GetStringValue()),
+                    ((int) cardType).ToString(), currentCardType == (int) cardType)).ToList();
+        }
     }
 
     public class SocialMediaHelper

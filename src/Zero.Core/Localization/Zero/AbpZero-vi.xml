@@ -3,9 +3,18 @@
   <texts>
     <!--  CarTracking  -->
     <text name="Library">Danh mục</text>
-    <text name="RfidType">Loại thẻ RFID</text>
-    <text name="RfidTypes">Loại thẻ RFID</text>
-    <text name="RfidTypeHeaderInfo">Danh mục loại thẻ RFID</text>
+    <text name="RfidType">Thẻ RFID</text>
+    <text name="RfidTypes">Thẻ RFID</text>
+    <text name="RfidTypeHeaderInfo">Danh mục thẻ RFID</text>
+    <text name="CardNumber">Số thẻ</text>
+    <text name="IsBlackList">Ngưng hoạt động</text>
+    <text name="SerialNumber">Số Seri</text>
+    <text name="RegisterDate">Ngày kích hoạt</text>
+    <text name="CardType">Loại thẻ</text>
+    <text name="CardDer">Mô tả</text>
+    <text name="CardType_Owner">Chủ hàng</text>
+    <text name="CardType_Car">Xe</text>
+    <text name="CardType_Driver">Lái xe</text>
     <!--    -->
     
     <!--  Mobile  -->

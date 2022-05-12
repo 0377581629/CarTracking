@@ -33,15 +33,21 @@ namespace DPS.Lib.Application.Services.Basic.RFID
 
             var query = from obj in _rfidTypeRepository.GetAll()
                     .Where(o => !o.IsDeleted && o.TenantId == AbpSession.TenantId)
-                    .WhereIf(input != null && !string.IsNullOrWhiteSpace(input.Filter), e => e.Code.Contains(input.Filter) || e.Name.Contains(input.Filter) || e.Note.Contains(input.Filter))
+                    .WhereIf(input != null && !string.IsNullOrWhiteSpace(input.Filter), e => e.Code.Contains(input.Filter) || e.CardNumber.Contains(input.Filter) || e.SerialNumber.Contains(input.Filter))
                     .WhereIf(id.HasValue, e => e.Id == id.Value)
                 select new RfidTypeDto
                 {
+                    TenantId = obj.TenantId,
                     Id = obj.Id,
                     Code = obj.Code,
-                    Name = obj.Name,
-                    Note = obj.Note,
-                    IsActive = obj.IsActive
+                    CardNumber = obj.CardNumber,
+                    CardDer = obj.CardDer,
+                    RegisterDate = obj.RegisterDate,
+                    UserId = obj.UserId,
+                    UserName = obj.User.UserName,
+                    IsBlackList = obj.IsBlackList,
+                    SerialNumber = obj.SerialNumber,
+                    CardType = obj.CardType,
                 };
             return query;
         }
@@ -94,7 +100,7 @@ namespace DPS.Lib.Application.Services.Basic.RFID
             return output;
         }
 
-        private async Task ValidateDataInput(SimpleCreateOrEditEntityDto input)
+        private async Task ValidateDataInput(CreateOrEditRfidTypeDto input)
         {
             var res = await _rfidTypeRepository.GetAll()
                 .Where(o => !o.IsDeleted && o.TenantId == AbpSession.TenantId && o.Code.Equals(input.Code))
