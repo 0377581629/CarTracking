@@ -60,14 +60,41 @@ namespace DPS.Lib.Core.Shared
         
         public enum CardType
         {
-            [StringValue("CardType_Owner")]
-            Owner = 1,
+            [StringValue("CardType_Treasurer")]
+            Treasurer = 1,
 
             [StringValue("CardType_Driver")] 
             Driver = 2,
 
             [StringValue("CardType_Car")]
             Car = 3,
+        }
+        
+        public enum BloodType
+        {
+            [StringValue("BloodType_APlus")]
+            APlus = 1,
+
+            [StringValue("BloodType_ASub")] 
+            ASub = 2,
+            
+            [StringValue("BloodType_BPlus")]
+            BPlus = 3,
+
+            [StringValue("BloodType_BSub")] 
+            BSub = 4,
+            
+            [StringValue("BloodType_OPlus")]
+            OPlus = 5,
+
+            [StringValue("BloodType_OSub")] 
+            OSub = 6,
+            
+            [StringValue("BloodType_AbPlus")]
+            AbPlus = 7,
+
+            [StringValue("BloodType_AbSub")] 
+            AbSub = 8,
         }
     }
 }

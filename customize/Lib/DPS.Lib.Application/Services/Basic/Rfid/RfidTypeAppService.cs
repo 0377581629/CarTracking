@@ -12,7 +12,6 @@ using DPS.Lib.Core.Basic.Rfid;
 using Microsoft.EntityFrameworkCore;
 using Zero;
 using Zero.Authorization;
-using Zero.Customize.Dto.Base;
 
 namespace DPS.Lib.Application.Services.Basic.RFID
 {

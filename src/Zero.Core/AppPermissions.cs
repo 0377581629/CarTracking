@@ -197,6 +197,21 @@
         public const string RfidType_Create = "Lib.RfidType.Create";
         public const string RfidType_Edit = "Lib.RfidType.Edit";
         public const string RfidType_Delete = "Lib.RfidType.Delete";
+        
+        public const string Technician = "Lib.Technician";
+        public const string Technician_Create = "Lib.Technician.Create";
+        public const string Technician_Edit = "Lib.Technician.Edit";
+        public const string Technician_Delete = "Lib.Technician.Delete";
+        
+        public const string Treasurer = "Lib.Treasurer";
+        public const string Treasurer_Create = "Lib.Treasurer.Create";
+        public const string Treasurer_Edit = "Lib.Treasurer.Edit";
+        public const string Treasurer_Delete = "Lib.Treasurer.Delete";
+        
+        public const string Driver = "Lib.Driver";
+        public const string Driver_Create = "Lib.Driver.Create";
+        public const string Driver_Edit = "Lib.Driver.Edit";
+        public const string Driver_Delete = "Lib.Driver.Delete";
 
         #endregion
     }

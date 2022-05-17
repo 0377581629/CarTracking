@@ -1,0 +1,60 @@
+﻿@model Zero.Web.Areas.Lib.Model.Treasurer.TreasurerViewModel
+@{
+    ViewBag.CurrentPageName = AppPageNames.Lib.Treasurer;
+}
+
+@section Scripts
+{
+    <script abp-src="@ZeroConst.ScriptPathLib/Treasurer/Index.js" asp-append-version="true"></script>
+}
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <abp-page-subheader title="@L("Treasurer")" description="@L("TreasurerHeaderInfo")">
+        @if (IsGranted(LibPermissions.Treasurer_Create))
+        {
+            <button id="CreateNewButton" class="btn btn-primary blue">
+                <i class="fa fa-plus"></i> @L("Create")
+            </button>
+        }
+    </abp-page-subheader>
+
+    <div class="@(await GetContainerClass())">
+        <div class="card card-custom gutter-b">
+            <div class="card-body">
+                <div class="form">
+                    <div id="TreasurerFormFilter">
+                        <div class="row mb-15">
+                            <div class="col-12">
+                                <div class="input-group">
+                                    <input id="TreasurerTableFilter" class="form-control" type="text" value="@ViewBag.FilterText" placeholder="@L("SearchWithThreeDot")" aria-describedby="basic-addon2">
+                                    <span class="input-group-btn">
+                                        <button type="button" name="RefreshButton" class="btn btn-primary">
+                                            <i class="fa fa-search"></i>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="align-items-center">
+                    <table id="TreasurerTable" class="display table table-striped table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th class="text-center">@L("Actions")</th>
+                            <th class="text-center">@L("Avatar")</th>
+                            <th class="text-center">@L("Code")</th>
+                            <th class="text-center">@L("Name")</th>
+                            <th class="text-center">@L("RfidTypeCardNumber")</th>
+                            <th class="text-center">@L("PhoneNumber")</th>
+                            <th class="text-center">@L("Email")</th>
+                            <th class="text-center">@L("IsStopWorking")</th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

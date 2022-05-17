@@ -2,6 +2,34 @@
 <localizationDictionary culture="vi">
   <texts>
     <!--  CarTracking  -->
+    <text name="Driver">Lái xe</text>
+    <text name="DriverHeaderInfo">Danh mục lái xe</text>
+    <text name="DoB">Ngày sinh</text>
+    <text name="BloodType">Nhóm máu</text>
+    <text name="BloodType_APlus">A+</text>
+    <text name="BloodType_ASub">A-</text>
+    <text name="BloodType_BPlus">B+</text>
+    <text name="BloodType_BSub">B-</text>
+    <text name="BloodType_OPlus">O+</text>
+    <text name="BloodType_OSub">O-</text>
+    <text name="BloodType_AbPlus">AB+</text>
+    <text name="BloodType_AbSub">AB-</text>
+    <text name="IdNumber">Số CMND</text>
+    <text name="DrivingLicense">Giấy phép lái xe</text>
+    <text name="DriverNumber">Số CMND</text>
+    <text name="DrivingLicenseStartDate">Ngày cấp GPLX</text>
+    <text name="DrivingLicenseEndDate">Ngày hết hạn GPLX</text>
+    
+    <text name="Technician">Kĩ thuật viên ATM</text>
+    <text name="TechnicianHeaderInfo">Danh mục kĩ thuật viên ATM</text>
+    <text name="RfidTypeCardNumber">Số thẻ RFID</text>
+    <text name="IsStopWorking">Đã nghỉ việc</text>
+    <text name="Male">Nam</text>
+    <text name="Female">Nữ</text>
+
+    <text name="Treasurer">Thủ quỹ / Chủ hàng</text>
+    <text name="TreasurerHeaderInfo">Danh mục Thủ quỹ / Chủ hàng</text>
+    
     <text name="Library">Danh mục</text>
     <text name="RfidType">Thẻ RFID</text>
     <text name="RfidTypes">Thẻ RFID</text>
@@ -12,7 +40,7 @@
     <text name="RegisterDate">Ngày kích hoạt</text>
     <text name="CardType">Loại thẻ</text>
     <text name="CardDer">Mô tả</text>
-    <text name="CardType_Owner">Chủ hàng</text>
+    <text name="CardType_Treasurer">Thủ quỹ / Chủ hàng</text>
     <text name="CardType_Car">Xe</text>
     <text name="CardType_Driver">Lái xe</text>
     <!--    -->

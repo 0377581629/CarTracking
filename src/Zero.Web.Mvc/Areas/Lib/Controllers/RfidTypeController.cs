@@ -50,7 +50,7 @@ namespace Zero.Web.Areas.Lib.Controllers
                     {
                         Code = StringHelper.ShortIdentity(),
                         IsBlackList = false,
-                        CardType = (int)LibEnums.CardType.Owner,
+                        CardType = (int)LibEnums.CardType.Treasurer,
                         RegisterDate = DateTime.Today
                     }
                 };

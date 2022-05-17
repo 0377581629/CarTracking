@@ -221,6 +221,21 @@ namespace Zero.Authorization
             rfidType.CreateChildPermission(LibPermissions.RfidType_Create, L("Create"));
             rfidType.CreateChildPermission(LibPermissions.RfidType_Edit, L("Edit"));
             rfidType.CreateChildPermission(LibPermissions.RfidType_Delete, L("Delete"));
+            
+            var technician = generalSettings.CreateChildPermission(LibPermissions.Technician, L("Technician"));
+            technician.CreateChildPermission(LibPermissions.Technician_Create, L("Create"));
+            technician.CreateChildPermission(LibPermissions.Technician_Edit, L("Edit"));
+            technician.CreateChildPermission(LibPermissions.Technician_Delete, L("Delete"));
+            
+            var treasurer = generalSettings.CreateChildPermission(LibPermissions.Treasurer, L("Treasurer"));
+            treasurer.CreateChildPermission(LibPermissions.Treasurer_Create, L("Create"));
+            treasurer.CreateChildPermission(LibPermissions.Treasurer_Edit, L("Edit"));
+            treasurer.CreateChildPermission(LibPermissions.Treasurer_Delete, L("Delete"));
+            
+            var driver = generalSettings.CreateChildPermission(LibPermissions.Driver, L("Driver"));
+            driver.CreateChildPermission(LibPermissions.Driver_Create, L("Create"));
+            driver.CreateChildPermission(LibPermissions.Driver_Edit, L("Edit"));
+            driver.CreateChildPermission(LibPermissions.Driver_Delete, L("Delete"));
         }
 
         private static ILocalizableString L(string name)

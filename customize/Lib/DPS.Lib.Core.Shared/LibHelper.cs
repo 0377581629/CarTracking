@@ -47,6 +47,13 @@ namespace DPS.Lib.Core.Shared
                 select new SelectListItem(lang.GetString(cardType.GetStringValue()),
                     ((int) cardType).ToString(), currentCardType == (int) cardType)).ToList();
         }
+        
+        public static List<SelectListItem> ListBloodType(int currentBloodType, ILocalizationSource lang)
+        {
+            return (from bloodType in (LibEnums.BloodType[]) Enum.GetValues(typeof(LibEnums.BloodType))
+                select new SelectListItem(lang.GetString(bloodType.GetStringValue()),
+                    ((int) bloodType).ToString(), currentBloodType == (int) bloodType)).ToList();
+        }
     }
 
     public class SocialMediaHelper

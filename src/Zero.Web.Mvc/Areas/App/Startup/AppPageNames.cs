@@ -74,6 +74,12 @@
             public const string GeneralSettings = "Lib.GeneralSetting";
             
             public const string RfidType = "Lib.RfidType";
+            
+            public const string Technician = "Lib.Technician";
+            
+            public const string Treasurer = "Lib.Treasurer";
+            
+            public const string Driver = "Lib.Driver";
         }
     }
 }

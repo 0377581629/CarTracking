@@ -2476,6 +2476,94 @@ namespace Zero.Migrations
                     b.ToTable("Cms_Widget_PageTheme");
                 });
 
+            modelBuilder.Entity("DPS.Lib.Core.Basic.Driver.Driver", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Avatar")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("BloodType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(95)
+                        .HasColumnType("nvarchar(95)");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("CreatorUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("DeleterUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DoB")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DriverNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DrivingLicense")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DrivingLicenseEndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DrivingLicenseStartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Gender")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("IdNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsStopWorking")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("LastModifierUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("RfidTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RfidTypeId");
+
+                    b.ToTable("Lib_Basic_Driver");
+                });
+
             modelBuilder.Entity("DPS.Lib.Core.Basic.Rfid.RfidType", b =>
                 {
                     b.Property<int>("Id")
@@ -2538,6 +2626,140 @@ namespace Zero.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Lib_Basic_RfidType");
+                });
+
+            modelBuilder.Entity("DPS.Lib.Core.Basic.Technician.Technician", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Avatar")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(95)
+                        .HasColumnType("nvarchar(95)");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("CreatorUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("DeleterUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Gender")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsStopWorking")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("LastModifierUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("RfidTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RfidTypeId");
+
+                    b.ToTable("Lib_Basic_Technician");
+                });
+
+            modelBuilder.Entity("DPS.Lib.Core.Basic.Treasurer.Treasurer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Avatar")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(95)
+                        .HasColumnType("nvarchar(95)");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("CreatorUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("DeleterUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Gender")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsStopWorking")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("LastModifierUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("RfidTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RfidTypeId");
+
+                    b.ToTable("Lib_Basic_Treasurer");
                 });
 
             modelBuilder.Entity("Zero.Abp.Authorization.Accounting.UserInvoice", b =>
@@ -3938,6 +4160,15 @@ namespace Zero.Migrations
                     b.Navigation("Widget");
                 });
 
+            modelBuilder.Entity("DPS.Lib.Core.Basic.Driver.Driver", b =>
+                {
+                    b.HasOne("DPS.Lib.Core.Basic.Rfid.RfidType", "RfidType")
+                        .WithMany()
+                        .HasForeignKey("RfidTypeId");
+
+                    b.Navigation("RfidType");
+                });
+
             modelBuilder.Entity("DPS.Lib.Core.Basic.Rfid.RfidType", b =>
                 {
                     b.HasOne("Zero.Authorization.Users.User", "User")
@@ -3945,6 +4176,24 @@ namespace Zero.Migrations
                         .HasForeignKey("UserId");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("DPS.Lib.Core.Basic.Technician.Technician", b =>
+                {
+                    b.HasOne("DPS.Lib.Core.Basic.Rfid.RfidType", "RfidType")
+                        .WithMany()
+                        .HasForeignKey("RfidTypeId");
+
+                    b.Navigation("RfidType");
+                });
+
+            modelBuilder.Entity("DPS.Lib.Core.Basic.Treasurer.Treasurer", b =>
+                {
+                    b.HasOne("DPS.Lib.Core.Basic.Rfid.RfidType", "RfidType")
+                        .WithMany()
+                        .HasForeignKey("RfidTypeId");
+
+                    b.Navigation("RfidType");
                 });
 
             modelBuilder.Entity("Zero.Abp.Payments.SubscriptionPayment", b =>

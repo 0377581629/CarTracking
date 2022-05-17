@@ -7,7 +7,9 @@ using Abp.Application.Services.Dto;
 using Abp.Authorization;
 using Abp.Domain.Repositories;
 using Abp.Linq.Extensions;
+using DPS.Lib.Application.Shared.Dto.Basic.Rfid.RfidType;
 using DPS.Lib.Application.Shared.Interface.Common;
+using DPS.Lib.Core.Basic.Rfid;
 using Microsoft.EntityFrameworkCore;
 using Zero;
 using Zero.Authorization.Roles;
@@ -21,16 +23,21 @@ namespace DPS.Lib.Application.Services.Common
     {
         private readonly RoleManager _roleManager;
         private readonly IRepository<User, long> _userRepository;
+        private readonly IRepository<RfidType> _rfidTypeRepository;
 
         #region Constructor
-        public LibAppService(RoleManager roleManager, IRepository<User, long> userRepository)
+        public LibAppService(RoleManager roleManager,
+            IRepository<User, long> userRepository,
+            IRepository<RfidType> rfidTypeRepository)
         {
             _roleManager = roleManager;
             _userRepository = userRepository;
+            _rfidTypeRepository = rfidTypeRepository;
         }
         #endregion
 
-        
+        #region User
+
         private IQueryable<User> GetUsersFilteredQuery(IGetUsersInput input)
         {
             var query = UserManager.Users
@@ -67,5 +74,53 @@ namespace DPS.Lib.Application.Services.Common
                 userListDtos
             );
         }
+
+        #endregion
+        
+        #region RfidType
+
+        private IQueryable<RfidTypeDto> RfidTypeDataQuery(GetAllRfidTypeInput input = null)
+        {
+            var query = from o in _rfidTypeRepository.GetAll()
+                    .Where(o => !o.IsDeleted && o.TenantId == AbpSession.TenantId)
+                    .WhereIf(input != null && !string.IsNullOrWhiteSpace(input.Filter),
+                        e => e.Code.Contains(input.Filter) || e.CardNumber.Contains(input.Filter) ||
+                             e.CardDer.Contains(input.Filter))
+                select new RfidTypeDto
+                {
+                    TenantId = o.TenantId,
+                    Id = o.Id,
+                    Code = o.Code,
+                    CardNumber = o.CardNumber,
+                    CardDer = o.CardDer,
+                    RegisterDate = o.RegisterDate,
+                    UserId = o.UserId,
+                    UserName = o.User.UserName,
+                    IsBlackList = o.IsBlackList,
+                    SerialNumber = o.SerialNumber,
+                    CardType = o.CardType,
+                };
+            return query;
+        }
+
+        public async Task<List<RfidTypeDto>> GetAllRfidTypes()
+        {
+            return await RfidTypeDataQuery().ToListAsync();
+        }
+
+        public async Task<PagedResultDto<RfidTypeDto>> GetPagedRfidTypes(GetAllRfidTypeInput input)
+        {
+            var objQuery = RfidTypeDataQuery(input);
+            var pagedAndFilteredObj = objQuery.OrderBy(input.Sorting ?? "id asc").PageBy(input);
+            var totalCount = await objQuery.CountAsync();
+            var res = await pagedAndFilteredObj.ToListAsync();
+
+            return new PagedResultDto<RfidTypeDto>(
+                totalCount,
+                res
+            );
+        }
+
+        #endregion
     }
 }

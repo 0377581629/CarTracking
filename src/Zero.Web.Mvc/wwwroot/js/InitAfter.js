@@ -447,7 +447,7 @@ function slugify(text) {
         }
 
         baseHelper.ShowAvatar = function (avatar) {
-            return baseHelper.ShowImage(avatar, '../../Common/Images/default-profile-picture.jpg');
+            return baseHelper.ShowImage(avatar, '../../Common/Images/default-profile-picture.png');
         }
 
         baseHelper.ShowDefaultStatus = function (status) {

@@ -138,13 +138,34 @@ namespace Zero.Web.Areas.App.Startup
                     .AddItem(new MenuItemDefinition(
                             AppPageNames.Lib.GeneralSettings,
                             L("Library"),
-                            icon: "la la-align-justify"
+                            icon: "la la-database"
                         )
                         .AddItem(new MenuItemDefinition(
                                 AppPageNames.Lib.RfidType,
                                 L("RfidType"),
                                 url: $"{ZeroConst.LibAreas}/RfidType",
                                 permissionDependency: new SimplePermissionDependency(LibPermissions.RfidType)
+                            )
+                        )
+                        .AddItem(new MenuItemDefinition(
+                                AppPageNames.Lib.Technician,
+                                L("Technician"),
+                                url: $"{ZeroConst.LibAreas}/Technician",
+                                permissionDependency: new SimplePermissionDependency(LibPermissions.Technician)
+                            )
+                        )
+                        .AddItem(new MenuItemDefinition(
+                                AppPageNames.Lib.Treasurer,
+                                L("Treasurer"),
+                                url: $"{ZeroConst.LibAreas}/Treasurer",
+                                permissionDependency: new SimplePermissionDependency(LibPermissions.Treasurer)
+                            )
+                        )
+                        .AddItem(new MenuItemDefinition(
+                                AppPageNames.Lib.Driver,
+                                L("Driver"),
+                                url: $"{ZeroConst.LibAreas}/Driver",
+                                permissionDependency: new SimplePermissionDependency(LibPermissions.Driver)
                             )
                         )
                     )

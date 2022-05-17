@@ -5,7 +5,10 @@ using DPS.Cms.Core.Menu;
 using DPS.Cms.Core.Page;
 using DPS.Cms.Core.Post;
 using DPS.Cms.Core.Widget;
+using DPS.Lib.Core.Basic.Driver;
 using DPS.Lib.Core.Basic.Rfid;
+using DPS.Lib.Core.Basic.Technician;
+using DPS.Lib.Core.Basic.Treasurer;
 using Microsoft.EntityFrameworkCore;
 using Zero.Abp.Authorization.Accounting;
 using Zero.Abp.Payments;
@@ -82,6 +85,12 @@ namespace Zero.EntityFrameworkCore
         #region Lib
 
         public virtual DbSet<RfidType> RfidTypes { get; set; }
+        
+        public virtual DbSet<Technician> Technicians { get; set; }
+        
+        public virtual DbSet<Treasurer> Treasurers { get; set; }
+        
+        public virtual DbSet<Driver> Drivers { get; set; }
 
         #endregion
         

@@ -1,0 +1,132 @@
+﻿@using DPS.Lib.Core.Shared
+@model Zero.Web.Areas.Lib.Model.Treasurer.CreateOrEditTreasurerViewModel
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(Model.IsEditMode ? (L("Edit")) : L("Create")))
+
+<div class="modal-body">
+    <div id="TreasurerInformationsTab">
+        <form name="TreasurerInformationsForm" role="form" novalidate class="form-validation">
+
+            @if (Model.IsEditMode)
+            {
+                <input type="hidden" name="id" value="@Model.Treasurer.Id"/>
+            }
+            <input type="hidden" name="language" id="Entity_Language" value=""/>
+            <div class="row">
+                <div class="col-3 text-center">
+                    <div class="col-12 text-center pt-10">
+                        <div id="AvatarWrap" class="image-input image-input-outline @(!string.IsNullOrEmpty(Model.Treasurer.Avatar) ? "image-input-changed" : "")">
+                            <input id="Avatar" name="avatar" type="hidden" value="@Model.Treasurer.Avatar">
+                            <img alt="Avatar" id="AvatarHolder" onerror="src='@GlobalConfig.DefaultAvatarUrl'" default-src="@GlobalConfig.DefaultAvatarUrl" src="@(!string.IsNullOrEmpty(Model.Treasurer.Avatar) ? Model.Treasurer.Avatar : GlobalConfig.DefaultAvatarUrl)" class="kt-avatar__holder mw-100"/>
+                            <label id="ChangeAvatar" class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="change" data-toggle="kt-tooltip" title="@L("ChangeAvatar")">
+                                <i class="fa fa-pen icon-sm text-muted"></i>
+                            </label>
+                            <span id="CancelAvatar" class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="cancel" data-toggle="kt-tooltip" title="@L("CancelAvatar")">
+                                <i class="ki ki-bold-close icon-xs text-muted"></i>
+                            </span>
+                        </div>
+                        <span class="form-text text-muted py-10">@L("AllowedFileTypes"): png, jpg, jpeg.</span>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="kt-radio-inline pt-5">
+                                <label for="IsMale" class="kt-radio kt-radio--primary">
+                                    <input id="IsMale" name="gender" value="true" type="radio" @(Model.Treasurer.Gender ? "checked" : "")/>
+                                    @L("Male")
+                                    <span></span>
+                                </label>
+                                <label for="IsFemale" class="kt-radio kt-radio--warning pl-5">
+                                    <input id="IsFemale" name="gender" value="false" type="radio" @(!Model.Treasurer.Gender ? "checked" : "")/>
+                                    @L("Female")
+                                    <span></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-9">
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label for="Treasurer_Code">
+                                    @L("Code") <span class="text-danger">*</span>
+                                </label>
+                                <input class="form-control" id="Treasurer_Code" value="@Model.Treasurer.Code" type="text" name="code" required maxlength="@ZeroConst.MaxCodeLength" minlength="@ZeroConst.MinCodeLength"/>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="Treasurer_Name">
+                                    @L("Name") <span class="text-danger">*</span>
+                                </label>
+                                <input class="form-control" id="Treasurer_Name" value="@Model.Treasurer.Name" type="text" name="name" required maxlength="@ZeroConst.MaxCodeLength" minlength="@ZeroConst.MinCodeLength"/>
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div class="form-group mb-0">
+                                <label>@L("IsStopWorking")</label>
+                                <div class="form-control no-border">
+                                    <span class="switch switch-sm switch-icon">
+                                        <label>
+                                            <input type="checkbox" value="true" id="Treasurer_IsStopWorking" name="isStopWorking" @Html.Raw(!Model.Treasurer.IsStopWorking ? "" : "checked=\"checked\"")/>
+                                            <span></span>
+                                        </label>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>@L("Email")</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Email" value="@Model.Treasurer.Email" name="email">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <i class="la la-envelope kt-font-brand"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>@L("Phone")</label>
+                                <div class="input-group">
+                                    <input class="form-control" value="@Model.Treasurer.PhoneNumber" type="text" name="phoneNumber"/>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <i class="la la-phone kt-font-brand"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>@L("Address")</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" value="@Model.Treasurer.Address" name="address">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>@L("RfidType")</label>
+                                <select id="RfidTypeId" style="width:100%;" name="rfidTypeId" class="form-control">
+                                    @if (!string.IsNullOrEmpty(Model.Treasurer.RfidTypeCardNumber) && Model.Treasurer.RfidTypeId > 0)
+                                    {
+                                        <option value="@Model.Treasurer.RfidTypeId" selected="selected">@Model.Treasurer.RfidTypeCardNumber</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalFooterWithSaveAndCancel.cshtml")
