@@ -1,0 +1,125 @@
+@using DPS.Lib.Core.Shared
+@model Zero.Web.Areas.Lib.Model.Car.CreateOrEditCarViewModel
+<form name="CarInformationsForm" role="form" novalidate class="form-validation">
+
+    @if (Model.IsEditMode)
+    {
+        <input type="hidden" name="id" value="@Model.Car.Id"/>
+    }
+    <input type="hidden" name="language" id="Entity_Language" value=""/>
+
+    <div class="row">
+        <div class="col-6">
+            <div class="form-group">
+                <label for="Car_Code">
+                    @L("Code") <span class="text-danger">*</span>
+                </label>
+                <input class="form-control" id="Car_Code" value="@Model.Car.Code" type="text" name="code" required maxlength="@ZeroConst.MaxCodeLength" minlength="@ZeroConst.MinCodeLength"/>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group">
+                <label for="Car_LicensePlate">
+                    @L("LicensePlate") <span class="text-danger">*</span>
+                </label>
+                <input class="form-control" id="Car_LicensePlate" value="@Model.Car.LicensePlate" type="text" name="licensePlate" required/>
+            </div>
+        </div>
+
+        <div class="col-6">
+            <div class="form-group">
+                <label>@L("Device")</label>
+                <select id="DeviceId" style="width:100%;" name="deviceId" class="form-control">
+                    @if (!string.IsNullOrEmpty(Model.Car.DeviceCode) && !string.IsNullOrEmpty(Model.Car.DeviceSimCard) && Model.Car.DeviceId > 0)
+                    {
+                        <option value="@Model.Car.DeviceId" selected="selected">@Model.Car.DeviceCode - @Model.Car.DeviceSimCard</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="col-6">
+            <div class="form-group">
+                <label>@L("CarType")</label>
+                <select id="CarTypeId" style="width:100%;" name="carTypeId" class="form-control">
+                    @if (!string.IsNullOrEmpty(Model.Car.CarTypeCode) && !string.IsNullOrEmpty(Model.Car.CarTypeName) && Model.Car.CarTypeId > 0)
+                    {
+                        <option value="@Model.Car.CarTypeId" selected="selected">@Model.Car.CarTypeCode - @Model.Car.CarTypeName</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="col-6">
+            <div class="form-group">
+                <label>@L("CarGroup")</label>
+                <select id="CarGroupId" style="width:100%;" name="carGroupId" class="form-control">
+                    @if (!string.IsNullOrEmpty(Model.Car.CarGroupCode) && !string.IsNullOrEmpty(Model.Car.CarGroupName) && Model.Car.CarGroupId > 0)
+                    {
+                        <option value="@Model.Car.CarGroupId" selected="selected">@Model.Car.CarGroupCode - @Model.Car.CarGroupName</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="col-6">
+            <div class="form-group">
+                <label>@L("Driver")</label>
+                <select id="DriverId" style="width:100%;" name="driverId" class="form-control">
+                    @if (!string.IsNullOrEmpty(Model.Car.DriverCode) && !string.IsNullOrEmpty(Model.Car.DriverName) && Model.Car.DriverId > 0)
+                    {
+                        <option value="@Model.Car.DriverId" selected="selected">@Model.Car.DriverCode - @Model.Car.DriverName</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="col-6">
+            <div class="form-group">
+                <label>@L("RfidType")</label>
+                <select id="RfidTypeId" style="width:100%;" name="rfidTypeId" class="form-control">
+                    @if (!string.IsNullOrEmpty(Model.Car.RfidTypeCode) && !string.IsNullOrEmpty(Model.Car.RfidTypeCardNumber) && Model.Car.RfidTypeId > 0)
+                    {
+                        <option value="@Model.Car.RfidTypeId" selected="selected">@Model.Car.RfidTypeCode - @Model.Car.RfidTypeCardNumber</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="col-6">
+            <div class="form-group">
+                <label for="Car_SpeedLimit">
+                    @L("SpeedLimit")
+                </label>
+                <input class="form-control number" id="Car_SpeedLimit" value="@Model.Car.SpeedLimit" type="text" name="speedLimit"/>
+            </div>
+        </div>
+
+        <div class="col-6">
+            <div class="form-group">
+                <label>
+                    @L("FuelType")
+                </label>
+                @Html.DropDownList("FuelType", LibHelper.ListFuelType(Model.Car.FuelType, LocalizationManager.GetSource(ZeroConst.LocalizationSourceName)), new {@class = "form-control kt-select2-non-search", @id = "FuelType"})
+            </div>
+        </div>
+
+        <div class="col-6">
+            <div class="form-group">
+                <label for="Car_Quota">
+                    @L("Quota")
+                </label>
+                <input class="form-control number" id="Car_Quota" value="@Model.Car.Quota" type="text" name="quota"/>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="form-group">
+                <label for="Car_Note">
+                    @L("Note")
+                </label>
+                <input class="form-control" id="Car_Note" value="@Model.Car.Note" type="text" name="note"/>
+            </div>
+        </div>
+    </div>
+</form>

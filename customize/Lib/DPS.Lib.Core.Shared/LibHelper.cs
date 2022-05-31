@@ -54,6 +54,13 @@ namespace DPS.Lib.Core.Shared
                 select new SelectListItem(lang.GetString(bloodType.GetStringValue()),
                     ((int) bloodType).ToString(), currentBloodType == (int) bloodType)).ToList();
         }
+        
+        public static List<SelectListItem> ListFuelType(int currentFuelType, ILocalizationSource lang)
+        {
+            return (from fuelType in (LibEnums.FuelType[]) Enum.GetValues(typeof(LibEnums.FuelType))
+                select new SelectListItem(lang.GetString(fuelType.GetStringValue()),
+                    ((int) fuelType).ToString(), currentFuelType == (int) fuelType)).ToList();
+        }
     }
 
     public class SocialMediaHelper

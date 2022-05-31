@@ -187,11 +187,9 @@
     
     public static class LibPermissions
     {
-        public const string GeneralSettings = "Lib.GeneralSetting";
-        
         #region Basic
-
-        public const string Categories = "Lib.Categories";
+        
+        public const string GeneralSettings = "Lib.GeneralSetting";
         
         public const string RfidType = "Lib.RfidType";
         public const string RfidType_Create = "Lib.RfidType.Create";
@@ -207,11 +205,42 @@
         public const string Treasurer_Create = "Lib.Treasurer.Create";
         public const string Treasurer_Edit = "Lib.Treasurer.Edit";
         public const string Treasurer_Delete = "Lib.Treasurer.Delete";
+
+        public const string NetworkProvider = "Lib.NetworkProvider";
+        public const string NetworkProvider_Create = "Lib.NetworkProvider.Create";
+        public const string NetworkProvider_Edit = "Lib.NetworkProvider.Edit";
+        public const string NetworkProvider_Delete = "Lib.NetworkProvider.Delete";
+        
+        public const string Device = "Lib.Device";
+        public const string Device_Create = "Lib.Device.Create";
+        public const string Device_Edit = "Lib.Device.Edit";
+        public const string Device_Delete = "Lib.Device.Delete";
+
+        #endregion
+
+        #region Transport
+
+        public const string Transport = "Lib.Transport";
         
         public const string Driver = "Lib.Driver";
         public const string Driver_Create = "Lib.Driver.Create";
         public const string Driver_Edit = "Lib.Driver.Edit";
         public const string Driver_Delete = "Lib.Driver.Delete";
+        
+        public const string CarType = "Lib.CarType";
+        public const string CarType_Create = "Lib.CarType.Create";
+        public const string CarType_Edit = "Lib.CarType.Edit";
+        public const string CarType_Delete = "Lib.CarType.Delete";
+        
+        public const string CarGroup = "Lib.CarGroup";
+        public const string CarGroup_Create = "Lib.CarGroup.Create";
+        public const string CarGroup_Edit = "Lib.CarGroup.Edit";
+        public const string CarGroup_Delete = "Lib.CarGroup.Delete";
+        
+        public const string Car = "Lib.Car";
+        public const string Car_Create = "Lib.Car.Create";
+        public const string Car_Edit = "Lib.Car.Edit";
+        public const string Car_Delete = "Lib.Car.Delete";
 
         #endregion
     }

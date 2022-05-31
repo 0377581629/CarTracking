@@ -30,149 +30,191 @@ namespace Zero.Web.Areas.App.Startup
 
         private static void AddMainMenu(ref MenuDefinition menu)
         {
-            
         }
 
         private static void AddReporting(ref MenuDefinition menu)
         {
-            
         }
 
         private static void AddCoreMenu(ref MenuDefinition menu)
         {
             menu.AddItem(new MenuItemDefinition(
-                        AppPageNames.Common.Settings,
-                        L("Settings")
+                    AppPageNames.Common.Settings,
+                    L("Settings")
+                )
+
+                #region Settings Cms
+
+                .AddItem(new MenuItemDefinition(
+                        AppPageNames.Cms.Settings,
+                        L("HomePage"),
+                        icon: "la la-cog"
                     )
-
-                    #region Settings Cms
-
                     .AddItem(new MenuItemDefinition(
-                            AppPageNames.Cms.Settings,
-                            L("HomePage"),
-                            icon: "la la-cog"
-                        )
-                        .AddItem(new MenuItemDefinition(
-                                AppPageNames.Cms.ImageBlockGroup,
-                                L("ImageBlockGroups"),
-                                url: $"{ZeroConst.CmsAreas}/ImageBlockGroup",
-                                permissionDependency: new SimplePermissionDependency(CmsPermissions.ImageBlockGroup)
-                            )
-                        )
-                        .AddItem(new MenuItemDefinition(
-                                AppPageNames.Cms.ImageBlock,
-                                L("ImageBlocks"),
-                                url: $"{ZeroConst.CmsAreas}/ImageBlock",
-                                permissionDependency: new SimplePermissionDependency(CmsPermissions.ImageBlock)
-                            )
-                        )
-                        .AddItem(new MenuItemDefinition(
-                                AppPageNames.Cms.PageTheme,
-                                L("PageThemes"),
-                                url: $"{ZeroConst.CmsAreas}/PageTheme",
-                                permissionDependency: new SimplePermissionDependency(CmsPermissions.PageTheme)
-                            )
-                        )
-                        .AddItem(new MenuItemDefinition(
-                                AppPageNames.Cms.PageLayout,
-                                L("PageLayouts"),
-                                url: $"{ZeroConst.CmsAreas}/PageLayout",
-                                permissionDependency: new SimplePermissionDependency(CmsPermissions.PageLayout)
-                            )
-                        )
-                        .AddItem(new MenuItemDefinition(
-                                AppPageNames.Cms.Widget,
-                                L("Widgets"),
-                                url: $"{ZeroConst.CmsAreas}/Widget",
-                                permissionDependency: new SimplePermissionDependency(CmsPermissions.Widget)
-                            )
-                        )
-                        .AddItem(new MenuItemDefinition(
-                                AppPageNames.Cms.Page,
-                                L("Pages"),
-                                url: $"{ZeroConst.CmsAreas}/Page",
-                                permissionDependency: new SimplePermissionDependency(CmsPermissions.Page)
-                            )
-                        )
-                        .AddItem(new MenuItemDefinition(
-                                AppPageNames.Cms.Tags,
-                                L("Tags"),
-                                url: $"{ZeroConst.CmsAreas}/Tags",
-                                permissionDependency: new SimplePermissionDependency(CmsPermissions.Tags)
-                            )
-                        )
-                        .AddItem(new MenuItemDefinition(
-                                AppPageNames.Cms.MenuGroup,
-                                L("MenuGroups"),
-                                url: $"{ZeroConst.CmsAreas}/MenuGroup",
-                                permissionDependency: new SimplePermissionDependency(CmsPermissions.MenuGroup)
-                            )
-                        )
-                        .AddItem(new MenuItemDefinition(
-                                AppPageNames.Cms.Menu,
-                                L("Menus"),
-                                url: $"{ZeroConst.CmsAreas}/Menu",
-                                permissionDependency: new SimplePermissionDependency(CmsPermissions.Menu)
-                            )
-                        )
-                        .AddItem(new MenuItemDefinition(
-                                AppPageNames.Cms.Category,
-                                L("Categories"),
-                                url: $"{ZeroConst.CmsAreas}/Category",
-                                permissionDependency: new SimplePermissionDependency(CmsPermissions.Category)
-                            )
-                        )
-                        .AddItem(new MenuItemDefinition(
-                                AppPageNames.Cms.Post,
-                                L("Posts"),
-                                url: $"{ZeroConst.CmsAreas}/Post",
-                                permissionDependency: new SimplePermissionDependency(CmsPermissions.Post)
-                            )
+                            AppPageNames.Cms.ImageBlockGroup,
+                            L("ImageBlockGroups"),
+                            url: $"{ZeroConst.CmsAreas}/ImageBlockGroup",
+                            permissionDependency: new SimplePermissionDependency(CmsPermissions.ImageBlockGroup)
                         )
                     )
-
-                    #endregion
-
-                    #region Library Config
-
                     .AddItem(new MenuItemDefinition(
-                            AppPageNames.Lib.GeneralSettings,
-                            L("Library"),
-                            icon: "la la-database"
-                        )
-                        .AddItem(new MenuItemDefinition(
-                                AppPageNames.Lib.RfidType,
-                                L("RfidType"),
-                                url: $"{ZeroConst.LibAreas}/RfidType",
-                                permissionDependency: new SimplePermissionDependency(LibPermissions.RfidType)
-                            )
-                        )
-                        .AddItem(new MenuItemDefinition(
-                                AppPageNames.Lib.Technician,
-                                L("Technician"),
-                                url: $"{ZeroConst.LibAreas}/Technician",
-                                permissionDependency: new SimplePermissionDependency(LibPermissions.Technician)
-                            )
-                        )
-                        .AddItem(new MenuItemDefinition(
-                                AppPageNames.Lib.Treasurer,
-                                L("Treasurer"),
-                                url: $"{ZeroConst.LibAreas}/Treasurer",
-                                permissionDependency: new SimplePermissionDependency(LibPermissions.Treasurer)
-                            )
-                        )
-                        .AddItem(new MenuItemDefinition(
-                                AppPageNames.Lib.Driver,
-                                L("Driver"),
-                                url: $"{ZeroConst.LibAreas}/Driver",
-                                permissionDependency: new SimplePermissionDependency(LibPermissions.Driver)
-                            )
+                            AppPageNames.Cms.ImageBlock,
+                            L("ImageBlocks"),
+                            url: $"{ZeroConst.CmsAreas}/ImageBlock",
+                            permissionDependency: new SimplePermissionDependency(CmsPermissions.ImageBlock)
                         )
                     )
+                    .AddItem(new MenuItemDefinition(
+                            AppPageNames.Cms.PageTheme,
+                            L("PageThemes"),
+                            url: $"{ZeroConst.CmsAreas}/PageTheme",
+                            permissionDependency: new SimplePermissionDependency(CmsPermissions.PageTheme)
+                        )
+                    )
+                    .AddItem(new MenuItemDefinition(
+                            AppPageNames.Cms.PageLayout,
+                            L("PageLayouts"),
+                            url: $"{ZeroConst.CmsAreas}/PageLayout",
+                            permissionDependency: new SimplePermissionDependency(CmsPermissions.PageLayout)
+                        )
+                    )
+                    .AddItem(new MenuItemDefinition(
+                            AppPageNames.Cms.Widget,
+                            L("Widgets"),
+                            url: $"{ZeroConst.CmsAreas}/Widget",
+                            permissionDependency: new SimplePermissionDependency(CmsPermissions.Widget)
+                        )
+                    )
+                    .AddItem(new MenuItemDefinition(
+                            AppPageNames.Cms.Page,
+                            L("Pages"),
+                            url: $"{ZeroConst.CmsAreas}/Page",
+                            permissionDependency: new SimplePermissionDependency(CmsPermissions.Page)
+                        )
+                    )
+                    .AddItem(new MenuItemDefinition(
+                            AppPageNames.Cms.Tags,
+                            L("Tags"),
+                            url: $"{ZeroConst.CmsAreas}/Tags",
+                            permissionDependency: new SimplePermissionDependency(CmsPermissions.Tags)
+                        )
+                    )
+                    .AddItem(new MenuItemDefinition(
+                            AppPageNames.Cms.MenuGroup,
+                            L("MenuGroups"),
+                            url: $"{ZeroConst.CmsAreas}/MenuGroup",
+                            permissionDependency: new SimplePermissionDependency(CmsPermissions.MenuGroup)
+                        )
+                    )
+                    .AddItem(new MenuItemDefinition(
+                            AppPageNames.Cms.Menu,
+                            L("Menus"),
+                            url: $"{ZeroConst.CmsAreas}/Menu",
+                            permissionDependency: new SimplePermissionDependency(CmsPermissions.Menu)
+                        )
+                    )
+                    .AddItem(new MenuItemDefinition(
+                            AppPageNames.Cms.Category,
+                            L("Categories"),
+                            url: $"{ZeroConst.CmsAreas}/Category",
+                            permissionDependency: new SimplePermissionDependency(CmsPermissions.Category)
+                        )
+                    )
+                    .AddItem(new MenuItemDefinition(
+                            AppPageNames.Cms.Post,
+                            L("Posts"),
+                            url: $"{ZeroConst.CmsAreas}/Post",
+                            permissionDependency: new SimplePermissionDependency(CmsPermissions.Post)
+                        )
+                    )
+                ));
 
-                    #endregion
+            #endregion
 
+            #region Library Config
+
+            menu.AddItem(new MenuItemDefinition(
+                    AppPageNames.Lib.GeneralSettings,
+                    L("Library"),
+                    icon: "la la-database"
+                )
+                .AddItem(new MenuItemDefinition(
+                        AppPageNames.Lib.RfidType,
+                        L("RfidType"),
+                        url: $"{ZeroConst.LibAreas}/RfidType",
+                        permissionDependency: new SimplePermissionDependency(LibPermissions.RfidType)
+                    )
+                )
+                .AddItem(new MenuItemDefinition(
+                        AppPageNames.Lib.Technician,
+                        L("Technician"),
+                        url: $"{ZeroConst.LibAreas}/Technician",
+                        permissionDependency: new SimplePermissionDependency(LibPermissions.Technician)
+                    )
+                )
+                .AddItem(new MenuItemDefinition(
+                        AppPageNames.Lib.Treasurer,
+                        L("Treasurer"),
+                        url: $"{ZeroConst.LibAreas}/Treasurer",
+                        permissionDependency: new SimplePermissionDependency(LibPermissions.Treasurer)
+                    )
+                )
+                .AddItem(new MenuItemDefinition(
+                        AppPageNames.Lib.NetworkProvider,
+                        L("NetworkProvider"),
+                        url: $"{ZeroConst.LibAreas}/NetworkProvider",
+                        permissionDependency: new SimplePermissionDependency(LibPermissions.NetworkProvider)
+                    )
+                )
+                .AddItem(new MenuItemDefinition(
+                        AppPageNames.Lib.Device,
+                        L("Device"),
+                        url: $"{ZeroConst.LibAreas}/Device",
+                        permissionDependency: new SimplePermissionDependency(LibPermissions.Device)
+                    )
+                )
             );
+
+            #endregion
+
+            #region Transport
+
+            menu.AddItem(new MenuItemDefinition(
+                    AppPageNames.Lib.Transport,
+                    L("Transport"),
+                    icon: "la la-cab"
+                )
+                .AddItem(new MenuItemDefinition(
+                        AppPageNames.Lib.Driver,
+                        L("Driver"),
+                        url: $"{ZeroConst.LibAreas}/Driver",
+                        permissionDependency: new SimplePermissionDependency(LibPermissions.Driver)
+                    )
+                )
+                .AddItem(new MenuItemDefinition(
+                        AppPageNames.Lib.CarType,
+                        L("CarType"),
+                        url: $"{ZeroConst.LibAreas}/CarType",
+                        permissionDependency: new SimplePermissionDependency(LibPermissions.CarType)
+                    )
+                )
+                .AddItem(new MenuItemDefinition(
+                        AppPageNames.Lib.CarGroup,
+                        L("CarGroup"),
+                        url: $"{ZeroConst.LibAreas}/CarGroup",
+                        permissionDependency: new SimplePermissionDependency(LibPermissions.CarGroup)
+                    )
+                )
+                .AddItem(new MenuItemDefinition(
+                        AppPageNames.Lib.Car,
+                        L("Car"),
+                        url: $"{ZeroConst.LibAreas}/Car",
+                        permissionDependency: new SimplePermissionDependency(LibPermissions.Car)
+                    )
+                )
+            );
+
+            #endregion
 
             #region Administration
 

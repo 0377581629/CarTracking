@@ -2476,21 +2476,12 @@ namespace Zero.Migrations
                     b.ToTable("Cms_Widget_PageTheme");
                 });
 
-            modelBuilder.Entity("DPS.Lib.Core.Basic.Driver.Driver", b =>
+            modelBuilder.Entity("DPS.Lib.Core.Basic.Device.Device", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Avatar")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("BloodType")
-                        .HasColumnType("int");
 
                     b.Property<string>("Code")
                         .IsRequired()
@@ -2509,34 +2500,77 @@ namespace Zero.Migrations
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DoB")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("DriverNumber")
+                    b.Property<string>("Imei")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("DrivingLicense")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("DrivingLicenseEndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DrivingLicenseStartDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Gender")
+                    b.Property<bool>("IsActive")
                         .HasColumnType("bit");
-
-                    b.Property<string>("IdNumber")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsStopWorking")
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("LastModifierUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("NeedUpdate")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("NetworkProviderId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SimCard")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NetworkProviderId");
+
+                    b.ToTable("Lib_Basic_Device");
+                });
+
+            modelBuilder.Entity("DPS.Lib.Core.Basic.NetworkProvider.NetworkProvider", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AccessPoint")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(95)
+                        .HasColumnType("nvarchar(95)");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("CreatorUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("DeleterUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("GprsPassword")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("GprsUserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<DateTime?>("LastModificationTime")
@@ -2548,20 +2582,12 @@ namespace Zero.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("RfidTypeId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("TenantId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RfidTypeId");
-
-                    b.ToTable("Lib_Basic_Driver");
+                    b.ToTable("Lib_Basic_NetworkProvider");
                 });
 
             modelBuilder.Entity("DPS.Lib.Core.Basic.Rfid.RfidType", b =>
@@ -2760,6 +2786,309 @@ namespace Zero.Migrations
                     b.HasIndex("RfidTypeId");
 
                     b.ToTable("Lib_Basic_Treasurer");
+                });
+
+            modelBuilder.Entity("DPS.Lib.Core.Transport.Car.Camera", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CarId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Position")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Rotation")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CarId");
+
+                    b.ToTable("Lib_Transport_Car_Camera");
+                });
+
+            modelBuilder.Entity("DPS.Lib.Core.Transport.Car.Car", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("CarGroupId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CarTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(95)
+                        .HasColumnType("nvarchar(95)");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("CreatorUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("DeleterUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("DeviceId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("DriverId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FuelType")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("LastModifierUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("LicensePlate")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("Quota")
+                        .HasColumnType("float");
+
+                    b.Property<int?>("RfidTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SpeedLimit")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CarGroupId");
+
+                    b.HasIndex("CarTypeId");
+
+                    b.HasIndex("DeviceId");
+
+                    b.HasIndex("DriverId");
+
+                    b.HasIndex("RfidTypeId");
+
+                    b.ToTable("Lib_Transport_Car");
+                });
+
+            modelBuilder.Entity("DPS.Lib.Core.Transport.CarGroup.CarGroup", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(95)
+                        .HasColumnType("nvarchar(95)");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("CreatorUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("DeleterUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsSpecialGroup")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("LastModifierUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Lib_Transport_CarGroup");
+                });
+
+            modelBuilder.Entity("DPS.Lib.Core.Transport.CarType.CarType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(95)
+                        .HasColumnType("nvarchar(95)");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("CreatorUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("DeleterUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("LastModifierUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Lib_Transport_CarType");
+                });
+
+            modelBuilder.Entity("DPS.Lib.Core.Transport.Driver.Driver", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Avatar")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("BloodType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(95)
+                        .HasColumnType("nvarchar(95)");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("CreatorUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("DeleterUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("DeviceId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DoB")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DriverNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DrivingLicense")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DrivingLicenseEndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DrivingLicenseStartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Gender")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("IdNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsStopWorking")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("LastModifierUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("RfidTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DeviceId");
+
+                    b.HasIndex("RfidTypeId");
+
+                    b.ToTable("Lib_Basic_Driver");
                 });
 
             modelBuilder.Entity("Zero.Abp.Authorization.Accounting.UserInvoice", b =>
@@ -4160,13 +4489,13 @@ namespace Zero.Migrations
                     b.Navigation("Widget");
                 });
 
-            modelBuilder.Entity("DPS.Lib.Core.Basic.Driver.Driver", b =>
+            modelBuilder.Entity("DPS.Lib.Core.Basic.Device.Device", b =>
                 {
-                    b.HasOne("DPS.Lib.Core.Basic.Rfid.RfidType", "RfidType")
+                    b.HasOne("DPS.Lib.Core.Basic.NetworkProvider.NetworkProvider", "NetworkProvider")
                         .WithMany()
-                        .HasForeignKey("RfidTypeId");
+                        .HasForeignKey("NetworkProviderId");
 
-                    b.Navigation("RfidType");
+                    b.Navigation("NetworkProvider");
                 });
 
             modelBuilder.Entity("DPS.Lib.Core.Basic.Rfid.RfidType", b =>
@@ -4192,6 +4521,65 @@ namespace Zero.Migrations
                     b.HasOne("DPS.Lib.Core.Basic.Rfid.RfidType", "RfidType")
                         .WithMany()
                         .HasForeignKey("RfidTypeId");
+
+                    b.Navigation("RfidType");
+                });
+
+            modelBuilder.Entity("DPS.Lib.Core.Transport.Car.Camera", b =>
+                {
+                    b.HasOne("DPS.Lib.Core.Transport.Car.Car", "Car")
+                        .WithMany()
+                        .HasForeignKey("CarId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Car");
+                });
+
+            modelBuilder.Entity("DPS.Lib.Core.Transport.Car.Car", b =>
+                {
+                    b.HasOne("DPS.Lib.Core.Transport.CarGroup.CarGroup", "CarGroup")
+                        .WithMany()
+                        .HasForeignKey("CarGroupId");
+
+                    b.HasOne("DPS.Lib.Core.Transport.CarType.CarType", "CarType")
+                        .WithMany()
+                        .HasForeignKey("CarTypeId");
+
+                    b.HasOne("DPS.Lib.Core.Basic.Device.Device", "Device")
+                        .WithMany()
+                        .HasForeignKey("DeviceId");
+
+                    b.HasOne("DPS.Lib.Core.Transport.Driver.Driver", "Driver")
+                        .WithMany()
+                        .HasForeignKey("DriverId");
+
+                    b.HasOne("DPS.Lib.Core.Basic.Rfid.RfidType", "RfidType")
+                        .WithMany()
+                        .HasForeignKey("RfidTypeId");
+
+                    b.Navigation("CarGroup");
+
+                    b.Navigation("CarType");
+
+                    b.Navigation("Device");
+
+                    b.Navigation("Driver");
+
+                    b.Navigation("RfidType");
+                });
+
+            modelBuilder.Entity("DPS.Lib.Core.Transport.Driver.Driver", b =>
+                {
+                    b.HasOne("DPS.Lib.Core.Basic.Device.Device", "Device")
+                        .WithMany()
+                        .HasForeignKey("DeviceId");
+
+                    b.HasOne("DPS.Lib.Core.Basic.Rfid.RfidType", "RfidType")
+                        .WithMany()
+                        .HasForeignKey("RfidTypeId");
+
+                    b.Navigation("Device");
 
                     b.Navigation("RfidType");
                 });

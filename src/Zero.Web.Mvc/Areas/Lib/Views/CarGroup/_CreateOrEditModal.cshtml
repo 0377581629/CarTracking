@@ -1,0 +1,72 @@
+﻿@using DPS.Lib.Core.Shared
+@model Zero.Web.Areas.Lib.Model.CarGroup.CreateOrEditCarGroupViewModel
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(Model.IsEditMode ? (L("Edit")) : L("Create")))
+
+<div class="modal-body">
+    <div id="CarGroupInformationsTab">
+        <form name="CarGroupInformationsForm" role="form" novalidate class="form-validation">
+
+            @if (Model.IsEditMode)
+            {
+                <input type="hidden" name="id" value="@Model.CarGroup.Id"/>
+            }
+            <input type="hidden" name="language" id="Entity_Language" value=""/>
+
+            <div class="row">
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="CarGroup_Code">
+                            @L("Code") <span class="text-danger">*</span>
+                        </label>
+                        <input class="form-control" id="CarGroup_Code" value="@Model.CarGroup.Code" type="text" name="code" required maxlength="@ZeroConst.MaxCodeLength" minlength="@ZeroConst.MinCodeLength"/>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="CarGroup_Name">
+                            @L("Name") <span class="text-danger">*</span>
+                        </label>
+                        <input class="form-control" id="CarGroup_Name" value="@Model.CarGroup.Name" type="text" name="name" required/>
+                    </div>
+                </div>
+                <div class="col-2">
+                    <div class="form-group mb-0">
+                        <label>@L("IsActive")</label>
+                        <div class="form-control no-border">
+                            <span class="switch switch-sm switch-icon">
+                                <label>
+                                    <input type="checkbox" value="true" id="CarGroup_IsActive" name="isActive" @Html.Raw(!Model.CarGroup.IsActive ? "" : "checked=\"checked\"")/>
+                                    <span></span>
+                                </label>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-2">
+                    <div class="form-group mb-0">
+                        <label>@L("IsSpecialGroup")</label>
+                        <div class="form-control no-border">
+                            <span class="switch switch-sm switch-icon">
+                                <label>
+                                    <input type="checkbox" value="true" id="CarGroup_IsSpecialGroup" name="isSpecialGroup" @Html.Raw(!Model.CarGroup.IsSpecialGroup ? "" : "checked=\"checked\"")/>
+                                    <span></span>
+                                </label>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <label for="CarGroup_Description">
+                            @L("Description")
+                        </label>
+                        <input class="form-control" id="CarGroup_Description" value="@Model.CarGroup.Description" type="text" name="description"/>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalFooterWithSaveAndCancel.cshtml")

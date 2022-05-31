@@ -231,11 +231,39 @@ namespace Zero.Authorization
             treasurer.CreateChildPermission(LibPermissions.Treasurer_Create, L("Create"));
             treasurer.CreateChildPermission(LibPermissions.Treasurer_Edit, L("Edit"));
             treasurer.CreateChildPermission(LibPermissions.Treasurer_Delete, L("Delete"));
+
+            var networkProvider = generalSettings.CreateChildPermission(LibPermissions.NetworkProvider, L("NetworkProvider"));
+            networkProvider.CreateChildPermission(LibPermissions.NetworkProvider_Create, L("Create"));
+            networkProvider.CreateChildPermission(LibPermissions.NetworkProvider_Edit, L("Edit"));
+            networkProvider.CreateChildPermission(LibPermissions.NetworkProvider_Delete, L("Delete"));
             
-            var driver = generalSettings.CreateChildPermission(LibPermissions.Driver, L("Driver"));
+            var device = generalSettings.CreateChildPermission(LibPermissions.Device, L("Device"));
+            device.CreateChildPermission(LibPermissions.Device_Create, L("Create"));
+            device.CreateChildPermission(LibPermissions.Device_Edit, L("Edit"));
+            device.CreateChildPermission(LibPermissions.Device_Delete, L("Delete"));
+            
+            // Transport
+            var transports = pages.CreateChildPermission(LibPermissions.Transport, L("Transport"));
+
+            var driver = transports.CreateChildPermission(LibPermissions.Driver, L("Driver"));
             driver.CreateChildPermission(LibPermissions.Driver_Create, L("Create"));
             driver.CreateChildPermission(LibPermissions.Driver_Edit, L("Edit"));
             driver.CreateChildPermission(LibPermissions.Driver_Delete, L("Delete"));
+            
+            var carType = transports.CreateChildPermission(LibPermissions.CarType, L("CarType"));
+            carType.CreateChildPermission(LibPermissions.CarType_Create, L("Create"));
+            carType.CreateChildPermission(LibPermissions.CarType_Edit, L("Edit"));
+            carType.CreateChildPermission(LibPermissions.CarType_Delete, L("Delete"));
+            
+            var carGroup = transports.CreateChildPermission(LibPermissions.CarGroup, L("CarGroup"));
+            carGroup.CreateChildPermission(LibPermissions.CarGroup_Create, L("Create"));
+            carGroup.CreateChildPermission(LibPermissions.CarGroup_Edit, L("Edit"));
+            carGroup.CreateChildPermission(LibPermissions.CarGroup_Delete, L("Delete"));
+            
+            var car = transports.CreateChildPermission(LibPermissions.Car, L("Car"));
+            car.CreateChildPermission(LibPermissions.Car_Create, L("Create"));
+            car.CreateChildPermission(LibPermissions.Car_Edit, L("Edit"));
+            car.CreateChildPermission(LibPermissions.Car_Delete, L("Delete"));
         }
 
         private static ILocalizableString L(string name)

@@ -2,6 +2,40 @@
 <localizationDictionary culture="vi">
   <texts>
     <!--  CarTracking  -->
+    <text name="Car">Xe</text>
+    <text name="CarHeaderInfo">Danh mục xe</text>
+    <text name="LicensePlate">Biển số</text>
+    <text name="SpeedLimit">Giới hạn tốc độ</text>
+    <text name="FuelType">Loại nhiên liệu</text>
+    <text name="FuelType_Gasoline">Xăng</text>
+    <text name="FuelType_Oil">Dầu</text>
+    <text name="FuelType_Electricity">Điện</text>
+    <text name="Quota">Định mức nhiên liệu</text>
+    <text name="Camera">Camera</text>
+    <text name="Position">Vị trí đặt</text>
+    <text name="Rotation">Góc quay</text>
+    
+    <text name="Transport">Vận chuyển</text>
+    <text name="CarType">Loại xe</text>
+    <text name="CarTypeHeaderInfo">Danh mục loại xe</text>
+
+    <text name="CarGroup">Nhóm xe</text>
+    <text name="CarGroupHeaderInfo">Danh mục nhóm xe</text>
+    <text name="IsSpecialGroup">Nhóm đặc biệt</text>
+    
+    <text name="Device">Thiết bị</text>
+    <text name="DeviceHeaderInfo">Danh mục thiết bị</text>
+    <text name="StartDate">Ngày kích hoạt</text>
+    <text name="Imei">IMEI SIM</text>
+    <text name="NeedUpdate">Cần cập nhật</text>
+    <text name="SimCard">Số điện thoại</text>
+    
+    <text name="NetworkProvider">Nhà mạng</text>
+    <text name="NetworkProviderHeaderInfo">Danh mục nhà mạng</text>
+    <text name="AccessPoint">Điểm truy cập</text>
+    <text name="GprsUserName">Tài khoản GPRS</text>
+    <text name="GprsPassword">Mật khẩu GPRS</text>
+    
     <text name="Driver">Lái xe</text>
     <text name="DriverHeaderInfo">Danh mục lái xe</text>
     <text name="DoB">Ngày sinh</text>
@@ -16,7 +50,7 @@
     <text name="BloodType_AbSub">AB-</text>
     <text name="IdNumber">Số CMND</text>
     <text name="DrivingLicense">Giấy phép lái xe</text>
-    <text name="DriverNumber">Số CMND</text>
+    <text name="DriverNumber">Số hiệu lái xe</text>
     <text name="DrivingLicenseStartDate">Ngày cấp GPLX</text>
     <text name="DrivingLicenseEndDate">Ngày hết hạn GPLX</text>
     

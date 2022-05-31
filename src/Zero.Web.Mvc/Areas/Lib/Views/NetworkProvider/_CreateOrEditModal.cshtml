@@ -1,0 +1,65 @@
+﻿@using DPS.Lib.Core.Shared
+@model Zero.Web.Areas.Lib.Model.NetworkProvider.CreateOrEditNetworkProviderViewModel
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(Model.IsEditMode ? (L("Edit")) : L("Create")))
+
+<div class="modal-body">
+    <div id="NetworkProviderInformationsTab">
+        <form name="NetworkProviderInformationsForm" role="form" novalidate class="form-validation">
+
+            @if (Model.IsEditMode)
+            {
+                <input type="hidden" name="id" value="@Model.NetworkProvider.Id"/>
+            }
+            <input type="hidden" name="language" id="Entity_Language" value=""/>
+
+            <div class="row">
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="NetworkProvider_Code">
+                            @L("Code") <span class="text-danger">*</span>
+                        </label>
+                        <input class="form-control" id="NetworkProvider_Code" value="@Model.NetworkProvider.Code" type="text" name="code" required maxlength="@ZeroConst.MaxCodeLength" minlength="@ZeroConst.MinCodeLength"/>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="NetworkProvider_Name">
+                            @L("Name") <span class="text-danger">*</span>
+                        </label>
+                        <input class="form-control" id="NetworkProvider_Name" value="@Model.NetworkProvider.Name" type="text" name="name" required/>
+                    </div>
+                </div>
+
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="NetworkProvider_AccessPoint">
+                            @L("AccessPoint")
+                        </label>
+                        <input class="form-control" id="NetworkProvider_AccessPoint" value="@Model.NetworkProvider.AccessPoint" type="text" name="accessPoint"/>
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="NetworkProvider_GprsUserName">
+                            @L("GprsUserName")
+                        </label>
+                        <input class="form-control" id="NetworkProvider_GprsUserName" value="@Model.NetworkProvider.GprsUserName" type="text" name="gprsUserName"/>
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="NetworkProvider_GprsPassword">
+                            @L("GprsPassword")
+                        </label>
+                        <input class="form-control" id="NetworkProvider_GprsPassword" value="@Model.NetworkProvider.GprsPassword" type="text" name="gprsPassword"/>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalFooterWithSaveAndCancel.cshtml")

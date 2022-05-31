@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using DPS.Lib.Application.Shared.Dto.Basic.Driver;
+using DPS.Lib.Application.Shared.Dto.Transport.Driver;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Zero.Web.Areas.Lib.Model.Driver

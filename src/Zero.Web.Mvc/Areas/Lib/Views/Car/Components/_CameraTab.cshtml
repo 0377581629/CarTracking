@@ -1,0 +1,33 @@
+@model Zero.Web.Areas.Lib.Model.Car.CreateOrEditCarViewModel
+
+<div class="row">
+    <div class="col-12">
+        <table class="display table table-bordered table-hover input-table mb-0" id="CameraTable">
+            <thead>
+            <tr>
+                <th class="text-center text-middle w-40"></th>
+                <th class="text-center text-middle">@L("Name")</th>
+                <th class="text-center text-middle">@L("Position")</th>
+                <th class="text-center text-middle">@L("Rotation")</th>
+                <th class="text-center text-middle w-30"></th>
+            </tr>
+            </thead>
+            <tbody>
+            @if (Model.Car.Cameras != null && Model.Car.Cameras.Any())
+            {
+                foreach (var detail in Model.Car.Cameras)
+                {
+                    await Html.RenderPartialAsync("Components/Details/_CameraDetail", detail);
+                }
+            }
+            <tr id="LastDetailRowCamera">
+                <td colspan="6" class="text-center">
+                    <button class="btn btn-sm btn-outline-primary" id="btnAddDetailCamera">
+                        <i class="fa fa-plus"></i> @L("Create")
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

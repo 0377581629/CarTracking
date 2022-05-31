@@ -5,10 +5,15 @@ using DPS.Cms.Core.Menu;
 using DPS.Cms.Core.Page;
 using DPS.Cms.Core.Post;
 using DPS.Cms.Core.Widget;
-using DPS.Lib.Core.Basic.Driver;
+using DPS.Lib.Core.Basic.Device;
+using DPS.Lib.Core.Basic.NetworkProvider;
 using DPS.Lib.Core.Basic.Rfid;
 using DPS.Lib.Core.Basic.Technician;
 using DPS.Lib.Core.Basic.Treasurer;
+using DPS.Lib.Core.Transport.Car;
+using DPS.Lib.Core.Transport.CarGroup;
+using DPS.Lib.Core.Transport.CarType;
+using DPS.Lib.Core.Transport.Driver;
 using Microsoft.EntityFrameworkCore;
 using Zero.Abp.Authorization.Accounting;
 using Zero.Abp.Payments;
@@ -91,6 +96,18 @@ namespace Zero.EntityFrameworkCore
         public virtual DbSet<Treasurer> Treasurers { get; set; }
         
         public virtual DbSet<Driver> Drivers { get; set; }
+        
+        public virtual DbSet<NetworkProvider> NetworkProviders { get; set; }
+        
+        public virtual DbSet<Device> Devices { get; set; }
+        
+        public virtual DbSet<CarType> CarTypes { get; set; }
+        
+        public virtual DbSet<CarGroup> CarGroups { get; set; }
+        
+        public virtual DbSet<Car> Cars { get; set; }
+        
+        public virtual DbSet<Camera> Cameras { get; set; }
 
         #endregion
         

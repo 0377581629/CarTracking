@@ -2,8 +2,8 @@
 using System.Threading.Tasks;
 using Abp.Application.Services.Dto;
 using Abp.AspNetCore.Mvc.Authorization;
-using DPS.Lib.Application.Shared.Dto.Basic.Driver;
-using DPS.Lib.Application.Shared.Interface.Basic.Driver;
+using DPS.Lib.Application.Shared.Dto.Transport.Driver;
+using DPS.Lib.Application.Shared.Interface.Transport.Driver;
 using DPS.Lib.Core.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Zero.Authorization;

@@ -1,0 +1,47 @@
+﻿@using DPS.Lib.Core.Shared
+@model Zero.Web.Areas.Lib.Model.CarType.CreateOrEditCarTypeViewModel
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(Model.IsEditMode ? (L("Edit")) : L("Create")))
+
+<div class="modal-body">
+    <div id="CarTypeInformationsTab">
+        <form name="CarTypeInformationsForm" role="form" novalidate class="form-validation">
+
+            @if (Model.IsEditMode)
+            {
+                <input type="hidden" name="id" value="@Model.CarType.Id"/>
+            }
+            <input type="hidden" name="language" id="Entity_Language" value=""/>
+
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="CarType_Code">
+                            @L("Code") <span class="text-danger">*</span>
+                        </label>
+                        <input class="form-control" id="CarType_Code" value="@Model.CarType.Code" type="text" name="code" required maxlength="@ZeroConst.MaxCodeLength" minlength="@ZeroConst.MinCodeLength"/>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="CarType_Name">
+                            @L("Name") <span class="text-danger">*</span>
+                        </label>
+                        <input class="form-control" id="CarType_Name" value="@Model.CarType.Name" type="text" name="name" required/>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <div class="form-group">
+                        <label for="CarType_Description">
+                            @L("Description")
+                        </label>
+                        <input class="form-control" id="CarType_Description" value="@Model.CarType.Description" type="text" name="description"/>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalFooterWithSaveAndCancel.cshtml")

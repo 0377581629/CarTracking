@@ -1,0 +1,96 @@
+﻿@using DPS.Lib.Core.Shared
+@model Zero.Web.Areas.Lib.Model.Device.CreateOrEditDeviceViewModel
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(Model.IsEditMode ? (L("Edit")) : L("Create")))
+
+<div class="modal-body">
+    <div id="DeviceInformationsTab">
+        <form name="DeviceInformationsForm" role="form" novalidate class="form-validation">
+
+            @if (Model.IsEditMode)
+            {
+                <input type="hidden" name="id" value="@Model.Device.Id"/>
+            }
+            <input type="hidden" name="language" id="Entity_Language" value=""/>
+
+            <div class="row">
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="Device_Code">
+                            @L("Code") <span class="text-danger">*</span>
+                        </label>
+                        <input class="form-control" id="Device_Code" value="@Model.Device.Code" type="text" name="code" required maxlength="@ZeroConst.MaxCodeLength" minlength="@ZeroConst.MinCodeLength"/>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="Device_SimCard">
+                            @L("SimCard") <span class="text-danger">*</span>
+                        </label>
+                        <input class="form-control" id="Device_SimCard" value="@Model.Device.SimCard" type="text" name="simCard" required/>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label>@L("NetworkProvider")</label>
+                        <select id="NetworkProviderId" style="width:100%;" name="networkProviderId" class="form-control">
+                            @if (!string.IsNullOrEmpty(Model.Device.NetworkProviderCode) && !string.IsNullOrEmpty(Model.Device.NetworkProviderName) && Model.Device.NetworkProviderId > 0)
+                            {
+                                <option value="@Model.Device.NetworkProviderId" selected="selected">@Model.Device.NetworkProviderCode - @Model.Device.NetworkProviderName</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label>@L("StartDate")</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control dateTime date-picker text-center" id="StartDate" name="StartDate" init-value="@Model.Device.StartDate.ToString("dd/MM/yyyy")">
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <i class="la la-calendar"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="Device_Imei">
+                            @L("Imei")
+                        </label>
+                        <input class="form-control" id="Device_Imei" value="@Model.Device.Imei" type="text" name="imei"/>
+                    </div>
+                </div>
+                <div class="col-2">
+                    <div class="form-group mb-0">
+                        <label>@L("IsActive")</label>
+                        <div class="form-control no-border">
+                            <span class="switch switch-sm switch-icon">
+                                <label>
+                                    <input type="checkbox" value="true" id="Device_IsActive" name="isActive" @Html.Raw(!Model.Device.IsActive ? "" : "checked=\"checked\"")/>
+                                    <span></span>
+                                </label>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-2">
+                    <div class="form-group mb-0">
+                        <label>@L("NeedUpdate")</label>
+                        <div class="form-control no-border">
+                            <span class="switch switch-sm switch-icon">
+                                <label>
+                                    <input type="checkbox" value="true" id="Device_NeedUpdate" name="needUpdate" @Html.Raw(!Model.Device.NeedUpdate ? "" : "checked=\"checked\"")/>
+                                    <span></span>
+                                </label>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalFooterWithSaveAndCancel.cshtml")

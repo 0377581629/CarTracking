@@ -71,15 +71,35 @@
         
         public static class Lib
         {
+            #region Basic
+
             public const string GeneralSettings = "Lib.GeneralSetting";
-            
+
             public const string RfidType = "Lib.RfidType";
             
             public const string Technician = "Lib.Technician";
             
             public const string Treasurer = "Lib.Treasurer";
             
+            public const string NetworkProvider = "Lib.NetworkProvider";
+            
+            public const string Device = "Lib.Device";
+
+            #endregion
+
+            #region Transport
+
+            public const string Transport = "Lib.Transport";
+            
             public const string Driver = "Lib.Driver";
+            
+            public const string CarType = "Lib.CarType";
+            
+            public const string CarGroup = "Lib.CarGroup";
+            
+            public const string Car = "Lib.Car";
+
+            #endregion
         }
     }
 }

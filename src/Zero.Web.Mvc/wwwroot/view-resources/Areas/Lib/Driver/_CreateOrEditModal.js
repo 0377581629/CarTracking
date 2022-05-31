@@ -8,6 +8,7 @@
 
         let modal;
         let rfidTypeSelector;
+        let deviceSelector;
 
         let _imageWrap;
         let _imageHolder;
@@ -59,6 +60,42 @@
                         let res = $.map(data.result.items, function (item) {
                             return {
                                 text: item.cardNumber,
+                                id: item.id,
+                            }
+                        });
+
+                        return {
+                            results: res,
+                            pagination: {
+                                more: (params.page * 10) < data.result.totalCount
+                            }
+                        };
+                    },
+                    cache: true
+                }
+            });
+
+            deviceSelector = modal.find('#DeviceId');
+            deviceSelector.select2({
+                placeholder: app.localize('NoneSelect'),
+                allowClear: true,
+                width: '100%',
+                language: baseHelper.Select2Language(),
+                ajax: {
+                    url: abp.appPath + "api/services/app/Lib/GetPagedDevices",
+                    dataType: 'json',
+                    delay: 50,
+                    data: function (params) {
+                        return {
+                            filter: params.term
+                        };
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 1;
+                        console.log('device =',data.result.items)
+                        let res = $.map(data.result.items, function (item) {
+                            return {
+                                text: item.code + ' - ' + item.simCard,
                                 id: item.id,
                             }
                         });

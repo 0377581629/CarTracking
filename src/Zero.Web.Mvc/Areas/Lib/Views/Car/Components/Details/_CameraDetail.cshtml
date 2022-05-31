@@ -1,0 +1,24 @@
+@model DPS.Lib.Application.Shared.Dto.Transport.Car.Details.CarCameraDto
+@{
+    var rowId = Guid.NewGuid().ToString();
+}
+<tr class="detailRow" rowId="@rowId">
+    <input rowId="@rowId" type="hidden" class="detailId" value="@Model.Id"/>
+    <input rowId="@rowId" type="hidden" class="carId" value="@Model.CarId"/>
+
+    <td rowId="@rowId" class="text-middle text-center detailOrder"></td>
+    <td class="text-middle">
+        <input type="text" class="form-control name" rowId="@rowId" value="@Model.Name"/>
+    </td>
+    <td class="text-middle">
+        <input type="text" class="form-control position" rowId="@rowId" value="@Model.Position"/>
+    </td>
+    <td class="text-middle">
+        <input type="text" class="form-control rotation" rowId="@rowId" value="@Model.Rotation"/>
+    </td>
+    <td>
+        <a class="btn btn-sm btn-clean btn-icon btn-icon-md btnDeleteDetail" rowId="@rowId" href="#" title="@L("Delete")">
+            <i class="la la-trash text-danger"></i>
+        </a>
+    </td>
+</tr>

@@ -96,5 +96,17 @@ namespace DPS.Lib.Core.Shared
             [StringValue("BloodType_AbSub")] 
             AbSub = 8,
         }
+        
+        public enum FuelType
+        {
+            [StringValue("FuelType_Gasoline")]
+            Gasoline = 1,
+
+            [StringValue("FuelType_Oil")] 
+            Oil = 2,
+
+            [StringValue("FuelType_Electricity")]
+            Electricity = 3,
+        }
     }
 }

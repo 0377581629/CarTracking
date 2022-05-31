@@ -1,0 +1,30 @@
+@model Zero.Web.Areas.Lib.Model.Car.CreateOrEditCarViewModel
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(Model.IsEditMode ? (L("Edit")) : L("Create")))
+
+<div class="modal-body">
+    <div id="CarInformationsTab">
+        <ul class="nav nav-pills nav-fill" role="tablist">
+            <li class="nav-item">
+                <a href="#GeneralTab" class="nav-link active" data-toggle="tab" role="tab">
+                    @L("GeneralInfo")
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#CameraTab" data-toggle="tab" role="tab" class="nav-link">
+                    @L("Camera")
+                </a>
+            </li>
+        </ul>
+        <div class="tab-content pt-15">
+            <div class="tab-pane pt-5 active" id="GeneralTab">
+                @await Html.PartialAsync("Components/_GeneralInfoTab", Model)
+            </div>
+            <div class="tab-pane pt-5" id="CameraTab">
+                @await Html.PartialAsync("Components/_CameraTab", Model)
+            </div>
+        </div>
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalFooterWithSaveAndCancel.cshtml")
