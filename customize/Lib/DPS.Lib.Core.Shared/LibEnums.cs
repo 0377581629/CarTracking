@@ -108,5 +108,14 @@ namespace DPS.Lib.Core.Shared
             [StringValue("FuelType_Electricity")]
             Electricity = 3,
         }
+        
+        public enum RouteType
+        {
+            [StringValue("RouteType_PGD")]
+            PGD = 1,
+
+            [StringValue("RouteType_ATM")] 
+            ATM = 2,
+        }
     }
 }

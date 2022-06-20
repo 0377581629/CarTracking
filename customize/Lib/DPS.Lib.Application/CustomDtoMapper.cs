@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DPS.Lib.Application.Shared.Dto.Basic.Device;
+using DPS.Lib.Application.Shared.Dto.Basic.ManagementUnit;
 using DPS.Lib.Application.Shared.Dto.Basic.NetworkProvider;
 using DPS.Lib.Application.Shared.Dto.Basic.Rfid.RfidType;
 using DPS.Lib.Application.Shared.Dto.Basic.Technician;
@@ -9,7 +10,11 @@ using DPS.Lib.Application.Shared.Dto.Transport.Car.Details;
 using DPS.Lib.Application.Shared.Dto.Transport.CarGroup;
 using DPS.Lib.Application.Shared.Dto.Transport.CarType;
 using DPS.Lib.Application.Shared.Dto.Transport.Driver;
+using DPS.Lib.Application.Shared.Dto.Transport.Point;
+using DPS.Lib.Application.Shared.Dto.Transport.PointType;
+using DPS.Lib.Application.Shared.Dto.Transport.Route;
 using DPS.Lib.Core.Basic.Device;
+using DPS.Lib.Core.Basic.ManagementUnit;
 using DPS.Lib.Core.Basic.NetworkProvider;
 using DPS.Lib.Core.Basic.Rfid;
 using DPS.Lib.Core.Basic.Technician;
@@ -18,6 +23,9 @@ using DPS.Lib.Core.Transport.Car;
 using DPS.Lib.Core.Transport.CarGroup;
 using DPS.Lib.Core.Transport.CarType;
 using DPS.Lib.Core.Transport.Driver;
+using DPS.Lib.Core.Transport.Point;
+using DPS.Lib.Core.Transport.PointType;
+using DPS.Lib.Core.Transport.Route;
 
 namespace DPS.Lib.Application
 {
@@ -46,6 +54,10 @@ namespace DPS.Lib.Application
             configuration.CreateMap<DeviceDto, Device>().ReverseMap();
             configuration.CreateMap<CreateOrEditDeviceDto, Device>().ReverseMap();
             configuration.CreateMap<DeviceDto, CreateOrEditDeviceDto>().ReverseMap();
+            
+            configuration.CreateMap<ManagementUnitDto, ManagementUnit>().ReverseMap();
+            configuration.CreateMap<CreateOrEditManagementUnitDto, ManagementUnit>().ReverseMap();
+            configuration.CreateMap<ManagementUnitDto, CreateOrEditManagementUnitDto>().ReverseMap();
 
             #endregion
 
@@ -67,6 +79,18 @@ namespace DPS.Lib.Application
             configuration.CreateMap<CreateOrEditCarDto, Car>().ReverseMap();
             configuration.CreateMap<CarDto, CreateOrEditCarDto>().ReverseMap();
             configuration.CreateMap<CarCameraDto, Camera>().ReverseMap();
+            
+            configuration.CreateMap<PointTypeDto, PointType>().ReverseMap();
+            configuration.CreateMap<CreateOrEditPointTypeDto, PointType>().ReverseMap();
+            configuration.CreateMap<PointTypeDto, CreateOrEditPointTypeDto>().ReverseMap();
+            
+            configuration.CreateMap<PointDto, Point>().ReverseMap();
+            configuration.CreateMap<CreateOrEditPointDto, Point>().ReverseMap();
+            configuration.CreateMap<PointDto, CreateOrEditPointDto>().ReverseMap();
+            
+            configuration.CreateMap<RouteDto, Route>().ReverseMap();
+            configuration.CreateMap<CreateOrEditRouteDto, Route>().ReverseMap();
+            configuration.CreateMap<RouteDto, CreateOrEditRouteDto>().ReverseMap();
 
             #endregion
         }

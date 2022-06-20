@@ -3,11 +3,13 @@ using System.Threading.Tasks;
 using Abp.Application.Services;
 using Abp.Application.Services.Dto;
 using DPS.Lib.Application.Shared.Dto.Basic.Device;
+using DPS.Lib.Application.Shared.Dto.Basic.ManagementUnit;
 using DPS.Lib.Application.Shared.Dto.Basic.NetworkProvider;
 using DPS.Lib.Application.Shared.Dto.Basic.Rfid.RfidType;
 using DPS.Lib.Application.Shared.Dto.Transport.CarGroup;
 using DPS.Lib.Application.Shared.Dto.Transport.CarType;
 using DPS.Lib.Application.Shared.Dto.Transport.Driver;
+using DPS.Lib.Application.Shared.Dto.Transport.PointType;
 using Zero.Authorization.Users.Dto;
 
 namespace DPS.Lib.Application.Shared.Interface.Common
@@ -39,5 +41,13 @@ namespace DPS.Lib.Application.Shared.Interface.Common
         Task<List<DriverDto>> GetAllDrivers();
 
         Task<PagedResultDto<DriverDto>> GetPagedDrivers(GetAllDriverInput input);
+        
+        Task<List<ManagementUnitDto>> GetAllManagementUnits();
+        
+        Task<PagedResultDto<ManagementUnitDto>> GetPagedManagementUnits(GetAllManagementUnitInput input);
+        
+        Task<List<PointTypeDto>> GetAllPointTypes();
+        
+        Task<PagedResultDto<PointTypeDto>> GetPagedPointTypes(GetAllPointTypeInput input);
     }
 }

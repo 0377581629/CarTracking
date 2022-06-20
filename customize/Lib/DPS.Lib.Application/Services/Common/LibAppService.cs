@@ -8,18 +8,22 @@ using Abp.Authorization;
 using Abp.Domain.Repositories;
 using Abp.Linq.Extensions;
 using DPS.Lib.Application.Shared.Dto.Basic.Device;
+using DPS.Lib.Application.Shared.Dto.Basic.ManagementUnit;
 using DPS.Lib.Application.Shared.Dto.Basic.NetworkProvider;
 using DPS.Lib.Application.Shared.Dto.Basic.Rfid.RfidType;
 using DPS.Lib.Application.Shared.Dto.Transport.CarGroup;
 using DPS.Lib.Application.Shared.Dto.Transport.CarType;
 using DPS.Lib.Application.Shared.Dto.Transport.Driver;
+using DPS.Lib.Application.Shared.Dto.Transport.PointType;
 using DPS.Lib.Application.Shared.Interface.Common;
 using DPS.Lib.Core.Basic.Device;
+using DPS.Lib.Core.Basic.ManagementUnit;
 using DPS.Lib.Core.Basic.NetworkProvider;
 using DPS.Lib.Core.Basic.Rfid;
 using DPS.Lib.Core.Transport.CarGroup;
 using DPS.Lib.Core.Transport.CarType;
 using DPS.Lib.Core.Transport.Driver;
+using DPS.Lib.Core.Transport.PointType;
 using Microsoft.EntityFrameworkCore;
 using Zero;
 using Zero.Authorization.Roles;
@@ -41,7 +45,9 @@ namespace DPS.Lib.Application.Services.Common
         private readonly IRepository<CarType> _carTypeRepository;
         private readonly IRepository<CarGroup> _carGroupRepository;
         private readonly IRepository<Driver> _driverRepository;
-        
+        private readonly IRepository<ManagementUnit> _managementUnitRepository;
+        private readonly IRepository<PointType> _pointTypeRepository;
+
         public LibAppService(RoleManager roleManager,
             IRepository<User, long> userRepository,
             IRepository<RfidType> rfidTypeRepository,
@@ -49,7 +55,9 @@ namespace DPS.Lib.Application.Services.Common
             IRepository<Device> deviceRepository,
             IRepository<CarType> carTypeRepository,
             IRepository<CarGroup> carGroupRepository,
-            IRepository<Driver> driverRepository)
+            IRepository<Driver> driverRepository,
+            IRepository<ManagementUnit> managementUnitRepository, 
+            IRepository<PointType> pointTypeRepository)
         {
             _roleManager = roleManager;
             _userRepository = userRepository;
@@ -59,6 +67,8 @@ namespace DPS.Lib.Application.Services.Common
             _carTypeRepository = carTypeRepository;
             _carGroupRepository = carGroupRepository;
             _driverRepository = driverRepository;
+            _managementUnitRepository = managementUnitRepository;
+            _pointTypeRepository = pointTypeRepository;
         }
 
         #endregion
@@ -372,6 +382,84 @@ namespace DPS.Lib.Application.Services.Common
             var res = await pagedAndFilteredObj.ToListAsync();
 
             return new PagedResultDto<DriverDto>(
+                totalCount,
+                res
+            );
+        }
+
+        #endregion
+        
+        #region ManagementUnit
+
+        private IQueryable<ManagementUnitDto> ManagementUnitDataQuery(GetAllManagementUnitInput input = null)
+        {
+            var query = from o in _managementUnitRepository.GetAll()
+                    .Where(o => !o.IsDeleted && o.TenantId == AbpSession.TenantId)
+                    .WhereIf(input != null && !string.IsNullOrWhiteSpace(input.Filter),
+                        e => e.Code.Contains(input.Filter) || e.Name.Contains(input.Filter))
+                select new ManagementUnitDto
+                {
+                    TenantId = o.TenantId,
+                    Id = o.Id,
+                    Code = o.Code,
+                    Name = o.Name,
+                    Note = o.Note
+                };
+            return query;
+        }
+
+        public async Task<List<ManagementUnitDto>> GetAllManagementUnits()
+        {
+            return await ManagementUnitDataQuery().ToListAsync();
+        }
+
+        public async Task<PagedResultDto<ManagementUnitDto>> GetPagedManagementUnits(GetAllManagementUnitInput input)
+        {
+            var objQuery = ManagementUnitDataQuery(input);
+            var pagedAndFilteredObj = objQuery.OrderBy(input.Sorting ?? "name asc").PageBy(input);
+            var totalCount = await objQuery.CountAsync();
+            var res = await pagedAndFilteredObj.ToListAsync();
+
+            return new PagedResultDto<ManagementUnitDto>(
+                totalCount,
+                res
+            );
+        }
+
+        #endregion
+        
+        #region PointType
+
+        private IQueryable<PointTypeDto> PointTypeDataQuery(GetAllPointTypeInput input = null)
+        {
+            var query = from o in _pointTypeRepository.GetAll()
+                    .Where(o => !o.IsDeleted && o.TenantId == AbpSession.TenantId)
+                    .WhereIf(input != null && !string.IsNullOrWhiteSpace(input.Filter),
+                        e => e.Code.Contains(input.Filter) || e.Name.Contains(input.Filter))
+                select new PointTypeDto
+                {
+                    TenantId = o.TenantId,
+                    Id = o.Id,
+                    Code = o.Code,
+                    Name = o.Name,
+                    Note = o.Note
+                };
+            return query;
+        }
+
+        public async Task<List<PointTypeDto>> GetAllPointTypes()
+        {
+            return await PointTypeDataQuery().ToListAsync();
+        }
+
+        public async Task<PagedResultDto<PointTypeDto>> GetPagedPointTypes(GetAllPointTypeInput input)
+        {
+            var objQuery = PointTypeDataQuery(input);
+            var pagedAndFilteredObj = objQuery.OrderBy(input.Sorting ?? "name asc").PageBy(input);
+            var totalCount = await objQuery.CountAsync();
+            var res = await pagedAndFilteredObj.ToListAsync();
+
+            return new PagedResultDto<PointTypeDto>(
                 totalCount,
                 res
             );

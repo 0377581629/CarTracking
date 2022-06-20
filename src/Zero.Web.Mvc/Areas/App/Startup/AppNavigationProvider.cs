@@ -173,6 +173,13 @@ namespace Zero.Web.Areas.App.Startup
                         permissionDependency: new SimplePermissionDependency(LibPermissions.Device)
                     )
                 )
+                .AddItem(new MenuItemDefinition(
+                        AppPageNames.Lib.ManagementUnit,
+                        L("ManagementUnit"),
+                        url: $"{ZeroConst.LibAreas}/ManagementUnit",
+                        permissionDependency: new SimplePermissionDependency(LibPermissions.ManagementUnit)
+                    )
+                )
             );
 
             #endregion
@@ -210,6 +217,27 @@ namespace Zero.Web.Areas.App.Startup
                         L("Car"),
                         url: $"{ZeroConst.LibAreas}/Car",
                         permissionDependency: new SimplePermissionDependency(LibPermissions.Car)
+                    )
+                )
+                .AddItem(new MenuItemDefinition(
+                        AppPageNames.Lib.PointType,
+                        L("PointType"),
+                        url: $"{ZeroConst.LibAreas}/PointType",
+                        permissionDependency: new SimplePermissionDependency(LibPermissions.PointType)
+                    )
+                )
+                .AddItem(new MenuItemDefinition(
+                        AppPageNames.Lib.Point,
+                        L("Point"),
+                        url: $"{ZeroConst.LibAreas}/Point",
+                        permissionDependency: new SimplePermissionDependency(LibPermissions.Point)
+                    )
+                )
+                .AddItem(new MenuItemDefinition(
+                        AppPageNames.Lib.Route,
+                        L("Route"),
+                        url: $"{ZeroConst.LibAreas}/Route",
+                        permissionDependency: new SimplePermissionDependency(LibPermissions.Route)
                     )
                 )
             );

@@ -215,6 +215,11 @@
         public const string Device_Create = "Lib.Device.Create";
         public const string Device_Edit = "Lib.Device.Edit";
         public const string Device_Delete = "Lib.Device.Delete";
+        
+        public const string ManagementUnit = "Lib.ManagementUnit";
+        public const string ManagementUnit_Create = "Lib.ManagementUnit.Create";
+        public const string ManagementUnit_Edit = "Lib.ManagementUnit.Edit";
+        public const string ManagementUnit_Delete = "Lib.ManagementUnit.Delete";
 
         #endregion
 
@@ -241,6 +246,21 @@
         public const string Car_Create = "Lib.Car.Create";
         public const string Car_Edit = "Lib.Car.Edit";
         public const string Car_Delete = "Lib.Car.Delete";
+        
+        public const string PointType = "Lib.PointType";
+        public const string PointType_Create = "Lib.PointType.Create";
+        public const string PointType_Edit = "Lib.PointType.Edit";
+        public const string PointType_Delete = "Lib.PointType.Delete";
+        
+        public const string Point = "Lib.Point";
+        public const string Point_Create = "Lib.Point.Create";
+        public const string Point_Edit = "Lib.Point.Edit";
+        public const string Point_Delete = "Lib.Point.Delete";
+        
+        public const string Route = "Lib.Route";
+        public const string Route_Create = "Lib.Route.Create";
+        public const string Route_Edit = "Lib.Route.Edit";
+        public const string Route_Delete = "Lib.Route.Delete";
 
         #endregion
     }

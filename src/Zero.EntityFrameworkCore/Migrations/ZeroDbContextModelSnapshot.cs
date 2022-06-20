@@ -2537,6 +2537,53 @@ namespace Zero.Migrations
                     b.ToTable("Lib_Basic_Device");
                 });
 
+            modelBuilder.Entity("DPS.Lib.Core.Basic.ManagementUnit.ManagementUnit", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(95)
+                        .HasColumnType("nvarchar(95)");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("CreatorUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("DeleterUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("LastModifierUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Lib_Basic_ManagementUnit");
+                });
+
             modelBuilder.Entity("DPS.Lib.Core.Basic.NetworkProvider.NetworkProvider", b =>
                 {
                     b.Property<int>("Id")
@@ -3089,6 +3136,207 @@ namespace Zero.Migrations
                     b.HasIndex("RfidTypeId");
 
                     b.ToTable("Lib_Basic_Driver");
+                });
+
+            modelBuilder.Entity("DPS.Lib.Core.Transport.Point.Point", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(95)
+                        .HasColumnType("nvarchar(95)");
+
+                    b.Property<string>("ContactPerson")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("CreatorUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("DeleterUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Fax")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("LastModifierUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<double>("Latitude")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Longitude")
+                        .HasColumnType("float");
+
+                    b.Property<int?>("ManagementUnitId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("PointTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ManagementUnitId");
+
+                    b.HasIndex("PointTypeId");
+
+                    b.ToTable("Lib_Transport_Point");
+                });
+
+            modelBuilder.Entity("DPS.Lib.Core.Transport.PointType.PointType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(95)
+                        .HasColumnType("nvarchar(95)");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("CreatorUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("DeleterUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("LastModifierUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Lib_Transport_PointType");
+                });
+
+            modelBuilder.Entity("DPS.Lib.Core.Transport.Route.Route", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(95)
+                        .HasColumnType("nvarchar(95)");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("CreatorUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("DeleterUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<double>("EstimateDistance")
+                        .HasColumnType("float");
+
+                    b.Property<double>("EstimatedTime")
+                        .HasColumnType("float");
+
+                    b.Property<bool>("HasConstraintTime")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsPermanentRoute")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("LastModifierUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("ListPoint")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ListTime")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ManagementUnitId")
+                        .HasColumnType("int");
+
+                    b.Property<double>("MinuteLate")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("Range")
+                        .HasColumnType("float");
+
+                    b.Property<string>("RouteDetail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RouteType")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ManagementUnitId");
+
+                    b.ToTable("Lib_Transport_Route");
                 });
 
             modelBuilder.Entity("Zero.Abp.Authorization.Accounting.UserInvoice", b =>
@@ -4582,6 +4830,30 @@ namespace Zero.Migrations
                     b.Navigation("Device");
 
                     b.Navigation("RfidType");
+                });
+
+            modelBuilder.Entity("DPS.Lib.Core.Transport.Point.Point", b =>
+                {
+                    b.HasOne("DPS.Lib.Core.Basic.ManagementUnit.ManagementUnit", "ManagementUnit")
+                        .WithMany()
+                        .HasForeignKey("ManagementUnitId");
+
+                    b.HasOne("DPS.Lib.Core.Transport.PointType.PointType", "PointType")
+                        .WithMany()
+                        .HasForeignKey("PointTypeId");
+
+                    b.Navigation("ManagementUnit");
+
+                    b.Navigation("PointType");
+                });
+
+            modelBuilder.Entity("DPS.Lib.Core.Transport.Route.Route", b =>
+                {
+                    b.HasOne("DPS.Lib.Core.Basic.ManagementUnit.ManagementUnit", "ManagementUnit")
+                        .WithMany()
+                        .HasForeignKey("ManagementUnitId");
+
+                    b.Navigation("ManagementUnit");
                 });
 
             modelBuilder.Entity("Zero.Abp.Payments.SubscriptionPayment", b =>

@@ -61,6 +61,13 @@ namespace DPS.Lib.Core.Shared
                 select new SelectListItem(lang.GetString(fuelType.GetStringValue()),
                     ((int) fuelType).ToString(), currentFuelType == (int) fuelType)).ToList();
         }
+        
+        public static List<SelectListItem> ListRouteType(int currentRouteType, ILocalizationSource lang)
+        {
+            return (from routeType in (LibEnums.RouteType[]) Enum.GetValues(typeof(LibEnums.RouteType))
+                select new SelectListItem(lang.GetString(routeType.GetStringValue()),
+                    ((int) routeType).ToString(), currentRouteType == (int) routeType)).ToList();
+        }
     }
 
     public class SocialMediaHelper

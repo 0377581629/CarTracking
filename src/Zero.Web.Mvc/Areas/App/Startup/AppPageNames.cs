@@ -84,6 +84,8 @@
             public const string NetworkProvider = "Lib.NetworkProvider";
             
             public const string Device = "Lib.Device";
+            
+            public const string ManagementUnit = "Lib.ManagementUnit";
 
             #endregion
 
@@ -98,6 +100,12 @@
             public const string CarGroup = "Lib.CarGroup";
             
             public const string Car = "Lib.Car";
+            
+            public const string PointType = "Lib.PointType";
+            
+            public const string Point = "Lib.Point";
+            
+            public const string Route = "Lib.Route";
 
             #endregion
         }

@@ -1,0 +1,47 @@
+﻿@using DPS.Lib.Core.Shared
+@model Zero.Web.Areas.Lib.Model.PointType.CreateOrEditPointTypeViewModel
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(Model.IsEditMode ? (L("Edit")) : L("Create")))
+
+<div class="modal-body">
+    <div id="PointTypeInformationsTab">
+        <form name="PointTypeInformationsForm" role="form" novalidate class="form-validation">
+
+            @if (Model.IsEditMode)
+            {
+                <input type="hidden" name="id" value="@Model.PointType.Id"/>
+            }
+            <input type="hidden" name="language" id="Entity_Language" value=""/>
+
+            <div class="row">
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="PointType_Code">
+                            @L("Code") <span class="text-danger">*</span>
+                        </label>
+                        <input class="form-control" id="PointType_Code" value="@Model.PointType.Code" type="text" name="code" required maxlength="@ZeroConst.MaxCodeLength" minlength="@ZeroConst.MinCodeLength"/>
+                    </div>
+                </div>
+                <div class="col-8">
+                    <div class="form-group">
+                        <label for="PointType_Name">
+                            @L("Name") <span class="text-danger">*</span>
+                        </label>
+                        <input class="form-control" id="PointType_Name" value="@Model.PointType.Name" type="text" name="name" required/>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <div class="form-group">
+                        <label for="PointType_Note">
+                            @L("Note")
+                        </label>
+                        <input class="form-control" id="PointType_Note" value="@Model.PointType.Note" type="text" name="note"/>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalFooterWithSaveAndCancel.cshtml")

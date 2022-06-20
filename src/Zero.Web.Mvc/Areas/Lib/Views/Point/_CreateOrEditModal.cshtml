@@ -1,0 +1,125 @@
+﻿@using DPS.Lib.Core.Shared
+@model Zero.Web.Areas.Lib.Model.Point.CreateOrEditPointViewModel
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(Model.IsEditMode ? (L("Edit")) : L("Create")))
+
+<div class="modal-body">
+    <div id="PointInformationsTab">
+        <form name="PointInformationsForm" role="form" novalidate class="form-validation">
+
+            @if (Model.IsEditMode)
+            {
+                <input type="hidden" name="id" value="@Model.Point.Id"/>
+            }
+            <input type="hidden" name="language" id="Entity_Language" value=""/>
+
+            <div class="row">
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="Point_Code">
+                            @L("Code") <span class="text-danger">*</span>
+                        </label>
+                        <input class="form-control" id="Point_Code" value="@Model.Point.Code" type="text" name="code" required maxlength="@ZeroConst.MaxCodeLength" minlength="@ZeroConst.MinCodeLength"/>
+                    </div>
+                </div>
+                <div class="col-8">
+                    <div class="form-group">
+                        <label for="Point_Name">
+                            @L("Name") <span class="text-danger">*</span>
+                        </label>
+                        <input class="form-control" id="Point_Name" value="@Model.Point.Name" type="text" name="name" required/>
+                    </div>
+                </div>
+                
+                <div class="col-6">
+                    <div class="form-group">
+                        <label>@L("ManagementUnit")</label>
+                        <select id="ManagementUnitId" style="width:100%;" name="managementUnitId" class="form-control">
+                            @if (!string.IsNullOrEmpty(Model.Point.ManagementUnitCode) && !string.IsNullOrEmpty(Model.Point.ManagementUnitName) && Model.Point.ManagementUnitId > 0)
+                            {
+                                <option value="@Model.Point.ManagementUnitId" selected="selected">@Model.Point.ManagementUnitCode - @Model.Point.ManagementUnitName</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="col-6">
+                    <div class="form-group">
+                        <label>@L("PointType")</label>
+                        <select id="PointTypeId" style="width:100%;" name="pointTypeId" class="form-control">
+                            @if (!string.IsNullOrEmpty(Model.Point.PointTypeCode) && !string.IsNullOrEmpty(Model.Point.PointTypeName) && Model.Point.PointTypeId > 0)
+                            {
+                                <option value="@Model.Point.PointTypeId" selected="selected">@Model.Point.PointTypeCode - @Model.Point.PointTypeName</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="Point_Address">
+                            @L("Address")
+                        </label>
+                        <input class="form-control" id="Point_Address" value="@Model.Point.Address" type="text" name="address"/>
+                    </div>
+                </div>
+                
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="Point_ContactPerson">
+                            @L("ContactPerson")
+                        </label>
+                        <input class="form-control" id="Point_ContactPerson" value="@Model.Point.ContactPerson" type="text" name="contactPerson"/>
+                    </div>
+                </div>
+                
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="Point_Phone">
+                            @L("Phone")
+                        </label>
+                        <input class="form-control" id="Point_Phone" value="@Model.Point.Phone" type="text" name="phone"/>
+                    </div>
+                </div>
+                
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="Point_Fax">
+                            @L("Fax")
+                        </label>
+                        <input class="form-control" id="Point_Fax" value="@Model.Point.Fax" type="text" name="fax"/>
+                    </div>
+                </div>
+                
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="Point_Latitude">
+                            @L("Latitude")
+                        </label>
+                        <input class="form-control" id="Point_Latitude" value="@Model.Point.Latitude" type="text" name="latitude"/>
+                    </div>
+                </div>
+                
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="Point_Longitude">
+                            @L("Longitude")
+                        </label>
+                        <input class="form-control" id="Point_Longitude" value="@Model.Point.Longitude" type="text" name="longitude"/>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <div class="form-group">
+                        <label for="Point_Note">
+                            @L("Note")
+                        </label>
+                        <input class="form-control" id="Point_Note" value="@Model.Point.Note" type="text" name="note"/>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalFooterWithSaveAndCancel.cshtml")

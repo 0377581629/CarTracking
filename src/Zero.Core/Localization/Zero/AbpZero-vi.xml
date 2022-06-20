@@ -2,6 +2,34 @@
 <localizationDictionary culture="vi">
   <texts>
     <!--  CarTracking  -->
+    <text name="Route">Tuyến mẫu</text>
+    <text name="RouteHeaderInfo">Danh mục tuyến mẫu</text>
+    <text name="ListPoint">Danh sách điểm dừng</text>
+    <text name="ListTime">Danh sách thời gian nhận</text>
+    <text name="RouteDetail">Lộ trình chi tiết</text>
+    <text name="MinuteLate">Thời gian đến muộn cho phép</text>
+    <text name="Range">Dung sai lộ trình cho phép</text>
+    <text name="EstimatedTime">Thời gian dự tính</text>
+    <text name="EstimateDistance">Khoảng cách dự tính</text>
+    <text name="IsPermanentRoute">Là tuyến cố định</text>
+    <text name="HasConstraintTime">Có ràng buộc thời gian</text>
+    <text name="RouteType">Loại tuyến đường</text>
+    <text name="RouteType_PGD">PGD</text>
+    <text name="RouteType_ATM">ATM</text>
+    
+    <text name="ContactPerson">Người liên hệ</text>
+    <text name="Fax">Fax</text>
+    <text name="Latitude">Vĩ độ</text>
+    <text name="Longitude">Kinh độ</text>
+    
+    <text name="ManagementUnit">Đơn vị quản lý</text>
+    <text name="ManagementUnitHeaderInfo">Danh mục đơn vị quản lý</text>
+
+    <text name="Point">Điểm</text>
+    <text name="PointHeaderInfo">Danh mục điểm</text>
+    <text name="PointType">Loại điểm</text>
+    <text name="PointTypeHeaderInfo">Danh mục loại điểm</text>
+    
     <text name="Car">Xe</text>
     <text name="CarHeaderInfo">Danh mục xe</text>
     <text name="LicensePlate">Biển số</text>

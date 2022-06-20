@@ -242,6 +242,11 @@ namespace Zero.Authorization
             device.CreateChildPermission(LibPermissions.Device_Edit, L("Edit"));
             device.CreateChildPermission(LibPermissions.Device_Delete, L("Delete"));
             
+            var managementUnit = generalSettings.CreateChildPermission(LibPermissions.ManagementUnit, L("ManagementUnit"));
+            managementUnit.CreateChildPermission(LibPermissions.ManagementUnit_Create, L("Create"));
+            managementUnit.CreateChildPermission(LibPermissions.ManagementUnit_Edit, L("Edit"));
+            managementUnit.CreateChildPermission(LibPermissions.ManagementUnit_Delete, L("Delete"));
+            
             // Transport
             var transports = pages.CreateChildPermission(LibPermissions.Transport, L("Transport"));
 
@@ -264,6 +269,21 @@ namespace Zero.Authorization
             car.CreateChildPermission(LibPermissions.Car_Create, L("Create"));
             car.CreateChildPermission(LibPermissions.Car_Edit, L("Edit"));
             car.CreateChildPermission(LibPermissions.Car_Delete, L("Delete"));
+            
+            var point = transports.CreateChildPermission(LibPermissions.Point, L("Point"));
+            point.CreateChildPermission(LibPermissions.Point_Create, L("Create"));
+            point.CreateChildPermission(LibPermissions.Point_Edit, L("Edit"));
+            point.CreateChildPermission(LibPermissions.Point_Delete, L("Delete"));
+            
+            var pointType = transports.CreateChildPermission(LibPermissions.PointType, L("PointType"));
+            pointType.CreateChildPermission(LibPermissions.PointType_Create, L("Create"));
+            pointType.CreateChildPermission(LibPermissions.PointType_Edit, L("Edit"));
+            pointType.CreateChildPermission(LibPermissions.PointType_Delete, L("Delete"));
+            
+            var route = transports.CreateChildPermission(LibPermissions.Route, L("Route"));
+            route.CreateChildPermission(LibPermissions.Route_Create, L("Create"));
+            route.CreateChildPermission(LibPermissions.Route_Edit, L("Edit"));
+            route.CreateChildPermission(LibPermissions.Route_Delete, L("Delete"));
         }
 
         private static ILocalizableString L(string name)
