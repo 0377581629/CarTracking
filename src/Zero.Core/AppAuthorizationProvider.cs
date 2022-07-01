@@ -284,6 +284,11 @@ namespace Zero.Authorization
             route.CreateChildPermission(LibPermissions.Route_Create, L("Create"));
             route.CreateChildPermission(LibPermissions.Route_Edit, L("Edit"));
             route.CreateChildPermission(LibPermissions.Route_Delete, L("Delete"));
+            
+            var assignmentRoute = transports.CreateChildPermission(LibPermissions.AssignmentRoute, L("AssignmentRoute"));
+            assignmentRoute.CreateChildPermission(LibPermissions.AssignmentRoute_Create, L("Create"));
+            assignmentRoute.CreateChildPermission(LibPermissions.AssignmentRoute_Edit, L("Edit"));
+            assignmentRoute.CreateChildPermission(LibPermissions.AssignmentRoute_Delete, L("Delete"));
         }
 
         private static ILocalizableString L(string name)

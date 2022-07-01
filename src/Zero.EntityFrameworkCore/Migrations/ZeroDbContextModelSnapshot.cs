@@ -2835,6 +2835,95 @@ namespace Zero.Migrations
                     b.ToTable("Lib_Basic_Treasurer");
                 });
 
+            modelBuilder.Entity("DPS.Lib.Core.Transport.AssignmentRoute.AssignmentRoute", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("CarId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(95)
+                        .HasColumnType("nvarchar(95)");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("CreatorUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("DayOfWeeks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("DeleterUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("DriverId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Guard")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsAssignment")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("LastModifierUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int?>("ManagementUnitId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("RouteId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("TechnicianId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TreasurerId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CarId");
+
+                    b.HasIndex("DriverId");
+
+                    b.HasIndex("ManagementUnitId");
+
+                    b.HasIndex("RouteId");
+
+                    b.HasIndex("TechnicianId");
+
+                    b.HasIndex("TreasurerId");
+
+                    b.ToTable("Lib_Transport_AssignmentRoute");
+                });
+
             modelBuilder.Entity("DPS.Lib.Core.Transport.Car.Camera", b =>
                 {
                     b.Property<int>("Id")
@@ -3337,6 +3426,31 @@ namespace Zero.Migrations
                     b.HasIndex("ManagementUnitId");
 
                     b.ToTable("Lib_Transport_Route");
+                });
+
+            modelBuilder.Entity("DPS.Lib.Core.Transport.Route.RouteDetail", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("EndPointId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("RouteId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Time")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EndPointId");
+
+                    b.HasIndex("RouteId");
+
+                    b.ToTable("Lib_Transport_RouteDetail");
                 });
 
             modelBuilder.Entity("Zero.Abp.Authorization.Accounting.UserInvoice", b =>
@@ -4773,6 +4887,45 @@ namespace Zero.Migrations
                     b.Navigation("RfidType");
                 });
 
+            modelBuilder.Entity("DPS.Lib.Core.Transport.AssignmentRoute.AssignmentRoute", b =>
+                {
+                    b.HasOne("DPS.Lib.Core.Transport.Car.Car", "Car")
+                        .WithMany()
+                        .HasForeignKey("CarId");
+
+                    b.HasOne("DPS.Lib.Core.Transport.Driver.Driver", "Driver")
+                        .WithMany()
+                        .HasForeignKey("DriverId");
+
+                    b.HasOne("DPS.Lib.Core.Basic.ManagementUnit.ManagementUnit", "ManagementUnit")
+                        .WithMany()
+                        .HasForeignKey("ManagementUnitId");
+
+                    b.HasOne("DPS.Lib.Core.Transport.Route.Route", "Route")
+                        .WithMany()
+                        .HasForeignKey("RouteId");
+
+                    b.HasOne("DPS.Lib.Core.Basic.Technician.Technician", "Technician")
+                        .WithMany()
+                        .HasForeignKey("TechnicianId");
+
+                    b.HasOne("DPS.Lib.Core.Basic.Treasurer.Treasurer", "Treasurer")
+                        .WithMany()
+                        .HasForeignKey("TreasurerId");
+
+                    b.Navigation("Car");
+
+                    b.Navigation("Driver");
+
+                    b.Navigation("ManagementUnit");
+
+                    b.Navigation("Route");
+
+                    b.Navigation("Technician");
+
+                    b.Navigation("Treasurer");
+                });
+
             modelBuilder.Entity("DPS.Lib.Core.Transport.Car.Camera", b =>
                 {
                     b.HasOne("DPS.Lib.Core.Transport.Car.Car", "Car")
@@ -4854,6 +5007,21 @@ namespace Zero.Migrations
                         .HasForeignKey("ManagementUnitId");
 
                     b.Navigation("ManagementUnit");
+                });
+
+            modelBuilder.Entity("DPS.Lib.Core.Transport.Route.RouteDetail", b =>
+                {
+                    b.HasOne("DPS.Lib.Core.Transport.Point.Point", "EndPoint")
+                        .WithMany()
+                        .HasForeignKey("EndPointId");
+
+                    b.HasOne("DPS.Lib.Core.Transport.Route.Route", "Route")
+                        .WithMany()
+                        .HasForeignKey("RouteId");
+
+                    b.Navigation("EndPoint");
+
+                    b.Navigation("Route");
                 });
 
             modelBuilder.Entity("Zero.Abp.Payments.SubscriptionPayment", b =>

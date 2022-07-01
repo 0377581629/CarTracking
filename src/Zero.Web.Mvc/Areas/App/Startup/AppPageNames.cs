@@ -106,6 +106,8 @@
             public const string Point = "Lib.Point";
             
             public const string Route = "Lib.Route";
+            
+            public const string AssignmentRoute = "Lib.AssignmentRoute";
 
             #endregion
         }

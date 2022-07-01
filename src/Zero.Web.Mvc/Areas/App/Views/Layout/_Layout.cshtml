@@ -48,6 +48,12 @@
     <link rel="stylesheet" abp-href="/Common/Scripts/Datatables/datatables@(CultureHelper.IsRtl ? "-rtl" : "").css" asp-append-version="true"/>
     <link rel="stylesheet" abp-href="/Common/Styles/metronic-customize.css" asp-append-version="true"/>
 
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" crossorigin=""/>
+    <!-- Geocoding Control -->
+    <link rel="stylesheet" href="https://unpkg.com/esri-leaflet-geocoder@3.1.3/dist/esri-leaflet-geocoder.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+
     @if (CultureHelper.IsRtl)
     {
         <link rel="stylesheet" href="/Common/Styles/abp-zero-template-rtl.css" asp-append-version="true"/>
@@ -173,6 +179,13 @@
 <script type="text/javascript" src="../../3rds/froala/js/plugins.pkgd.min.js"></script>
 <script type="text/javascript" src="../../3rds/froala/js/languages/en_gb.js"></script>
 <script type="text/javascript" src="../../3rds/froala/js/languages/vi.js"></script>
+
+<script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js" crossorigin=""></script>
+<script src="https://unpkg.com/esri-leaflet@3.0.8/dist/esri-leaflet.js"></script>
+<script src="https://unpkg.com/esri-leaflet-geocoder@3.1.3/dist/esri-leaflet-geocoder.js"></script>
+<script src="https://unpkg.com/esri-leaflet-vector@3.1.3/dist/esri-leaflet-vector.js"></script>
+<script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 
 <script id="file-manager-preview-template" type="text/kendo-ui-template">
     <div class="#:styles.fileInfo#">

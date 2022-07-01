@@ -5,6 +5,7 @@ using DPS.Lib.Application.Shared.Dto.Basic.NetworkProvider;
 using DPS.Lib.Application.Shared.Dto.Basic.Rfid.RfidType;
 using DPS.Lib.Application.Shared.Dto.Basic.Technician;
 using DPS.Lib.Application.Shared.Dto.Basic.Treasurer;
+using DPS.Lib.Application.Shared.Dto.Transport.AssignmentRoute;
 using DPS.Lib.Application.Shared.Dto.Transport.Car;
 using DPS.Lib.Application.Shared.Dto.Transport.Car.Details;
 using DPS.Lib.Application.Shared.Dto.Transport.CarGroup;
@@ -13,12 +14,14 @@ using DPS.Lib.Application.Shared.Dto.Transport.Driver;
 using DPS.Lib.Application.Shared.Dto.Transport.Point;
 using DPS.Lib.Application.Shared.Dto.Transport.PointType;
 using DPS.Lib.Application.Shared.Dto.Transport.Route;
+using DPS.Lib.Application.Shared.Dto.Transport.Route.Details;
 using DPS.Lib.Core.Basic.Device;
 using DPS.Lib.Core.Basic.ManagementUnit;
 using DPS.Lib.Core.Basic.NetworkProvider;
 using DPS.Lib.Core.Basic.Rfid;
 using DPS.Lib.Core.Basic.Technician;
 using DPS.Lib.Core.Basic.Treasurer;
+using DPS.Lib.Core.Transport.AssignmentRoute;
 using DPS.Lib.Core.Transport.Car;
 using DPS.Lib.Core.Transport.CarGroup;
 using DPS.Lib.Core.Transport.CarType;
@@ -91,6 +94,11 @@ namespace DPS.Lib.Application
             configuration.CreateMap<RouteDto, Route>().ReverseMap();
             configuration.CreateMap<CreateOrEditRouteDto, Route>().ReverseMap();
             configuration.CreateMap<RouteDto, CreateOrEditRouteDto>().ReverseMap();
+            configuration.CreateMap<RouteDetailDto, RouteDetail>().ReverseMap();
+            
+            configuration.CreateMap<AssignmentRouteDto, AssignmentRoute>().ReverseMap();
+            configuration.CreateMap<CreateOrEditAssignmentRouteDto, AssignmentRoute>().ReverseMap();
+            configuration.CreateMap<AssignmentRouteDto, CreateOrEditAssignmentRouteDto>().ReverseMap();
 
             #endregion
         }

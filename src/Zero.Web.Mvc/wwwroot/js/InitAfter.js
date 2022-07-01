@@ -295,6 +295,18 @@ function slugify(text) {
 
                 });
 
+                element.find('.time-picker').each(function () {
+                    $(this).timepicker({
+                        locale: abp.localization.currentLanguage.name,
+                        format: 'hh:mm p',
+                        defaultTime: $(this).attr('init-value'),
+                        icons: {
+                            up: 'la la-chevron-circle-up',
+                            down: 'la la-chevron-circle-down'
+                        },
+                    });
+                });
+
                 element.find('.month-picker').datetimepicker({
                     locale: abp.localization.currentLanguage.name,
                     format: 'MM/YYYY'

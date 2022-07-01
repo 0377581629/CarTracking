@@ -180,17 +180,6 @@ namespace Zero.Web.Areas.App.Startup
                         permissionDependency: new SimplePermissionDependency(LibPermissions.ManagementUnit)
                     )
                 )
-            );
-
-            #endregion
-
-            #region Transport
-
-            menu.AddItem(new MenuItemDefinition(
-                    AppPageNames.Lib.Transport,
-                    L("Transport"),
-                    icon: "la la-cab"
-                )
                 .AddItem(new MenuItemDefinition(
                         AppPageNames.Lib.Driver,
                         L("Driver"),
@@ -219,6 +208,17 @@ namespace Zero.Web.Areas.App.Startup
                         permissionDependency: new SimplePermissionDependency(LibPermissions.Car)
                     )
                 )
+            );
+
+            #endregion
+
+            #region Transport
+
+            menu.AddItem(new MenuItemDefinition(
+                    AppPageNames.Lib.Transport,
+                    L("Transport"),
+                    icon: "la la-cab"
+                )
                 .AddItem(new MenuItemDefinition(
                         AppPageNames.Lib.PointType,
                         L("PointType"),
@@ -238,6 +238,13 @@ namespace Zero.Web.Areas.App.Startup
                         L("Route"),
                         url: $"{ZeroConst.LibAreas}/Route",
                         permissionDependency: new SimplePermissionDependency(LibPermissions.Route)
+                    )
+                )
+                .AddItem(new MenuItemDefinition(
+                        AppPageNames.Lib.AssignmentRoute,
+                        L("AssignmentRoute"),
+                        url: $"{ZeroConst.LibAreas}/AssignmentRoute",
+                        permissionDependency: new SimplePermissionDependency(LibPermissions.AssignmentRoute)
                     )
                 )
             );

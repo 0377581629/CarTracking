@@ -1,0 +1,219 @@
+﻿@using DPS.Lib.Core.Shared
+@model Zero.Web.Areas.Lib.Model.AssignmentRoute.CreateOrEditAssignmentRouteViewModel
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(Model.IsEditMode ? (L("Edit")) : L("Create")))
+
+<div class="modal-body">
+<div id="AssignmentRouteInformationsTab">
+<form name="AssignmentRouteInformationsForm" role="form" novalidate class="form-validation">
+
+@if (Model.IsEditMode)
+{
+    <input type="hidden" name="id" value="@Model.AssignmentRoute.Id"/>
+}
+<input type="hidden" name="language" id="Entity_Language" value=""/>
+
+<div class="row">
+    <div class="col-4">
+        <div class="form-group">
+            <label for="AssignmentRoute_Code">
+                @L("Code") <span class="text-danger">*</span>
+            </label>
+            <input class="form-control" id="AssignmentRoute_Code" value="@Model.AssignmentRoute.Code" type="text" name="code" required maxlength="@ZeroConst.MaxCodeLength" minlength="@ZeroConst.MinCodeLength"/>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="form-group">
+            <label for="AssignmentRoute_Name">
+                @L("Name") <span class="text-danger">*</span>
+            </label>
+            <input class="form-control" id="AssignmentRoute_Name" value="@Model.AssignmentRoute.Name" type="text" name="name" required/>
+        </div>
+    </div>
+    <div class="col-2">
+        <div class="form-group mb-0">
+            <label>@L("IsAssignment")</label>
+            <div class="form-control no-border">
+                <span class="switch switch-sm switch-icon">
+                    <label>
+                        <input type="checkbox" value="true" id="AssignmentRoute_IsAssignment" name="isAssignment" @Html.Raw(!Model.AssignmentRoute.IsAssignment ? "" : "checked=\"checked\"")/>
+                        <span></span>
+                    </label>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6">
+        <div class="form-group">
+            <label>@L("ManagementUnit")</label>
+            <select id="ManagementUnitId" style="width:100%;" name="managementUnitId" class="form-control">
+                @if (!string.IsNullOrEmpty(Model.AssignmentRoute.ManagementUnitCode) && !string.IsNullOrEmpty(Model.AssignmentRoute.ManagementUnitName) && Model.AssignmentRoute.ManagementUnitId > 0)
+                {
+                    <option value="@Model.AssignmentRoute.ManagementUnitId" selected="selected">@Model.AssignmentRoute.ManagementUnitCode - @Model.AssignmentRoute.ManagementUnitName</option>
+                }
+            </select>
+        </div>
+    </div>
+
+    <div class="col-6">
+        <div class="form-group">
+            <label>@L("Car")</label>
+            <select id="CarId" style="width:100%;" name="carId" class="form-control">
+                @if (!string.IsNullOrEmpty(Model.AssignmentRoute.CarCode) && !string.IsNullOrEmpty(Model.AssignmentRoute.CarLicensePlate) && Model.AssignmentRoute.CarId > 0)
+                {
+                    <option value="@Model.AssignmentRoute.CarId" selected="selected">@Model.AssignmentRoute.CarCode - @Model.AssignmentRoute.CarLicensePlate</option>
+                }
+            </select>
+        </div>
+    </div>
+
+    <div class="col-6">
+        <div class="form-group">
+            <label>@L("Driver")</label>
+            <select id="DriverId" style="width:100%;" name="driverId" class="form-control">
+                @if (!string.IsNullOrEmpty(Model.AssignmentRoute.DriverCode) && !string.IsNullOrEmpty(Model.AssignmentRoute.DriverName) && Model.AssignmentRoute.DriverId > 0)
+                {
+                    <option value="@Model.AssignmentRoute.DriverId" selected="selected">@Model.AssignmentRoute.DriverCode - @Model.AssignmentRoute.DriverName</option>
+                }
+            </select>
+        </div>
+    </div>
+
+    <div class="col-6">
+        <div class="form-group">
+            <label>@L("Route")</label>
+            <select id="RouteId" style="width:100%;" name="routeId" class="form-control">
+                @if (!string.IsNullOrEmpty(Model.AssignmentRoute.RouteCode) && !string.IsNullOrEmpty(Model.AssignmentRoute.RouteName) && Model.AssignmentRoute.RouteId > 0)
+                {
+                    <option value="@Model.AssignmentRoute.RouteId" selected="selected">@Model.AssignmentRoute.RouteCode - @Model.AssignmentRoute.RouteName</option>
+                }
+            </select>
+        </div>
+    </div>
+
+    <div class="col-6">
+        <div class="form-group">
+            <label>@L("Treasurer")</label>
+            <select id="TreasurerId" style="width:100%;" name="treasurerId" class="form-control">
+                @if (!string.IsNullOrEmpty(Model.AssignmentRoute.TreasurerCode) && !string.IsNullOrEmpty(Model.AssignmentRoute.TreasurerName) && Model.AssignmentRoute.TreasurerId > 0)
+                {
+                    <option value="@Model.AssignmentRoute.TreasurerId" selected="selected">@Model.AssignmentRoute.TreasurerCode - @Model.AssignmentRoute.TreasurerName</option>
+                }
+            </select>
+        </div>
+    </div>
+
+    <div class="col-6">
+        <div class="form-group">
+            <label>@L("Technician")</label>
+            <select id="TechnicianId" style="width:100%;" name="technicianId" class="form-control">
+                @if (!string.IsNullOrEmpty(Model.AssignmentRoute.TechnicianCode) && !string.IsNullOrEmpty(Model.AssignmentRoute.TechnicianName) && Model.AssignmentRoute.TechnicianId > 0)
+                {
+                    <option value="@Model.AssignmentRoute.TechnicianId" selected="selected">@Model.AssignmentRoute.TechnicianCode - @Model.AssignmentRoute.TechnicianName</option>
+                }
+            </select>
+        </div>
+    </div>
+
+    <div class="col-12">
+        <div class="form-group">
+            <label for="AssignmentRoute_Guard">
+                @L("Guard")
+            </label>
+            <input class="form-control" id="AssignmentRoute_Guard" value="@Model.AssignmentRoute.Guard" type="text" name="guard"/>
+        </div>
+    </div>
+
+    <div class="col-6">
+        <div class="form-group">
+            <label>@L("StartDate")</label>
+            <div class="input-group">
+                <input type="text" class="form-control dateTime date-picker text-center" id="StartDate" name="StartDate" init-value="@Model.AssignmentRoute.StartDate.ToString("dd/MM/yyyy")">
+                <div class="input-group-append">
+                    <span class="input-group-text">
+                        <i class="la la-calendar"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6">
+        <div class="form-group">
+            <label>@L("EndDate")</label>
+            <div class="input-group">
+                <input type="text" class="form-control dateTime date-picker text-center" id="EndDate" name="EndDate" init-value="@Model.AssignmentRoute.EndDate.ToString("dd/MM/yyyy")">
+                <div class="input-group-append">
+                    <span class="input-group-text">
+                        <i class="la la-calendar"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+     <div class="col-12 mb-20 bottom-separate"></div>
+    
+    <div class="row">
+        <div class="col-12">
+            <h5 class="font-weight-bold mt-10 mb-6">@L("DayOfWeekRunning")</h5>
+        </div>
+        <div class="col-3">
+            <label class="checkbox checkbox-outline checkbox-primary">
+                <input class="dayOfWeekChk" id="DayOfWeek_1" value="1" type="checkbox" @(Model.AssignmentRoute.DayOfWeeks != null && Model.AssignmentRoute.DayOfWeeks.Contains("1") ? "checked" : "")>
+                <span></span>
+                Thứ hai
+            </label>
+        </div>
+        <div class="col-3">
+            <label class="checkbox checkbox-outline checkbox-primary">
+                <input class="dayOfWeekChk" id="DayOfWeek_2" value="2" type="checkbox" @(Model.AssignmentRoute.DayOfWeeks != null && Model.AssignmentRoute.DayOfWeeks.Contains("2") ? "checked" : "")>
+                <span></span>
+                Thứ ba
+            </label>
+        </div>
+        <div class="col-3">
+            <label class="checkbox checkbox-outline checkbox-primary">
+                <input class="dayOfWeekChk" id="DayOfWeek_3" value="3" type="checkbox" @(Model.AssignmentRoute.DayOfWeeks != null && Model.AssignmentRoute.DayOfWeeks.Contains("3") ? "checked" : "")>
+                <span></span>
+                Thứ tư
+            </label>
+        </div>
+        <div class="col-3">
+            <label class="checkbox checkbox-outline checkbox-primary">
+                <input class="dayOfWeekChk" id="DayOfWeek_4" value="4" type="checkbox" @(Model.AssignmentRoute.DayOfWeeks != null && Model.AssignmentRoute.DayOfWeeks.Contains("4") ? "checked" : "")>
+                <span></span>
+                Thứ năm
+            </label>
+        </div>
+        <br/>
+        <br/>
+        <div class="col-3">
+            <label class="checkbox checkbox-outline checkbox-primary">
+                <input class="dayOfWeekChk" id="DayOfWeek_5" value="5" type="checkbox" @(Model.AssignmentRoute.DayOfWeeks != null && Model.AssignmentRoute.DayOfWeeks.Contains("5") ? "checked" : "")>
+                <span></span>
+                Thứ sáu
+            </label>
+        </div>
+        <div class="col-3">
+            <label class="checkbox checkbox-outline checkbox-primary">
+                <input class="dayOfWeekChk" id="DayOfWeek_6" value="6" type="checkbox" @(Model.AssignmentRoute.DayOfWeeks != null && Model.AssignmentRoute.DayOfWeeks.Contains("6") ? "checked" : "")>
+                <span></span>
+                Thứ bảy
+            </label>
+        </div>
+        <div class="col-3">
+            <label class="checkbox checkbox-outline checkbox-primary">
+                <input class="dayOfWeekChk" id="DayOfWeek_7" value="7" type="checkbox" @(Model.AssignmentRoute.DayOfWeeks != null && Model.AssignmentRoute.DayOfWeeks.Contains("7") ? "checked" : "")>
+                <span></span>
+                Chủ nhật
+            </label>
+        </div>
+    </div>
+</div>
+</form>
+</div>
+</div>
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalFooterWithSaveAndCancel.cshtml")

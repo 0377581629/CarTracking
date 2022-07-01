@@ -11,19 +11,29 @@ using DPS.Lib.Application.Shared.Dto.Basic.Device;
 using DPS.Lib.Application.Shared.Dto.Basic.ManagementUnit;
 using DPS.Lib.Application.Shared.Dto.Basic.NetworkProvider;
 using DPS.Lib.Application.Shared.Dto.Basic.Rfid.RfidType;
+using DPS.Lib.Application.Shared.Dto.Basic.Technician;
+using DPS.Lib.Application.Shared.Dto.Basic.Treasurer;
+using DPS.Lib.Application.Shared.Dto.Transport.Car;
 using DPS.Lib.Application.Shared.Dto.Transport.CarGroup;
 using DPS.Lib.Application.Shared.Dto.Transport.CarType;
 using DPS.Lib.Application.Shared.Dto.Transport.Driver;
+using DPS.Lib.Application.Shared.Dto.Transport.Point;
 using DPS.Lib.Application.Shared.Dto.Transport.PointType;
+using DPS.Lib.Application.Shared.Dto.Transport.Route;
 using DPS.Lib.Application.Shared.Interface.Common;
 using DPS.Lib.Core.Basic.Device;
 using DPS.Lib.Core.Basic.ManagementUnit;
 using DPS.Lib.Core.Basic.NetworkProvider;
 using DPS.Lib.Core.Basic.Rfid;
+using DPS.Lib.Core.Basic.Technician;
+using DPS.Lib.Core.Basic.Treasurer;
+using DPS.Lib.Core.Transport.Car;
 using DPS.Lib.Core.Transport.CarGroup;
 using DPS.Lib.Core.Transport.CarType;
 using DPS.Lib.Core.Transport.Driver;
+using DPS.Lib.Core.Transport.Point;
 using DPS.Lib.Core.Transport.PointType;
+using DPS.Lib.Core.Transport.Route;
 using Microsoft.EntityFrameworkCore;
 using Zero;
 using Zero.Authorization.Roles;
@@ -47,6 +57,11 @@ namespace DPS.Lib.Application.Services.Common
         private readonly IRepository<Driver> _driverRepository;
         private readonly IRepository<ManagementUnit> _managementUnitRepository;
         private readonly IRepository<PointType> _pointTypeRepository;
+        private readonly IRepository<Car> _carRepository;
+        private readonly IRepository<Route> _routeRepository;
+        private readonly IRepository<Treasurer> _treasurerRepository;
+        private readonly IRepository<Technician> _technicianRepository;
+        private readonly IRepository<Point> _pointRepository;
 
         public LibAppService(RoleManager roleManager,
             IRepository<User, long> userRepository,
@@ -57,7 +72,12 @@ namespace DPS.Lib.Application.Services.Common
             IRepository<CarGroup> carGroupRepository,
             IRepository<Driver> driverRepository,
             IRepository<ManagementUnit> managementUnitRepository, 
-            IRepository<PointType> pointTypeRepository)
+            IRepository<PointType> pointTypeRepository,
+            IRepository<Car> carRepository,
+            IRepository<Route> routeRepository,
+            IRepository<Treasurer> treasurerRepository,
+            IRepository<Technician> technicianRepository,
+            IRepository<Point> pointRepository)
         {
             _roleManager = roleManager;
             _userRepository = userRepository;
@@ -69,6 +89,11 @@ namespace DPS.Lib.Application.Services.Common
             _driverRepository = driverRepository;
             _managementUnitRepository = managementUnitRepository;
             _pointTypeRepository = pointTypeRepository;
+            _carRepository = carRepository;
+            _routeRepository = routeRepository;
+            _treasurerRepository = treasurerRepository;
+            _technicianRepository = technicianRepository;
+            _pointRepository = pointRepository;
         }
 
         #endregion
@@ -330,6 +355,69 @@ namespace DPS.Lib.Application.Services.Common
 
         #endregion
         
+        #region Car
+
+        private IQueryable<CarDto> CarDataQuery(GetAllCarInput input = null)
+        {
+            var query = from o in _carRepository.GetAll()
+                    .Where(o => !o.IsDeleted && o.TenantId == AbpSession.TenantId)
+                    .WhereIf(input != null && !string.IsNullOrWhiteSpace(input.Filter),
+                        e => e.Code.Contains(input.Filter) || e.LicensePlate.Contains(input.Filter))
+                select new CarDto
+                {
+                    TenantId = o.TenantId,
+                    Id = o.Id,
+                    Code = o.Code,
+                    LicensePlate = o.LicensePlate,
+                    
+                    DeviceId = o.DeviceId,
+                    DeviceCode = o.Device.Code,
+                    DeviceSimCard = o.Device.SimCard,
+                    
+                    CarTypeId = o.CarTypeId,
+                    CarTypeCode = o.CarType.Code,
+                    CarTypeName = o.CarType.Name,
+                    
+                    CarGroupId = o.CarGroupId,
+                    CarGroupCode = o.CarGroup.Code,
+                    CarGroupName = o.CarGroup.Name,
+                    
+                    DriverId = o.DriverId,
+                    DriverCode = o.Driver.Code,
+                    DriverName = o.Driver.Name,
+                    
+                    RfidTypeId = o.RfidTypeId,
+                    RfidTypeCode = o.RfidType.Code,
+                    RfidTypeCardNumber = o.RfidType.CardNumber,
+                    
+                    Note = o.Note,
+                    FuelType = o.FuelType,
+                    Quota = o.Quota,
+                    SpeedLimit = o.SpeedLimit
+                };
+            return query;
+        }
+
+        public async Task<List<CarDto>> GetAllCars()
+        {
+            return await CarDataQuery().ToListAsync();
+        }
+
+        public async Task<PagedResultDto<CarDto>> GetPagedCars(GetAllCarInput input)
+        {
+            var objQuery = CarDataQuery(input);
+            var pagedAndFilteredObj = objQuery.OrderBy(input.Sorting ?? "licensePlate asc").PageBy(input);
+            var totalCount = await objQuery.CountAsync();
+            var res = await pagedAndFilteredObj.ToListAsync();
+
+            return new PagedResultDto<CarDto>(
+                totalCount,
+                res
+            );
+        }
+
+        #endregion
+        
         #region Driver
 
         private IQueryable<DriverDto> DriverDataQuery(GetAllDriverInput input = null)
@@ -460,6 +548,202 @@ namespace DPS.Lib.Application.Services.Common
             var res = await pagedAndFilteredObj.ToListAsync();
 
             return new PagedResultDto<PointTypeDto>(
+                totalCount,
+                res
+            );
+        }
+
+        #endregion
+        
+        #region Point
+
+        private IQueryable<PointDto> PointDataQuery(GetAllPointInput input = null)
+        {
+            var query = from o in _pointRepository.GetAll()
+                    .Where(o => !o.IsDeleted && o.TenantId == AbpSession.TenantId)
+                    .WhereIf(input != null && !string.IsNullOrWhiteSpace(input.Filter), e => e.Code.Contains(input.Filter) || e.Name.Contains(input.Filter))
+                select new PointDto
+                {
+                    TenantId = o.TenantId,
+                    Id = o.Id,
+                    Code = o.Code,
+                    Name = o.Name,
+                    Note = o.Note,
+                    Address = o.Address,
+                    Fax = o.Fax,
+                    Latitude = o.Latitude,
+                    Longitude = o.Longitude,
+                    Phone = o.Phone,
+                    ContactPerson = o.ContactPerson,
+                    
+                    ManagementUnitId = o.ManagementUnitId,
+                    ManagementUnitCode = o.ManagementUnit.Code,
+                    ManagementUnitName = o.ManagementUnit.Name,
+                    
+                    PointTypeId = o.PointTypeId,
+                    PointTypeCode = o.PointType.Code,
+                    PointTypeName = o.PointType.Name,
+                };
+            return query;
+        }
+
+        public async Task<List<PointDto>> GetAllPoints()
+        {
+            return await PointDataQuery().ToListAsync();
+        }
+
+        public async Task<PagedResultDto<PointDto>> GetPagedPoints(GetAllPointInput input)
+        {
+            var objQuery = PointDataQuery(input);
+            var pagedAndFilteredObj = objQuery.OrderBy(input.Sorting ?? "name asc").PageBy(input);
+            var totalCount = await objQuery.CountAsync();
+            var res = await pagedAndFilteredObj.ToListAsync();
+
+            return new PagedResultDto<PointDto>(
+                totalCount,
+                res
+            );
+        }
+
+        #endregion
+        
+        #region Route
+
+        private IQueryable<RouteDto> RouteDataQuery(GetAllRouteInput input = null)
+        {
+            var query = from o in _routeRepository.GetAll()
+                    .Where(o => !o.IsDeleted && o.TenantId == AbpSession.TenantId)
+                    .WhereIf(input != null && !string.IsNullOrWhiteSpace(input.Filter), e => e.Code.Contains(input.Filter) || e.Name.Contains(input.Filter))
+                select new RouteDto
+                {
+                    TenantId = o.TenantId,
+                    Id = o.Id,
+                    Code = o.Code,
+                    Name = o.Name,
+                    
+                    ManagementUnitId = o.ManagementUnitId,
+                    ManagementUnitCode = o.ManagementUnit.Code,
+                    ManagementUnitName = o.ManagementUnit.Name,
+                    
+                    ListPoint = o.ListPoint,
+                    ListTime = o.ListTime,
+                    RouteDetail = o.RouteDetail,
+                    IsPermanentRoute = o.IsPermanentRoute,
+                    MinuteLate = o.MinuteLate,
+                    Range = o.Range,
+                    HasConstraintTime = o.HasConstraintTime,
+                    RouteType = o.RouteType,
+                    EstimateDistance = o.EstimateDistance,
+                    EstimatedTime = o.EstimatedTime
+                };
+            return query;
+        }
+
+        public async Task<List<RouteDto>> GetAllRoutes()
+        {
+            return await RouteDataQuery().ToListAsync();
+        }
+
+        public async Task<PagedResultDto<RouteDto>> GetPagedRoutes(GetAllRouteInput input)
+        {
+            var objQuery = RouteDataQuery(input);
+            var pagedAndFilteredObj = objQuery.OrderBy(input.Sorting ?? "name asc").PageBy(input);
+            var totalCount = await objQuery.CountAsync();
+            var res = await pagedAndFilteredObj.ToListAsync();
+
+            return new PagedResultDto<RouteDto>(
+                totalCount,
+                res
+            );
+        }
+
+        #endregion
+        
+        #region Treasurer
+
+        private IQueryable<TreasurerDto> TreasurerDataQuery(GetAllTreasurerInput input = null)
+        {
+            var query = from o in _treasurerRepository.GetAll()
+                    .Where(o => !o.IsDeleted && o.TenantId == AbpSession.TenantId)
+                    .WhereIf(input != null && !string.IsNullOrWhiteSpace(input.Filter), e => e.Code.Contains(input.Filter) || e.Name.Contains(input.Filter))
+                select new TreasurerDto
+                {
+                    TenantId = o.TenantId,
+                    Id = o.Id,
+                    Code = o.Code,
+                    Name = o.Name,
+                    Address = o.Address,
+                    Avatar = o.Avatar,
+                    Email = o.Email,
+                    Gender = o.Gender,
+                    PhoneNumber = o.PhoneNumber,
+                    IsStopWorking = o.IsStopWorking,
+                    
+                    RfidTypeId = o.RfidTypeId,
+                    RfidTypeCardNumber = o.RfidType.CardNumber
+                };
+            return query;
+        }
+
+        public async Task<List<TreasurerDto>> GetAllTreasurers()
+        {
+            return await TreasurerDataQuery().ToListAsync();
+        }
+
+        public async Task<PagedResultDto<TreasurerDto>> GetPagedTreasurers(GetAllTreasurerInput input)
+        {
+            var objQuery = TreasurerDataQuery(input);
+            var pagedAndFilteredObj = objQuery.OrderBy(input.Sorting ?? "name asc").PageBy(input);
+            var totalCount = await objQuery.CountAsync();
+            var res = await pagedAndFilteredObj.ToListAsync();
+
+            return new PagedResultDto<TreasurerDto>(
+                totalCount,
+                res
+            );
+        }
+
+        #endregion
+        
+        #region Technician
+
+        private IQueryable<TechnicianDto> TechnicianDataQuery(GetAllTechnicianInput input = null)
+        {
+            var query = from o in _technicianRepository.GetAll()
+                    .Where(o => !o.IsDeleted && o.TenantId == AbpSession.TenantId)
+                        .WhereIf(input != null && !string.IsNullOrWhiteSpace(input.Filter), e => e.Code.Contains(input.Filter) || e.Name.Contains(input.Filter))
+                select new TechnicianDto
+                {
+                    TenantId = o.TenantId,
+                    Id = o.Id,
+                    Code = o.Code,
+                    Name = o.Name,
+                    Address = o.Address,
+                    Avatar = o.Avatar,
+                    Email = o.Email,
+                    Gender = o.Gender,
+                    PhoneNumber = o.PhoneNumber,
+                    IsStopWorking = o.IsStopWorking,
+                    
+                    RfidTypeId = o.RfidTypeId,
+                    RfidTypeCardNumber = o.RfidType.CardNumber
+                };
+            return query;
+        }
+
+        public async Task<List<TechnicianDto>> GetAllTechnicians()
+        {
+            return await TechnicianDataQuery().ToListAsync();
+        }
+
+        public async Task<PagedResultDto<TechnicianDto>> GetPagedTechnicians(GetAllTechnicianInput input)
+        {
+            var objQuery = TechnicianDataQuery(input);
+            var pagedAndFilteredObj = objQuery.OrderBy(input.Sorting ?? "name asc").PageBy(input);
+            var totalCount = await objQuery.CountAsync();
+            var res = await pagedAndFilteredObj.ToListAsync();
+
+            return new PagedResultDto<TechnicianDto>(
                 totalCount,
                 res
             );

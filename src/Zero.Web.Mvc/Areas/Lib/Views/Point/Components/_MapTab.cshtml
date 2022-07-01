@@ -1,0 +1,23 @@
+﻿<form name="PointInformationsForm" role="form" novalidate class="form-validation">
+    <div class="row">
+        <div class="col-6">
+            <div class="form-group">
+                <label for="Point_Latitude">
+                    @L("Latitude")
+                </label>
+                <input class="form-control" id="Point_Latitude" value="@Model.Point.Latitude" type="text" name="latitude"/>
+            </div>
+        </div>
+
+        <div class="col-6">
+            <div class="form-group">
+                <label for="Point_Longitude">
+                    @L("Longitude")
+                </label>
+                <input class="form-control" id="Point_Longitude" value="@Model.Point.Longitude" type="text" name="longitude"/>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div id="map" style="width: 100%; height: 500px; border: 1px solid #ccc"></div>

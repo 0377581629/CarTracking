@@ -6,10 +6,15 @@ using DPS.Lib.Application.Shared.Dto.Basic.Device;
 using DPS.Lib.Application.Shared.Dto.Basic.ManagementUnit;
 using DPS.Lib.Application.Shared.Dto.Basic.NetworkProvider;
 using DPS.Lib.Application.Shared.Dto.Basic.Rfid.RfidType;
+using DPS.Lib.Application.Shared.Dto.Basic.Technician;
+using DPS.Lib.Application.Shared.Dto.Basic.Treasurer;
+using DPS.Lib.Application.Shared.Dto.Transport.Car;
 using DPS.Lib.Application.Shared.Dto.Transport.CarGroup;
 using DPS.Lib.Application.Shared.Dto.Transport.CarType;
 using DPS.Lib.Application.Shared.Dto.Transport.Driver;
+using DPS.Lib.Application.Shared.Dto.Transport.Point;
 using DPS.Lib.Application.Shared.Dto.Transport.PointType;
+using DPS.Lib.Application.Shared.Dto.Transport.Route;
 using Zero.Authorization.Users.Dto;
 
 namespace DPS.Lib.Application.Shared.Interface.Common
@@ -37,6 +42,10 @@ namespace DPS.Lib.Application.Shared.Interface.Common
         Task<List<CarGroupDto>> GetAllCarGroups();
 
         Task<PagedResultDto<CarGroupDto>> GetPagedCarGroups(GetAllCarGroupInput input);
+        
+        Task<List<CarDto>> GetAllCars();
+
+        Task<PagedResultDto<CarDto>> GetPagedCars(GetAllCarInput input);
 
         Task<List<DriverDto>> GetAllDrivers();
 
@@ -49,5 +58,21 @@ namespace DPS.Lib.Application.Shared.Interface.Common
         Task<List<PointTypeDto>> GetAllPointTypes();
         
         Task<PagedResultDto<PointTypeDto>> GetPagedPointTypes(GetAllPointTypeInput input);
+        
+        Task<List<PointDto>> GetAllPoints();
+
+        Task<PagedResultDto<PointDto>> GetPagedPoints(GetAllPointInput input);
+        
+        Task<List<RouteDto>> GetAllRoutes();
+
+        Task<PagedResultDto<RouteDto>> GetPagedRoutes(GetAllRouteInput input);
+        
+        Task<List<TreasurerDto>> GetAllTreasurers();
+
+        Task<PagedResultDto<TreasurerDto>> GetPagedTreasurers(GetAllTreasurerInput input);
+        
+        Task<List<TechnicianDto>> GetAllTechnicians();
+
+        Task<PagedResultDto<TechnicianDto>> GetPagedTechnicians(GetAllTechnicianInput input);
     }
 }

@@ -1,0 +1,37 @@
+﻿@model DPS.Lib.Application.Shared.Dto.Transport.Route.Details.RouteDetailDto
+@{
+    var rowId = Guid.NewGuid().ToString();
+}
+<tr class="detailRow" rowId="@rowId">
+    <input rowId="@rowId" type="hidden" class="detailId" value="@Model.Id"/>
+    <input rowId="@rowId" type="hidden" class="routeId" value="@Model.RouteId"/>
+    <input rowId="@rowId" type="hidden" class="pointName" value="@Model.EndPointName"/>
+
+    <td rowId="@rowId" class="text-middle text-center detailOrder"></td>
+
+    <td rowId="@rowId" class="text-middle">
+        <select class="form-control endPointSelector requiredSelect2" id="endPointSelector_@rowId" rowId="@rowId" initSelector="false">
+            @if (Model.EndPointId > 0 && !string.IsNullOrEmpty(Model.EndPointCode) || !string.IsNullOrEmpty(Model.EndPointName))
+            {
+                <option value="@Model.EndPointId">@Model.EndPointCode - @Model.EndPointName</option>
+            }
+        </select>
+    </td>
+
+    <td class="text-middle">
+        <div class="input-group">
+            <input type="text" class="form-control time-picker time" rowId="@rowId" init-value="@Model.Time"/>
+            <div class="input-group-append">
+                <span class="input-group-text">
+                    <i class="la la-clock-o"></i>
+                </span>
+            </div>
+        </div>
+    </td>
+
+    <td>
+        <a class="btn btn-sm btn-clean btn-icon btn-icon-md btnDeleteDetail" rowId="@rowId" href="#" title="@L("Delete")">
+            <i class="la la-trash text-danger"></i>
+        </a>
+    </td>
+</tr>

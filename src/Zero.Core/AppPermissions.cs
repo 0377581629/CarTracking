@@ -261,6 +261,11 @@
         public const string Route_Create = "Lib.Route.Create";
         public const string Route_Edit = "Lib.Route.Edit";
         public const string Route_Delete = "Lib.Route.Delete";
+        
+        public const string AssignmentRoute = "Lib.AssignmentRoute";
+        public const string AssignmentRoute_Create = "Lib.AssignmentRoute.Create";
+        public const string AssignmentRoute_Edit = "Lib.AssignmentRoute.Edit";
+        public const string AssignmentRoute_Delete = "Lib.AssignmentRoute.Delete";
 
         #endregion
     }

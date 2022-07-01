@@ -2,6 +2,7 @@
 using Abp.Application.Services.Dto;
 using Abp.AspNetCore.Mvc.Authorization;
 using DPS.Lib.Application.Shared.Dto.Transport.Route;
+using DPS.Lib.Application.Shared.Dto.Transport.Route.Details;
 using DPS.Lib.Application.Shared.Interface.Transport.Route;
 using DPS.Lib.Core.Shared;
 using Microsoft.AspNetCore.Mvc;
@@ -61,6 +62,13 @@ namespace Zero.Web.Areas.Lib.Controllers
             };
 
             return PartialView("_CreateOrEditModal", viewModel);
+        }
+        
+        [AbpMvcAuthorize(LibPermissions.Route_Create, LibPermissions.Route_Edit)]
+        public PartialViewResult NewRouteDetail()
+        {
+            var res = new RouteDetailDto();
+            return PartialView("Components/Details/_RouteDetail", res);
         }
         
     }

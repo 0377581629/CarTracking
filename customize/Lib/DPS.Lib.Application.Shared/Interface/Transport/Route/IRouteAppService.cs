@@ -1,6 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Abp.Application.Services;
 using Abp.Application.Services.Dto;
+using DPS.Lib.Application.Shared.Dto.Transport.Point;
 using DPS.Lib.Application.Shared.Dto.Transport.Route;
 
 namespace DPS.Lib.Application.Shared.Interface.Transport.Route
@@ -14,5 +16,7 @@ namespace DPS.Lib.Application.Shared.Interface.Transport.Route
         Task CreateOrEdit(CreateOrEditRouteDto input);
 
         Task Delete(EntityDto input);
+
+        Task<List<PointDto>> GetPointByIds(List<int> lstPointIds);
     }
 }

@@ -11,6 +11,7 @@ using DPS.Lib.Core.Basic.NetworkProvider;
 using DPS.Lib.Core.Basic.Rfid;
 using DPS.Lib.Core.Basic.Technician;
 using DPS.Lib.Core.Basic.Treasurer;
+using DPS.Lib.Core.Transport.AssignmentRoute;
 using DPS.Lib.Core.Transport.Car;
 using DPS.Lib.Core.Transport.CarGroup;
 using DPS.Lib.Core.Transport.CarType;
@@ -120,6 +121,10 @@ namespace Zero.EntityFrameworkCore
         public virtual DbSet<PointType> PointTypes { get; set; }
         
         public virtual DbSet<Route> Routes { get; set; }
+        
+        public virtual DbSet<AssignmentRoute> AssignmentRoutes { get; set; }
+        
+        public virtual DbSet<RouteDetail> RouteDetails { get; set; }
 
         #endregion
         

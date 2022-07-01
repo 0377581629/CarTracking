@@ -1,4 +1,6 @@
-﻿using Abp.Application.Services.Dto;
+﻿using System.Collections.Generic;
+using Abp.Application.Services.Dto;
+using DPS.Lib.Application.Shared.Dto.Transport.Route.Details;
 
 namespace DPS.Lib.Application.Shared.Dto.Transport.Route
 {
@@ -35,5 +37,7 @@ namespace DPS.Lib.Application.Shared.Dto.Transport.Route
         public double EstimateDistance { get; set; }
         
         public double EstimatedTime { get; set; }
+        
+        public List<RouteDetailDto> RouteDetails { get; set; }
     }
 }

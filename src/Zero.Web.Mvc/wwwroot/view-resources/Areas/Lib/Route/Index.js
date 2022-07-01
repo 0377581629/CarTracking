@@ -113,7 +113,7 @@
                 },
                 {
                     targets: 8,
-                    data: "author.isPermanentRoute",
+                    data: "route.isPermanentRoute",
                     name: "isPermanentRoute",
                     class: "text-center",
                     width: 80,
@@ -123,7 +123,7 @@
                 },
                 {
                     targets: 9,
-                    data: "author.hasConstraintTime",
+                    data: "route.hasConstraintTime",
                     name: "hasConstraintTime",
                     class: "text-center",
                     width: 80,
