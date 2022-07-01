@@ -14,7 +14,7 @@
         let lstPointIds;
         let listTime;
         let routeDetail;
-
+        
         this.init = function (modalManager) {
             _modalManager = modalManager;
 
@@ -43,6 +43,7 @@
                         }
                     });
                 });
+                // L.map('map').setView([21.02095, 105.80954], 12);
             }
 
             routeDetailTable.on('click', '.btnDeleteDetail', function () {
@@ -82,6 +83,7 @@
                     control.spliceWaypoints(control.getWaypoints().length - 1, 1, [data.latitude, data.longitude]);
                 } else {
                     control.spliceWaypoints(0, 1, [data.latitude, data.longitude]);
+                    L.marker([data.latitude, data.longitude]).addTo(map).bindPopup('Bắt đầu').openPopup();
                 }
             });
 
@@ -95,6 +97,7 @@
                         detailRowCount++;
                         if (detailRowCount === 1) {
                             control.spliceWaypoints(0, 1, [point.latitude, point.longitude]);
+                            L.marker([point.latitude, point.longitude]).addTo(map).bindPopup('Bắt đầu').openPopup();
                         } else if (detailRowCount === 2) {
                             control.spliceWaypoints(control.getWaypoints().length - 1, 1, [point.latitude, point.longitude]);
                         } else {
